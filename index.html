@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#C9A96E">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="description" content="Cocolashes Bielefeld – Entdecke dein perfektes Wimpernset per KI-Analyse">
-  <title>Cocolashes Bielefeld – Lash Preview</title>
+  <meta name="description" content="Cocolashes Bielefeld – KI-Wimpernvorschau & Terminbuchung">
+  <title>Cocolashes Bielefeld</title>
   <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -40,18 +40,14 @@
       <button class="btn-primary" id="btn-start" data-i18n="start">Jetzt starten</button>
 
       <div class="feature-list">
-        <div class="feature-item">
-          <span class="feat-icon">🔒</span>
-          <span data-i18n="feat1">Kein Foto verlässt dein Gerät</span>
-        </div>
-        <div class="feature-item">
-          <span class="feat-icon">⚡</span>
-          <span data-i18n="feat2">Ergebnis in Sekunden</span>
-        </div>
-        <div class="feature-item">
-          <span class="feat-icon">✨</span>
-          <span data-i18n="feat3">6 Wimpernstile zur Auswahl</span>
-        </div>
+        <div class="feature-item"><span class="feat-icon">🔒</span><span data-i18n="feat1">Kein Foto verlässt dein Gerät</span></div>
+        <div class="feature-item"><span class="feat-icon">⚡</span><span data-i18n="feat2">Ergebnis in Sekunden</span></div>
+        <div class="feature-item"><span class="feat-icon">✨</span><span data-i18n="feat3">6 Wimpernstile zur Auswahl</span></div>
+      </div>
+
+      <div class="splash-tabs">
+        <button class="splash-tab-btn" id="btn-splash-services" data-i18n="splashTabServices">Leistungen & Preise</button>
+        <button class="splash-tab-btn" id="btn-splash-info" data-i18n="splashTabInfo">Kontakt & Zeiten</button>
       </div>
     </div>
   </div>
@@ -67,14 +63,12 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       </button>
     </div>
-
     <div class="camera-wrap">
       <video id="video" autoplay playsinline muted></video>
       <canvas id="camera-overlay" class="cam-overlay"></canvas>
       <div class="face-guide-oval"></div>
       <div class="guide-label" data-i18n="guideText">Gesicht im Oval positionieren</div>
     </div>
-
     <div class="camera-bar">
       <div class="cam-hint" data-i18n="camHint">Gutes Licht &amp; frontale Aufnahme</div>
       <button class="btn-capture" id="btn-capture">
@@ -83,7 +77,6 @@
       </button>
       <div class="cam-hint-right" data-i18n="camHintRight">Ruhig halten</div>
     </div>
-
     <div id="camera-error" class="camera-error hidden">
       <div class="camera-error-content">
         <span class="error-icon">📷</span>
@@ -92,7 +85,6 @@
         <button class="btn-secondary" id="btn-upload-fallback" data-i18n="uploadPhoto">Foto hochladen</button>
       </div>
     </div>
-
     <input type="file" id="file-input" accept="image/*" style="display:none">
   </div>
 
@@ -114,20 +106,17 @@
   </div>
 
   <!-- ═══════════════════ SCREEN 4: RESULTS ═══════════════════ -->
-  <div id="screen-results" class="screen">
+  <div id="screen-results" class="screen has-tabbar">
     <div class="top-bar">
       <button class="btn-icon" id="btn-back-results" aria-label="Zurück">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
       <h2 data-i18n="resultsTitle">Dein Ergebnis</h2>
-      <button class="btn-icon" id="btn-download" aria-label="Bild speichern">
+      <button class="btn-icon" id="btn-download" aria-label="Bild speichern" title="Bild speichern">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </button>
     </div>
-
     <div class="results-scroll">
-
-      <!-- Canvas photo preview -->
       <div class="photo-preview-wrap">
         <canvas id="result-canvas"></canvas>
         <div id="no-face-msg" class="no-face-msg hidden">
@@ -135,8 +124,6 @@
           <span data-i18n="noFace">Kein Gesicht erkannt – Empfehlungen basieren auf allgemeinen Schönheitsstandards</span>
         </div>
       </div>
-
-      <!-- Face shape card -->
       <div class="face-card" id="face-card">
         <div class="face-card-icon" id="face-shape-icon">⬡</div>
         <div>
@@ -145,42 +132,87 @@
         </div>
         <div class="face-card-badge" data-i18n="aiLabel">KI-Analyse</div>
       </div>
-
-      <!-- Recommended style -->
       <div class="section-header">
         <h3 data-i18n="recommendedStyle">Empfehlung für dich</h3>
         <div class="recommended-badge" data-i18n="topPick">Top Pick ✦</div>
       </div>
-
-      <!-- Style selector pills -->
       <div class="style-pills" id="style-pills"></div>
-
-      <!-- Preview canvas area + why text -->
       <div class="why-card">
         <h4 data-i18n="whyTitle">Warum dieser Stil?</h4>
         <p id="why-text"></p>
       </div>
-
-      <!-- All styles grid -->
       <div class="section-header">
         <h3 data-i18n="allStyles">Alle Wimpernstile</h3>
       </div>
       <div class="styles-grid" id="styles-grid"></div>
 
-      <!-- Book CTA -->
-      <div class="book-section">
-        <p class="book-text" data-i18n="bookText">Bereit für deinen Traumlook?</p>
-        <a class="btn-primary btn-book" id="btn-book" href="#" target="_blank" data-i18n="bookNow">Jetzt Termin buchen</a>
-        <p class="book-hint" data-i18n="bookHint">Cocolashes Bielefeld · Persönliche Beratung inklusive</p>
+      <!-- Save & book CTA -->
+      <div class="results-cta-row">
+        <button class="btn-primary btn-save-big" id="btn-save-result" data-i18n="saveImage">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Bild speichern
+        </button>
+        <button class="btn-secondary btn-to-services" id="btn-to-services" data-i18n="toServices">Leistungen & Termin →</button>
       </div>
-
     </div>
   </div>
 
-  <!-- ═══════════════════ HIDDEN CANVAS FOR CAPTURE ═══════════════════ -->
-  <canvas id="capture-canvas" style="display:none"></canvas>
+  <!-- ═══════════════════ SCREEN 5: SERVICES ═══════════════════ -->
+  <div id="screen-services" class="screen has-tabbar">
+    <div class="top-bar">
+      <div class="top-bar-logo-small">
+        <svg viewBox="0 0 30 20" width="24" height="16"><path d="M15 1 Q7 4 4 9 Q8 7 15 8 Q22 7 26 9 Q23 4 15 1Z" fill="#C9A96E"/><path d="M15 8 Q7 9 5 14 Q9 11 15 12 Q21 11 25 14 Q23 9 15 8Z" fill="#A8845A" opacity="0.7"/></svg>
+        <span class="logo-small-text">Cocolashes</span>
+      </div>
+      <h2 data-i18n="servicesTitle">Leistungen & Preise</h2>
+      <div style="width:40px"></div>
+    </div>
+    <div class="services-scroll" id="services-scroll">
+      <!-- Built dynamically by JS -->
+    </div>
+  </div>
 
-  <!-- ═══════════════════ TOAST ═══════════════════ -->
+  <!-- ═══════════════════ SCREEN 6: INFO ═══════════════════ -->
+  <div id="screen-info" class="screen has-tabbar">
+    <div class="top-bar">
+      <div class="top-bar-logo-small">
+        <svg viewBox="0 0 30 20" width="24" height="16"><path d="M15 1 Q7 4 4 9 Q8 7 15 8 Q22 7 26 9 Q23 4 15 1Z" fill="#C9A96E"/><path d="M15 8 Q7 9 5 14 Q9 11 15 12 Q21 11 25 14 Q23 9 15 8Z" fill="#A8845A" opacity="0.7"/></svg>
+        <span class="logo-small-text">Cocolashes</span>
+      </div>
+      <h2 data-i18n="infoTitle">Kontakt & Zeiten</h2>
+      <div style="width:40px"></div>
+    </div>
+    <div class="info-scroll" id="info-scroll">
+      <!-- Built dynamically by JS -->
+    </div>
+  </div>
+
+  <!-- ═══════════════════ TAB BAR ═══════════════════ -->
+  <nav id="tab-bar" class="tab-bar hidden">
+    <button class="tab-btn" data-screen="results" id="tab-preview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+        <circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
+      </svg>
+      <span data-i18n="tabPreview">Vorschau</span>
+    </button>
+    <button class="tab-btn tab-center-btn" data-screen="services" id="tab-services">
+      <div class="tab-center-inner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="24" height="24">
+          <path d="M12 2a10 10 0 110 20A10 10 0 0112 2z" opacity=".3"/><path d="M8 12l3 3 5-5"/>
+        </svg>
+      </div>
+      <span data-i18n="tabServices">Leistungen</span>
+    </button>
+    <button class="tab-btn" data-screen="info" id="tab-info">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span data-i18n="tabInfo">Info</span>
+    </button>
+  </nav>
+
+  <!-- ═══════════════════ HIDDEN CANVAS + TOAST ═══════════════════ -->
+  <canvas id="capture-canvas" style="display:none"></canvas>
   <div id="toast" class="toast hidden"></div>
 
   <!-- MediaPipe Face Mesh -->

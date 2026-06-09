@@ -2,15 +2,224 @@
    Cocolashes Bielefeld — Main App Controller
    ═══════════════════════════════════════════════════ */
 
-/* ── State ── */
+/* ══════════════════════
+   Business Data
+══════════════════════ */
+const BUSINESS = {
+  name:       'Cocolashes Bielefeld',
+  owner:      'Claudia Gajda',
+  phone:      '+4917643456902',
+  email:      'cocolashes-bielefeld@gmx.de',
+  address:    'Gerichtstraße 13',
+  city:       '33602 Bielefeld',
+  instagram:  'cocolashes.bielefeld', // update if handle differs
+  bookingUrl: 'https://cocolashesbielefeld.simplybook.it/v2/',
+  hours: [
+    { day: 'monday',    open: '16:30', close: '20:00' },
+    { day: 'tuesday',   open: '16:30', close: '20:00' },
+    { day: 'wednesday', open: '16:30', close: '20:00' },
+    { day: 'thursday',  open: '16:30', close: '20:00' },
+    { day: 'friday',    open: '10:00', close: '14:00' },
+    { day: 'saturday',  open: null,    close: null },
+    { day: 'sunday',    open: null,    close: null },
+  ],
+};
+
+/* ── Service categories & items ── */
+const SERVICES = [
+  {
+    id: 'neumodellage',
+    category: { de: 'Neumodellage', en: 'New Set' },
+    categoryDesc: { de: 'Vollständige Neuanlage – Ersttermin', en: 'Full new set – first appointment' },
+    emoji: '🌸',
+    items: [
+      {
+        name: 'Neumodellage 1:1',
+        desc: { de: 'Eine klassische Verlängerung. Verschafft mehr Biegung und eine Verlängerung der Naturwimpern.', en: 'Classic extension with more curl and length for your natural lashes.' },
+        duration: 90, price: 80, styleId: 'classic',
+      },
+      {
+        name: 'Neumodellage Light Volumen',
+        desc: { de: 'Light Volumen für nicht nur mehr Länge, sondern auch mehr Volumen und Dichte.', en: 'Light volume for not just more length, but also more volume and density.' },
+        duration: 90, price: 90, styleId: 'volume',
+      },
+      {
+        name: 'Neumodellage Mega Volumen',
+        desc: { de: 'Maximales Volumen für einen dramatischen, dichten Look.', en: 'Maximum volume for a dramatic, full look.' },
+        duration: 90, price: 100, styleId: 'megaVolume',
+      },
+      {
+        name: 'Bloom Eyes Neumodellage',
+        desc: { de: 'Wispy, Wet mit Farbe deiner Wahl. Für den extravaganten natürlichen Look.', en: 'Wispy, wet with colour of your choice. For an extravagant natural look.' },
+        duration: 120, price: 95, styleId: 'natural',
+        badge: { de: 'Bestseller', en: 'Bestseller' },
+      },
+    ],
+  },
+  {
+    id: 'auffuell-1-1',
+    category: { de: 'Auffülltermin 1:1', en: 'Refill 1:1' },
+    categoryDesc: { de: 'Classic – Nachfülltermin', en: 'Classic – refill appointment' },
+    emoji: '✨',
+    items: [
+      {
+        name: { de: 'Auffülltermin 1:1 (2–3 Wochen)', en: 'Refill 1:1 (2–3 weeks)' },
+        desc: { de: 'Für Kunden, deren letzter Termin 2–3 Wochen zurückliegt.', en: 'For clients whose last appointment was 2–3 weeks ago.' },
+        duration: 60, price: 40, styleId: 'classic',
+      },
+      {
+        name: { de: 'Auffülltermin 1:1 (3–4 Wochen)', en: 'Refill 1:1 (3–4 weeks)' },
+        desc: { de: 'Für Kunden, deren letzter Termin 3–4 Wochen zurückliegt.', en: 'For clients whose last appointment was 3–4 weeks ago.' },
+        duration: 60, price: 50, styleId: 'classic',
+      },
+    ],
+  },
+  {
+    id: 'auffuell-light',
+    category: { de: 'Auffülltermin Light Volumen', en: 'Refill Light Volume' },
+    categoryDesc: { de: 'Light Volume – Nachfülltermin', en: 'Light Volume – refill appointment' },
+    emoji: '💫',
+    items: [
+      {
+        name: { de: 'Auffülltermin Light Volumen (2–3 Wochen)', en: 'Refill Light Volume (2–3 weeks)' },
+        duration: 60, price: 50, styleId: 'volume',
+      },
+      {
+        name: { de: 'Auffülltermin Light Volumen (3–4 Wochen)', en: 'Refill Light Volume (3–4 weeks)' },
+        duration: 60, price: 60, styleId: 'volume',
+      },
+    ],
+  },
+  {
+    id: 'auffuell-mega',
+    category: { de: 'Auffülltermin Mega Volumen', en: 'Refill Mega Volume' },
+    categoryDesc: { de: 'Mega Volume – Nachfülltermin', en: 'Mega Volume – refill appointment' },
+    emoji: '🌟',
+    items: [
+      {
+        name: { de: 'Auffülltermin Mega Volumen (2–3 Wochen)', en: 'Refill Mega Volume (2–3 weeks)' },
+        duration: 60, price: 60, styleId: 'megaVolume',
+      },
+      {
+        name: { de: 'Auffülltermin Mega Volumen (3–4 Wochen)', en: 'Refill Mega Volume (3–4 weeks)' },
+        duration: 60, price: 70, styleId: 'megaVolume',
+      },
+    ],
+  },
+  {
+    id: 'bloom-auffuell',
+    category: { de: 'Bloom Eyes Auffüllen', en: 'Bloom Eyes Refill' },
+    categoryDesc: { de: 'Wispy Bloom Eyes – Nachfülltermin', en: 'Wispy Bloom Eyes – refill appointment' },
+    emoji: '🌺',
+    items: [
+      {
+        name: { de: 'Bloom Eyes (Auffüllen 2–3 Wochen)', en: 'Bloom Eyes Refill (2–3 weeks)' },
+        duration: 60, price: 55, styleId: 'natural',
+      },
+      {
+        name: { de: 'Bloom Eyes (Auffüllen 3–4 Wochen)', en: 'Bloom Eyes Refill (3–4 weeks)' },
+        duration: 60, price: 65, styleId: 'natural',
+      },
+    ],
+  },
+  {
+    id: 'sonstiges',
+    category: { de: 'Sonstiges', en: 'Other Services' },
+    categoryDesc: { de: 'Weitere Leistungen', en: 'Additional services' },
+    emoji: '🔧',
+    items: [
+      {
+        name: { de: 'Wimpern entfernen', en: 'Lash removal' },
+        desc: { de: 'Professionelle und schonende Entfernung der Wimpernverlängerung.', en: 'Professional and gentle removal of lash extensions.' },
+        duration: 30, price: 10, styleId: null,
+      },
+      {
+        name: { de: 'Modellarbeit', en: 'Model work' },
+        desc: { de: 'Du hast eine Anzeige gesehen, dass ich Modelle suche? Buch dich gerne dafür ein.', en: 'Saw our ad looking for models? Book yourself in here.' },
+        duration: 120, price: 50, styleId: null,
+      },
+    ],
+  },
+];
+
+/* ══════════════════════
+   NRW Holidays
+══════════════════════ */
+function getEasterSunday(year) {
+  const a = year % 19, b = Math.floor(year / 100), c = year % 100;
+  const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4), k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31);
+  const day   = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(year, month - 1, day);
+}
+
+function addDays(date, n) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+
+function getNRWHolidays(year) {
+  const e = getEasterSunday(year);
+  return [
+    { date: new Date(year, 0, 1),   name: { de: 'Neujahr',                  en: "New Year's Day" } },
+    { date: addDays(e, -2),          name: { de: 'Karfreitag',               en: 'Good Friday' } },
+    { date: addDays(e,  1),          name: { de: 'Ostermontag',              en: 'Easter Monday' } },
+    { date: new Date(year, 4, 1),   name: { de: 'Tag der Arbeit',           en: 'Labour Day' } },
+    { date: addDays(e, 39),          name: { de: 'Christi Himmelfahrt',      en: 'Ascension Day' } },
+    { date: addDays(e, 50),          name: { de: 'Pfingstmontag',            en: 'Whit Monday' } },
+    { date: addDays(e, 60),          name: { de: 'Fronleichnam',             en: 'Corpus Christi' } },
+    { date: new Date(year, 9, 3),   name: { de: 'Tag der deutschen Einheit',en: 'German Unity Day' } },
+    { date: new Date(year, 10, 1),  name: { de: 'Allerheiligen',            en: "All Saints' Day" } },
+    { date: new Date(year, 11, 25), name: { de: '1. Weihnachtstag',         en: '1st Christmas Day' } },
+    { date: new Date(year, 11, 26), name: { de: '2. Weihnachtstag',         en: '2nd Christmas Day' } },
+  ];
+}
+
+function getUpcomingHolidays(count = 6) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const years = [today.getFullYear(), today.getFullYear() + 1];
+  return years
+    .flatMap(y => getNRWHolidays(y))
+    .filter(h => h.date >= today)
+    .sort((a, b) => a.date - b.date)
+    .slice(0, count);
+}
+
+function formatDate(date, lang) {
+  return date.toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-DE', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+  });
+}
+
+function isHoliday(date) {
+  const y = date.getFullYear();
+  const str = `${y}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+  return getNRWHolidays(y).some(h => {
+    const hs = `${h.date.getFullYear()}-${String(h.date.getMonth()+1).padStart(2,'0')}-${String(h.date.getDate()).padStart(2,'0')}`;
+    return hs === str;
+  });
+}
+
+/* ══════════════════════
+   App State
+══════════════════════ */
 const state = {
-  lang:           'de',
-  stream:         null,
-  capturedImage:  null,     // HTMLImageElement | HTMLCanvasElement
-  landmarks:      null,
-  faceShape:      null,
-  activeStyle:    null,
-  recommendedStyle: null,
+  lang:              'de',
+  stream:            null,
+  capturedImage:     null,
+  landmarks:         null,
+  faceShape:         null,
+  activeStyle:       null,
+  recommendedStyle:  null,
+  servicesBuilt:     false,
+  infoBuilt:         false,
 };
 
 /* ── DOM refs ── */
@@ -22,47 +231,21 @@ const dom = {
     camera:    $('screen-camera'),
     analyzing: $('screen-analyzing'),
     results:   $('screen-results'),
+    services:  $('screen-services'),
+    info:      $('screen-info'),
   },
-  splash: {
-    start:    $('btn-start'),
-    langBtns: document.querySelectorAll('.lang-btn'),
-  },
-  camera: {
-    video:         $('video'),
-    overlay:       $('camera-overlay'),
-    capture:       $('btn-capture'),
-    back:          $('btn-back-camera'),
-    uploadTrigger: $('btn-upload-trigger'),
-    uploadFallback:$('btn-upload-fallback'),
-    fileInput:     $('file-input'),
-    errorPanel:    $('camera-error'),
-  },
-  analyze: {
-    progress: $('progress-bar'),
-  },
-  results: {
-    canvas:       $('result-canvas'),
-    back:         $('btn-back-results'),
-    download:     $('btn-download'),
-    faceIcon:     $('face-shape-icon'),
-    faceText:     $('face-shape-text'),
-    whyText:      $('why-text'),
-    noFaceMsg:    $('no-face-msg'),
-    stylePills:   $('style-pills'),
-    stylesGrid:   $('styles-grid'),
-    bookBtn:      $('btn-book'),
-  },
-  captureCanvas: $('capture-canvas'),
-  toast:         $('toast'),
+  tabBar:         $('tab-bar'),
+  progressBar:    $('progress-bar'),
+  resultCanvas:   $('result-canvas'),
+  captureCanvas:  $('capture-canvas'),
+  video:          $('video'),
+  toast:          $('toast'),
 };
 
+const TAB_SCREENS = ['results', 'services', 'info'];
+
 const FACE_ICONS = {
-  oval:    '⬭',
-  round:   '⬤',
-  square:  '■',
-  heart:   '♡',
-  diamond: '◆',
-  oblong:  '▭',
+  oval: '⬭', round: '⬤', square: '■', heart: '♡', diamond: '◆', oblong: '▭',
 };
 
 /* ══════════════════════
@@ -72,31 +255,59 @@ function showScreen(name) {
   Object.entries(dom.screens).forEach(([key, el]) => {
     el.classList.toggle('active', key === name);
   });
+
+  const showTab = TAB_SCREENS.includes(name);
+  dom.tabBar.classList.toggle('hidden', !showTab);
+
+  if (showTab) {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.screen === name);
+    });
+  }
+
   if (name !== 'camera' && state.stream) stopCamera();
 }
 
 /* ══════════════════════
    Toast
 ══════════════════════ */
-let toastTimer;
+let _toastTimer;
 function showToast(msg) {
   dom.toast.textContent = msg;
   dom.toast.classList.remove('hidden');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => dom.toast.classList.add('hidden'), 3000);
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => dom.toast.classList.add('hidden'), 3000);
 }
 
 /* ══════════════════════
    Language
 ══════════════════════ */
 function initLang() {
-  dom.splash.langBtns.forEach(btn => {
+  document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       state.lang = btn.dataset.lang;
       setLang(state.lang);
-      refreshResultsText();
+      refreshDynamicText();
     });
   });
+}
+
+function refreshDynamicText() {
+  if (state.faceShape) {
+    $('face-shape-text').textContent = t('faceShapes')[state.faceShape] || state.faceShape;
+    $('why-text').textContent = getRecommendation(state.faceShape).reason[state.lang];
+    document.querySelectorAll('[data-style-id]').forEach(el => {
+      const style = getAllStyles().find(s => s.id === el.dataset.styleId);
+      if (!style) return;
+      const n = el.querySelector('.pill-name,.style-card-name');
+      const d = el.querySelector('.style-card-desc');
+      if (n) n.textContent = style.name[state.lang] || style.name.de;
+      if (d) d.textContent = style.desc[state.lang] || style.desc.de;
+    });
+  }
+  // Rebuild dynamic screens with new lang
+  if (state.servicesBuilt) buildServicesScreen();
+  if (state.infoBuilt)     buildInfoScreen();
 }
 
 /* ══════════════════════
@@ -104,19 +315,13 @@ function initLang() {
 ══════════════════════ */
 async function startCamera() {
   try {
-    const constraints = {
-      video: {
-        facingMode: 'user',
-        width:  { ideal: 1280 },
-        height: { ideal: 960 },
-      },
-    };
-    state.stream = await navigator.mediaDevices.getUserMedia(constraints);
-    dom.camera.video.srcObject = state.stream;
-    dom.camera.errorPanel.classList.add('hidden');
-  } catch (err) {
-    console.warn('Camera error:', err);
-    dom.camera.errorPanel.classList.remove('hidden');
+    state.stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 960 } },
+    });
+    dom.video.srcObject = state.stream;
+    $('camera-error').classList.add('hidden');
+  } catch {
+    $('camera-error').classList.remove('hidden');
   }
 }
 
@@ -125,128 +330,88 @@ function stopCamera() {
     state.stream.getTracks().forEach(t => t.stop());
     state.stream = null;
   }
-  dom.camera.video.srcObject = null;
+  dom.video.srcObject = null;
 }
 
 function captureFromVideo() {
-  const video  = dom.camera.video;
-  const canvas = dom.captureCanvas;
-  const w = video.videoWidth  || 640;
-  const h = video.videoHeight || 480;
-  canvas.width  = w;
-  canvas.height = h;
-  const ctx = canvas.getContext('2d');
-  // Un-mirror the image (video is mirrored via CSS)
-  ctx.save();
-  ctx.translate(w, 0);
-  ctx.scale(-1, 1);
-  ctx.drawImage(video, 0, 0, w, h);
+  const v = dom.video;
+  const c = dom.captureCanvas;
+  const w = v.videoWidth || 640, h = v.videoHeight || 480;
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.save(); ctx.translate(w, 0); ctx.scale(-1, 1);
+  ctx.drawImage(v, 0, 0, w, h);
   ctx.restore();
-  return canvas;
+  return c;
 }
 
-/* ══════════════════════
-   File upload
-══════════════════════ */
 function loadImageFromFile(file) {
-  return new Promise((resolve, reject) => {
+  return new Promise((res, rej) => {
     const reader = new FileReader();
     reader.onload = e => {
       const img = new Image();
-      img.onload  = () => resolve(img);
-      img.onerror = reject;
+      img.onload = () => res(img);
+      img.onerror = rej;
       img.src = e.target.result;
     };
-    reader.onerror = reject;
+    reader.onerror = rej;
     reader.readAsDataURL(file);
   });
 }
 
 /* ══════════════════════
-   MediaPipe FaceMesh
+   MediaPipe
 ══════════════════════ */
-let faceMeshInstance = null;
+let _faceMesh = null;
 
 async function getFaceMesh() {
-  if (faceMeshInstance) return faceMeshInstance;
-  return new Promise((resolve, reject) => {
-    if (typeof FaceMesh === 'undefined') {
-      reject(new Error('MediaPipe FaceMesh not loaded'));
-      return;
-    }
+  if (_faceMesh) return _faceMesh;
+  return new Promise((res, rej) => {
+    if (typeof FaceMesh === 'undefined') { rej(new Error('FaceMesh not loaded')); return; }
     const fm = new FaceMesh({
-      locateFile: file =>
-        `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/${file}`,
+      locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/${f}`,
     });
-    fm.setOptions({
-      maxNumFaces:          1,
-      refineLandmarks:      true,
-      minDetectionConfidence: 0.5,
-      minTrackingConfidence:  0.5,
-    });
-    fm.onResults(results => {
-      fm._lastResults = results;
-    });
-    fm.initialize().then(() => {
-      faceMeshInstance = fm;
-      resolve(fm);
-    }).catch(reject);
+    fm.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+    fm.onResults(r => { fm._last = r; });
+    fm.initialize().then(() => { _faceMesh = fm; res(fm); }).catch(rej);
   });
 }
 
-async function detectFaceLandmarks(imageSource) {
+async function detectFaceLandmarks(src) {
   const fm = await getFaceMesh();
-  return new Promise(async (resolve) => {
-    fm.onResults(results => {
-      if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-        resolve(results.multiFaceLandmarks[0]);
-      } else {
-        resolve(null);
-      }
+  return new Promise(async res => {
+    fm.onResults(r => {
+      res(r.multiFaceLandmarks && r.multiFaceLandmarks.length > 0
+        ? r.multiFaceLandmarks[0] : null);
     });
-    await fm.send({ image: imageSource });
+    await fm.send({ image: src });
   });
-}
-
-/* ══════════════════════
-   Progress animation
-══════════════════════ */
-function animateProgress(duration, onDone) {
-  const bar   = dom.analyze.progress;
-  const start = performance.now();
-  function step(now) {
-    const pct = Math.min(100, ((now - start) / duration) * 100);
-    bar.style.width = pct + '%';
-    if (pct < 100) requestAnimationFrame(step);
-    else if (onDone) onDone();
-  }
-  requestAnimationFrame(step);
 }
 
 /* ══════════════════════
    Analysis flow
 ══════════════════════ */
-async function analyzeAndShowResults(imgSource) {
-  state.capturedImage = imgSource;
+async function analyzeAndShow(imgSrc) {
+  state.capturedImage = imgSrc;
   showScreen('analyzing');
-  dom.analyze.progress.style.width = '0%';
+  dom.progressBar.style.width = '0%';
 
-  // Run face detection and progress animation in parallel
   const [landmarks] = await Promise.all([
-    detectFaceLandmarks(imgSource).catch(() => null),
-    new Promise(r => animateProgress(2200, r)),
+    detectFaceLandmarks(imgSrc).catch(() => null),
+    animateProgress(2200),
   ]);
 
   state.landmarks = landmarks;
 
+  const w = imgSrc.naturalWidth  || imgSrc.width  || 640;
+  const h = imgSrc.naturalHeight || imgSrc.height || 480;
+
   if (landmarks) {
-    const w = imgSource.naturalWidth  || imgSource.width  || 640;
-    const h = imgSource.naturalHeight || imgSource.height || 480;
     state.faceShape = detectFaceShape(landmarks, w, h);
-    dom.results.noFaceMsg.classList.add('hidden');
+    $('no-face-msg').classList.add('hidden');
   } else {
-    state.faceShape = 'oval'; // fallback
-    dom.results.noFaceMsg.classList.remove('hidden');
+    state.faceShape = 'oval';
+    $('no-face-msg').classList.remove('hidden');
     showToast(t('noFaceToast'));
   }
 
@@ -259,165 +424,336 @@ async function analyzeAndShowResults(imgSource) {
   showScreen('results');
 }
 
+function animateProgress(ms) {
+  return new Promise(done => {
+    const bar = dom.progressBar;
+    const start = performance.now();
+    function step(now) {
+      const pct = Math.min(100, ((now - start) / ms) * 100);
+      bar.style.width = pct + '%';
+      pct < 100 ? requestAnimationFrame(step) : done();
+    }
+    requestAnimationFrame(step);
+  });
+}
+
 /* ══════════════════════
-   Build results UI
+   Results UI
 ══════════════════════ */
 function buildResultsUI() {
   const styles = getAllStyles();
   const rec    = getRecommendation(state.faceShape);
 
-  // Face card
-  dom.results.faceIcon.textContent = FACE_ICONS[state.faceShape] || '⬡';
-  dom.results.faceText.textContent = t('faceShapes')[state.faceShape] || state.faceShape;
+  $('face-shape-icon').textContent = FACE_ICONS[state.faceShape] || '⬡';
+  $('face-shape-text').textContent = t('faceShapes')[state.faceShape] || state.faceShape;
 
-  // Style pills (horizontal scroll row)
-  dom.results.stylePills.innerHTML = '';
-  styles.forEach(style => {
+  // Pills
+  const pillsCt = $('style-pills');
+  pillsCt.innerHTML = '';
+  styles.forEach(s => {
     const pill = document.createElement('div');
     pill.className = 'style-pill' +
-      (style.id === rec.primary ? ' recommended-pill' : '') +
-      (style.id === state.activeStyle ? ' active' : '');
-    pill.dataset.styleId = style.id;
-    pill.innerHTML = `
-      <span class="pill-emoji">${style.emoji}</span>
-      <span class="pill-name">${style.name[state.lang] || style.name.de}</span>
-    `;
-    pill.addEventListener('click', () => selectStyle(style.id));
-    dom.results.stylePills.appendChild(pill);
+      (s.id === rec.primary     ? ' recommended-pill' : '') +
+      (s.id === state.activeStyle ? ' active'           : '');
+    pill.dataset.styleId = s.id;
+    pill.innerHTML = `<span class="pill-emoji">${s.emoji}</span><span class="pill-name">${s.name[state.lang]||s.name.de}</span>`;
+    pill.addEventListener('click', () => selectStyle(s.id));
+    pillsCt.appendChild(pill);
   });
 
-  // Why text
-  dom.results.whyText.textContent = rec.reason[state.lang] || rec.reason.de;
+  $('why-text').textContent = rec.reason[state.lang] || rec.reason.de;
 
-  // Styles grid
-  dom.results.stylesGrid.innerHTML = '';
-  styles.forEach(style => {
+  // Grid
+  const grid = $('styles-grid');
+  grid.innerHTML = '';
+  styles.forEach(s => {
     const card = document.createElement('div');
     card.className = 'style-card' +
-      (style.id === rec.primary ? ' recommended-card' : '') +
-      (style.id === state.activeStyle ? ' active' : '');
-    card.dataset.styleId = style.id;
+      (s.id === rec.primary     ? ' recommended-card' : '') +
+      (s.id === state.activeStyle ? ' active'           : '');
+    card.dataset.styleId = s.id;
     card.innerHTML = `
-      <span class="style-card-emoji">${style.emoji}</span>
-      <span class="style-card-name">${style.name[state.lang] || style.name.de}</span>
-      <span class="style-card-desc">${style.desc[state.lang] || style.desc.de}</span>
-    `;
-    card.addEventListener('click', () => selectStyle(style.id));
-    dom.results.stylesGrid.appendChild(card);
+      <span class="style-card-emoji">${s.emoji}</span>
+      <span class="style-card-name">${s.name[state.lang]||s.name.de}</span>
+      <span class="style-card-desc">${s.desc[state.lang]||s.desc.de}</span>`;
+    card.addEventListener('click', () => selectStyle(s.id));
+    grid.appendChild(card);
   });
-
-  // Book button – WhatsApp link (placeholder number)
-  dom.results.bookBtn.href = 'https://wa.me/4952198765432?text=' +
-    encodeURIComponent('Hallo Cocolashes! Ich möchte einen Termin für Wimpernverlängerung buchen.');
 }
 
-function refreshResultsText() {
-  if (!state.faceShape) return;
-  const rec = getRecommendation(state.faceShape);
-  dom.results.faceText.textContent = t('faceShapes')[state.faceShape] || state.faceShape;
-  dom.results.whyText.textContent  = rec.reason[state.lang] || rec.reason.de;
-
-  // Update pill/card names
-  document.querySelectorAll('[data-style-id]').forEach(el => {
-    const style = getAllStyles().find(s => s.id === el.dataset.styleId);
-    if (!style) return;
-    const nameEl = el.querySelector('.pill-name, .style-card-name');
-    const descEl = el.querySelector('.style-card-desc');
-    if (nameEl) nameEl.textContent = style.name[state.lang] || style.name.de;
-    if (descEl) descEl.textContent = style.desc[state.lang] || style.desc.de;
-  });
-
-  setLang(state.lang);
-}
-
-/* ══════════════════════
-   Style selection
-══════════════════════ */
-function selectStyle(styleId) {
-  state.activeStyle = styleId;
-
-  // Update pill active state
-  document.querySelectorAll('.style-pill').forEach(p => {
-    p.classList.toggle('active', p.dataset.styleId === styleId);
-  });
-  // Update card active state
-  document.querySelectorAll('.style-card').forEach(c => {
-    c.classList.toggle('active', c.dataset.styleId === styleId);
-  });
-
+function selectStyle(id) {
+  state.activeStyle = id;
+  document.querySelectorAll('.style-pill').forEach(p => p.classList.toggle('active', p.dataset.styleId === id));
+  document.querySelectorAll('.style-card').forEach(c => c.classList.toggle('active', c.dataset.styleId === id));
   renderCurrentStyle();
 }
 
 function renderCurrentStyle() {
   if (!state.capturedImage) return;
-  renderLashesOnCanvas(
-    dom.results.canvas,
-    state.capturedImage,
-    state.landmarks,
-    state.activeStyle,
-  );
+  renderLashesOnCanvas(dom.resultCanvas, state.capturedImage, state.landmarks, state.activeStyle);
+}
+
+/* ══════════════════════
+   Services Screen
+══════════════════════ */
+function buildServicesScreen() {
+  const container = $('services-scroll');
+  const lang = state.lang;
+  container.innerHTML = '';
+  state.servicesBuilt = true;
+
+  // Intro note
+  const note = document.createElement('p');
+  note.className = 'services-note';
+  note.textContent = t('priceNote');
+  container.appendChild(note);
+
+  SERVICES.forEach(cat => {
+    // Category header
+    const catEl = document.createElement('div');
+    catEl.className = 'service-category';
+    catEl.innerHTML = `
+      <div class="service-cat-header">
+        <span class="service-cat-emoji">${cat.emoji}</span>
+        <div>
+          <h3 class="service-cat-name">${cat.category[lang]||cat.category.de}</h3>
+          <p class="service-cat-desc">${cat.categoryDesc[lang]||cat.categoryDesc.de}</p>
+        </div>
+      </div>`;
+    container.appendChild(catEl);
+
+    // Service items
+    cat.items.forEach(item => {
+      const name = typeof item.name === 'object' ? (item.name[lang]||item.name.de) : item.name;
+      const desc = item.desc ? (item.desc[lang]||item.desc.de) : '';
+      const badge = item.badge ? (item.badge[lang]||item.badge.de) : null;
+
+      const card = document.createElement('div');
+      card.className = 'service-card';
+      card.innerHTML = `
+        <div class="service-card-top">
+          <div class="service-card-info">
+            <div class="service-name-row">
+              <span class="service-name">${name}</span>
+              ${badge ? `<span class="service-badge">${badge}</span>` : ''}
+            </div>
+            ${desc ? `<p class="service-desc">${desc}</p>` : ''}
+            <div class="service-meta">
+              <span class="service-dur">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ${item.duration} ${t('minLabel')}
+              </span>
+              ${item.styleId ? `<span class="service-style-tag">${getStyleName(item.styleId, lang)}</span>` : ''}
+            </div>
+          </div>
+          <div class="service-price-col">
+            <span class="service-price">${item.price},00&nbsp;€</span>
+          </div>
+        </div>
+        <a class="btn-book-service" href="${BUSINESS.bookingUrl}" target="_blank" rel="noopener">
+          ${t('bookBtn')}
+        </a>`;
+      container.appendChild(card);
+    });
+  });
+
+  // Book all CTA
+  const cta = document.createElement('div');
+  cta.className = 'services-cta';
+  cta.innerHTML = `
+    <a class="btn-primary" href="${BUSINESS.bookingUrl}" target="_blank" rel="noopener">
+      ${t('bookAtSimplyBook')}
+    </a>`;
+  container.appendChild(cta);
+}
+
+function getStyleName(styleId, lang) {
+  const s = getAllStyles().find(x => x.id === styleId);
+  return s ? (s.name[lang] || s.name.de) : '';
+}
+
+/* ══════════════════════
+   Info Screen
+══════════════════════ */
+function buildInfoScreen() {
+  const container = $('info-scroll');
+  const lang = state.lang;
+  container.innerHTML = '';
+  state.infoBuilt = true;
+
+  // ── Opening hours ──
+  const hoursCard = document.createElement('div');
+  hoursCard.className = 'info-card';
+  const dayMap = { de: ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'],
+                   en: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] };
+  const daysLabels = dayMap[lang] || dayMap.de;
+  const dayKeys = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+  const rowsHtml = BUSINESS.hours.map((h, i) => {
+    const isToday = new Date().getDay() === (i + 1) % 7;
+    const todayCls = isToday ? ' hours-today' : '';
+    const timeStr = h.open ? `${h.open}–${h.close}` : t('closedText');
+    const closedCls = !h.open ? ' hours-closed' : '';
+    return `<tr class="${todayCls}">
+      <td class="hours-day">${daysLabels[i]}</td>
+      <td class="hours-time${closedCls}">${timeStr}</td>
+    </tr>`;
+  }).join('');
+
+  hoursCard.innerHTML = `
+    <div class="info-card-header">
+      <span class="info-icon">🕐</span>
+      <h3>${t('hoursTitle')}</h3>
+    </div>
+    <table class="hours-table">${rowsHtml}</table>`;
+  container.appendChild(hoursCard);
+
+  // ── Upcoming NRW holidays ──
+  const holidays = getUpcomingHolidays(6);
+  const holidayCard = document.createElement('div');
+  holidayCard.className = 'info-card info-card-holiday';
+  holidayCard.innerHTML = `
+    <div class="info-card-header">
+      <span class="info-icon">🎌</span>
+      <h3>${t('upcomingHolidays')}</h3>
+    </div>
+    <p class="holiday-note">${t('holidayNote')}</p>
+    <div class="holiday-pills">
+      ${holidays.map(h => `
+        <div class="holiday-pill">
+          <span class="holiday-date">${formatDate(h.date, lang)}</span>
+          <span class="holiday-name">${h.name[lang]||h.name.de}</span>
+        </div>`).join('')}
+    </div>`;
+  container.appendChild(holidayCard);
+
+  // ── Contact ──
+  const contactCard = document.createElement('div');
+  contactCard.className = 'info-card';
+  contactCard.innerHTML = `
+    <div class="info-card-header">
+      <span class="info-icon">📞</span>
+      <h3>${t('contactTitle')}</h3>
+    </div>
+    <div class="contact-links">
+      <a class="contact-link" href="tel:${BUSINESS.phone}">
+        <span class="contact-link-icon">📱</span>
+        <span>${BUSINESS.phone}</span>
+      </a>
+      <a class="contact-link" href="mailto:${BUSINESS.email}">
+        <span class="contact-link-icon">✉️</span>
+        <span>${BUSINESS.email}</span>
+      </a>
+      <a class="contact-link" href="https://www.instagram.com/${BUSINESS.instagram}" target="_blank" rel="noopener">
+        <span class="contact-link-icon">📸</span>
+        <span>@${BUSINESS.instagram}</span>
+      </a>
+      <a class="contact-link" href="${BUSINESS.bookingUrl}" target="_blank" rel="noopener">
+        <span class="contact-link-icon">🌐</span>
+        <span>cocolashesbielefeld.simplybook.it</span>
+      </a>
+    </div>`;
+  container.appendChild(contactCard);
+
+  // ── Address ──
+  const addrCard = document.createElement('div');
+  addrCard.className = 'info-card';
+  const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(BUSINESS.address + ', ' + BUSINESS.city)}`;
+  addrCard.innerHTML = `
+    <div class="info-card-header">
+      <span class="info-icon">📍</span>
+      <h3>${t('addressTitle')}</h3>
+    </div>
+    <a class="address-link" href="${mapsUrl}" target="_blank" rel="noopener">
+      <div class="address-text">
+        <p>${BUSINESS.address}</p>
+        <p>${BUSINESS.city}</p>
+      </div>
+      <span class="address-arrow">→ Google Maps</span>
+    </a>`;
+  container.appendChild(addrCard);
+
+  // Bottom spacer
+  const spacer = document.createElement('div');
+  spacer.style.height = '16px';
+  container.appendChild(spacer);
 }
 
 /* ══════════════════════
    Download
 ══════════════════════ */
 function downloadResult() {
-  const canvas = dom.results.canvas;
+  const canvas = dom.resultCanvas;
   const link   = document.createElement('a');
-  link.download = `cocolashes-preview-${state.activeStyle || 'result'}.jpg`;
-  link.href     = canvas.toDataURL('image/jpeg', 0.92);
+  link.download = `cocolashes-${state.activeStyle || 'preview'}.jpg`;
+  link.href     = canvas.toDataURL('image/jpeg', 0.93);
   link.click();
   showToast(t('saved'));
+}
+
+/* ══════════════════════
+   Tab Bar
+══════════════════════ */
+function initTabBar() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.screen;
+      if (target === 'results' && !state.capturedImage) {
+        showScreen('camera');
+        startCamera();
+        return;
+      }
+      showScreen(target);
+      if (target === 'services' && !state.servicesBuilt) buildServicesScreen();
+      if (target === 'info'     && !state.infoBuilt)     buildInfoScreen();
+    });
+  });
 }
 
 /* ══════════════════════
    Event bindings
 ══════════════════════ */
 function initEvents() {
-  // Splash → Camera
-  dom.splash.start.addEventListener('click', () => {
+  // Splash buttons
+  $('btn-start').addEventListener('click', () => {
     showScreen('camera');
     startCamera();
   });
-
-  // Camera back
-  dom.camera.back.addEventListener('click', () => {
-    showScreen('splash');
+  $('btn-splash-services').addEventListener('click', () => {
+    showScreen('services');
+    buildServicesScreen();
+  });
+  $('btn-splash-info').addEventListener('click', () => {
+    showScreen('info');
+    buildInfoScreen();
   });
 
-  // Capture photo
-  dom.camera.capture.addEventListener('click', () => {
-    if (!dom.camera.video.srcObject) return;
-    const frame = captureFromVideo();
-    analyzeAndShowResults(frame);
+  // Camera
+  $('btn-back-camera').addEventListener('click', () => showScreen('splash'));
+  $('btn-upload-trigger').addEventListener('click', () => $('file-input').click());
+  $('btn-upload-fallback') && $('btn-upload-fallback').addEventListener('click', () => $('file-input').click());
+  $('btn-capture').addEventListener('click', () => {
+    if (!dom.video.srcObject) return;
+    analyzeAndShow(captureFromVideo());
   });
-
-  // Upload triggers
-  dom.camera.uploadTrigger.addEventListener('click', () => dom.camera.fileInput.click());
-  if (dom.camera.uploadFallback) {
-    dom.camera.uploadFallback.addEventListener('click', () => dom.camera.fileInput.click());
-  }
-
-  dom.camera.fileInput.addEventListener('change', async e => {
+  $('file-input').addEventListener('change', async e => {
     const file = e.target.files[0];
     if (!file) return;
-    try {
-      const img = await loadImageFromFile(file);
-      analyzeAndShowResults(img);
-    } catch {
-      showToast('Fehler beim Laden des Bildes');
-    }
-    e.target.value = ''; // reset so same file can be re-selected
+    try { analyzeAndShow(await loadImageFromFile(file)); }
+    catch { showToast('Fehler beim Laden des Bildes'); }
+    e.target.value = '';
   });
 
-  // Results back
-  dom.results.back.addEventListener('click', () => {
+  // Results
+  $('btn-back-results').addEventListener('click', () => {
     showScreen('camera');
     startCamera();
   });
-
-  // Download
-  dom.results.download.addEventListener('click', downloadResult);
+  $('btn-download').addEventListener('click', downloadResult);
+  $('btn-save-result').addEventListener('click', downloadResult);
+  $('btn-to-services').addEventListener('click', () => {
+    showScreen('services');
+    if (!state.servicesBuilt) buildServicesScreen();
+  });
 }
 
 /* ══════════════════════
@@ -425,18 +761,15 @@ function initEvents() {
 ══════════════════════ */
 function init() {
   initLang();
+  initTabBar();
   initEvents();
   setLang(state.lang);
 
-  // Pre-warm MediaPipe in background
-  if (typeof FaceMesh !== 'undefined') {
-    getFaceMesh().catch(() => {});
-  }
+  // Pre-warm MediaPipe
+  if (typeof FaceMesh !== 'undefined') getFaceMesh().catch(() => {});
 
   // Register service worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 
 document.addEventListener('DOMContentLoaded', init);
