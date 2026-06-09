@@ -1,5 +1,5 @@
 /* ── Cocolashes Service Worker ── */
-const CACHE = 'cocolashes-v1';
+const CACHE = 'cocolashes-v3';
 const ASSETS = [
   '/',
   '/index.html',
@@ -29,15 +29,22 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Network-first for MediaPipe CDN, cache-first for app assets
   const url = new URL(e.request.url);
+  // CDN resources: network-first, cache as fallback
   if (url.hostname.includes('jsdelivr') || url.hostname.includes('googleapis')) {
     e.respondWith(
       fetch(e.request).catch(() => caches.match(e.request))
     );
     return;
   }
+  // App files: network-first so updates are always picked up immediately
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
+    fetch(e.request)
+      .then(response => {
+        const clone = response.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return response;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
