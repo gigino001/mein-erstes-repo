@@ -12,7 +12,7 @@ const BUSINESS = {
   email:      'cocolashes-bielefeld@gmx.de',
   address:    'Gerichtstraße 13',
   city:       '33602 Bielefeld',
-  instagram:  'cocolashes.bielefeld', // update if handle differs
+  instagram:  'cocolashesbielefeld',
   bookingUrl: 'https://cocolashesbielefeld.simplybook.it/v2/',
   hours: [
     { day: 'monday',    open: '16:30', close: '20:00' },
