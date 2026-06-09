@@ -266,6 +266,7 @@ function showScreen(name) {
   }
 
   if (name !== 'camera' && state.stream) stopCamera();
+  if (name !== 'analyzing') dom.progressBar.classList.remove('pulsing');
 }
 
 /* ══════════════════════
@@ -378,14 +379,18 @@ async function getFaceMesh() {
 }
 
 async function detectFaceLandmarks(src) {
-  const fm = await getFaceMesh();
-  return new Promise(async res => {
-    fm.onResults(r => {
-      res(r.multiFaceLandmarks && r.multiFaceLandmarks.length > 0
-        ? r.multiFaceLandmarks[0] : null);
+  const timeout = new Promise(res => setTimeout(() => res(null), 9000));
+  const detect = (async () => {
+    const fm = await getFaceMesh();
+    return new Promise(async res => {
+      fm.onResults(r => {
+        res(r.multiFaceLandmarks && r.multiFaceLandmarks.length > 0
+          ? r.multiFaceLandmarks[0] : null);
+      });
+      await fm.send({ image: src });
     });
-    await fm.send({ image: src });
-  });
+  })().catch(() => null);
+  return Promise.race([detect, timeout]);
 }
 
 /* ══════════════════════
@@ -396,41 +401,61 @@ async function analyzeAndShow(imgSrc) {
   showScreen('analyzing');
   dom.progressBar.style.width = '0%';
 
-  const [landmarks] = await Promise.all([
-    detectFaceLandmarks(imgSrc).catch(() => null),
-    animateProgress(2200),
-  ]);
+  try {
+    const [landmarks] = await Promise.all([
+      detectFaceLandmarks(imgSrc).catch(() => null),
+      animateProgress(2200),
+    ]);
 
-  state.landmarks = landmarks;
+    state.landmarks = landmarks;
 
-  const w = imgSrc.naturalWidth  || imgSrc.width  || 640;
-  const h = imgSrc.naturalHeight || imgSrc.height || 480;
+    const w = imgSrc.naturalWidth  || imgSrc.width  || 640;
+    const h = imgSrc.naturalHeight || imgSrc.height || 480;
 
-  if (landmarks) {
-    state.faceShape = detectFaceShape(landmarks, w, h);
-    $('no-face-msg').classList.add('hidden');
-  } else {
-    state.faceShape = 'oval';
+    if (landmarks) {
+      state.faceShape = detectFaceShape(landmarks, w, h);
+      $('no-face-msg').classList.add('hidden');
+    } else {
+      state.faceShape = 'oval';
+      $('no-face-msg').classList.remove('hidden');
+      showToast(t('noFaceToast'));
+    }
+
+    const rec = getRecommendation(state.faceShape);
+    state.recommendedStyle = rec.primary;
+    state.activeStyle      = rec.primary;
+
+    try {
+      buildCarousel();
+    } catch (err) {
+      console.error('Carousel build error:', err);
+    }
+  } catch (err) {
+    console.error('Analysis error:', err);
+    state.faceShape        = state.faceShape || 'oval';
+    state.recommendedStyle = state.recommendedStyle || 'natural';
+    state.activeStyle      = state.activeStyle      || 'natural';
     $('no-face-msg').classList.remove('hidden');
-    showToast(t('noFaceToast'));
+    try { buildCarousel(); } catch (_) {}
   }
 
-  const rec = getRecommendation(state.faceShape);
-  state.recommendedStyle = rec.primary;
-  state.activeStyle      = rec.primary;
-
-  buildCarousel();
   showScreen('results');
 }
 
 function animateProgress(ms) {
   return new Promise(done => {
     const bar = dom.progressBar;
+    bar.classList.remove('pulsing');
     const start = performance.now();
     function step(now) {
       const pct = Math.min(100, ((now - start) / ms) * 100);
       bar.style.width = pct + '%';
-      pct < 100 ? requestAnimationFrame(step) : done();
+      if (pct < 100) {
+        requestAnimationFrame(step);
+      } else {
+        bar.classList.add('pulsing');
+        done();
+      }
     }
     requestAnimationFrame(step);
   });
