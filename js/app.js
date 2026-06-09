@@ -852,3 +852,6 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// Expose for dev/testing
+window.__coco = { state, showScreen, buildCarousel, goToSlide };
