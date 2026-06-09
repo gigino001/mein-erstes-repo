@@ -295,17 +295,17 @@ function initLang() {
 function refreshDynamicText() {
   if (state.faceShape) {
     $('face-shape-text').textContent = t('faceShapes')[state.faceShape] || state.faceShape;
-    $('why-text').textContent = getRecommendation(state.faceShape).reason[state.lang];
-    document.querySelectorAll('[data-style-id]').forEach(el => {
-      const style = getAllStyles().find(s => s.id === el.dataset.styleId);
-      if (!style) return;
-      const n = el.querySelector('.pill-name,.style-card-name');
-      const d = el.querySelector('.style-card-desc');
-      if (n) n.textContent = style.name[state.lang] || style.name.de;
-      if (d) d.textContent = style.desc[state.lang] || style.desc.de;
-    });
+    // Refresh carousel slide labels and info text for new lang
+    if (state.slides) {
+      const container = $('swipe-container');
+      state.slides.forEach((slide, i) => {
+        const s = getAllStyles().find(x => x.id === slide.styleId);
+        const nameEl = container.children[i]?.querySelector('.slide-name-text');
+        if (nameEl) nameEl.textContent = s.name[state.lang] || s.name.de;
+      });
+      updateStyleInfo(state.currentSlide);
+    }
   }
-  // Rebuild dynamic screens with new lang
   if (state.servicesBuilt) buildServicesScreen();
   if (state.infoBuilt)     buildInfoScreen();
 }
@@ -419,8 +419,7 @@ async function analyzeAndShow(imgSrc) {
   state.recommendedStyle = rec.primary;
   state.activeStyle      = rec.primary;
 
-  buildResultsUI();
-  renderCurrentStyle();
+  buildCarousel();
   showScreen('results');
 }
 
@@ -438,59 +437,136 @@ function animateProgress(ms) {
 }
 
 /* ══════════════════════
-   Results UI
+   Carousel / Swipe
 ══════════════════════ */
-function buildResultsUI() {
-  const styles = getAllStyles();
-  const rec    = getRecommendation(state.faceShape);
 
+function getStyleOrder() {
+  const all = getAllStyles().map(s => s.id);
+  const rest = all.filter(id => id !== state.recommendedStyle);
+  return [state.recommendedStyle, ...rest];
+}
+
+function buildCarousel() {
+  const lang = state.lang;
+  const rec  = getRecommendation(state.faceShape);
+
+  // Face mini bar
   $('face-shape-icon').textContent = FACE_ICONS[state.faceShape] || '⬡';
   $('face-shape-text').textContent = t('faceShapes')[state.faceShape] || state.faceShape;
 
-  // Pills
-  const pillsCt = $('style-pills');
-  pillsCt.innerHTML = '';
-  styles.forEach(s => {
-    const pill = document.createElement('div');
-    pill.className = 'style-pill' +
-      (s.id === rec.primary     ? ' recommended-pill' : '') +
-      (s.id === state.activeStyle ? ' active'           : '');
-    pill.dataset.styleId = s.id;
-    pill.innerHTML = `<span class="pill-emoji">${s.emoji}</span><span class="pill-name">${s.name[state.lang]||s.name.de}</span>`;
-    pill.addEventListener('click', () => selectStyle(s.id));
-    pillsCt.appendChild(pill);
+  // Pre-render every style to a data URL
+  const styleOrder = getStyleOrder();
+  state.styleOrder = styleOrder;
+  state.slides = styleOrder.map(styleId => {
+    const canvas = document.createElement('canvas');
+    renderLashesOnCanvas(canvas, state.capturedImage, state.landmarks, styleId);
+    return { styleId, dataUrl: canvas.toDataURL('image/jpeg', 0.93) };
   });
 
-  $('why-text').textContent = rec.reason[state.lang] || rec.reason.de;
+  // Build slides in DOM
+  const container = $('swipe-container');
+  container.innerHTML = '';
+  state.slides.forEach((slide, i) => {
+    const s   = getAllStyles().find(x => x.id === slide.styleId);
+    const isRec = i === 0;
+    const el  = document.createElement('div');
+    el.className = 'swipe-slide';
+    el.innerHTML = `
+      <img src="${slide.dataUrl}" alt="${s.name[lang]||s.name.de}" draggable="false">
+      ${isRec ? `<div class="slide-top-badge">✦ Top Pick</div>` : ''}
+      <div class="slide-name-overlay">
+        <span class="slide-name-emoji">${s.emoji}</span>
+        <span class="slide-name-text">${s.name[lang]||s.name.de}</span>
+      </div>`;
+    container.appendChild(el);
+  });
 
-  // Grid
-  const grid = $('styles-grid');
-  grid.innerHTML = '';
-  styles.forEach(s => {
-    const card = document.createElement('div');
-    card.className = 'style-card' +
-      (s.id === rec.primary     ? ' recommended-card' : '') +
-      (s.id === state.activeStyle ? ' active'           : '');
-    card.dataset.styleId = s.id;
-    card.innerHTML = `
-      <span class="style-card-emoji">${s.emoji}</span>
-      <span class="style-card-name">${s.name[state.lang]||s.name.de}</span>
-      <span class="style-card-desc">${s.desc[state.lang]||s.desc.de}</span>`;
-    card.addEventListener('click', () => selectStyle(s.id));
-    grid.appendChild(card);
+  // Dots
+  const dotsEl = $('swipe-dots');
+  dotsEl.innerHTML = '';
+  state.slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'swipe-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goToSlide(i));
+    dotsEl.appendChild(dot);
+  });
+
+  // Init state
+  state.currentSlide = 0;
+  updateStyleInfo(0);
+  initSwipeEvents(container);
+  updateArrows();
+}
+
+function goToSlide(index) {
+  const container = $('swipe-container');
+  const total = state.slides.length;
+  index = Math.max(0, Math.min(total - 1, index));
+  state.currentSlide = index;
+  container.scrollTo({ left: index * container.offsetWidth, behavior: 'smooth' });
+  updateDots(index);
+  updateStyleInfo(index);
+  updateArrows();
+}
+
+function updateDots(index) {
+  document.querySelectorAll('.swipe-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === index);
   });
 }
 
-function selectStyle(id) {
-  state.activeStyle = id;
-  document.querySelectorAll('.style-pill').forEach(p => p.classList.toggle('active', p.dataset.styleId === id));
-  document.querySelectorAll('.style-card').forEach(c => c.classList.toggle('active', c.dataset.styleId === id));
-  renderCurrentStyle();
+function updateArrows() {
+  const prev = $('swipe-prev');
+  const next = $('swipe-next');
+  if (!prev || !next) return;
+  const i = state.currentSlide;
+  const n = state.slides ? state.slides.length : 0;
+  prev.classList.toggle('hidden', i === 0);
+  next.classList.toggle('hidden', i >= n - 1);
 }
 
-function renderCurrentStyle() {
-  if (!state.capturedImage) return;
-  renderLashesOnCanvas(dom.resultCanvas, state.capturedImage, state.landmarks, state.activeStyle);
+function updateStyleInfo(index) {
+  if (!state.slides) return;
+  const lang    = state.lang;
+  const styleId = state.slides[index].styleId;
+  const s       = getAllStyles().find(x => x.id === styleId);
+  const isRec   = styleId === state.recommendedStyle;
+  const rec     = getRecommendation(state.faceShape);
+
+  $('current-style-emoji').textContent   = s.emoji;
+  $('current-style-name').textContent    = s.name[lang] || s.name.de;
+  $('current-style-subdesc').textContent = s.desc[lang] || s.desc.de;
+  $('rec-badge').classList.toggle('hidden', !isRec);
+  $('why-text').textContent = isRec
+    ? (rec.reason[lang] || rec.reason.de)
+    : (s.desc[lang] || s.desc.de);
+
+  // Hide swipe hint after first swipe
+  if (index > 0) {
+    const hint = $('swipe-hint');
+    if (hint) hint.style.opacity = '0';
+  }
+
+  state.activeStyle = styleId;
+}
+
+function initSwipeEvents(container) {
+  // Scroll-snap does the heavy lifting; we just listen for scroll end
+  let _scrollTimer;
+  container.addEventListener('scroll', () => {
+    clearTimeout(_scrollTimer);
+    _scrollTimer = setTimeout(() => {
+      const w = container.offsetWidth;
+      if (!w) return;
+      const newIndex = Math.round(container.scrollLeft / w);
+      if (newIndex !== state.currentSlide) {
+        state.currentSlide = newIndex;
+        updateDots(newIndex);
+        updateStyleInfo(newIndex);
+        updateArrows();
+      }
+    }, 60);
+  }, { passive: true });
 }
 
 /* ══════════════════════
@@ -682,10 +758,11 @@ function buildInfoScreen() {
    Download
 ══════════════════════ */
 function downloadResult() {
-  const canvas = dom.resultCanvas;
+  const slide = state.slides && state.slides[state.currentSlide];
+  if (!slide) return;
   const link   = document.createElement('a');
-  link.download = `cocolashes-${state.activeStyle || 'preview'}.jpg`;
-  link.href     = canvas.toDataURL('image/jpeg', 0.93);
+  link.download = `cocolashes-${slide.styleId}.jpg`;
+  link.href     = slide.dataUrl;
   link.click();
   showToast(t('saved'));
 }
@@ -743,7 +820,7 @@ function initEvents() {
     e.target.value = '';
   });
 
-  // Results
+  // Results – back, download, arrows, services link
   $('btn-back-results').addEventListener('click', () => {
     showScreen('camera');
     startCamera();
@@ -754,6 +831,8 @@ function initEvents() {
     showScreen('services');
     if (!state.servicesBuilt) buildServicesScreen();
   });
+  $('swipe-prev').addEventListener('click', () => goToSlide(state.currentSlide - 1));
+  $('swipe-next').addEventListener('click', () => goToSlide(state.currentSlide + 1));
 }
 
 /* ══════════════════════

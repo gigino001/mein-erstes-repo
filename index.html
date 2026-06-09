@@ -117,43 +117,61 @@
       </button>
     </div>
     <div class="results-scroll">
-      <div class="photo-preview-wrap">
-        <canvas id="result-canvas"></canvas>
-        <div id="no-face-msg" class="no-face-msg hidden">
-          <span>⚠️</span>
-          <span data-i18n="noFace">Kein Gesicht erkannt – Empfehlungen basieren auf allgemeinen Schönheitsstandards</span>
-        </div>
-      </div>
-      <div class="face-card" id="face-card">
-        <div class="face-card-icon" id="face-shape-icon">⬡</div>
-        <div>
-          <p class="face-card-label" data-i18n="faceShapeLabel">Deine Gesichtsform</p>
-          <p class="face-card-value" id="face-shape-text">–</p>
-        </div>
-        <div class="face-card-badge" data-i18n="aiLabel">KI-Analyse</div>
-      </div>
-      <div class="section-header">
-        <h3 data-i18n="recommendedStyle">Empfehlung für dich</h3>
-        <div class="recommended-badge" data-i18n="topPick">Top Pick ✦</div>
-      </div>
-      <div class="style-pills" id="style-pills"></div>
-      <div class="why-card">
-        <h4 data-i18n="whyTitle">Warum dieser Stil?</h4>
-        <p id="why-text"></p>
-      </div>
-      <div class="section-header">
-        <h3 data-i18n="allStyles">Alle Wimpernstile</h3>
-      </div>
-      <div class="styles-grid" id="styles-grid"></div>
 
-      <!-- Save & book CTA -->
+      <!-- Compact face shape bar -->
+      <div class="face-mini-bar">
+        <span class="face-mini-icon" id="face-shape-icon">⬡</span>
+        <span class="face-mini-label" data-i18n="faceShapeLabel">Gesichtsform:</span>
+        <span class="face-mini-value" id="face-shape-text">–</span>
+        <span class="face-mini-badge" data-i18n="aiLabel">KI-Analyse</span>
+      </div>
+
+      <!-- No-face warning -->
+      <div id="no-face-msg" class="no-face-msg hidden">
+        <span>⚠️</span>
+        <span data-i18n="noFace">Kein Gesicht erkannt – Empfehlungen basieren auf allgemeinen Schönheitsstandards</span>
+      </div>
+
+      <!-- Swipe carousel -->
+      <div class="swipe-wrapper">
+        <button class="swipe-arrow swipe-arrow-left hidden" id="swipe-prev" aria-label="Vorheriger Stil">‹</button>
+        <div class="swipe-container" id="swipe-container">
+          <!-- slides injected by JS -->
+        </div>
+        <button class="swipe-arrow swipe-arrow-right" id="swipe-next" aria-label="Nächster Stil">›</button>
+      </div>
+
+      <!-- Dot indicators + swipe hint -->
+      <div class="swipe-dots-row">
+        <div class="swipe-dots" id="swipe-dots"></div>
+      </div>
+      <p class="swipe-hint" id="swipe-hint" data-i18n="swipeHint">← wischen für andere Stile →</p>
+
+      <!-- Current style info -->
+      <div class="style-info-card">
+        <div class="style-info-header">
+          <span class="style-info-emoji" id="current-style-emoji">✨</span>
+          <div>
+            <h3 class="style-info-name" id="current-style-name">–</h3>
+            <p class="style-info-subdesc" id="current-style-subdesc"></p>
+          </div>
+          <span class="rec-badge hidden" id="rec-badge" data-i18n="topPick">Top Pick ✦</span>
+        </div>
+        <div class="why-section">
+          <span class="why-label" data-i18n="whyTitle">Warum dieser Stil?</span>
+          <p id="why-text"></p>
+        </div>
+      </div>
+
+      <!-- CTA row -->
       <div class="results-cta-row">
-        <button class="btn-primary btn-save-big" id="btn-save-result" data-i18n="saveImage">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Bild speichern
+        <button class="btn-primary btn-save-big" id="btn-save-result">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span data-i18n="saveImage">Bild speichern</span>
         </button>
         <button class="btn-secondary btn-to-services" id="btn-to-services" data-i18n="toServices">Leistungen & Termin →</button>
       </div>
+
     </div>
   </div>
 
