@@ -1,0 +1,27 @@
+{
+  "name": "Cocolashes Bielefeld – Lash Preview",
+  "short_name": "Cocolashes",
+  "description": "KI-Wimpernverlängerungs-Vorschau für Cocolashes Bielefeld",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF6F1",
+  "theme_color": "#C9A96E",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["beauty", "lifestyle", "photo"],
+  "lang": "de",
+  "dir": "ltr"
+}

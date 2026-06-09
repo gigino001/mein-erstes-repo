@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#FAF6F1"/>
+  <path d="M256 64 Q168 98 128 168 Q168 136 256 144 Q344 136 384 168 Q344 98 256 64Z" fill="#C9A96E"/>
+  <path d="M256 144 Q168 152 140 220 Q184 182 256 190 Q328 182 372 220 Q344 152 256 144Z" fill="#A8845A" opacity="0.7"/>
+  <text x="256" y="360" font-family="Georgia,serif" font-size="72" font-weight="700" fill="#3D2B1F" text-anchor="middle">Coco</text>
+  <text x="256" y="430" font-family="Georgia,serif" font-size="54" fill="#C9A96E" text-anchor="middle">lashes</text>
+  <text x="256" y="470" font-family="Georgia,serif" font-size="24" letter-spacing="6" fill="#B09080" text-anchor="middle">BIELEFELD</text>
+</svg>
