@@ -1,5 +1,5 @@
 /* ── Cocolashes Service Worker ── */
-const CACHE = 'cocolashes-v3';
+const CACHE = 'cocolashes-v4';
 const ASSETS = [
   '/',
   '/index.html',
