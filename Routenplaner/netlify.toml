@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/api/here-matrix"
+  to = "https://matrix.router.hereapi.com/v8/matrix"
+  status = 200
+  force = true
