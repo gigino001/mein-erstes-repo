@@ -1,0 +1,272 @@
+// Datenmodell für die PV- und Wärmepumpen-Vertriebs-App
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ---------- Benutzer ----------
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("SALES") // ADMIN | SALES
+  createdAt    DateTime @default(now())
+
+  customers Customer[]
+  projects  Project[]
+}
+
+// ---------- Kunden (CRM) ----------
+
+model Customer {
+  id            String   @id @default(cuid())
+  salutation    String? // Herr, Frau, Firma
+  firstName     String
+  lastName      String
+  company       String?
+  street        String?
+  postalCode    String?
+  city          String?
+  phone         String?
+  email         String?
+  buildingType  String? // EFH, DHH, MFH, GEWERBE
+  buildYear     Int?
+  contactPerson String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  projects Project[]
+}
+
+// ---------- Projekt / Vorgang ----------
+
+model Project {
+  id            String   @id @default(cuid())
+  title         String? // z.B. "PV + Wärmepumpe Musterstraße 1"
+  status        String   @default("NEU") // NEU | ANGEBOT | AUFTRAG | ABGESCHLOSSEN
+  wantsPv       Boolean  @default(true)
+  wantsHeatPump Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  pvData       PvData?
+  heatPumpData HeatPumpData?
+  costItems    CostItem[]
+  pricing      Pricing?
+  offers       Offer[]
+}
+
+// ---------- PV-Daten ----------
+
+model PvData {
+  id String @id @default(cuid())
+
+  projectId String  @unique
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Dach
+  roofMaterial String?
+
+  // Verbrauch
+  annualConsumptionKwh Float?
+  personsCount         Int?
+  homeOffice           Boolean @default(false)
+  hasHeatPumpExisting  Boolean @default(false)
+  hasWallbox           Boolean @default(false)
+  hasPool              Boolean @default(false)
+  hasAirConditioning   Boolean @default(false)
+
+  // Netz
+  gridOperator           String?
+  meterCabinetSufficient Boolean?
+  threePhase             Boolean?
+  gridConnectionPowerKw  Float?
+
+  // Kundenwunsch
+  goalMaxSelfSupply  Boolean @default(false)
+  goalMaxYield       Boolean @default(false)
+  goalBackupPower    Boolean @default(false)
+  goalEmergencyPower Boolean @default(false)
+  goalLowCost        Boolean @default(false)
+
+  // gewählte Komponenten
+  moduleComponentId         String?
+  moduleComponent           Component? @relation("PvModule", fields: [moduleComponentId], references: [id])
+  moduleCount               Int?
+  inverterComponentId       String?
+  inverterComponent         Component? @relation("PvInverter", fields: [inverterComponentId], references: [id])
+  storageComponentId        String?
+  storageComponent          Component? @relation("PvStorage", fields: [storageComponentId], references: [id])
+  wallboxComponentId        String?
+  wallboxComponent          Component? @relation("PvWallbox", fields: [wallboxComponentId], references: [id])
+  emsComponentId            String?
+  emsComponent              Component? @relation("PvEms", fields: [emsComponentId], references: [id])
+  mountingSystemComponentId String?
+  mountingSystemComponent   Component? @relation("PvMounting", fields: [mountingSystemComponentId], references: [id])
+
+  // Berechnungsergebnisse (Cache)
+  calculatedKwp                Float?
+  calculatedAnnualYieldKwh     Float?
+  calculatedSelfConsumptionKwh Float?
+  calculatedAutarkyPercent     Float?
+  calculatedFeedInKwh          Float?
+  calculatedFeedInRevenue      Float?
+  calculatedSavingsPerYear     Float?
+  calculatedAmortizationYears  Float?
+  calculatedCo2SavingsKg       Float?
+
+  roofSurfaces RoofSurface[]
+}
+
+model RoofSurface {
+  id String @id @default(cuid())
+
+  pvDataId String
+  pvData   PvData @relation(fields: [pvDataId], references: [id], onDelete: Cascade)
+
+  name          String? // "Dachfläche 1"
+  roofShape     String? // SATTELDACH, WALMDACH, FLACHDACH, PULTDACH, ZELTDACH, SONSTIGE
+  orientation   String? // N, NO, O, SO, S, SW, W, NW
+  tiltDegrees   Float?
+  areaSqm       Float?
+  usableAreaSqm Float?
+  shading       String? // KEINE, LEICHT, MITTEL, STARK
+  sortOrder     Int     @default(0)
+}
+
+// ---------- Wärmepumpen-Daten ----------
+
+model HeatPumpData {
+  id String @id @default(cuid())
+
+  projectId String  @unique
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Gebäude
+  buildYear          Int?
+  livingAreaSqm      Float?
+  heatedAreaSqm      Float?
+  insulationStandard String? // UNSANIERT, TEILSANIERT, SANIERT, NEUBAU
+  windowType         String?
+  floorsCount        Int?
+
+  // bisherige Heizung
+  currentHeatingType     String? // GAS, OEL, ELEKTRO, PELLET, FERNWAERME, SONSTIGE
+  annualConsumptionValue Float?
+  annualConsumptionUnit  String? // l, m3, kWh
+
+  // Heizkörper
+  heatEmitterType String? // FUSSBODENHEIZUNG, HEIZKOERPER, MISCHSYSTEM
+  flowTemperature Float?
+
+  // Warmwasser
+  personsCount          Int?
+  hotWaterStorageLiters Float?
+
+  // Standort / Klima
+  location          String?
+  designOutdoorTemp Float?
+
+  // gewählte Komponenten
+  heatPumpComponentId String?
+  heatPumpComponent   Component? @relation("HpDevice", fields: [heatPumpComponentId], references: [id])
+  bufferComponentId   String?
+  bufferComponent     Component? @relation("HpBuffer", fields: [bufferComponentId], references: [id])
+
+  // Berechnungsergebnisse (Cache)
+  calculatedHeatLoadKw           Float?
+  calculatedAnnualConsumptionKwh Float?
+  calculatedJaz                  Float?
+  calculatedAnnualOperatingCost  Float?
+  calculatedOldAnnualCost        Float?
+  calculatedSavingsPerYear       Float?
+  calculatedAmortizationYears    Float?
+  calculatedCo2SavingsKg         Float?
+}
+
+// ---------- Komponenten-Stammdaten ----------
+
+model Component {
+  id           String   @id @default(cuid())
+  category     String // MODUL, WECHSELRICHTER, SPEICHER, WALLBOX, ENERGIEMANAGER, MONTAGESYSTEM, WAERMEPUMPE, PUFFERSPEICHER
+  manufacturer String
+  name         String
+  price        Float
+  specs        String   @default("{}") // JSON-String mit kategorie-spezifischen Eigenschaften
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  pvModuleFor   PvData[]       @relation("PvModule")
+  pvInverterFor PvData[]       @relation("PvInverter")
+  pvStorageFor  PvData[]       @relation("PvStorage")
+  pvWallboxFor  PvData[]       @relation("PvWallbox")
+  pvEmsFor      PvData[]       @relation("PvEms")
+  pvMountingFor PvData[]       @relation("PvMounting")
+  hpDeviceFor   HeatPumpData[] @relation("HpDevice")
+  hpBufferFor   HeatPumpData[] @relation("HpBuffer")
+}
+
+// ---------- Kostenpositionen ----------
+
+model CostItem {
+  id String @id @default(cuid())
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  category    String // MATERIAL, MONTAGE, SONSTIGES
+  description String
+  amount      Float
+  sortOrder   Int    @default(0)
+}
+
+// ---------- Preisfindung ----------
+
+model Pricing {
+  id String @id @default(cuid())
+
+  projectId String  @unique
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  marginPercent            Float  @default(20)
+  discountAmount           Float  @default(0)
+  financingMonths          Int?
+  financingInterestPercent Float?
+
+  // Cache
+  totalCost   Float?
+  salesPrice  Float?
+  monthlyRate Float?
+}
+
+// ---------- Angebote ----------
+
+model Offer {
+  id String @id @default(cuid())
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  offerNumber String
+  createdAt   DateTime @default(now())
+  totalNet    Float?
+  totalGross  Float?
+}
