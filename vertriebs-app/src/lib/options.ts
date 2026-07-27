@@ -82,6 +82,19 @@ export const COMPONENT_CATEGORIES = [
   { value: "MONTAGESYSTEM", label: "Montagesystem" },
   { value: "WAERMEPUMPE", label: "Wärmepumpe" },
   { value: "PUFFERSPEICHER", label: "Pufferspeicher" },
+  { value: "KLIMAGERAET", label: "Klimagerät" },
+  { value: "MONTAGE", label: "Montage & Installation" },
+  { value: "DIENSTLEISTUNG", label: "Dienstleistung" },
+  { value: "GARANTIE", label: "Garantie" },
+  { value: "SONSTIGES", label: "Sonstiges" },
+] as const;
+
+export const COMPONENT_UNITS = [
+  { value: "Stück", label: "Stück" },
+  { value: "Pauschale", label: "Pauschale" },
+  { value: "kWp", label: "kWp" },
+  { value: "Stunde", label: "Stunde" },
+  { value: "je Feld", label: "je Feld" },
 ] as const;
 
 export function labelFor(

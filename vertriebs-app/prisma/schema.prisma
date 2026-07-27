@@ -230,10 +230,16 @@ model HeatPumpData {
 
 model Component {
   id                     String   @id @default(cuid())
-  category               String // MODUL, WECHSELRICHTER, SPEICHER, WALLBOX, ENERGIEMANAGER, MONTAGESYSTEM, WAERMEPUMPE, PUFFERSPEICHER
+  category               String // MODUL, WECHSELRICHTER, SPEICHER, WALLBOX, ENERGIEMANAGER, MONTAGESYSTEM, WAERMEPUMPE, PUFFERSPEICHER, KLIMAGERAET, MONTAGE, DIENSTLEISTUNG, GARANTIE, SONSTIGES
   manufacturer           String
   name                   String
+  longDescription        String? // ausführliche Beschreibung, z.B. für Angebotstexte
   price                  Float
+  unit                   String   @default("Stück") // Stück, Pauschale, kWp, Stunde, je Feld, ...
+  productNumber          String? // Artikel-/Produktnummer aus dem Wareneingang bzw. der Rechnungssoftware
+  vatRatePercent         Float    @default(19) // Umsatzsteuersatz in %
+  maxDiscountPercent     Float? // maximaler Rabatt in % auf den Preis dieser Position
+  maxDiscountAmount      Float? // alternativ/zusätzlich: fester Mindestpreis, unter den nicht rabattiert werden darf
   specs                  String   @default("{}") // JSON-String mit kategorie-spezifischen Eigenschaften
   usesNaturalRefrigerant Boolean  @default(false) // für Wärmepumpen: natürliches Kältemittel (z.B. Propan/R290), relevant für Effizienzbonus
   active                 Boolean  @default(true)

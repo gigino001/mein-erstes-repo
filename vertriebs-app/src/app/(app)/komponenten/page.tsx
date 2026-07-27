@@ -52,12 +52,18 @@ export default async function KomponentenPage() {
                 <Card key={c.id} className={!c.active ? "opacity-50" : undefined}>
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <p className="font-medium">{c.manufacturer}</p>
+                      {c.manufacturer && <p className="font-medium">{c.manufacturer}</p>}
                       <p className="text-sm text-slate-500">{c.name}</p>
                     </div>
-                    <p className="shrink-0 font-medium text-emerald-600">
-                      {c.price.toLocaleString("de-DE")} €
-                    </p>
+                    <div className="shrink-0 text-right">
+                      <p className="font-medium text-emerald-600">
+                        {c.price.toLocaleString("de-DE")} € / {c.unit}
+                      </p>
+                      <p className="text-xs text-slate-400">
+                        {c.vatRatePercent}% USt
+                        {c.maxDiscountPercent != null && ` · max. ${c.maxDiscountPercent}% Rabatt`}
+                      </p>
+                    </div>
                   </div>
                   <div className="mt-3 flex items-center justify-between border-t border-[var(--border)] pt-3">
                     <Link

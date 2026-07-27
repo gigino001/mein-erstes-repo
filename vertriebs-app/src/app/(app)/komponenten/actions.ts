@@ -17,6 +17,11 @@ function str(formData: FormData, key: string): string {
   return typeof v === "string" ? v : "";
 }
 
+function strOrNull(formData: FormData, key: string): string | null {
+  const v = str(formData, key).trim();
+  return v === "" ? null : v;
+}
+
 function buildSpecs(category: string, formData: FormData): Record<string, number> {
   const specs: Record<string, number> = {};
   switch (category) {
@@ -74,7 +79,13 @@ export async function createComponentAction(formData: FormData) {
       category,
       manufacturer: str(formData, "manufacturer"),
       name: str(formData, "name"),
+      longDescription: strOrNull(formData, "longDescription"),
       price: num(formData, "price") ?? 0,
+      unit: str(formData, "unit") || "Stück",
+      productNumber: strOrNull(formData, "productNumber"),
+      vatRatePercent: num(formData, "vatRatePercent") ?? 19,
+      maxDiscountPercent: num(formData, "maxDiscountPercent") ?? null,
+      maxDiscountAmount: num(formData, "maxDiscountAmount") ?? null,
       specs: JSON.stringify(specs),
     },
   });
@@ -98,7 +109,13 @@ export async function updateComponentAction(componentId: string, formData: FormD
       category,
       manufacturer: str(formData, "manufacturer"),
       name: str(formData, "name"),
+      longDescription: strOrNull(formData, "longDescription"),
       price: num(formData, "price") ?? 0,
+      unit: str(formData, "unit") || "Stück",
+      productNumber: strOrNull(formData, "productNumber"),
+      vatRatePercent: num(formData, "vatRatePercent") ?? 19,
+      maxDiscountPercent: num(formData, "maxDiscountPercent") ?? null,
+      maxDiscountAmount: num(formData, "maxDiscountAmount") ?? null,
       specs: JSON.stringify(specs),
       active: formData.get("active") === "on",
     },
@@ -109,6 +126,11 @@ export async function updateComponentAction(componentId: string, formData: FormD
 }
 
 export async function deleteComponentAction(componentId: string) {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+
   await prisma.component.delete({ where: { id: componentId } });
   revalidatePath("/komponenten");
 }

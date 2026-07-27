@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Field, FormGrid, TextInput, Select, Checkbox } from "@/components/form";
+import { Field, FormGrid, TextInput, Textarea, Select, Checkbox } from "@/components/form";
 import { Button } from "@/components/ui";
-import { COMPONENT_CATEGORIES } from "@/lib/options";
+import { COMPONENT_CATEGORIES, COMPONENT_UNITS } from "@/lib/options";
 import type { Component } from "@/generated/prisma/client";
 
 type Specs = Record<string, number | undefined>;
@@ -44,11 +44,14 @@ export function ComponentForm({
               ))}
             </Select>
           </Field>
-          <Field label="Hersteller" htmlFor="manufacturer">
+          <Field
+            label="Hersteller"
+            htmlFor="manufacturer"
+            hint="Optional, z.B. bei Dienstleistungen ohne Hersteller"
+          >
             <TextInput
               id="manufacturer"
               name="manufacturer"
-              required
               defaultValue={existing?.manufacturer ?? ""}
             />
           </Field>
@@ -64,6 +67,69 @@ export function ComponentForm({
               step="0.01"
               required
               defaultValue={existing?.price ?? ""}
+            />
+          </Field>
+          <Field label="Einheit" htmlFor="unit">
+            <Select id="unit" name="unit" defaultValue={existing?.unit ?? "Stück"}>
+              {COMPONENT_UNITS.map((u) => (
+                <option key={u.value} value={u.value}>
+                  {u.label}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="Produktnummer" htmlFor="productNumber" hint="Optional, z.B. Artikelnummer">
+            <TextInput
+              id="productNumber"
+              name="productNumber"
+              defaultValue={existing?.productNumber ?? ""}
+            />
+          </Field>
+          <Field label="Ausführliche Beschreibung" htmlFor="longDescription" full>
+            <Textarea
+              id="longDescription"
+              name="longDescription"
+              rows={3}
+              defaultValue={existing?.longDescription ?? ""}
+            />
+          </Field>
+        </FormGrid>
+      </div>
+
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
+        <h2 className="mb-3 text-sm font-semibold text-slate-500">
+          Steuer &amp; Rabattgrenze
+        </h2>
+        <FormGrid>
+          <Field label="Umsatzsteuersatz (%)" htmlFor="vatRatePercent">
+            <TextInput
+              id="vatRatePercent"
+              name="vatRatePercent"
+              type="number"
+              step="0.1"
+              defaultValue={existing?.vatRatePercent ?? 19}
+            />
+          </Field>
+          <Field label="Max. Rabatt (%)" htmlFor="maxDiscountPercent" hint="Leer lassen = kein Prozent-Limit">
+            <TextInput
+              id="maxDiscountPercent"
+              name="maxDiscountPercent"
+              type="number"
+              step="0.1"
+              defaultValue={existing?.maxDiscountPercent ?? ""}
+            />
+          </Field>
+          <Field
+            label="Mindestpreis nach Rabatt (€)"
+            htmlFor="maxDiscountAmount"
+            hint="Fester Bodenpreis, unter den nicht rabattiert werden darf"
+          >
+            <TextInput
+              id="maxDiscountAmount"
+              name="maxDiscountAmount"
+              type="number"
+              step="0.01"
+              defaultValue={existing?.maxDiscountAmount ?? ""}
             />
           </Field>
         </FormGrid>
@@ -174,7 +240,15 @@ export function ComponentForm({
               />
             </Field>
           )}
-          {(category === "ENERGIEMANAGER" || category === "MONTAGESYSTEM") && (
+          {[
+            "ENERGIEMANAGER",
+            "MONTAGESYSTEM",
+            "KLIMAGERAET",
+            "MONTAGE",
+            "DIENSTLEISTUNG",
+            "GARANTIE",
+            "SONSTIGES",
+          ].includes(category) && (
             <p className="text-sm text-slate-400 sm:col-span-2">
               Keine zusätzlichen technischen Daten erforderlich.
             </p>
