@@ -313,6 +313,7 @@ model Component {
   hpDeviceFor   HeatPumpData[] @relation("HpDevice")
   hpBufferFor   HeatPumpData[] @relation("HpBuffer")
   climaFor      ClimaData[]    @relation("ClimaUnit")
+  costItemFor   CostItem[]
 }
 
 // ---------- Kostenpositionen ----------
@@ -330,6 +331,15 @@ model CostItem {
   // gesetzt bei automatisch aus der Komponentenauswahl generierten Positionen
   // (PV, WAERMEPUMPE, KLIMA), null bei manuell erfassten Positionen
   sourceVariant String?
+
+  // optionaler Bezug zu einer Katalog-Komponente: ermöglicht die Rabattlogik
+  // (maxDiscountPercent/maxDiscountAmount an der Komponente) und die
+  // automatische Preisübernahme. Bei freien Positionen bleibt das leer.
+  componentId     String?
+  component       Component? @relation(fields: [componentId], references: [id], onDelete: SetNull)
+  unitPrice       Float?
+  quantity        Float      @default(1)
+  discountPercent Float      @default(0)
 }
 
 // ---------- Preisfindung ----------

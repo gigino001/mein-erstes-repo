@@ -2,7 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { recalculatePricing } from "@/lib/cost-items";
+import {
+  recalculatePricing,
+  clampDiscountPercent,
+  computeCostItemAmount,
+  costCategoryForComponent,
+} from "@/lib/cost-items";
 
 export async function updateStatusAction(variantId: string, formData: FormData) {
   const statusId = formData.get("statusId");
@@ -16,21 +21,74 @@ export async function updateStatusAction(variantId: string, formData: FormData) 
 }
 
 export async function addCostItemAction(projectId: string, formData: FormData) {
-  const category = formData.get("category");
   const description = formData.get("description");
-  const amount = Number(formData.get("amount"));
-  if (
-    typeof category !== "string" ||
-    typeof description !== "string" ||
-    !description.trim() ||
-    !Number.isFinite(amount)
-  ) {
-    return;
+  if (typeof description !== "string" || !description.trim()) return;
+
+  const componentId = formData.get("componentId");
+  if (typeof componentId === "string" && componentId) {
+    const component = await prisma.component.findUnique({ where: { id: componentId } });
+    if (!component) return;
+
+    const quantityRaw = Number(formData.get("quantity"));
+    const quantity = Number.isFinite(quantityRaw) && quantityRaw > 0 ? quantityRaw : 1;
+    const discountRaw = Number(formData.get("discountPercent"));
+    const discountPercent = clampDiscountPercent(
+      component,
+      Number.isFinite(discountRaw) ? discountRaw : 0
+    );
+
+    await prisma.costItem.create({
+      data: {
+        projectId,
+        category: costCategoryForComponent(component),
+        description: description.trim(),
+        componentId: component.id,
+        unitPrice: component.price,
+        quantity,
+        discountPercent,
+        amount: computeCostItemAmount(component.price, quantity, discountPercent),
+      },
+    });
+  } else {
+    const category = formData.get("category");
+    const amount = Number(formData.get("amount"));
+    if (typeof category !== "string" || !Number.isFinite(amount)) return;
+
+    await prisma.costItem.create({
+      data: { projectId, category, description: description.trim(), amount },
+    });
   }
 
-  await prisma.costItem.create({
-    data: { projectId, category, description: description.trim(), amount },
+  await recalculatePricing(projectId);
+  revalidatePath(`/projekte/${projectId}`);
+}
+
+export async function updateCostItemDiscountAction(
+  projectId: string,
+  costItemId: string,
+  formData: FormData
+) {
+  const costItem = await prisma.costItem.findUnique({
+    where: { id: costItemId },
+    include: { component: true },
   });
+  if (!costItem || !costItem.component) return;
+
+  const discountRaw = Number(formData.get("discountPercent"));
+  const discountPercent = clampDiscountPercent(
+    costItem.component,
+    Number.isFinite(discountRaw) ? discountRaw : 0
+  );
+  const unitPrice = costItem.unitPrice ?? costItem.component.price;
+
+  await prisma.costItem.update({
+    where: { id: costItemId },
+    data: {
+      discountPercent,
+      amount: computeCostItemAmount(unitPrice, costItem.quantity, discountPercent),
+    },
+  });
+
   await recalculatePricing(projectId);
   revalidatePath(`/projekte/${projectId}`);
 }

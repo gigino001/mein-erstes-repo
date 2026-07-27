@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "CostItem" ADD COLUMN     "componentId" TEXT,
+ADD COLUMN     "discountPercent" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "quantity" DOUBLE PRECISION NOT NULL DEFAULT 1,
+ADD COLUMN     "unitPrice" DOUBLE PRECISION;
+
+-- AddForeignKey
+ALTER TABLE "CostItem" ADD CONSTRAINT "CostItem_componentId_fkey" FOREIGN KEY ("componentId") REFERENCES "Component"("id") ON DELETE SET NULL ON UPDATE CASCADE;

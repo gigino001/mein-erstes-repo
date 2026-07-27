@@ -160,6 +160,7 @@ export async function recalculatePv(projectId: string) {
   const lines: ComponentCostLine[] = [];
   if (pvData.moduleComponent && pvData.moduleCount) {
     lines.push({
+      componentId: pvData.moduleComponent.id,
       description: `${pvData.moduleComponent.manufacturer} ${pvData.moduleComponent.name} (${pvData.moduleCount}x)`,
       unitPrice: pvData.moduleComponent.price,
       quantity: pvData.moduleCount,
@@ -174,6 +175,7 @@ export async function recalculatePv(projectId: string) {
   ]) {
     if (component) {
       lines.push({
+        componentId: component.id,
         description: `${component.manufacturer} ${component.name}`,
         unitPrice: component.price,
         quantity: 1,

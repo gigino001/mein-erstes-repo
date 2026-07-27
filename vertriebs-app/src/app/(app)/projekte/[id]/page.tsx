@@ -32,7 +32,7 @@ export default async function ProjektDetailPage({
       pvData: true,
       heatPumpData: true,
       climaData: true,
-      costItems: { orderBy: { sortOrder: "asc" } },
+      costItems: { orderBy: { sortOrder: "asc" }, include: { component: true } },
       pricing: true,
     },
   });
@@ -42,10 +42,16 @@ export default async function ProjektDetailPage({
   }
 
   const variantTypes = project.variants.map((v) => v.variantType);
-  const statusOptions = await prisma.statusDefinition.findMany({
-    where: { variantType: { in: variantTypes } },
-    orderBy: { sortOrder: "asc" },
-  });
+  const [statusOptions, components] = await Promise.all([
+    prisma.statusDefinition.findMany({
+      where: { variantType: { in: variantTypes } },
+      orderBy: { sortOrder: "asc" },
+    }),
+    prisma.component.findMany({
+      where: { active: true },
+      orderBy: [{ category: "asc" }, { manufacturer: "asc" }],
+    }),
+  ]);
   const statusesByVariantType = new Map<string, typeof statusOptions>();
   for (const status of statusOptions) {
     const list = statusesByVariantType.get(status.variantType) ?? [];
@@ -281,6 +287,7 @@ export default async function ProjektDetailPage({
             <CostSection
               projectId={project.id}
               costItems={project.costItems}
+              components={components}
               pricing={project.pricing}
             />
           )}

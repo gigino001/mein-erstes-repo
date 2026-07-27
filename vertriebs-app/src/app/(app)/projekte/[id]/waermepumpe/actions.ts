@@ -119,6 +119,7 @@ export async function recalculateHeatPump(projectId: string) {
   for (const component of [data.heatPumpComponent, data.bufferComponent]) {
     if (component) {
       lines.push({
+        componentId: component.id,
         description: `${component.manufacturer} ${component.name}`,
         unitPrice: component.price,
         quantity: 1,

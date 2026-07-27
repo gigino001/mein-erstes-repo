@@ -1,10 +1,12 @@
-import { Trash2 } from "lucide-react";
+import { Check, Trash2 } from "lucide-react";
 import { Card, Button } from "@/components/ui";
-import { Field, FormGrid, TextInput, Select } from "@/components/form";
-import type { CostItem, Pricing } from "@/generated/prisma/client";
+import { Field, FormGrid, TextInput } from "@/components/form";
+import { AddCostItemForm } from "./add-cost-item-form";
+import type { Component, CostItem, Pricing } from "@/generated/prisma/client";
 import {
   addCostItemAction,
   deleteCostItemAction,
+  updateCostItemDiscountAction,
   updatePricingAction,
 } from "./actions";
 
@@ -21,13 +23,17 @@ function formatEur(value: number | null | undefined) {
   });
 }
 
+type CostItemWithComponent = CostItem & { component: Component | null };
+
 export function CostSection({
   projectId,
   costItems,
+  components,
   pricing,
 }: {
   projectId: string;
-  costItems: CostItem[];
+  costItems: CostItemWithComponent[];
+  components: Component[];
   pricing: Pricing;
 }) {
   const totalCost = costItems.reduce((sum, item) => sum + item.amount, 0);
@@ -58,7 +64,7 @@ export function CostSection({
                 {group.items.map((item) => (
                   <li
                     key={item.id}
-                    className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 text-sm dark:bg-slate-800"
+                    className="flex flex-col gap-1.5 rounded-lg bg-slate-50 px-3 py-2 text-sm dark:bg-slate-800 sm:flex-row sm:items-center sm:justify-between"
                   >
                     <span>
                       {item.description}
@@ -69,6 +75,39 @@ export function CostSection({
                       )}
                     </span>
                     <div className="flex items-center gap-3">
+                      {item.component && (
+                        <form
+                          action={updateCostItemDiscountAction.bind(
+                            null,
+                            projectId,
+                            item.id
+                          )}
+                          className="flex items-center gap-1"
+                        >
+                          <input
+                            type="number"
+                            name="discountPercent"
+                            defaultValue={item.discountPercent}
+                            step="0.1"
+                            min="0"
+                            max="100"
+                            className="w-16 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-2 py-1 text-xs"
+                            aria-label="Rabatt in %"
+                          />
+                          <span className="text-xs text-slate-400">
+                            % Rabatt
+                            {item.component.maxDiscountPercent != null &&
+                              ` (max. ${item.component.maxDiscountPercent})`}
+                          </span>
+                          <button
+                            type="submit"
+                            className="rounded p-1 text-slate-400 hover:bg-emerald-50 hover:text-emerald-600"
+                            aria-label="Rabatt übernehmen"
+                          >
+                            <Check size={13} />
+                          </button>
+                        </form>
+                      )}
                       <span className="font-medium">{formatEur(item.amount)}</span>
                       <form
                         action={deleteCostItemAction.bind(null, projectId, item.id)}
@@ -89,33 +128,7 @@ export function CostSection({
           </div>
         ))}
 
-        <form action={boundAdd} className="mt-4 space-y-3 border-t border-[var(--border)] pt-4">
-          <FormGrid>
-            <Field label="Kategorie" htmlFor="category">
-              <Select id="category" name="category" defaultValue="MATERIAL">
-                <option value="MATERIAL">Material</option>
-                <option value="MONTAGE">Montage</option>
-                <option value="SONSTIGES">Sonstiges</option>
-              </Select>
-            </Field>
-            <Field label="Betrag (€)" htmlFor="amount">
-              <TextInput
-                id="amount"
-                name="amount"
-                type="number"
-                inputMode="decimal"
-                step="0.01"
-                required
-              />
-            </Field>
-            <Field label="Beschreibung" htmlFor="description" full>
-              <TextInput id="description" name="description" required />
-            </Field>
-          </FormGrid>
-          <Button type="submit" variant="secondary">
-            + Position hinzufügen
-          </Button>
-        </form>
+        <AddCostItemForm components={components} action={boundAdd} />
 
         <div className="mt-4 flex items-center justify-between border-t border-[var(--border)] pt-4 text-sm font-semibold">
           <span>Gesamtkosten</span>

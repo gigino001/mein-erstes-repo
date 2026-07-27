@@ -101,6 +101,7 @@ export async function recalculateKlima(projectId: string) {
   const lines: ComponentCostLine[] = [];
   if (data.climaComponent) {
     lines.push({
+      componentId: data.climaComponent.id,
       description: `${data.climaComponent.manufacturer} ${data.climaComponent.name}`,
       unitPrice: data.climaComponent.price,
       quantity: data.unitsCount ?? 1,
