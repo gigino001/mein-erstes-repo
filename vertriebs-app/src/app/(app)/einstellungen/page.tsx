@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, ListChecks, BadgeEuro, ClipboardList, Camera, Landmark } from "lucide-react";
+import { ChevronRight, ListChecks, BadgeEuro, ClipboardList, Camera, Landmark, BarChart3 } from "lucide-react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { PageHeader, Card } from "@/components/ui";
@@ -86,14 +86,15 @@ export default async function EinstellungenPage() {
           </Card>
         </Link>
 
-        <Card>
-          <h2 className="mb-2 text-sm font-semibold text-slate-500">
-            Demnächst
-          </h2>
-          <ul className="list-disc space-y-1 pl-4 text-sm text-slate-500">
-            <li>Auswertungen: Umsatz, Abschlussquote, Pipeline</li>
-          </ul>
-        </Card>
+        <Link href="/auswertungen">
+          <Card className="flex items-center justify-between transition-shadow hover:shadow-md">
+            <span className="flex items-center gap-2.5 text-sm font-medium">
+              <BarChart3 size={18} className="text-emerald-600" />
+              Auswertungen
+            </span>
+            <ChevronRight size={16} className="text-slate-400" />
+          </Card>
+        </Link>
       </div>
     </div>
   );

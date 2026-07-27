@@ -15,5 +15,10 @@ export const navItems: NavItem[] = [
   { href: "/kunden", label: "Kunden", icon: Users },
   { href: "/kunden/neu", label: "Neu", icon: PlusCircle },
   { href: "/komponenten", label: "Komponenten", icon: Package },
-  { href: "/einstellungen", label: "Mehr", icon: Settings, activeMatch: ["/aufgaben"] },
+  {
+    href: "/einstellungen",
+    label: "Mehr",
+    icon: Settings,
+    activeMatch: ["/aufgaben", "/auswertungen"],
+  },
 ];
