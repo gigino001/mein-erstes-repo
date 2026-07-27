@@ -25,7 +25,10 @@ export function calculateKlima(input: KlimaCalculationInput): KlimaCalculationRe
       CLIMA.defaultCoolingLoadWPerSqm)
     : CLIMA.defaultCoolingLoadWPerSqm;
 
-  const roomLoadsKw = input.rooms.map((room) => {
+  // Ungerundete Werte für die Summenbildung, damit sich keine Rundungsfehler
+  // über mehrere Räume aufsummieren; gerundet wird erst für die Anzeige
+  // (roomLoadsKw) bzw. das Gesamtergebnis.
+  const roomLoadsKwRaw = input.rooms.map((room) => {
     const shadingFactor = room.shading
       ? (CLIMA.shadingFactor[room.shading] ?? 1.0)
       : 1.0;
@@ -35,10 +38,11 @@ export function calculateKlima(input: KlimaCalculationInput): KlimaCalculationRe
       (room.occupantsCount ?? 0) * CLIMA.occupantLoadW +
       (room.hasHeatSources ? CLIMA.heatSourceLoadW : 0);
 
-    return round(roomLoadW / 1000, 2);
+    return roomLoadW / 1000;
   });
+  const roomLoadsKw = roomLoadsKwRaw.map((load) => round(load, 2));
 
-  const sumLoadsKw = roomLoadsKw.reduce((sum, load) => sum + load, 0);
+  const sumLoadsKw = roomLoadsKwRaw.reduce((sum, load) => sum + load, 0);
   const simultaneityFactor =
     input.rooms.length > 1 ? CLIMA.simultaneityFactorMultiRoom : 1;
   const totalCoolingLoadKw = sumLoadsKw * simultaneityFactor;

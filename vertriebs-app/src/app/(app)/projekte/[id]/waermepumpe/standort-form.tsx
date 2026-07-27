@@ -28,6 +28,7 @@ export function StandortForm({
               name="designOutdoorTemp"
               type="number"
               inputMode="decimal"
+              step="0.1"
               defaultValue={data.designOutdoorTemp ?? ""}
             />
           </Field>

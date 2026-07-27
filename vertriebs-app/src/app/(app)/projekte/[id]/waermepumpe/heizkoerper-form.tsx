@@ -37,6 +37,7 @@ export function HeizkoerperForm({
               name="flowTemperature"
               type="number"
               inputMode="decimal"
+              step="0.1"
               defaultValue={data.flowTemperature ?? ""}
             />
           </Field>

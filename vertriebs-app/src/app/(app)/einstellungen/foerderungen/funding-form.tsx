@@ -101,6 +101,7 @@ export function FundingForm({
               id="maxAmountEur"
               name="maxAmountEur"
               type="number"
+              step="0.01"
               defaultValue={existing?.maxAmountEur ?? ""}
             />
           </Field>
@@ -113,6 +114,7 @@ export function FundingForm({
               id="maxHouseholdIncomeEur"
               name="maxHouseholdIncomeEur"
               type="number"
+              step="0.01"
               defaultValue={existing?.maxHouseholdIncomeEur ?? ""}
             />
           </Field>

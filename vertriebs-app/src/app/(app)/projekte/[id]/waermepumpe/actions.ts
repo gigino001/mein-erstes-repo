@@ -134,7 +134,7 @@ export async function recalculateHeatPump(projectId: string) {
   if (data.heatPumpComponent) {
     try {
       const specs = JSON.parse(data.heatPumpComponent.specs);
-      jazOverride = specs.jaz ? Number(specs.jaz) : null;
+      jazOverride = specs.jaz != null ? Number(specs.jaz) : null;
     } catch {
       jazOverride = null;
     }

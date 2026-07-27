@@ -7,12 +7,22 @@ import {
   clampDiscountPercent,
   computeCostItemAmount,
   costCategoryForComponent,
+  COST_ITEM_CATEGORIES,
 } from "@/lib/cost-items";
 
 export async function updateStatusAction(variantId: string, formData: FormData) {
   const statusId = formData.get("statusId");
   if (typeof statusId !== "string") return;
-  const variant = await prisma.projectVariant.update({
+
+  const [variant, status] = await Promise.all([
+    prisma.projectVariant.findUnique({ where: { id: variantId } }),
+    prisma.statusDefinition.findUnique({ where: { id: statusId } }),
+  ]);
+  // Nur Status derselben Auftragsvariante zulassen (z.B. kein PV-Status auf
+  // eine Klima-Variante).
+  if (!variant || !status || status.variantType !== variant.variantType) return;
+
+  await prisma.projectVariant.update({
     where: { id: variantId },
     data: { statusId },
   });
@@ -52,7 +62,13 @@ export async function addCostItemAction(projectId: string, formData: FormData) {
   } else {
     const category = formData.get("category");
     const amount = Number(formData.get("amount"));
-    if (typeof category !== "string" || !Number.isFinite(amount)) return;
+    if (
+      typeof category !== "string" ||
+      !COST_ITEM_CATEGORIES.includes(category as (typeof COST_ITEM_CATEGORIES)[number]) ||
+      !Number.isFinite(amount)
+    ) {
+      return;
+    }
 
     await prisma.costItem.create({
       data: { projectId, category, description: description.trim(), amount },
@@ -72,7 +88,7 @@ export async function updateCostItemDiscountAction(
     where: { id: costItemId },
     include: { component: true },
   });
-  if (!costItem || !costItem.component) return;
+  if (!costItem || costItem.projectId !== projectId || !costItem.component) return;
 
   const discountRaw = Number(formData.get("discountPercent"));
   const discountPercent = clampDiscountPercent(
@@ -94,6 +110,9 @@ export async function updateCostItemDiscountAction(
 }
 
 export async function deleteCostItemAction(projectId: string, costItemId: string) {
+  const costItem = await prisma.costItem.findUnique({ where: { id: costItemId } });
+  if (!costItem || costItem.projectId !== projectId) return;
+
   await prisma.costItem.delete({ where: { id: costItemId } });
   await recalculatePricing(projectId);
   revalidatePath(`/projekte/${projectId}`);

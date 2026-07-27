@@ -32,11 +32,14 @@ export function calculateHeatPump(
   const heatLoadKw = (input.heatedAreaSqm * specificLoad) / 1000;
   const annualHeatDemandKwh = heatLoadKw * HEAT_PUMP.fullLoadHours;
 
+  const fallbackJaz = input.heatEmitterType
+    ? (HEAT_PUMP.defaultJazByEmitter[input.heatEmitterType] ?? HEAT_PUMP.defaultJaz)
+    : HEAT_PUMP.defaultJaz;
+  // Eine JAZ <= 0 ist physikalisch unsinnig und würde die Division unten auf
+  // Infinity/negative Werte laufen lassen; in dem Fall auf die Faustformel
+  // zurückfallen statt eines fehlerhaften Override-Werts.
   const jaz =
-    input.jazOverride ??
-    (input.heatEmitterType
-      ? (HEAT_PUMP.defaultJazByEmitter[input.heatEmitterType] ?? HEAT_PUMP.defaultJaz)
-      : HEAT_PUMP.defaultJaz);
+    input.jazOverride != null && input.jazOverride > 0 ? input.jazOverride : fallbackJaz;
 
   const annualElectricityConsumptionKwh = annualHeatDemandKwh / jaz;
   const annualOperatingCostEur =

@@ -132,7 +132,8 @@ export function DachForm({
                   id={`tiltDegrees-${index}`}
                   name={`tiltDegrees-${index}`}
                   type="number"
-                  inputMode="numeric"
+                  inputMode="decimal"
+                  step="0.1"
                   defaultValue={row.tiltDegrees}
                 />
               </Field>
@@ -155,6 +156,7 @@ export function DachForm({
                   name={`areaSqm-${index}`}
                   type="number"
                   inputMode="decimal"
+                  step="0.1"
                   defaultValue={row.areaSqm}
                 />
               </Field>
@@ -164,6 +166,7 @@ export function DachForm({
                   name={`usableAreaSqm-${index}`}
                   type="number"
                   inputMode="decimal"
+                  step="0.1"
                   defaultValue={row.usableAreaSqm}
                 />
               </Field>

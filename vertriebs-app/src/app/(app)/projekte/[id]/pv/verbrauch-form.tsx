@@ -21,6 +21,7 @@ export function VerbrauchForm({
               name="annualConsumptionKwh"
               type="number"
               inputMode="decimal"
+              step="0.1"
               defaultValue={pvData.annualConsumptionKwh ?? ""}
               required
             />

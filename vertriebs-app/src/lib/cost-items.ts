@@ -9,6 +9,8 @@ export type ComponentCostLine = {
   quantity: number;
 };
 
+export const COST_ITEM_CATEGORIES = ["MATERIAL", "MONTAGE", "SONSTIGES"] as const;
+
 const COST_CATEGORY_BY_COMPONENT_CATEGORY: Record<string, string> = {
   MODUL: "MATERIAL",
   WECHSELRICHTER: "MATERIAL",
@@ -113,29 +115,57 @@ export async function syncComponentCostItems(
   await recalculatePricing(projectId);
 }
 
+// Umsatzsteuersatz für Kostenpositionen ohne Komponentenbezug (Freitext).
+const DEFAULT_VAT_RATE_PERCENT = 19;
+
+/** Nach Positionsbetrag gewichteter MwSt-Satz über alle Kostenpositionen. */
+function weightedVatRatePercent(
+  costItems: Array<{ amount: number; component: { vatRatePercent: number } | null }>
+): number {
+  const totalAmount = costItems.reduce((sum, item) => sum + item.amount, 0);
+  if (totalAmount <= 0) return DEFAULT_VAT_RATE_PERCENT;
+
+  const weightedSum = costItems.reduce(
+    (sum, item) =>
+      sum + item.amount * (item.component?.vatRatePercent ?? DEFAULT_VAT_RATE_PERCENT),
+    0
+  );
+  return round(weightedSum / totalAmount, 2);
+}
+
 export async function recalculatePricing(projectId: string) {
-  const [costItems, pricing] = await Promise.all([
-    prisma.costItem.findMany({ where: { projectId } }),
-    prisma.pricing.findUnique({ where: { projectId } }),
-  ]);
-  if (!pricing) return;
+  // Lesen + Schreiben in einer Transaktion, damit ein gleichzeitiger zweiter
+  // Aufruf (z.B. paralleles Ändern von Kostenpositionen und Marge) nicht mit
+  // veralteten Zwischenwerten überschreibt.
+  await prisma.$transaction(async (tx) => {
+    const [costItems, pricing] = await Promise.all([
+      tx.costItem.findMany({ where: { projectId }, include: { component: true } }),
+      tx.pricing.findUnique({ where: { projectId } }),
+    ]);
+    if (!pricing) return;
 
-  const totalCost = costItems.reduce((sum, item) => sum + item.amount, 0);
-  const result = calculatePricing({
-    totalCost,
-    marginPercent: pricing.marginPercent,
-    discountAmount: pricing.discountAmount,
-    financingMonths: pricing.financingMonths,
-    financingInterestPercent: pricing.financingInterestPercent,
-  });
+    const totalCost = costItems.reduce((sum, item) => sum + item.amount, 0);
+    const result = calculatePricing({
+      totalCost,
+      marginPercent: pricing.marginPercent,
+      discountAmount: pricing.discountAmount,
+      financingMonths: pricing.financingMonths,
+      financingInterestPercent: pricing.financingInterestPercent,
+    });
 
-  await prisma.pricing.update({
-    where: { projectId },
-    data: {
-      totalCost: result.totalCost,
-      salesPrice: result.salesPrice,
-      monthlyRate: result.monthlyRate,
-    },
+    const vatRatePercent = weightedVatRatePercent(costItems);
+    const salesPriceGross = round(result.salesPrice * (1 + vatRatePercent / 100), 2);
+
+    await tx.pricing.update({
+      where: { projectId },
+      data: {
+        totalCost: result.totalCost,
+        salesPrice: result.salesPrice,
+        monthlyRate: result.monthlyRate,
+        vatRatePercent,
+        salesPriceGross,
+      },
+    });
   });
 }
 

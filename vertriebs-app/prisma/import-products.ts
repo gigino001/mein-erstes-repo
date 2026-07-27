@@ -76,15 +76,44 @@ async function main() {
   for (const demo of demoComponents) {
     const component = await prisma.component.findFirst({ where: demo });
     if (!component) continue;
-    try {
-      await prisma.component.delete({ where: { id: component.id } });
-      removed++;
-    } catch {
+
+    // Komponenten-Fremdschlüssel sind alle ON DELETE SET NULL, ein delete()
+    // würde also NIE eine Exception werfen, selbst wenn die Komponente noch
+    // in einem Vorgang ausgewählt ist. Verwendung deshalb explizit prüfen.
+    const [pvUsage, hpUsage, climaUsage, costItemUsage] = await Promise.all([
+      prisma.pvData.count({
+        where: {
+          OR: [
+            { moduleComponentId: component.id },
+            { inverterComponentId: component.id },
+            { storageComponentId: component.id },
+            { wallboxComponentId: component.id },
+            { emsComponentId: component.id },
+            { mountingSystemComponentId: component.id },
+          ],
+        },
+      }),
+      prisma.heatPumpData.count({
+        where: {
+          OR: [
+            { heatPumpComponentId: component.id },
+            { bufferComponentId: component.id },
+          ],
+        },
+      }),
+      prisma.climaData.count({ where: { climaComponentId: component.id } }),
+      prisma.costItem.count({ where: { componentId: component.id } }),
+    ]);
+
+    if (pvUsage + hpUsage + climaUsage + costItemUsage > 0) {
       await prisma.component.update({
         where: { id: component.id },
         data: { active: false },
       });
       deactivated++;
+    } else {
+      await prisma.component.delete({ where: { id: component.id } });
+      removed++;
     }
   }
   if (removed > 0 || deactivated > 0) {

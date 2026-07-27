@@ -29,6 +29,7 @@ export function NetzWunschForm({
               name="gridConnectionPowerKw"
               type="number"
               inputMode="decimal"
+              step="0.1"
               defaultValue={pvData.gridConnectionPowerKw ?? ""}
             />
           </Field>

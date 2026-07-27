@@ -14,7 +14,7 @@ function hasNetlifyContext() {
 }
 
 function localPath(key: string) {
-  return join(LOCAL_DIR, key.replace(/\//g, "_"));
+  return join(LOCAL_DIR, key.replace(/[/\\]/g, "_"));
 }
 
 export async function putBlob(key: string, data: Buffer) {

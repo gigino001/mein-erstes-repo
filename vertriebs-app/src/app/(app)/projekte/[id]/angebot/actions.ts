@@ -8,14 +8,12 @@ export async function saveOfferAction(projectId: string) {
   const offerData = await buildOfferData(projectId);
   if (!offerData) return;
 
-  const salesPriceGross = offerData.salesPriceNet * 1.19;
-
   await prisma.offer.create({
     data: {
       projectId,
       offerNumber: offerData.offerNumber,
       totalNet: offerData.salesPriceNet,
-      totalGross: salesPriceGross,
+      totalGross: offerData.salesPriceGross,
     },
   });
 

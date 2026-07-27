@@ -187,7 +187,7 @@ export async function recalculatePv(projectId: string) {
   if (!pvData.moduleComponent || !pvData.moduleCount) return null;
 
   const result = calculatePv({
-    modulePowerWp: pvData.moduleComponent.price >= 0 ? getWattPeak(pvData.moduleComponent.specs) : 0,
+    modulePowerWp: getWattPeak(pvData.moduleComponent.specs),
     moduleCount: pvData.moduleCount,
     roofSurfaces: pvData.roofSurfaces,
     annualConsumptionKwh: pvData.annualConsumptionKwh ?? 0,

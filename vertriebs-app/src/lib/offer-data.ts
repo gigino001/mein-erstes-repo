@@ -132,6 +132,9 @@ export async function buildOfferData(
     heatPump,
     clima,
     salesPriceNet: project.pricing.salesPrice ?? 0,
+    vatRatePercent: project.pricing.vatRatePercent ?? 19,
+    salesPriceGross:
+      project.pricing.salesPriceGross ?? (project.pricing.salesPrice ?? 0) * 1.19,
     monthlyRate: project.pricing.monthlyRate,
   };
 }

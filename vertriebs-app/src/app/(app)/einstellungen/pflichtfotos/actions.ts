@@ -1,9 +1,19 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
+async function requireAuth() {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+}
+
 export async function createRequiredPhotoTypeAction(variantType: string, formData: FormData) {
+  await requireAuth();
   const label = formData.get("label");
   if (typeof label !== "string" || !label.trim()) return;
 
@@ -23,6 +33,7 @@ export async function createRequiredPhotoTypeAction(variantType: string, formDat
 }
 
 export async function renameRequiredPhotoTypeAction(id: string, formData: FormData) {
+  await requireAuth();
   const label = formData.get("label");
   if (typeof label !== "string" || !label.trim()) return;
 
@@ -34,6 +45,7 @@ export async function renameRequiredPhotoTypeAction(id: string, formData: FormDa
 }
 
 export async function deleteRequiredPhotoTypeAction(id: string) {
+  await requireAuth();
   // Bereits hochgeladene Fotos bleiben erhalten und rutschen in "Weitere
   // Dokumente" (requiredPhotoTypeId wird via onDelete: SetNull geleert).
   await prisma.requiredPhotoType.delete({ where: { id } });
@@ -45,6 +57,7 @@ export async function moveRequiredPhotoTypeAction(
   id: string,
   direction: "up" | "down"
 ) {
+  await requireAuth();
   const types = await prisma.requiredPhotoType.findMany({
     where: { variantType },
     orderBy: { sortOrder: "asc" },

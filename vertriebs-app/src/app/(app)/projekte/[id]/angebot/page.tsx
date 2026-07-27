@@ -183,9 +183,11 @@ export default async function AngebotPage({
 
         <div className="space-y-4">
           <Card>
-            <p className="mb-1 text-xs text-slate-400">Gesamtpreis (brutto, inkl. 19% MwSt.)</p>
+            <p className="mb-1 text-xs text-slate-400">
+              Gesamtpreis (brutto, inkl. {offerData.vatRatePercent}% MwSt.)
+            </p>
             <p className="mb-4 text-2xl font-semibold text-emerald-600">
-              {eur(offerData.salesPriceNet * 1.19)}
+              {eur(offerData.salesPriceGross)}
             </p>
             {offerData.monthlyRate != null && (
               <p className="mb-4 text-sm text-slate-500">

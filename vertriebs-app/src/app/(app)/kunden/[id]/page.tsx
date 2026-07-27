@@ -150,7 +150,8 @@ export default async function KundeDetailPage({
                   id="annualHouseholdIncomeEur"
                   name="annualHouseholdIncomeEur"
                   type="number"
-                  inputMode="numeric"
+                  inputMode="decimal"
+                  step="0.01"
                   defaultValue={customer.annualHouseholdIncomeEur ?? ""}
                 />
               </Field>

@@ -36,13 +36,20 @@ function buildData(formData: FormData) {
   };
 }
 
+function hasRequiredFields(data: ReturnType<typeof buildData>) {
+  return Boolean(data.name && data.provider && data.appliesTo && data.fundingType);
+}
+
 export async function createFundingProgramAction(formData: FormData) {
   const session = await auth();
   if (!session?.user) {
     redirect("/login");
   }
 
-  await prisma.fundingProgram.create({ data: buildData(formData) });
+  const data = buildData(formData);
+  if (!hasRequiredFields(data)) return;
+
+  await prisma.fundingProgram.create({ data });
   redirect("/einstellungen/foerderungen");
 }
 
@@ -52,9 +59,12 @@ export async function updateFundingProgramAction(programId: string, formData: Fo
     redirect("/login");
   }
 
+  const data = buildData(formData);
+  if (!hasRequiredFields(data)) return;
+
   await prisma.fundingProgram.update({
     where: { id: programId },
-    data: buildData(formData),
+    data,
   });
   redirect("/einstellungen/foerderungen");
 }

@@ -45,6 +45,7 @@ export function HeizungForm({
               name="annualConsumptionValue"
               type="number"
               inputMode="decimal"
+              step="0.1"
               defaultValue={data.annualConsumptionValue ?? ""}
             />
           </Field>

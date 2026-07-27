@@ -5,6 +5,9 @@ export type NavItem = {
   href: string;
   label: string;
   icon: LucideIcon;
+  // Zusätzliche Pfade, unter denen dieser Nav-Punkt ebenfalls als aktiv
+  // markiert wird (für Unterseiten, die nicht unter href liegen).
+  activeMatch?: string[];
 };
 
 export const navItems: NavItem[] = [
@@ -12,5 +15,5 @@ export const navItems: NavItem[] = [
   { href: "/kunden", label: "Kunden", icon: Users },
   { href: "/kunden/neu", label: "Neu", icon: PlusCircle },
   { href: "/komponenten", label: "Komponenten", icon: Package },
-  { href: "/einstellungen", label: "Mehr", icon: Settings },
+  { href: "/einstellungen", label: "Mehr", icon: Settings, activeMatch: ["/aufgaben"] },
 ];

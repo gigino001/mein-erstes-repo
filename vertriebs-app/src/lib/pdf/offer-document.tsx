@@ -1,7 +1,5 @@
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
-const VAT_RATE = 0.19;
-
 const styles = StyleSheet.create({
   page: {
     padding: 40,
@@ -123,12 +121,14 @@ export type OfferDocumentProps = {
     estimatedAnnualOperatingCostEur: number;
   } | null;
   salesPriceNet: number;
+  vatRatePercent: number;
+  salesPriceGross: number;
   monthlyRate: number | null;
 };
 
 export function OfferDocument(props: OfferDocumentProps) {
-  const { customer, pv, heatPump, clima, salesPriceNet, monthlyRate } = props;
-  const salesPriceGross = salesPriceNet * (1 + VAT_RATE);
+  const { customer, pv, heatPump, clima, salesPriceNet, vatRatePercent, salesPriceGross, monthlyRate } =
+    props;
 
   return (
     <Document>
@@ -268,7 +268,7 @@ export function OfferDocument(props: OfferDocumentProps) {
             <Text>{eur(salesPriceNet)}</Text>
           </View>
           <View style={styles.priceRow}>
-            <Text style={styles.rowLabel}>zzgl. 19% MwSt.</Text>
+            <Text style={styles.rowLabel}>zzgl. {vatRatePercent}% MwSt.</Text>
             <Text>{eur(salesPriceGross - salesPriceNet)}</Text>
           </View>
           <View style={styles.priceTotalRow}>

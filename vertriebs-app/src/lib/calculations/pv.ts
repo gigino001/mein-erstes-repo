@@ -70,7 +70,11 @@ export function calculatePv(input: PvCalculationInput): PvCalculationResult {
   selfConsumptionRatio = Math.min(Math.max(selfConsumptionRatio, 0.15), 0.85);
 
   let selfConsumptionKwh = annualYieldKwh * selfConsumptionRatio;
-  selfConsumptionKwh = Math.min(selfConsumptionKwh, input.annualConsumptionKwh || selfConsumptionKwh);
+  if (input.annualConsumptionKwh > 0) {
+    selfConsumptionKwh = Math.min(selfConsumptionKwh, input.annualConsumptionKwh);
+  } else {
+    selfConsumptionKwh = 0;
+  }
 
   const autarkyPercent =
     input.annualConsumptionKwh > 0

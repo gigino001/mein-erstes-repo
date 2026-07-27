@@ -1,9 +1,19 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
+async function requireAuth() {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+}
+
 export async function createStatusAction(variantType: string, formData: FormData) {
+  await requireAuth();
   const name = formData.get("name");
   if (typeof name !== "string" || !name.trim()) return;
 
@@ -23,6 +33,7 @@ export async function createStatusAction(variantType: string, formData: FormData
 }
 
 export async function renameStatusAction(statusId: string, formData: FormData) {
+  await requireAuth();
   const name = formData.get("name");
   if (typeof name !== "string" || !name.trim()) return;
   const isTerminal = formData.get("isTerminal") === "on";
@@ -35,6 +46,7 @@ export async function renameStatusAction(statusId: string, formData: FormData) {
 }
 
 export async function deleteStatusAction(statusId: string) {
+  await requireAuth();
   const inUse = await prisma.projectVariant.count({ where: { statusId } });
   if (inUse > 0) {
     throw new Error(
@@ -50,6 +62,7 @@ export async function moveStatusAction(
   statusId: string,
   direction: "up" | "down"
 ) {
+  await requireAuth();
   const statuses = await prisma.statusDefinition.findMany({
     where: { variantType },
     orderBy: { sortOrder: "asc" },

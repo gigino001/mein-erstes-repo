@@ -361,9 +361,13 @@ model Pricing {
   financingInterestPercent Float?
 
   // Cache
-  totalCost   Float?
-  salesPrice  Float?
-  monthlyRate Float?
+  totalCost       Float?
+  salesPrice      Float?
+  monthlyRate     Float?
+  // gewichteter MwSt-Satz über alle Kostenpositionen (nach Komponenten-
+  // vatRatePercent, Freitext-Positionen mit 19% angenommen) + Bruttopreis
+  vatRatePercent  Float?
+  salesPriceGross Float?
 }
 
 // ---------- Förderprogramme ----------

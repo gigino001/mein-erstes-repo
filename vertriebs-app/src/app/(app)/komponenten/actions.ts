@@ -72,13 +72,15 @@ export async function createComponentAction(formData: FormData) {
   }
 
   const category = str(formData, "category");
+  const name = str(formData, "name").trim();
+  if (!category || !name) return;
   const specs = buildSpecs(category, formData);
 
   await prisma.component.create({
     data: {
       category,
       manufacturer: str(formData, "manufacturer"),
-      name: str(formData, "name"),
+      name,
       longDescription: strOrNull(formData, "longDescription"),
       price: num(formData, "price") ?? 0,
       unit: str(formData, "unit") || "Stück",
@@ -101,6 +103,8 @@ export async function updateComponentAction(componentId: string, formData: FormD
   }
 
   const category = str(formData, "category");
+  const name = str(formData, "name").trim();
+  if (!category || !name) return;
   const specs = buildSpecs(category, formData);
 
   await prisma.component.update({
@@ -108,7 +112,7 @@ export async function updateComponentAction(componentId: string, formData: FormD
     data: {
       category,
       manufacturer: str(formData, "manufacturer"),
-      name: str(formData, "name"),
+      name,
       longDescription: strOrNull(formData, "longDescription"),
       price: num(formData, "price") ?? 0,
       unit: str(formData, "unit") || "Stück",
@@ -129,6 +133,34 @@ export async function deleteComponentAction(componentId: string) {
   const session = await auth();
   if (!session?.user) {
     redirect("/login");
+  }
+
+  const [pvUsage, hpUsage, climaUsage, costItemUsage] = await Promise.all([
+    prisma.pvData.count({
+      where: {
+        OR: [
+          { moduleComponentId: componentId },
+          { inverterComponentId: componentId },
+          { storageComponentId: componentId },
+          { wallboxComponentId: componentId },
+          { emsComponentId: componentId },
+          { mountingSystemComponentId: componentId },
+        ],
+      },
+    }),
+    prisma.heatPumpData.count({
+      where: {
+        OR: [{ heatPumpComponentId: componentId }, { bufferComponentId: componentId }],
+      },
+    }),
+    prisma.climaData.count({ where: { climaComponentId: componentId } }),
+    prisma.costItem.count({ where: { componentId } }),
+  ]);
+  const totalUsage = pvUsage + hpUsage + climaUsage + costItemUsage;
+  if (totalUsage > 0) {
+    throw new Error(
+      `Komponente kann nicht gelöscht werden: sie wird noch in ${totalUsage} Vorgang(-positionen) verwendet. Stattdessen deaktivieren.`
+    );
   }
 
   await prisma.component.delete({ where: { id: componentId } });

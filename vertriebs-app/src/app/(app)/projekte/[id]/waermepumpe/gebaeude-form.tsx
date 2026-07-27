@@ -40,6 +40,7 @@ export function GebaeudeForm({
               name="livingAreaSqm"
               type="number"
               inputMode="decimal"
+              step="0.1"
               defaultValue={data.livingAreaSqm ?? ""}
             />
           </Field>
@@ -49,6 +50,7 @@ export function GebaeudeForm({
               name="heatedAreaSqm"
               type="number"
               inputMode="decimal"
+              step="0.1"
               defaultValue={data.heatedAreaSqm ?? ""}
               required
             />
