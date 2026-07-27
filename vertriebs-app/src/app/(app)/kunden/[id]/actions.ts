@@ -15,6 +15,7 @@ export async function createProjectAction(formData: FormData) {
   if (typeof customerId !== "string" || typeof variantType !== "string") {
     throw new Error("customerId oder variantType fehlt");
   }
+  const isNewBuilding = formData.get("isNewBuilding") === "on";
 
   const startStatus = await prisma.statusDefinition.findFirst({
     where: { variantType },
@@ -29,6 +30,7 @@ export async function createProjectAction(formData: FormData) {
       customerId,
       ownerId: session.user.id,
       variantType,
+      isNewBuilding,
       statusId: startStatus.id,
       pvData: variantType === "PV" ? { create: {} } : undefined,
       heatPumpData: variantType === "WAERMEPUMPE" ? { create: {} } : undefined,
@@ -37,6 +39,26 @@ export async function createProjectAction(formData: FormData) {
   });
 
   redirect(`/projekte/${project.id}`);
+}
+
+export async function updateFundingInfoAction(customerId: string, formData: FormData) {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  const usageType = formData.get("usageType");
+  const incomeRaw = formData.get("annualHouseholdIncomeEur");
+  const annualHouseholdIncomeEur =
+    typeof incomeRaw === "string" && incomeRaw !== "" ? Number(incomeRaw) : null;
+
+  await prisma.customer.update({
+    where: { id: customerId },
+    data: {
+      usageType: typeof usageType === "string" ? usageType : "SELBSTGENUTZT",
+      annualHouseholdIncomeEur,
+    },
+  });
 }
 
 export async function updatePipelineStatusAction(customerId: string, formData: FormData) {

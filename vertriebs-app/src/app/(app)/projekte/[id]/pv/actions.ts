@@ -1,8 +1,16 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { calculatePv } from "@/lib/calculations/pv";
+
+async function requireAuth() {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+}
 
 function num(formData: FormData, key: string): number | null {
   const v = formData.get(key);
@@ -27,6 +35,7 @@ async function getPvDataId(projectId: string) {
 }
 
 export async function saveDachAction(projectId: string, formData: FormData) {
+  await requireAuth();
   const pvDataId = await getPvDataId(projectId);
 
   await prisma.pvData.update({
@@ -64,6 +73,7 @@ export async function saveDachAction(projectId: string, formData: FormData) {
 }
 
 export async function saveVerbrauchAction(projectId: string, formData: FormData) {
+  await requireAuth();
   const pvDataId = await getPvDataId(projectId);
   await prisma.pvData.update({
     where: { id: pvDataId },
@@ -81,6 +91,7 @@ export async function saveVerbrauchAction(projectId: string, formData: FormData)
 }
 
 export async function saveNetzWunschAction(projectId: string, formData: FormData) {
+  await requireAuth();
   const pvDataId = await getPvDataId(projectId);
   await prisma.pvData.update({
     where: { id: pvDataId },
@@ -102,6 +113,7 @@ export async function saveNetzWunschAction(projectId: string, formData: FormData
 }
 
 export async function saveKomponentenAction(projectId: string, formData: FormData) {
+  await requireAuth();
   const pvDataId = await getPvDataId(projectId);
 
   const moduleComponentId = str(formData, "moduleComponentId");

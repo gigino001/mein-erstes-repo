@@ -1,9 +1,17 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { calculateHeatPump } from "@/lib/calculations/heatpump";
 import { UNIT_BY_HEATING_TYPE } from "./steps";
+
+async function requireAuth() {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+}
 
 function num(formData: FormData, key: string): number | null {
   const v = formData.get(key);
@@ -24,6 +32,7 @@ async function getHeatPumpDataId(projectId: string) {
 }
 
 export async function saveGebaeudeAction(projectId: string, formData: FormData) {
+  await requireAuth();
   const id = await getHeatPumpDataId(projectId);
   await prisma.heatPumpData.update({
     where: { id },
@@ -40,6 +49,7 @@ export async function saveGebaeudeAction(projectId: string, formData: FormData) 
 }
 
 export async function saveHeizungAction(projectId: string, formData: FormData) {
+  await requireAuth();
   const id = await getHeatPumpDataId(projectId);
   const currentHeatingType = str(formData, "currentHeatingType");
   await prisma.heatPumpData.update({
@@ -56,6 +66,7 @@ export async function saveHeizungAction(projectId: string, formData: FormData) {
 }
 
 export async function saveHeizkoerperAction(projectId: string, formData: FormData) {
+  await requireAuth();
   const id = await getHeatPumpDataId(projectId);
   await prisma.heatPumpData.update({
     where: { id },
@@ -70,6 +81,7 @@ export async function saveHeizkoerperAction(projectId: string, formData: FormDat
 }
 
 export async function saveStandortAction(projectId: string, formData: FormData) {
+  await requireAuth();
   const id = await getHeatPumpDataId(projectId);
   await prisma.heatPumpData.update({
     where: { id },
@@ -82,6 +94,7 @@ export async function saveStandortAction(projectId: string, formData: FormData) 
 }
 
 export async function saveKomponentenAction(projectId: string, formData: FormData) {
+  await requireAuth();
   const id = await getHeatPumpDataId(projectId);
   await prisma.heatPumpData.update({
     where: { id },

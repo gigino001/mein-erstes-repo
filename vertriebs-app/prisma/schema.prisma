@@ -26,24 +26,26 @@ model User {
 // ---------- Kunden (CRM) ----------
 
 model Customer {
-  id             String    @id @default(cuid())
-  salutation     String? // Herr, Frau, Firma
-  firstName      String
-  lastName       String
-  company        String?
-  street         String?
-  postalCode     String?
-  city           String?
-  phone          String?
-  email          String?
-  buildingType   String? // EFH, DHH, MFH, GEWERBE
-  buildYear      Int?
-  contactPerson  String?
-  notes          String?
-  pipelineStatus String    @default("INTERESSENT") // INTERESSENT | TERMIN | ANGEBOT | WIEDERVORLAGE | KUNDE
-  followUpDate   DateTime? // Wiedervorlage-Datum
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id                       String    @id @default(cuid())
+  salutation               String? // Herr, Frau, Firma
+  firstName                String
+  lastName                 String
+  company                  String?
+  street                   String?
+  postalCode               String?
+  city                     String?
+  phone                    String?
+  email                    String?
+  buildingType             String? // EFH, DHH, MFH, GEWERBE
+  buildYear                Int?
+  contactPerson            String?
+  notes                    String?
+  pipelineStatus           String    @default("INTERESSENT") // INTERESSENT | TERMIN | ANGEBOT | WIEDERVORLAGE | KUNDE
+  followUpDate             DateTime? // Wiedervorlage-Datum
+  usageType                String    @default("SELBSTGENUTZT") // SELBSTGENUTZT | VERMIETET (für Förderfähigkeit)
+  annualHouseholdIncomeEur Float? // zu versteuerndes Jahreseinkommen (für Einkommens-Bonus Wärmepumpe)
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
 
   ownerId String
   owner   User   @relation(fields: [ownerId], references: [id])
@@ -73,6 +75,7 @@ model Project {
   title          String? // z.B. "PV Musterstraße 1"
   variantType    String // PV | WAERMEPUMPE | KLIMA | WARTUNG | ELEKTROINSTALLATION | HEIZUNG_SANITAER_NEUBAU
   offerExpiresAt DateTime? // Gültigkeit des zuletzt versendeten Angebots
+  isNewBuilding  Boolean   @default(false) // Neubau vs. Bestandsgebäude (für Förderfähigkeit)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
@@ -203,6 +206,9 @@ model HeatPumpData {
   location          String?
   designOutdoorTemp Float?
 
+  // Für Förderfähigkeit
+  oldHeatingInstallYear Int? // Baujahr der bisherigen Heizanlage
+
   // gewählte Komponenten
   heatPumpComponentId String?
   heatPumpComponent   Component? @relation("HpDevice", fields: [heatPumpComponentId], references: [id])
@@ -223,15 +229,16 @@ model HeatPumpData {
 // ---------- Komponenten-Stammdaten ----------
 
 model Component {
-  id           String   @id @default(cuid())
-  category     String // MODUL, WECHSELRICHTER, SPEICHER, WALLBOX, ENERGIEMANAGER, MONTAGESYSTEM, WAERMEPUMPE, PUFFERSPEICHER
-  manufacturer String
-  name         String
-  price        Float
-  specs        String   @default("{}") // JSON-String mit kategorie-spezifischen Eigenschaften
-  active       Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                     String   @id @default(cuid())
+  category               String // MODUL, WECHSELRICHTER, SPEICHER, WALLBOX, ENERGIEMANAGER, MONTAGESYSTEM, WAERMEPUMPE, PUFFERSPEICHER
+  manufacturer           String
+  name                   String
+  price                  Float
+  specs                  String   @default("{}") // JSON-String mit kategorie-spezifischen Eigenschaften
+  usesNaturalRefrigerant Boolean  @default(false) // für Wärmepumpen: natürliches Kältemittel (z.B. Propan/R290), relevant für Effizienzbonus
+  active                 Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
   pvModuleFor   PvData[]       @relation("PvModule")
   pvInverterFor PvData[]       @relation("PvInverter")
@@ -274,6 +281,34 @@ model Pricing {
   totalCost   Float?
   salesPrice  Float?
   monthlyRate Float?
+}
+
+// ---------- Förderprogramme ----------
+
+// Pflegbare Stammdaten (keine Rechts-/Steuerberatung, nur Vorprüfung).
+// Deutsche Förderprogramme ändern sich häufig, deshalb mit lastCheckedAt
+// statt fest im Code.
+model FundingProgram {
+  id          String @id @default(cuid())
+  name        String
+  provider    String // KFW | BAFA | BUND | LAND | KOMMUNE | SONSTIGE
+  appliesTo   String // PV | WAERMEPUMPE | BEIDE
+  fundingType String // ZUSCHUSS | KREDIT | STEUERVORTEIL
+
+  description String
+
+  percentageOfCost Float?
+  maxAmountEur     Float?
+
+  requiresExistingBuilding Boolean @default(false) // nur Bestandsgebäude
+  requiresOwnerOccupied    Boolean @default(false) // nur selbstnutzende Eigentümer
+  maxHouseholdIncomeEur    Float? // Einkommensgrenze, falls relevant
+
+  conditions String // übrige Bedingungen als Freitext, manuell zu prüfen
+  sourceUrl  String?
+
+  active        Boolean  @default(true)
+  lastCheckedAt DateTime
 }
 
 // ---------- Angebote ----------

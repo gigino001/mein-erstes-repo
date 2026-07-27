@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 function num(formData: FormData, key: string): number | undefined {
@@ -60,6 +61,11 @@ function buildSpecs(category: string, formData: FormData): Record<string, number
 }
 
 export async function createComponentAction(formData: FormData) {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+
   const category = str(formData, "category");
   const specs = buildSpecs(category, formData);
 
@@ -78,6 +84,11 @@ export async function createComponentAction(formData: FormData) {
 }
 
 export async function updateComponentAction(componentId: string, formData: FormData) {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+
   const category = str(formData, "category");
   const specs = buildSpecs(category, formData);
 

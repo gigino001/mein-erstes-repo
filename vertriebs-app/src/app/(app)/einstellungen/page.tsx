@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, ListChecks } from "lucide-react";
+import { ChevronRight, ListChecks, BadgeEuro } from "lucide-react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { PageHeader, Card } from "@/components/ui";
@@ -46,12 +46,21 @@ export default async function EinstellungenPage() {
           </Card>
         </Link>
 
+        <Link href="/einstellungen/foerderungen">
+          <Card className="flex items-center justify-between transition-shadow hover:shadow-md">
+            <span className="flex items-center gap-2.5 text-sm font-medium">
+              <BadgeEuro size={18} className="text-emerald-600" />
+              Förderprogramme verwalten
+            </span>
+            <ChevronRight size={16} className="text-slate-400" />
+          </Card>
+        </Link>
+
         <Card>
           <h2 className="mb-2 text-sm font-semibold text-slate-500">
             Demnächst
           </h2>
           <ul className="list-disc space-y-1 pl-4 text-sm text-slate-500">
-            <li>Förderungen für PV und Wärmepumpe im Kundenprofil</li>
             <li>Finanzierungsrechner mit Bank-Konditionen</li>
             <li>Foto- &amp; Dokumentenverwaltung</li>
             <li>Aufgabenverwaltung</li>
