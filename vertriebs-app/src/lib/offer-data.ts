@@ -34,7 +34,11 @@ export async function buildOfferData(
   if (!project || !project.pricing) return null;
 
   let pv: OfferDocumentProps["pv"] = null;
-  if (project.wantsPv && project.pvData?.moduleComponent && project.pvData.moduleCount) {
+  if (
+    project.variantType === "PV" &&
+    project.pvData?.moduleComponent &&
+    project.pvData.moduleCount
+  ) {
     const wattPeak = parseSpecs(project.pvData.moduleComponent.specs).wattPeak ?? 0;
     const result = calculatePv({
       modulePowerWp: wattPeak,
@@ -62,7 +66,7 @@ export async function buildOfferData(
   }
 
   let heatPump: OfferDocumentProps["heatPump"] = null;
-  if (project.wantsHeatPump && project.heatPumpData?.heatedAreaSqm) {
+  if (project.variantType === "WAERMEPUMPE" && project.heatPumpData?.heatedAreaSqm) {
     const hp = project.heatPumpData;
     let jazOverride: number | null = null;
     if (hp.heatPumpComponent) {

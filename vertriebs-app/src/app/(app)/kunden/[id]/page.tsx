@@ -3,10 +3,11 @@ import { notFound } from "next/navigation";
 import { Phone, Mail, MapPin, User } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { PageHeader, Card, StatusBadge, EmptyState } from "@/components/ui";
-import { labelFor, BUILDING_TYPES } from "@/lib/options";
-import { Checkbox } from "@/components/form";
+import { labelFor, BUILDING_TYPES, AUFTRAGSVARIANTEN } from "@/lib/options";
+import { Select } from "@/components/form";
 import { Button } from "@/components/ui";
-import { createProjectAction } from "./actions";
+import { createProjectAction, updatePipelineStatusAction } from "./actions";
+import { PipelineStatusForm } from "./pipeline-status-form";
 
 export default async function KundeDetailPage({
   params,
@@ -17,7 +18,9 @@ export default async function KundeDetailPage({
 
   const customer = await prisma.customer.findUnique({
     where: { id },
-    include: { projects: { orderBy: { updatedAt: "desc" } } },
+    include: {
+      projects: { include: { status: true }, orderBy: { updatedAt: "desc" } },
+    },
   });
 
   if (!customer) {
@@ -90,12 +93,28 @@ export default async function KundeDetailPage({
 
           <Card>
             <h2 className="mb-3 text-sm font-semibold text-slate-500">
+              Status
+            </h2>
+            <PipelineStatusForm
+              pipelineStatus={customer.pipelineStatus}
+              followUpDate={customer.followUpDate}
+              action={updatePipelineStatusAction.bind(null, customer.id)}
+            />
+          </Card>
+
+          <Card>
+            <h2 className="mb-3 text-sm font-semibold text-slate-500">
               Neuer Vorgang
             </h2>
             <form action={createProjectAction} className="space-y-3">
               <input type="hidden" name="customerId" value={customer.id} />
-              <Checkbox name="wantsPv" label="Photovoltaik" defaultChecked />
-              <Checkbox name="wantsHeatPump" label="Wärmepumpe" />
+              <Select name="variantType" defaultValue="PV" required>
+                {AUFTRAGSVARIANTEN.map((v) => (
+                  <option key={v.value} value={v.value}>
+                    {v.label}
+                  </option>
+                ))}
+              </Select>
               <Button type="submit" className="w-full">
                 Vorgang anlegen
               </Button>
@@ -116,13 +135,13 @@ export default async function KundeDetailPage({
                 <Card className="transition-shadow hover:shadow-md">
                   <div className="flex items-center justify-between">
                     <p className="font-medium">
-                      {project.wantsPv && project.wantsHeatPump
-                        ? "PV + Wärmepumpe"
-                        : project.wantsHeatPump
-                          ? "Wärmepumpe"
-                          : "Photovoltaik"}
+                      {labelFor(AUFTRAGSVARIANTEN, project.variantType)}
                     </p>
-                    <StatusBadge status={project.status} />
+                    <StatusBadge
+                      name={project.status.name}
+                      sortOrder={project.status.sortOrder}
+                      isTerminal={project.status.isTerminal}
+                    />
                   </div>
                   <p className="mt-1 text-xs text-slate-400">
                     Angelegt am{" "}

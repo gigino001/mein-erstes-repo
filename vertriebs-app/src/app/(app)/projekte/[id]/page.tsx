@@ -1,11 +1,21 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Sun, Flame, ArrowRight, FileText } from "lucide-react";
+import { Sun, Flame, ArrowRight, FileText, Snowflake, Wrench, Zap, Droplet } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Card, LinkButton, PageHeader } from "@/components/ui";
+import { labelFor, AUFTRAGSVARIANTEN } from "@/lib/options";
 import { StatusSelect } from "./status-select";
 import { CostSection } from "./cost-section";
 import { updateStatusAction } from "./actions";
+
+const VARIANT_ICONS: Record<string, typeof Sun> = {
+  PV: Sun,
+  WAERMEPUMPE: Flame,
+  KLIMA: Snowflake,
+  WARTUNG: Wrench,
+  ELEKTROINSTALLATION: Zap,
+  HEIZUNG_SANITAER_NEUBAU: Droplet,
+};
 
 export default async function ProjektDetailPage({
   params,
@@ -18,6 +28,7 @@ export default async function ProjektDetailPage({
     where: { id },
     include: {
       customer: true,
+      status: true,
       pvData: true,
       heatPumpData: true,
       costItems: { orderBy: { sortOrder: "asc" } },
@@ -29,19 +40,35 @@ export default async function ProjektDetailPage({
     notFound();
   }
 
+  const statuses = await prisma.statusDefinition.findMany({
+    where: { variantType: project.variantType },
+    orderBy: { sortOrder: "asc" },
+  });
+
+  const VariantIcon = VARIANT_ICONS[project.variantType] ?? Sun;
+  const hasWizard = project.variantType === "PV" || project.variantType === "WAERMEPUMPE";
+
   return (
     <div>
       <PageHeader
         title={`${project.customer.firstName} ${project.customer.lastName}`}
         description={
-          <Link href={`/kunden/${project.customer.id}`} className="hover:text-emerald-600">
-            Zum Kundenprofil
-          </Link>
+          <span className="flex items-center gap-2">
+            <Link href={`/kunden/${project.customer.id}`} className="hover:text-emerald-600">
+              Zum Kundenprofil
+            </Link>
+            <span className="text-slate-300 dark:text-slate-700">·</span>
+            <span className="flex items-center gap-1">
+              <VariantIcon size={13} />
+              {labelFor(AUFTRAGSVARIANTEN, project.variantType)}
+            </span>
+          </span>
         }
         action={
           <StatusSelect
             projectId={project.id}
-            status={project.status}
+            statuses={statuses}
+            currentStatusId={project.statusId}
             action={updateStatusAction.bind(null, project.id)}
           />
         }
@@ -49,7 +76,7 @@ export default async function ProjektDetailPage({
 
       <div className="grid gap-6 p-4 sm:p-8 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
-          {project.wantsPv && project.pvData && (
+          {project.variantType === "PV" && project.pvData && (
             <Card>
               <div className="mb-3 flex items-center justify-between">
                 <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-500">
@@ -90,7 +117,7 @@ export default async function ProjektDetailPage({
             </Card>
           )}
 
-          {project.wantsHeatPump && project.heatPumpData && (
+          {project.variantType === "WAERMEPUMPE" && project.heatPumpData && (
             <Card>
               <div className="mb-3 flex items-center justify-between">
                 <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-500">
@@ -130,6 +157,20 @@ export default async function ProjektDetailPage({
                   </Link>
                 </p>
               )}
+            </Card>
+          )}
+
+          {!hasWizard && (
+            <Card>
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-500">
+                <VariantIcon size={16} className="text-emerald-600" />
+                {labelFor(AUFTRAGSVARIANTEN, project.variantType)}
+              </h2>
+              <p className="mt-2 text-sm text-slate-500">
+                Für diese Auftragsvariante gibt es noch keinen technischen
+                Erfassungsassistenten. Kostenpositionen und Angebot unten
+                erfassen.
+              </p>
             </Card>
           )}
 

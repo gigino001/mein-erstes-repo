@@ -11,24 +11,51 @@ export async function createProjectAction(formData: FormData) {
   }
 
   const customerId = formData.get("customerId");
-  if (typeof customerId !== "string") {
-    throw new Error("customerId fehlt");
+  const variantType = formData.get("variantType");
+  if (typeof customerId !== "string" || typeof variantType !== "string") {
+    throw new Error("customerId oder variantType fehlt");
   }
 
-  const wantsPv = formData.get("wantsPv") === "on";
-  const wantsHeatPump = formData.get("wantsHeatPump") === "on";
+  const startStatus = await prisma.statusDefinition.findFirst({
+    where: { variantType },
+    orderBy: { sortOrder: "asc" },
+  });
+  if (!startStatus) {
+    throw new Error(`Keine Status-Definition für ${variantType} gefunden`);
+  }
 
   const project = await prisma.project.create({
     data: {
       customerId,
       ownerId: session.user.id,
-      wantsPv,
-      wantsHeatPump,
-      pvData: wantsPv ? { create: {} } : undefined,
-      heatPumpData: wantsHeatPump ? { create: {} } : undefined,
+      variantType,
+      statusId: startStatus.id,
+      pvData: variantType === "PV" ? { create: {} } : undefined,
+      heatPumpData: variantType === "WAERMEPUMPE" ? { create: {} } : undefined,
       pricing: { create: {} },
     },
   });
 
   redirect(`/projekte/${project.id}`);
+}
+
+export async function updatePipelineStatusAction(customerId: string, formData: FormData) {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  const pipelineStatus = formData.get("pipelineStatus");
+  if (typeof pipelineStatus !== "string") return;
+
+  const followUpDateRaw = formData.get("followUpDate");
+  const followUpDate =
+    typeof followUpDateRaw === "string" && followUpDateRaw !== ""
+      ? new Date(followUpDateRaw)
+      : null;
+
+  await prisma.customer.update({
+    where: { id: customerId },
+    data: { pipelineStatus, followUpDate },
+  });
 }

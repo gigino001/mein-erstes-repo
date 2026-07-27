@@ -26,22 +26,24 @@ model User {
 // ---------- Kunden (CRM) ----------
 
 model Customer {
-  id            String   @id @default(cuid())
-  salutation    String? // Herr, Frau, Firma
-  firstName     String
-  lastName      String
-  company       String?
-  street        String?
-  postalCode    String?
-  city          String?
-  phone         String?
-  email         String?
-  buildingType  String? // EFH, DHH, MFH, GEWERBE
-  buildYear     Int?
-  contactPerson String?
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id             String    @id @default(cuid())
+  salutation     String? // Herr, Frau, Firma
+  firstName      String
+  lastName       String
+  company        String?
+  street         String?
+  postalCode     String?
+  city           String?
+  phone          String?
+  email          String?
+  buildingType   String? // EFH, DHH, MFH, GEWERBE
+  buildYear      Int?
+  contactPerson  String?
+  notes          String?
+  pipelineStatus String    @default("INTERESSENT") // INTERESSENT | TERMIN | ANGEBOT | WIEDERVORLAGE | KUNDE
+  followUpDate   DateTime? // Wiedervorlage-Datum
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   ownerId String
   owner   User   @relation(fields: [ownerId], references: [id])
@@ -49,16 +51,33 @@ model Customer {
   projects Project[]
 }
 
-// ---------- Projekt / Vorgang ----------
+// ---------- Auftragsvarianten: Status-Workflows ----------
+
+// Jede Auftragsvariante (PV, Wärmepumpe, ...) hat einen eigenen,
+// frei konfigurierbaren Satz an Status-Schritten.
+model StatusDefinition {
+  id          String  @id @default(cuid())
+  variantType String // PV | WAERMEPUMPE | KLIMA | WARTUNG | ELEKTROINSTALLATION | HEIZUNG_SANITAER_NEUBAU
+  name        String
+  sortOrder   Int     @default(0)
+  isTerminal  Boolean @default(false)
+  color       String?
+
+  projects Project[]
+}
+
+// ---------- Projekt / Auftragsvariante ----------
 
 model Project {
-  id            String   @id @default(cuid())
-  title         String? // z.B. "PV + Wärmepumpe Musterstraße 1"
-  status        String   @default("NEU") // NEU | ANGEBOT | AUFTRAG | ABGESCHLOSSEN
-  wantsPv       Boolean  @default(true)
-  wantsHeatPump Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id             String    @id @default(cuid())
+  title          String? // z.B. "PV Musterstraße 1"
+  variantType    String // PV | WAERMEPUMPE | KLIMA | WARTUNG | ELEKTROINSTALLATION | HEIZUNG_SANITAER_NEUBAU
+  offerExpiresAt DateTime? // Gültigkeit des zuletzt versendeten Angebots
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  statusId String
+  status   StatusDefinition @relation(fields: [statusId], references: [id])
 
   customerId String
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)

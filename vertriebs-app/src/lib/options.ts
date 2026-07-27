@@ -1,3 +1,22 @@
+export const AUFTRAGSVARIANTEN = [
+  { value: "PV", label: "Photovoltaik" },
+  { value: "WAERMEPUMPE", label: "Wärmepumpe" },
+  { value: "KLIMA", label: "Klimaanlage" },
+  { value: "WARTUNG", label: "Wartung" },
+  { value: "ELEKTROINSTALLATION", label: "Haus-Elektroinstallation" },
+  { value: "HEIZUNG_SANITAER_NEUBAU", label: "Heizung/Sanitär Neubau" },
+] as const;
+
+export const AUFTRAGSVARIANTEN_MIT_ASSISTENT = ["PV", "WAERMEPUMPE"] as const;
+
+export const PIPELINE_STATUS = [
+  { value: "INTERESSENT", label: "Interessent" },
+  { value: "TERMIN", label: "Termin" },
+  { value: "ANGEBOT", label: "Angebot" },
+  { value: "WIEDERVORLAGE", label: "Wiedervorlage" },
+  { value: "KUNDE", label: "Kunde" },
+] as const;
+
 export const BUILDING_TYPES = [
   { value: "EFH", label: "Einfamilienhaus" },
   { value: "DHH", label: "Doppelhaushälfte" },

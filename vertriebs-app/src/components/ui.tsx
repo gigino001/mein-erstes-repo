@@ -112,29 +112,59 @@ export function EmptyState({
   );
 }
 
-const statusStyles: Record<string, string> = {
-  NEU: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400",
-  ANGEBOT: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400",
-  AUFTRAG: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400",
-  ABGESCHLOSSEN: "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
-};
+// Fester Farbzyklus für die (je Auftragsvariante frei konfigurierbaren)
+// Status-Schritte eines Projekts. Abgeschlossene/terminale Stati sind immer grau.
+const STATUS_COLOR_CYCLE = [
+  "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400",
+  "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400",
+  "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400",
+  "bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-400",
+  "bg-cyan-100 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-400",
+];
+const STATUS_TERMINAL_STYLE =
+  "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300";
 
-export const statusLabels: Record<string, string> = {
-  NEU: "Neu",
-  ANGEBOT: "Angebot",
-  AUFTRAG: "Auftrag",
-  ABGESCHLOSSEN: "Abgeschlossen",
-};
-
-export function StatusBadge({ status }: { status: string }) {
+export function StatusBadge({
+  name,
+  sortOrder = 0,
+  isTerminal = false,
+}: {
+  name: string;
+  sortOrder?: number;
+  isTerminal?: boolean;
+}) {
   return (
     <span
       className={clsx(
         "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium",
-        statusStyles[status] ?? statusStyles.NEU
+        isTerminal
+          ? STATUS_TERMINAL_STYLE
+          : STATUS_COLOR_CYCLE[sortOrder % STATUS_COLOR_CYCLE.length]
       )}
     >
-      {statusLabels[status] ?? status}
+      {name}
+    </span>
+  );
+}
+
+// Fester Farbzyklus für den (fest vorgegebenen) Interessenten-Pipeline-Status des Kunden.
+const pipelineStyles: Record<string, string> = {
+  INTERESSENT: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400",
+  TERMIN: "bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-400",
+  ANGEBOT: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400",
+  WIEDERVORLAGE: "bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-400",
+  KUNDE: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400",
+};
+
+export function PipelineStatusBadge({ status, label }: { status: string; label: string }) {
+  return (
+    <span
+      className={clsx(
+        "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium",
+        pipelineStyles[status] ?? pipelineStyles.INTERESSENT
+      )}
+    >
+      {label}
     </span>
   );
 }

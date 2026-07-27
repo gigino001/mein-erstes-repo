@@ -31,9 +31,9 @@ async function recalculatePricing(projectId: string) {
 }
 
 export async function updateStatusAction(projectId: string, formData: FormData) {
-  const status = formData.get("status");
-  if (typeof status !== "string") return;
-  await prisma.project.update({ where: { id: projectId }, data: { status } });
+  const statusId = formData.get("statusId");
+  if (typeof statusId !== "string") return;
+  await prisma.project.update({ where: { id: projectId }, data: { statusId } });
   revalidatePath(`/projekte/${projectId}`);
   revalidatePath("/");
 }

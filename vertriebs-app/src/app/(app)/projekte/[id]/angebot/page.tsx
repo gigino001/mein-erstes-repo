@@ -3,6 +3,7 @@ import { Download, Save } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { buildOfferData } from "@/lib/offer-data";
 import { PageHeader, Card, Button, EmptyState, LinkButton } from "@/components/ui";
+import { labelFor, AUFTRAGSVARIANTEN } from "@/lib/options";
 import { saveOfferAction } from "./actions";
 
 function eur(value: number | null | undefined) {
@@ -27,14 +28,21 @@ export default async function AngebotPage({
     orderBy: { createdAt: "desc" },
   });
 
-  if (!offerData || (!offerData.pv && !offerData.heatPump)) {
+  const isReady =
+    offerData && (offerData.pv || offerData.heatPump || offerData.salesPriceNet > 0);
+
+  if (!offerData || !isReady) {
     return (
       <div>
         <PageHeader title="Angebot" />
         <div className="p-4 sm:p-8">
           <EmptyState
             title="Angebot noch nicht bereit"
-            description="Schließe zuerst die Komponentenauswahl für PV und/oder Wärmepumpe ab, damit ein Angebot berechnet werden kann."
+            description={
+              project.variantType === "PV" || project.variantType === "WAERMEPUMPE"
+                ? "Schließe zuerst die Komponentenauswahl ab, damit ein Angebot berechnet werden kann."
+                : "Erfasse zuerst mindestens eine Kostenposition, damit ein Angebot berechnet werden kann."
+            }
           />
         </div>
       </div>
@@ -102,6 +110,17 @@ export default async function AngebotPage({
                   </dd>
                 </div>
               </dl>
+            </Card>
+          )}
+
+          {!offerData.pv && !offerData.heatPump && (
+            <Card>
+              <h2 className="mb-1 text-sm font-semibold text-slate-500">
+                {labelFor(AUFTRAGSVARIANTEN, project.variantType)}
+              </h2>
+              <p className="text-sm text-slate-500">
+                Angebot auf Basis der erfassten Kostenpositionen.
+              </p>
             </Card>
           )}
 
