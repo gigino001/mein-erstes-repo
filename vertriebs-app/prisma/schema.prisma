@@ -19,8 +19,11 @@ model User {
   role         String   @default("SALES") // ADMIN | SALES
   createdAt    DateTime @default(now())
 
-  customers Customer[]
-  projects  Project[]
+  customers        Customer[]
+  projects         Project[]
+  assignedTasks    Task[]     @relation("TaskAssignee")
+  createdTasks     Task[]     @relation("TaskCreator")
+  uploadedDocuments Document[]
 }
 
 // ---------- Kunden (CRM) ----------
@@ -96,6 +99,8 @@ model Project {
   costItems    CostItem[]
   pricing      Pricing?
   offers       Offer[]
+  tasks        Task[]
+  documents    Document[]
 }
 
 // Eine im Vorgang enthaltene Leistung (Auftragsvariante) mit eigenem Status.
@@ -401,4 +406,56 @@ model Offer {
   createdAt   DateTime @default(now())
   totalNet    Float?
   totalGross  Float?
+}
+
+// ---------- Aufgaben ----------
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  dueDate     DateTime?
+  status      String    @default("OFFEN") // OFFEN, ERLEDIGT
+
+  assignedToId String
+  assignedTo   User   @relation("TaskAssignee", fields: [assignedToId], references: [id])
+  createdById  String
+  createdBy    User   @relation("TaskCreator", fields: [createdById], references: [id])
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ---------- Dateiablage & Pflichtfotos ----------
+
+// Administrierbare Pflichtfoto-Vorgabe je Auftragsvariante (z.B. "Dachübersicht" bei PV).
+model RequiredPhotoType {
+  id          String @id @default(cuid())
+  variantType String // PV | WAERMEPUMPE | KLIMA | WARTUNG | ELEKTROINSTALLATION | HEIZUNG_SANITAER_NEUBAU
+  label       String
+  sortOrder   Int    @default(0)
+
+  documents Document[]
+}
+
+model Document {
+  id String @id @default(cuid())
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // leer = freie Zusatzdatei ohne festen Pflichtfoto-Typ
+  requiredPhotoTypeId String?
+  requiredPhotoType   RequiredPhotoType? @relation(fields: [requiredPhotoTypeId], references: [id], onDelete: SetNull)
+
+  blobKey  String
+  fileName String
+  mimeType String
+
+  uploadedById String
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id])
+  uploadedAt   DateTime @default(now())
 }

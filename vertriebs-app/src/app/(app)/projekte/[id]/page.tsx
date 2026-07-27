@@ -1,11 +1,14 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Sun, Flame, ArrowRight, FileText, Snowflake, Wrench, Zap, Droplet } from "lucide-react";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { Card, LinkButton, PageHeader } from "@/components/ui";
 import { labelFor, AUFTRAGSVARIANTEN } from "@/lib/options";
 import { StatusSelect } from "./status-select";
 import { CostSection } from "./cost-section";
+import { TaskSection } from "./task-section";
+import { PhotosSection } from "./photos-section";
 import { updateStatusAction } from "./actions";
 
 const VARIANT_ICONS: Record<string, typeof Sun> = {
@@ -24,6 +27,11 @@ export default async function ProjektDetailPage({
 }) {
   const { id } = await params;
 
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+
   const project = await prisma.project.findUnique({
     where: { id },
     include: {
@@ -34,6 +42,11 @@ export default async function ProjektDetailPage({
       climaData: true,
       costItems: { orderBy: { sortOrder: "asc" }, include: { component: true } },
       pricing: true,
+      tasks: {
+        include: { assignedTo: true, project: { include: { customer: true } } },
+        orderBy: { createdAt: "desc" },
+      },
+      documents: { orderBy: { uploadedAt: "asc" } },
     },
   });
 
@@ -42,7 +55,7 @@ export default async function ProjektDetailPage({
   }
 
   const variantTypes = project.variants.map((v) => v.variantType);
-  const [statusOptions, components] = await Promise.all([
+  const [statusOptions, components, users, requiredPhotoTypes] = await Promise.all([
     prisma.statusDefinition.findMany({
       where: { variantType: { in: variantTypes } },
       orderBy: { sortOrder: "asc" },
@@ -50,6 +63,11 @@ export default async function ProjektDetailPage({
     prisma.component.findMany({
       where: { active: true },
       orderBy: [{ category: "asc" }, { manufacturer: "asc" }],
+    }),
+    prisma.user.findMany({ orderBy: { name: "asc" } }),
+    prisma.requiredPhotoType.findMany({
+      where: { variantType: { in: variantTypes } },
+      orderBy: [{ variantType: "asc" }, { sortOrder: "asc" }],
     }),
   ]);
   const statusesByVariantType = new Map<string, typeof statusOptions>();
@@ -291,6 +309,12 @@ export default async function ProjektDetailPage({
               pricing={project.pricing}
             />
           )}
+
+          <PhotosSection
+            projectId={project.id}
+            requiredPhotoTypes={requiredPhotoTypes}
+            documents={project.documents}
+          />
         </div>
 
         <div className="space-y-4">
@@ -305,6 +329,13 @@ export default async function ProjektDetailPage({
               Angebot erstellen
             </LinkButton>
           </Card>
+
+          <TaskSection
+            projectId={project.id}
+            tasks={project.tasks}
+            users={users}
+            currentUserId={session.user.id}
+          />
         </div>
       </div>
     </div>

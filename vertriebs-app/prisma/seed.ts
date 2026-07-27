@@ -166,6 +166,37 @@ async function main() {
     }
   }
   console.log(`${fundingPrograms.length} Förderprogramme bereit.`);
+
+  const requiredPhotoTypes: Array<{ variantType: string; label: string }> = [
+    { variantType: "PV", label: "Dachübersicht" },
+    { variantType: "PV", label: "Zählerschrank" },
+    { variantType: "PV", label: "Hausanschluss" },
+    { variantType: "PV", label: "Dachstuhl innen" },
+    { variantType: "WAERMEPUMPE", label: "Aufstellort außen" },
+    { variantType: "WAERMEPUMPE", label: "Heizungskeller" },
+    { variantType: "WAERMEPUMPE", label: "Stromzähler" },
+    { variantType: "KLIMA", label: "Aufstellort Außeneinheit" },
+    { variantType: "KLIMA", label: "Wanddurchbruch/Verlegeweg" },
+    { variantType: "KLIMA", label: "Stromanschluss" },
+    { variantType: "WARTUNG", label: "Übersichtsfoto" },
+    { variantType: "WARTUNG", label: "Zugangssituation" },
+    { variantType: "ELEKTROINSTALLATION", label: "Übersichtsfoto" },
+    { variantType: "ELEKTROINSTALLATION", label: "Zugangssituation" },
+    { variantType: "HEIZUNG_SANITAER_NEUBAU", label: "Übersichtsfoto" },
+    { variantType: "HEIZUNG_SANITAER_NEUBAU", label: "Zugangssituation" },
+  ];
+
+  for (const [index, type] of requiredPhotoTypes.entries()) {
+    const existing = await prisma.requiredPhotoType.findFirst({
+      where: { variantType: type.variantType, label: type.label },
+    });
+    if (!existing) {
+      await prisma.requiredPhotoType.create({
+        data: { ...type, sortOrder: index },
+      });
+    }
+  }
+  console.log(`${requiredPhotoTypes.length} Pflichtfoto-Vorgaben bereit.`);
 }
 
 main()

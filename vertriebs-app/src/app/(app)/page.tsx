@@ -1,5 +1,16 @@
 import Link from "next/link";
-import { Sun, Flame, Snowflake, Wrench, Zap, Droplet, Users as UsersIcon } from "lucide-react";
+import { redirect } from "next/navigation";
+import {
+  Sun,
+  Flame,
+  Snowflake,
+  Wrench,
+  Zap,
+  Droplet,
+  Users as UsersIcon,
+  ListChecks,
+} from "lucide-react";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { PageHeader, LinkButton, EmptyState, PipelineStatusBadge, Card } from "@/components/ui";
 import { PIPELINE_STATUS, labelFor, AUFTRAGSVARIANTEN } from "@/lib/options";
@@ -14,15 +25,32 @@ const VARIANT_ICONS: Record<string, typeof Sun> = {
 };
 
 export default async function DashboardPage() {
-  const customers = await prisma.customer.findMany({
-    include: {
-      projects: {
-        include: { variants: { include: { status: true } } },
-        orderBy: { updatedAt: "desc" },
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  const [customers, openTaskCount] = await Promise.all([
+    prisma.customer.findMany({
+      include: {
+        projects: {
+          include: { variants: { include: { status: true } } },
+          orderBy: { updatedAt: "desc" },
+        },
       },
-    },
-    orderBy: { updatedAt: "desc" },
-  });
+      orderBy: { updatedAt: "desc" },
+    }),
+    prisma.task.count({
+      where: { assignedToId: session.user.id, status: "OFFEN" },
+    }),
+  ]);
+
+  const taskWidget = (
+    <LinkButton href="/aufgaben" variant="secondary">
+      <ListChecks size={16} />
+      {openTaskCount} offene Aufgabe{openTaskCount === 1 ? "" : "n"}
+    </LinkButton>
+  );
 
   if (customers.length === 0) {
     return (
@@ -30,6 +58,7 @@ export default async function DashboardPage() {
         <PageHeader
           title="Übersicht"
           description="Deine Vertriebs-Pipeline"
+          action={taskWidget}
         />
         <div className="p-4 sm:p-8">
           <EmptyState
@@ -54,7 +83,12 @@ export default async function DashboardPage() {
       <PageHeader
         title="Übersicht"
         description="Deine Vertriebs-Pipeline"
-        action={<LinkButton href="/kunden/neu">+ Neuer Kunde</LinkButton>}
+        action={
+          <div className="flex flex-wrap items-center gap-2">
+            {taskWidget}
+            <LinkButton href="/kunden/neu">+ Neuer Kunde</LinkButton>
+          </div>
+        }
       />
 
       <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto p-4 sm:p-8 md:grid md:grid-cols-5 md:overflow-visible">
