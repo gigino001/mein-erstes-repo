@@ -7,7 +7,8 @@
     "unit": "Pauschale",
     "productNumber": null,
     "category": "GARANTIE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "5-Year Extended Warranty Service for Sigen HybridTP2 3-12 kW",
@@ -17,7 +18,8 @@
     "unit": "Pauschale",
     "productNumber": "ENL0004",
     "category": "GARANTIE",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "5-Year Extended Warranty Service for SigenStorBAT",
@@ -27,7 +29,8 @@
     "unit": "Pauschale",
     "productNumber": "ENL0005",
     "category": "GARANTIE",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Abholung Module & Unterkonstruktion (SAT)",
@@ -37,7 +40,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0029",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Absicherung Dachmontage EFH",
@@ -47,7 +51,8 @@
     "unit": "Stück",
     "productNumber": "END0008",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Absicherung Dachmontage Garage",
@@ -57,7 +62,8 @@
     "unit": "Stück",
     "productNumber": "END0007",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Absturzsicherung (C&W)",
@@ -67,7 +73,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0001",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Absturzsicherung (EnL)",
@@ -77,7 +84,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0002",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Absturzsicherung (GT3)",
@@ -87,7 +95,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0003",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Absturzsicherung (LaEx)",
@@ -97,7 +106,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0004",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Absturzsicherung (PS)",
@@ -107,7 +117,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0005",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Absturzsicherung (SAT)",
@@ -117,7 +128,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0030",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Absturzsicherung nur Vogelschutz (C&W)",
@@ -127,7 +139,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0006",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Anbindung der bestehenden Solarthermieanlage",
@@ -137,7 +150,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Anfahrt (C&W)",
@@ -147,7 +161,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0007",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Anfahrt (EnL)",
@@ -157,7 +172,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0008",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Anfahrt (GT3)",
@@ -167,7 +183,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0009",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Anfahrt (LaEx)",
@@ -177,7 +194,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0010",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Anfahrt (PS)",
@@ -187,7 +205,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0011",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Bestehendes Rohrsystem vor Umbau spühlen",
@@ -197,7 +216,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "climaVAIR multi Deckenkassette mit Blende, VAM 1-035 KNI – Art.-Nr. 8000045091",
@@ -207,7 +227,8 @@
     "unit": "Stück",
     "productNumber": "8000045091",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR multi VAM 1-050 A2NO, Außeneinheit – Art.-Nr. 8000010717",
@@ -217,7 +238,8 @@
     "unit": "Stück",
     "productNumber": "8000010717",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR multi VAM 1-070 A3NO, Außeneinheit – Art.-Nr. 8000010724",
@@ -227,7 +249,8 @@
     "unit": "Stück",
     "productNumber": "8000010724",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR multi VAM 1-080 A4NO, Außeneinheit – Art.-Nr. 8000010719",
@@ -237,7 +260,8 @@
     "unit": "Stück",
     "productNumber": "8000010719",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR multi VAM 1-120 A5NO, Außeneinheit – Art.-Nr. 8000010712",
@@ -247,7 +271,8 @@
     "unit": "Stück",
     "productNumber": "8000010712",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus Set VAIP 1-025 WN, Mono-Split Innen- und Außeneinheit – Art.-Nr. 8000041403",
@@ -257,7 +282,8 @@
     "unit": "Stück",
     "productNumber": "8000041403",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus Set VAIP 1-035 WN, Mono-Split Innen- und Außeneinheit – Art.-Nr. 8000041404",
@@ -267,7 +293,8 @@
     "unit": "Stück",
     "productNumber": "8000041404",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus Set VAIP 1-050 WN, Mono-Split Innen- und Außeneinheit – Art.-Nr. 8000041405",
@@ -277,7 +304,8 @@
     "unit": "Stück",
     "productNumber": "8000041405",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus Set VAIP 1-065 WN, Mono-Split Innen- und Außeneinheit – Art.-Nr. 8000041406",
@@ -287,7 +315,8 @@
     "unit": "Stück",
     "productNumber": "8000041406",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus VAIP 1-025 WNI, Wandkassette (Inneneinheit) – Art.-Nr. 8000010685",
@@ -297,7 +326,8 @@
     "unit": "Stück",
     "productNumber": "8000010685",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus VAIP 1-025 WNO, Mono-Split Außeneinheit – Art.-Nr. 8000010663",
@@ -307,7 +337,8 @@
     "unit": "Stück",
     "productNumber": "8000010663",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus VAIP 1-035 WNI, Wandkassette (Inneneinheit) – Art.-Nr. 8000010686",
@@ -317,7 +348,8 @@
     "unit": "Stück",
     "productNumber": "8000010686",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus VAIP 1-035 WNO, Mono-Split Außeneinheit – Art.-Nr. 8000010668",
@@ -327,7 +359,8 @@
     "unit": "Stück",
     "productNumber": "8000010668",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus VAIP 1-050 WNI, Wandkassette (Inneneinheit) – Art.-Nr. 8000010687",
@@ -337,7 +370,8 @@
     "unit": "Stück",
     "productNumber": "8000010687",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus VAIP 1-050 WNO, Mono-Split Außeneinheit – Art.-Nr. 8000010673",
@@ -347,7 +381,8 @@
     "unit": "Stück",
     "productNumber": "8000010673",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus VAIP 1-065 WNI, Wandkassette (Inneneinheit) – Art.-Nr. 8000010679",
@@ -357,7 +392,8 @@
     "unit": "Stück",
     "productNumber": "8000010679",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "climaVAIR plus VAIP 1-065 WNO, Mono-Split Außeneinheit – Art.-Nr. 8000010670",
@@ -367,7 +403,8 @@
     "unit": "Stück",
     "productNumber": "8000010670",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "DC Montage (C&W)",
@@ -377,7 +414,8 @@
     "unit": "kWp",
     "productNumber": "ENX0012",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "DC Montage (EnL)",
@@ -387,7 +425,8 @@
     "unit": "kWp",
     "productNumber": "ENX0013",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "DC Montage (GT3)",
@@ -397,7 +436,8 @@
     "unit": "kWp",
     "productNumber": "ENX0014",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "DC Montage (LaEx)",
@@ -407,7 +447,8 @@
     "unit": "kWp",
     "productNumber": "ENX0015",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "DC Montage (PS)",
@@ -417,7 +458,8 @@
     "unit": "kWp",
     "productNumber": "ENX0016",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "DC Montage (SAT)",
@@ -427,7 +469,8 @@
     "unit": "Stück",
     "productNumber": "ENX0031",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "DC Montage Schiefer pro Modul",
@@ -437,7 +480,8 @@
     "unit": "Stück",
     "productNumber": "END0005",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "DC Montage Standard pro Modul",
@@ -447,7 +491,8 @@
     "unit": "Stück",
     "productNumber": "END0004",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "DC Verkabelung (EnL)",
@@ -457,7 +502,8 @@
     "unit": "kWp",
     "productNumber": "ENX0017",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "DC Verkabelung (GT3)",
@@ -467,7 +513,8 @@
     "unit": "kWp",
     "productNumber": "ENX0018",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "DC Verkabelung (LaEx)",
@@ -477,7 +524,8 @@
     "unit": "kWp",
     "productNumber": "ENX0019",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "DC Verkabelung (PS)",
@@ -487,7 +535,8 @@
     "unit": "kWp",
     "productNumber": "ENX0020",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Demontage & Entsorgung Altanlage (Gas)",
@@ -497,7 +546,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Demontage & Entsorgung Altanlage (Heizöl) - Optional",
@@ -507,7 +557,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Demontage Modul inkl. Unterkonstruktion (preis nur bei Neuanlage)",
@@ -517,7 +568,8 @@
     "unit": "Stück",
     "productNumber": "END0011",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Demontage oder versetzen einer SAT Anlage",
@@ -527,7 +579,8 @@
     "unit": "Stück",
     "productNumber": "END0012",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Demontage oder versetzen eines Schneefangs",
@@ -537,7 +590,8 @@
     "unit": "Stück",
     "productNumber": "END0013",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Demontage und Entsorgung Solarthermiekollektor - Optional",
@@ -547,7 +601,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Elektrischer Anschluss",
@@ -557,7 +612,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Enpere Wärmepumpenzuschuss",
@@ -567,7 +623,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "SONSTIGES",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Ersatzstrom",
@@ -577,7 +634,8 @@
     "unit": "Stück",
     "productNumber": "ENA0065",
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Facharbeiter Stunde",
@@ -587,7 +645,8 @@
     "unit": "Stunde",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Fassadengerüst (C&W)",
@@ -597,7 +656,8 @@
     "unit": "je Feld",
     "productNumber": "ENX0021",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Fördermittelbeantragung und Service",
@@ -607,7 +667,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Fundament",
@@ -617,7 +678,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Fußbodenverteiler tauschen und hydraulisch abgleichen",
@@ -627,7 +689,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Gebäudebezogene Nachweisdokumentation",
@@ -637,7 +700,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Heizkreiserweiterung je zusätzlichem Heizkreis",
@@ -647,7 +711,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Heizlastberechnung",
@@ -657,7 +722,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Helfer Stunde",
@@ -667,7 +733,8 @@
     "unit": "Stunde",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Herstellung der Kommunikation zwischen Wärmepumpe und Pv Anlage",
@@ -677,7 +744,8 @@
     "unit": "Stück",
     "productNumber": "ENA0044",
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Hydraulischer Abgleich pro Heizkörper",
@@ -687,7 +755,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Inbetriebnahme und Anmeldung",
@@ -697,7 +766,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Jolywood 460W Bifazial Glas-Glas Full Black Modul JW-HD96N-R2",
@@ -707,7 +777,10 @@
     "unit": "Stück",
     "productNumber": "ENM0027",
     "category": "MODUL",
-    "manufacturer": "Jolywood"
+    "manufacturer": "Jolywood",
+    "specs": {
+      "wattPeak": 460.0
+    }
   },
   {
     "name": "Kernbohrungen",
@@ -717,7 +790,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Kreuzerder",
@@ -727,7 +801,8 @@
     "unit": "Stück",
     "productNumber": "ENA0059",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Magnetitabscheider",
@@ -737,7 +812,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Materialaufwand (SAT)",
@@ -747,7 +823,8 @@
     "unit": "Pauschale",
     "productNumber": "ENX0032",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Messkonzept MK8",
@@ -757,7 +834,8 @@
     "unit": "Stück",
     "productNumber": "ENA0069",
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Müllentsorgung/Endreinigung (C&W)",
@@ -767,7 +845,8 @@
     "unit": "Stück",
     "productNumber": "ENX0022",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Neuerrichtung der Internetverbindung per LAN-Kabel",
@@ -777,7 +856,8 @@
     "unit": "Pauschale",
     "productNumber": "ENA0074",
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Neuerrichtung Internetverbindung per D-LAN",
@@ -787,7 +867,8 @@
     "unit": "Pauschale",
     "productNumber": "ENA0074",
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.013, climaVAIR plus VAIP 1-025 WNO mit VAIP 1-025 WNI + Zubehör, 10 m – Art.-Nr. 8000052639",
@@ -797,7 +878,8 @@
     "unit": "Stück",
     "productNumber": "8000052639",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Paket 5.014, climaVAIR plus VAIP 1-035 WNO mit VAIP 1-035 WNI + Zubehör, 10 m – Art.-Nr. 8000052640",
@@ -807,7 +889,8 @@
     "unit": "Stück",
     "productNumber": "8000052640",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Paket 5.015, climaVAIR plus VAIP 1-050 WNO mit VAIP 1-050 WNI + Zubehör, 10 m – Art.-Nr. 8000052651",
@@ -817,7 +900,8 @@
     "unit": "Stück",
     "productNumber": "8000052651",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Paket 5.016, climaVAIR plus VAIP 1-065 WNO mit VAIP 1-065 WNI + Zubehör, 10 m – Art.-Nr. 8000052652",
@@ -827,7 +911,8 @@
     "unit": "Stück",
     "productNumber": "8000052652",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Paket 5.017, climaVAIR plus VAIP 1-025 WNO mit VAIP 1-025 WNI + Zubehör, 25 m – Art.-Nr. 8000052653",
@@ -837,7 +922,8 @@
     "unit": "Stück",
     "productNumber": "8000052653",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Paket 5.018, climaVAIR plus VAIP 1-035 WNO mit VAIP 1-035 WNI + Zubehör, 25 m – Art.-Nr. 8000052654",
@@ -847,7 +933,8 @@
     "unit": "Stück",
     "productNumber": "8000052654",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Paket 5.019, climaVAIR plus VAIP 1-050 WNO mit VAIP 1-050 WNI + Zubehör, 25 m – Art.-Nr. 8000052655",
@@ -857,7 +944,8 @@
     "unit": "Stück",
     "productNumber": "8000052655",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Paket 5.020, climaVAIR plus VAIP 1-065 WNO mit VAIP 1-065 WNI + Zubehör, 25 m – Art.-Nr. 8000052656",
@@ -867,7 +955,8 @@
     "unit": "Stück",
     "productNumber": "8000052656",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Paket 5.021, climaVAIR multi Installationszubehör für Multi-Split-Klimagerät, 10 m – Art.-Nr. 8000052657",
@@ -877,7 +966,8 @@
     "unit": "Stück",
     "productNumber": "8000052657",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Paket 5.022, climaVAIR multi Installationszubehör für Multi-Split-Klimagerät, 25 m – Art.-Nr. 8000052658",
@@ -887,7 +977,8 @@
     "unit": "Stück",
     "productNumber": "8000052658",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Paket 5.023, VAM 1-050 A2NO mit 2x VAIP 1-025 WNI – Art.-Nr. 8000052659",
@@ -897,7 +988,8 @@
     "unit": "Stück",
     "productNumber": "8000052659",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.024, VAM 1-050 A2NO mit VAIP 1-025 WNI + VAIP 1-035 WNI – Art.-Nr. 8000052660",
@@ -907,7 +999,8 @@
     "unit": "Stück",
     "productNumber": "8000052660",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.025, VAM 1-050 A2NO mit 2x VAM 1-035 KNI – Art.-Nr. 8000052661",
@@ -917,7 +1010,8 @@
     "unit": "Stück",
     "productNumber": "8000052661",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.026, VAM 1-070 A3NO mit 3x VAIP 1-025 WNI – Art.-Nr. 8000052662",
@@ -927,7 +1021,8 @@
     "unit": "Stück",
     "productNumber": "8000052662",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.027, VAM 1-070 A3NO mit 2x VAIP 1-035 WNI – Art.-Nr. 8000052663",
@@ -937,7 +1032,8 @@
     "unit": "Stück",
     "productNumber": "8000052663",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.028, VAM 1-070 A3NO mit 2x VAM 1-035 KNI – Art.-Nr. 8000052664",
@@ -947,7 +1043,8 @@
     "unit": "Stück",
     "productNumber": "8000052664",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.029, VAM 1-070 A3NO mit 2x VAIP 1-025 WNI + VAIP 1-035 WNI – Art.-Nr. 8000052665",
@@ -957,7 +1054,8 @@
     "unit": "Stück",
     "productNumber": "8000052665",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.030, VAM 1-080 A4NO mit 3x VAIP 1-025 WNI – Art.-Nr. 8000052666",
@@ -967,7 +1065,8 @@
     "unit": "Stück",
     "productNumber": "8000052666",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.031, VAM 1-080 A4NO mit 2x VAIP 1-025 WNI + VAIP 1-035 WNI – Art.-Nr. 8000052667",
@@ -977,7 +1076,8 @@
     "unit": "Stück",
     "productNumber": "8000052667",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.032, VAM 1-080 A4NO mit 4x VAIP 1-025 WNI – Art.-Nr. 8000052668",
@@ -987,7 +1087,8 @@
     "unit": "Stück",
     "productNumber": "8000052668",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.033, VAM 1-080 A4NO mit 3x VAIP 1-025 WNI + VAIP 1-035 WNI – Art.-Nr. 8000052669",
@@ -997,7 +1098,8 @@
     "unit": "Stück",
     "productNumber": "8000052669",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Paket 5.034, VAM 1-080 A4NO mit 3x VAM 1-035 KNI – Art.-Nr. 8000052670",
@@ -1007,7 +1109,8 @@
     "unit": "Stück",
     "productNumber": "8000052670",
     "category": "KLIMAGERAET",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Provisorische Warmwasserbereitung - Optional",
@@ -1017,7 +1120,8 @@
     "unit": "Tag",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Pufferspeicher",
@@ -1027,7 +1131,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "PUFFERSPEICHER",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Roll-/Fassadengerüst (EnL)",
@@ -1037,7 +1142,8 @@
     "unit": "je Feld",
     "productNumber": "ENX0023",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Roll-/Fassadengerüst (GT3)",
@@ -1047,7 +1153,8 @@
     "unit": "je Feld",
     "productNumber": "ENX0024",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Roll-/Fassadengerüst (LaEx)",
@@ -1057,7 +1164,8 @@
     "unit": "je Feld",
     "productNumber": "ENX0025",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Roll-/Fassadengerüst (PS)",
@@ -1067,7 +1175,8 @@
     "unit": "je Feld",
     "productNumber": "ENX0026",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "SBH Battery Module 5,0 KWH Speichernachrüstung",
@@ -1077,7 +1186,10 @@
     "unit": "Stück",
     "productNumber": "ENS0056",
     "category": "SPEICHER",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {
+      "capacityKwh": 5.0
+    }
   },
   {
     "name": "Sigen Energy Controller 10.0 kW Three Phase",
@@ -1087,7 +1199,8 @@
     "unit": "Stück",
     "productNumber": "ENW0059",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Sigen Energy Controller 12.0 kW Three Phase",
@@ -1097,7 +1210,8 @@
     "unit": "Stück",
     "productNumber": "ENW0060",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Sigen Energy Controller 15.0 kW Three Phase",
@@ -1107,7 +1221,8 @@
     "unit": "Stück",
     "productNumber": "ENW0061",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Sigen Energy Controller 17.0 kW Three Phase",
@@ -1117,7 +1232,8 @@
     "unit": "Stück",
     "productNumber": "ENW0062",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Sigen Energy Controller 20.0 kW Three Phase",
@@ -1127,7 +1243,8 @@
     "unit": "Stück",
     "productNumber": "ENW0063",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Sigen Energy Controller 25.0 kW Three Phase",
@@ -1137,7 +1254,8 @@
     "unit": "Stück",
     "productNumber": "ENW0064",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Sigen Energy Controller 30.0 kW Three Phase",
@@ -1147,7 +1265,8 @@
     "unit": "Stück",
     "productNumber": "ENW0065",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Sigen Energy Controller 5.0 kW Three Phase",
@@ -1157,7 +1276,8 @@
     "unit": "Stück",
     "productNumber": "ENW0056",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Sigen Energy Controller 6.0 kW Three Phase",
@@ -1167,7 +1287,8 @@
     "unit": "Stück",
     "productNumber": "ENW0057",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Sigen Energy Controller 8.0 kW Three Phase",
@@ -1177,7 +1298,8 @@
     "unit": "Stück",
     "productNumber": "ENW0058",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Sigen Energy Gateway HomeMax Three Phase",
@@ -1187,7 +1309,8 @@
     "unit": "Stück",
     "productNumber": "ENA0084",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {}
   },
   {
     "name": "Sigen EV AC Charger 11 kW 4G 5m Cable Type2White",
@@ -1197,7 +1320,10 @@
     "unit": "Stück",
     "productNumber": "ENA0080",
     "category": "WALLBOX",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "chargingPowerKw": 11.0
+    }
   },
   {
     "name": "Sigen EV AC Charger 22 kW 4G 5m Cable Type2White",
@@ -1207,7 +1333,10 @@
     "unit": "Stück",
     "productNumber": "ENA0081",
     "category": "WALLBOX",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "chargingPowerKw": 22.0
+    }
   },
   {
     "name": "Sigen EV DC Charging Module 12 kW 10m CableCCS2",
@@ -1217,7 +1346,10 @@
     "unit": "Stück",
     "productNumber": "ENA0082",
     "category": "WALLBOX",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "chargingPowerKw": 12.0
+    }
   },
   {
     "name": "Sigen EV DC Charging Module 25 kW 10m CableCCS2",
@@ -1227,7 +1359,10 @@
     "unit": "Stück",
     "productNumber": "ENA0083",
     "category": "WALLBOX",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "chargingPowerKw": 25.0
+    }
   },
   {
     "name": "Sigen Hybrid Inverter 10.0 kW Three Phase",
@@ -1237,7 +1372,10 @@
     "unit": "Stück",
     "productNumber": "ENW0071",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "powerKw": 10.0
+    }
   },
   {
     "name": "Sigen Hybrid Inverter 12.0 kW Three Phase",
@@ -1247,7 +1385,10 @@
     "unit": "Stück",
     "productNumber": "ENW0072",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "powerKw": 12.0
+    }
   },
   {
     "name": "Sigen Hybrid Inverter 3.0 kW Three Phase",
@@ -1257,7 +1398,10 @@
     "unit": "Stück",
     "productNumber": "ENW0066",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "powerKw": 3.0
+    }
   },
   {
     "name": "Sigen Hybrid Inverter 4.0 kW Three Phase",
@@ -1267,7 +1411,10 @@
     "unit": "Stück",
     "productNumber": "ENW0067",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "powerKw": 4.0
+    }
   },
   {
     "name": "Sigen Hybrid Inverter 5.0 kW Three Phase",
@@ -1277,7 +1424,10 @@
     "unit": "Stück",
     "productNumber": "ENW0068",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "powerKw": 5.0
+    }
   },
   {
     "name": "Sigen Hybrid Inverter 6.0 kW Three Phase",
@@ -1287,7 +1437,10 @@
     "unit": "Stück",
     "productNumber": "ENW0069",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "powerKw": 6.0
+    }
   },
   {
     "name": "Sigen Hybrid Inverter 8.0 kW Three Phase",
@@ -1297,7 +1450,10 @@
     "unit": "Stück",
     "productNumber": "ENW0070",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "powerKw": 8.0
+    }
   },
   {
     "name": "SigenStor BAT 10.0",
@@ -1307,7 +1463,10 @@
     "unit": "Stück",
     "productNumber": "ENS0063",
     "category": "SPEICHER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "capacityKwh": 10.0
+    }
   },
   {
     "name": "SigenStor BAT 6.0",
@@ -1317,7 +1476,10 @@
     "unit": "Stück",
     "productNumber": "ENS0062",
     "category": "SPEICHER",
-    "manufacturer": "Sigenergy"
+    "manufacturer": "Sigenergy",
+    "specs": {
+      "capacityKwh": 6.0
+    }
   },
   {
     "name": "Sungrow Hybrid SH10RT - V112",
@@ -1327,7 +1489,10 @@
     "unit": "Stück",
     "productNumber": "ENW0004",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "powerKw": 10.0
+    }
   },
   {
     "name": "Sungrow Hybrid SH15T - V11",
@@ -1337,7 +1502,8 @@
     "unit": "Stück",
     "productNumber": "ENW0045",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {}
   },
   {
     "name": "Sungrow Hybrid SH20T - V11",
@@ -1347,7 +1513,8 @@
     "unit": "Stück",
     "productNumber": "ENW0046",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {}
   },
   {
     "name": "Sungrow Hybrid SH25T - V11",
@@ -1357,7 +1524,8 @@
     "unit": "Stück",
     "productNumber": "ENW0051",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {}
   },
   {
     "name": "Sungrow Hybrid SH5.0RT - V112",
@@ -1367,7 +1535,10 @@
     "unit": "Stück",
     "productNumber": "ENW0001",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "powerKw": 5.0
+    }
   },
   {
     "name": "Sungrow Hybrid SH6.0RT - V112",
@@ -1377,7 +1548,10 @@
     "unit": "Stück",
     "productNumber": "ENW0002",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "powerKw": 6.0
+    }
   },
   {
     "name": "Sungrow Hybrid SH8.0RT - V112",
@@ -1387,7 +1561,10 @@
     "unit": "Stück",
     "productNumber": "ENW0003",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "powerKw": 8.0
+    }
   },
   {
     "name": "Sungrow IHomeManager",
@@ -1397,7 +1574,8 @@
     "unit": "Stück",
     "productNumber": "ENA0076",
     "category": "ENERGIEMANAGER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {}
   },
   {
     "name": "Sungrow Leistungsoptimierer SP600S Optimizer",
@@ -1407,7 +1585,8 @@
     "unit": "Stück",
     "productNumber": "END0015",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {}
   },
   {
     "name": "Sungrow Residential SG10.0RT-V115",
@@ -1417,7 +1596,10 @@
     "unit": "Stück",
     "productNumber": "ENW0007",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "powerKw": 10.0
+    }
   },
   {
     "name": "Sungrow Residential SG8.0RT-V115",
@@ -1427,7 +1609,10 @@
     "unit": "Stück",
     "productNumber": "ENW0007",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "powerKw": 8.0
+    }
   },
   {
     "name": "Sungrow SBH100 (nur komp. SH15,20,25T)",
@@ -1437,7 +1622,10 @@
     "unit": "Stück",
     "productNumber": "ENS0049",
     "category": "SPEICHER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "capacityKwh": 100.0
+    }
   },
   {
     "name": "Sungrow SBH150 (nur komp. SH15,20,25T)",
@@ -1447,7 +1635,10 @@
     "unit": "Stück",
     "productNumber": "ENS0050",
     "category": "SPEICHER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "capacityKwh": 150.0
+    }
   },
   {
     "name": "Sungrow SBH200 (nur komp. SH15,20,25T)",
@@ -1457,7 +1648,10 @@
     "unit": "Stück",
     "productNumber": "ENS0051",
     "category": "SPEICHER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "capacityKwh": 200.0
+    }
   },
   {
     "name": "Sungrow SBH250 (nur komp. SH15,20,25T)",
@@ -1467,7 +1661,10 @@
     "unit": "Stück",
     "productNumber": "ENS0052",
     "category": "SPEICHER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "capacityKwh": 250.0
+    }
   },
   {
     "name": "Sungrow SBH300 (nur komp. SH15,20,25T)",
@@ -1477,7 +1674,10 @@
     "unit": "Stück",
     "productNumber": "ENS0053",
     "category": "SPEICHER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "capacityKwh": 300.0
+    }
   },
   {
     "name": "Sungrow SBH350 (nur komp. SH15,20,25T)",
@@ -1487,7 +1687,10 @@
     "unit": "Stück",
     "productNumber": "ENS0054",
     "category": "SPEICHER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "capacityKwh": 350.0
+    }
   },
   {
     "name": "Sungrow SBH400 (nur komp. SH15,20,25T)",
@@ -1497,7 +1700,10 @@
     "unit": "Stück",
     "productNumber": "ENS0055",
     "category": "SPEICHER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "capacityKwh": 400.0
+    }
   },
   {
     "name": "Sungrow SG125 CX-P2",
@@ -1507,7 +1713,10 @@
     "unit": "Stück",
     "productNumber": "ENW0014",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "powerKw": 125.0
+    }
   },
   {
     "name": "Sungrow SG33 CX Premium V112",
@@ -1517,7 +1726,10 @@
     "unit": "Stück",
     "productNumber": "ENW0012",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "powerKw": 33.0
+    }
   },
   {
     "name": "Sungrow SG50 CX-P2",
@@ -1527,7 +1739,10 @@
     "unit": "Stück",
     "productNumber": "ENW0013",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "powerKw": 50.0
+    }
   },
   {
     "name": "Sungrow Wallbox 22kW AC022E-01",
@@ -1537,7 +1752,10 @@
     "unit": "Stück",
     "productNumber": "ENA0079",
     "category": "WALLBOX",
-    "manufacturer": "Sungrow"
+    "manufacturer": "Sungrow",
+    "specs": {
+      "chargingPowerKw": 22.0
+    }
   },
   {
     "name": "Synergierabatt",
@@ -1547,7 +1765,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "SONSTIGES",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Tigo TS4-A-O Optimierer 700W/15A",
@@ -1557,7 +1776,8 @@
     "unit": "Stück",
     "productNumber": "END0009",
     "category": "WECHSELRICHTER",
-    "manufacturer": "Tigo"
+    "manufacturer": "Tigo",
+    "specs": {}
   },
   {
     "name": "Überdruck- und Ausgleichspaket",
@@ -1567,7 +1787,8 @@
     "unit": "Pauschale",
     "productNumber": null,
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "UK Flachdach einseitig pro Modul",
@@ -1577,7 +1798,8 @@
     "unit": "Stück",
     "productNumber": "END0002",
     "category": "MONTAGESYSTEM",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "UK Flachdach zweiseitig pro Modul",
@@ -1587,7 +1809,8 @@
     "unit": "Stück",
     "productNumber": "END0003",
     "category": "MONTAGESYSTEM",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "UK Kurzschiene für Trapez",
@@ -1597,7 +1820,8 @@
     "unit": "Stück",
     "productNumber": "END0014",
     "category": "MONTAGESYSTEM",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "UK Schieferdach pro Modul",
@@ -1607,7 +1831,8 @@
     "unit": "Stück",
     "productNumber": "END0006",
     "category": "MONTAGESYSTEM",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "UK Ziegeldach pro Modul",
@@ -1617,7 +1842,8 @@
     "unit": "Stück",
     "productNumber": "END0001",
     "category": "MONTAGESYSTEM",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Unterkonstruktion (LaEx)",
@@ -1627,7 +1853,8 @@
     "unit": "kWp",
     "productNumber": "ENX0028",
     "category": "MONTAGESYSTEM",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "VA Paket 4.1200 aroTHERM pro /7.1 VWL 55/7.1 A 230V mit uniTOWER plus /7.1",
@@ -1637,7 +1864,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 5.5
+    }
   },
   {
     "name": "VA Paket 4.1201 aroTHERM pro /7.1 VWL 75/7.1 A 230V mit uniTOWER plus /7.1",
@@ -1647,7 +1877,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 7.5
+    }
   },
   {
     "name": "VA Paket 4.1202 aroTHERM pro /7.1 VWL 115/7.1 A 400V mit uniTOWER plus /7.1",
@@ -1657,7 +1890,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 11.5
+    }
   },
   {
     "name": "VA Paket 4.1300 aroTHERM pro /7.1 VWL 55/7.1 A 230V mit VWZ MEH 97/7",
@@ -1667,7 +1903,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 5.5
+    }
   },
   {
     "name": "VA Paket 4.1301 aroTHERM pro /7.1 VWL 75/7.1 A 230V mit VWZ MEH 97/7",
@@ -1677,7 +1916,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 7.5
+    }
   },
   {
     "name": "VA Paket 4.1302 aroTHERM pro /7.1 VWL 115/7.1 A 400V mit VWZ MEH 97/7",
@@ -1687,7 +1929,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 11.5
+    }
   },
   {
     "name": "VA Paket 4.3212 aroTHERM plus /8.1 VWL 35/8.1 A 230V mit uniTOWER plus /7.1",
@@ -1697,7 +1942,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 3.5
+    }
   },
   {
     "name": "VA Paket 4.3213 aroTHERM plus /8.1 VWL 55/8.1 A 230V mit uniTOWER plus /7.1",
@@ -1707,7 +1955,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 5.5
+    }
   },
   {
     "name": "VA Paket 4.3214 aroTHERM plus /8.1 VWL 75/8.1 A 230V mit uniTOWER plus /7.1",
@@ -1717,7 +1968,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 7.5
+    }
   },
   {
     "name": "VA Paket 4.3215 aroTHERM plus /8.1 VWL 105/8.1 A 400V mit uniTOWER plus /7.1",
@@ -1727,7 +1981,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 10.5
+    }
   },
   {
     "name": "VA Paket 4.3216 aroTHERM plus /8.1 VWL 125/8.1 A 400V mit uniTOWER plus /7.1",
@@ -1737,7 +1994,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 12.5
+    }
   },
   {
     "name": "VA Paket 4.3321 aroTHERM plus /8.1 VWL 35/8.1 A 230V mit VWZ MEH 97/7",
@@ -1747,7 +2007,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 3.5
+    }
   },
   {
     "name": "VA Paket 4.3322 aroTHERM plus /8.1 VWL 55/8.1 A 230V mit VWZ MEH 97/7",
@@ -1757,7 +2020,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 5.5
+    }
   },
   {
     "name": "VA Paket 4.3323 aroTHERM plus /8.1 VWL 75/8.1 A 230V mit VWZ MEH 97/7",
@@ -1767,7 +2033,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 7.5
+    }
   },
   {
     "name": "VA Paket 4.3324 aroTHERM plus /8.1 VWL 105/8.1 A 400V mit VWZ MEH 97/7",
@@ -1777,7 +2046,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 10.5
+    }
   },
   {
     "name": "VA Paket 4.3325 aroTHERM plus /8.1 VWL 125/8.1 A 400V mit VWZ MEH 97/7",
@@ -1787,7 +2059,10 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "WAERMEPUMPE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {
+      "heatingPowerKw": 12.5
+    }
   },
   {
     "name": "Vaillant Kältemittelleitung 1/2\", Länge 10 m – Art.-Nr. 0010035543",
@@ -1797,7 +2072,8 @@
     "unit": "Stück",
     "productNumber": "0010035543",
     "category": "MONTAGE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Vaillant Kältemittelleitung 1/4\", Länge 10 m – Art.-Nr. 0010035542",
@@ -1807,7 +2083,8 @@
     "unit": "Stück",
     "productNumber": "0010035542",
     "category": "MONTAGE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Vaillant Kältemittelleitung 3/8\", Länge 10 m – Art.-Nr. 0010035544",
@@ -1817,7 +2094,8 @@
     "unit": "Stück",
     "productNumber": "0010035544",
     "category": "MONTAGE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Vaillant Kältemittelleitung 5/8\", Länge 10 m – Art.-Nr. 0010035545",
@@ -1827,7 +2105,8 @@
     "unit": "Stück",
     "productNumber": "0010035545",
     "category": "MONTAGE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Vaillant Kondensatpumpe Mini Orange silent+ – Art.-Nr. 0010040565",
@@ -1837,7 +2116,8 @@
     "unit": "Stück",
     "productNumber": "0010040565",
     "category": "MONTAGE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Vaillant Montagekasten Unterputz – Art.-Nr. 0020003518",
@@ -1847,7 +2127,8 @@
     "unit": "Stück",
     "productNumber": "0020003518",
     "category": "MONTAGE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Vaillant On-Off Kontakt – Art.-Nr. 0020257890",
@@ -1857,7 +2138,8 @@
     "unit": "Stück",
     "productNumber": "0020257890",
     "category": "MONTAGE",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "Vaillant Wandhalterung für climaVAIR – Art.-Nr. 0020003517",
@@ -1867,7 +2149,8 @@
     "unit": "Stück",
     "productNumber": "0020003517",
     "category": "KLIMAGERAET",
-    "manufacturer": "Vaillant"
+    "manufacturer": "Vaillant",
+    "specs": {}
   },
   {
     "name": "VDE konforme Elektroinstallation/Inbetriebnahme & Service Leistungen",
@@ -1877,7 +2160,8 @@
     "unit": "Stück",
     "productNumber": "ENA0078",
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Verrohrung Wärmepumpe inkl. Hausanschluss",
@@ -1887,7 +2171,8 @@
     "unit": "Pauschale",
     "productNumber": null,
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Vogelschutz (C&W)",
@@ -1897,7 +2182,8 @@
     "unit": "Stunden",
     "productNumber": "ENX0027",
     "category": "MONTAGE",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Vorläufig berücksichtigte Basisförderung (30 %)",
@@ -1907,7 +2193,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "SONSTIGES",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Vorläufig berücksichtigter Einkommensbonus (10 %)",
@@ -1917,7 +2204,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "SONSTIGES",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Vorläufig berücksichtigter Einkommensbonus (30 %)",
@@ -1927,7 +2215,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "SONSTIGES",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Vorläufig berücksichtigter Einkommensbonus (40 %)",
@@ -1937,7 +2226,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "SONSTIGES",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Vorläufig berücksichtigter Klimageschwindigkeitsbonus (16 %)",
@@ -1947,7 +2237,8 @@
     "unit": "Stück",
     "productNumber": null,
     "category": "SONSTIGES",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Warten auf Finanzierungszusage",
@@ -1957,7 +2248,8 @@
     "unit": "Pauschale",
     "productNumber": "ENL0003",
     "category": "SONSTIGES",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Wartung PV-Anlage mit 1 Wechselrichter mit Notstrom-/Ersatzstromfunktion",
@@ -1967,7 +2259,8 @@
     "unit": "Pauschale",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Wartung PV-Anlage mit 1 Wechselrichter ohne Notstrom-/Ersatzstromfunktion",
@@ -1977,7 +2270,8 @@
     "unit": "Pauschale",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Wartung PV-Anlage mit 2 Wechselrichter mit Notstrom-/Ersatzstromfunktion",
@@ -1987,7 +2281,8 @@
     "unit": "Pauschale",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Wartung PV-Anlage mit 2 Wechselrichter ohne Notstrom-/Ersatzstromfunktion",
@@ -1997,7 +2292,8 @@
     "unit": "Pauschale",
     "productNumber": null,
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Wartung Wallbox",
@@ -2007,7 +2303,8 @@
     "unit": "Pauschale",
     "productNumber": null,
     "category": "WALLBOX",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Wiederherstellung der Internetverbindung",
@@ -2017,7 +2314,8 @@
     "unit": "Pauschale",
     "productNumber": "ENA0075",
     "category": "DIENSTLEISTUNG",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Zuleitung Wallbox pro Meter",
@@ -2027,7 +2325,8 @@
     "unit": "Stück",
     "productNumber": "ENA0061",
     "category": "WALLBOX",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   },
   {
     "name": "Zwischenzähler (Hutschienenzähler m.Display MID)",
@@ -2037,6 +2336,7 @@
     "unit": "Stück",
     "productNumber": "ENA0072",
     "category": "SONSTIGES",
-    "manufacturer": ""
+    "manufacturer": "",
+    "specs": {}
   }
 ]

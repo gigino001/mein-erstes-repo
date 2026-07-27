@@ -13,6 +13,7 @@ type ImportItem = {
   productNumber: string | null;
   category: string;
   manufacturer: string;
+  specs?: Record<string, number>;
 };
 
 async function main() {
@@ -39,6 +40,7 @@ async function main() {
       unit: item.unit,
       productNumber: item.productNumber,
       vatRatePercent: item.vatRatePercent,
+      specs: JSON.stringify(item.specs ?? {}),
     };
 
     if (existing) {
