@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { calculateHeatPump } from "@/lib/calculations/heatpump";
+import { syncComponentCostItems, type ComponentCostLine } from "@/lib/cost-items";
 import { UNIT_BY_HEATING_TYPE } from "./steps";
 
 async function requireAuth() {
@@ -110,9 +111,23 @@ export async function saveKomponentenAction(projectId: string, formData: FormDat
 export async function recalculateHeatPump(projectId: string) {
   const data = await prisma.heatPumpData.findUnique({
     where: { projectId },
-    include: { heatPumpComponent: true },
+    include: { heatPumpComponent: true, bufferComponent: true },
   });
-  if (!data || !data.heatedAreaSqm) return null;
+  if (!data) return null;
+
+  const lines: ComponentCostLine[] = [];
+  for (const component of [data.heatPumpComponent, data.bufferComponent]) {
+    if (component) {
+      lines.push({
+        description: `${component.manufacturer} ${component.name}`,
+        unitPrice: component.price,
+        quantity: 1,
+      });
+    }
+  }
+  await syncComponentCostItems(projectId, "WAERMEPUMPE", lines);
+
+  if (!data.heatedAreaSqm) return null;
 
   let jazOverride: number | null = null;
   if (data.heatPumpComponent) {

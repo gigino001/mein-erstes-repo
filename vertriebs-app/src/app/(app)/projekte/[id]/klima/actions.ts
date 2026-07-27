@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { calculateKlima } from "@/lib/calculations/klima";
+import { syncComponentCostItems, type ComponentCostLine } from "@/lib/cost-items";
 
 async function requireAuth() {
   const session = await auth();
@@ -93,9 +94,19 @@ export async function saveKomponentenAction(projectId: string, formData: FormDat
 export async function recalculateKlima(projectId: string) {
   const data = await prisma.climaData.findUnique({
     where: { projectId },
-    include: { rooms: { orderBy: { sortOrder: "asc" } } },
+    include: { rooms: { orderBy: { sortOrder: "asc" } }, climaComponent: true },
   });
   if (!data) return null;
+
+  const lines: ComponentCostLine[] = [];
+  if (data.climaComponent) {
+    lines.push({
+      description: `${data.climaComponent.manufacturer} ${data.climaComponent.name}`,
+      unitPrice: data.climaComponent.price,
+      quantity: data.unitsCount ?? 1,
+    });
+  }
+  await syncComponentCostItems(projectId, "KLIMA", lines);
 
   const rooms = data.rooms.filter((r) => r.areaSqm != null);
   if (rooms.length === 0) return null;

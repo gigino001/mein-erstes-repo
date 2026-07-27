@@ -326,7 +326,10 @@ model CostItem {
   category    String // MATERIAL, MONTAGE, SONSTIGES
   description String
   amount      Float
-  sortOrder   Int    @default(0)
+  sortOrder   Int     @default(0)
+  // gesetzt bei automatisch aus der Komponentenauswahl generierten Positionen
+  // (PV, WAERMEPUMPE, KLIMA), null bei manuell erfassten Positionen
+  sourceVariant String?
 }
 
 // ---------- Preisfindung ----------

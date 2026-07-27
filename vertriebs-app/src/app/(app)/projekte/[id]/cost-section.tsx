@@ -60,7 +60,14 @@ export function CostSection({
                     key={item.id}
                     className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 text-sm dark:bg-slate-800"
                   >
-                    <span>{item.description}</span>
+                    <span>
+                      {item.description}
+                      {item.sourceVariant && (
+                        <span className="ml-2 text-xs text-slate-400">
+                          (aus Konfiguration)
+                        </span>
+                      )}
+                    </span>
                     <div className="flex items-center gap-3">
                       <span className="font-medium">{formatEur(item.amount)}</span>
                       <form

@@ -2,33 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { calculatePricing } from "@/lib/calculations/pricing";
-
-async function recalculatePricing(projectId: string) {
-  const [costItems, pricing] = await Promise.all([
-    prisma.costItem.findMany({ where: { projectId } }),
-    prisma.pricing.findUnique({ where: { projectId } }),
-  ]);
-  if (!pricing) return;
-
-  const totalCost = costItems.reduce((sum, item) => sum + item.amount, 0);
-  const result = calculatePricing({
-    totalCost,
-    marginPercent: pricing.marginPercent,
-    discountAmount: pricing.discountAmount,
-    financingMonths: pricing.financingMonths,
-    financingInterestPercent: pricing.financingInterestPercent,
-  });
-
-  await prisma.pricing.update({
-    where: { projectId },
-    data: {
-      totalCost: result.totalCost,
-      salesPrice: result.salesPrice,
-      monthlyRate: result.monthlyRate,
-    },
-  });
-}
+import { recalculatePricing } from "@/lib/cost-items";
 
 export async function updateStatusAction(variantId: string, formData: FormData) {
   const statusId = formData.get("statusId");

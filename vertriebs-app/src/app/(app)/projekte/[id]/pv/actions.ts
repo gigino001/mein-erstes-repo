@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { calculatePv } from "@/lib/calculations/pv";
+import { syncComponentCostItems, type ComponentCostLine } from "@/lib/cost-items";
 
 async function requireAuth() {
   const session = await auth();
@@ -144,9 +145,44 @@ export async function saveKomponentenAction(projectId: string, formData: FormDat
 export async function recalculatePv(projectId: string) {
   const pvData = await prisma.pvData.findUnique({
     where: { projectId },
-    include: { roofSurfaces: true, moduleComponent: true, storageComponent: true },
+    include: {
+      roofSurfaces: true,
+      moduleComponent: true,
+      inverterComponent: true,
+      storageComponent: true,
+      wallboxComponent: true,
+      emsComponent: true,
+      mountingSystemComponent: true,
+    },
   });
-  if (!pvData || !pvData.moduleComponent || !pvData.moduleCount) return null;
+  if (!pvData) return null;
+
+  const lines: ComponentCostLine[] = [];
+  if (pvData.moduleComponent && pvData.moduleCount) {
+    lines.push({
+      description: `${pvData.moduleComponent.manufacturer} ${pvData.moduleComponent.name} (${pvData.moduleCount}x)`,
+      unitPrice: pvData.moduleComponent.price,
+      quantity: pvData.moduleCount,
+    });
+  }
+  for (const component of [
+    pvData.inverterComponent,
+    pvData.storageComponent,
+    pvData.wallboxComponent,
+    pvData.emsComponent,
+    pvData.mountingSystemComponent,
+  ]) {
+    if (component) {
+      lines.push({
+        description: `${component.manufacturer} ${component.name}`,
+        unitPrice: component.price,
+        quantity: 1,
+      });
+    }
+  }
+  await syncComponentCostItems(projectId, "PV", lines);
+
+  if (!pvData.moduleComponent || !pvData.moduleCount) return null;
 
   const result = calculatePv({
     modulePowerWp: pvData.moduleComponent.price >= 0 ? getWattPeak(pvData.moduleComponent.specs) : 0,
