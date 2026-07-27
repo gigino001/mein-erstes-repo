@@ -28,7 +28,7 @@ export default async function ProjektDetailPage({
     where: { id },
     include: {
       customer: true,
-      status: true,
+      variants: { include: { status: true } },
       pvData: true,
       heatPumpData: true,
       costItems: { orderBy: { sortOrder: "asc" } },
@@ -40,55 +40,62 @@ export default async function ProjektDetailPage({
     notFound();
   }
 
-  const statuses = await prisma.statusDefinition.findMany({
-    where: { variantType: project.variantType },
+  const variantTypes = project.variants.map((v) => v.variantType);
+  const statusOptions = await prisma.statusDefinition.findMany({
+    where: { variantType: { in: variantTypes } },
     orderBy: { sortOrder: "asc" },
   });
+  const statusesByVariantType = new Map<string, typeof statusOptions>();
+  for (const status of statusOptions) {
+    const list = statusesByVariantType.get(status.variantType) ?? [];
+    list.push(status);
+    statusesByVariantType.set(status.variantType, list);
+  }
 
-  const VariantIcon = VARIANT_ICONS[project.variantType] ?? Sun;
-  const hasWizard = project.variantType === "PV" || project.variantType === "WAERMEPUMPE";
+  const pvVariant = project.variants.find((v) => v.variantType === "PV");
+  const heatPumpVariant = project.variants.find((v) => v.variantType === "WAERMEPUMPE");
+  const genericVariants = project.variants.filter(
+    (v) => v.variantType !== "PV" && v.variantType !== "WAERMEPUMPE"
+  );
 
   return (
     <div>
       <PageHeader
         title={`${project.customer.firstName} ${project.customer.lastName}`}
         description={
-          <span className="flex items-center gap-2">
+          <span className="flex flex-wrap items-center gap-2">
             <Link href={`/kunden/${project.customer.id}`} className="hover:text-emerald-600">
               Zum Kundenprofil
             </Link>
             <span className="text-slate-300 dark:text-slate-700">·</span>
-            <span className="flex items-center gap-1">
-              <VariantIcon size={13} />
-              {labelFor(AUFTRAGSVARIANTEN, project.variantType)}
-            </span>
+            {project.variants.map((variant) => {
+              const Icon = VARIANT_ICONS[variant.variantType] ?? Sun;
+              return (
+                <span key={variant.id} className="flex items-center gap-1">
+                  <Icon size={13} />
+                  {labelFor(AUFTRAGSVARIANTEN, variant.variantType)}
+                </span>
+              );
+            })}
           </span>
-        }
-        action={
-          <StatusSelect
-            projectId={project.id}
-            statuses={statuses}
-            currentStatusId={project.statusId}
-            action={updateStatusAction.bind(null, project.id)}
-          />
         }
       />
 
       <div className="grid gap-6 p-4 sm:p-8 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
-          {project.variantType === "PV" && project.pvData && (
+          {pvVariant && project.pvData && (
             <Card>
-              <div className="mb-3 flex items-center justify-between">
+              <div className="mb-3 flex items-center justify-between gap-2">
                 <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-500">
                   <Sun size={16} className="text-emerald-600" />
                   Photovoltaik
                 </h2>
-                <Link
-                  href={`/projekte/${project.id}/pv/dach`}
-                  className="flex items-center gap-1 text-xs font-medium text-emerald-600 hover:underline"
-                >
-                  Bearbeiten <ArrowRight size={12} />
-                </Link>
+                <StatusSelect
+                  variantId={pvVariant.id}
+                  statuses={statusesByVariantType.get("PV") ?? []}
+                  currentStatusId={pvVariant.statusId}
+                  action={updateStatusAction.bind(null, pvVariant.id)}
+                />
               </div>
               {project.pvData.calculatedKwp ? (
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -114,22 +121,32 @@ export default async function ProjektDetailPage({
                   </Link>
                 </p>
               )}
+              {project.pvData.calculatedKwp && (
+                <div className="mt-3 border-t border-[var(--border)] pt-3 text-right">
+                  <Link
+                    href={`/projekte/${project.id}/pv/dach`}
+                    className="flex items-center justify-end gap-1 text-xs font-medium text-emerald-600 hover:underline"
+                  >
+                    Bearbeiten <ArrowRight size={12} />
+                  </Link>
+                </div>
+              )}
             </Card>
           )}
 
-          {project.variantType === "WAERMEPUMPE" && project.heatPumpData && (
+          {heatPumpVariant && project.heatPumpData && (
             <Card>
-              <div className="mb-3 flex items-center justify-between">
+              <div className="mb-3 flex items-center justify-between gap-2">
                 <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-500">
                   <Flame size={16} className="text-orange-600" />
                   Wärmepumpe
                 </h2>
-                <Link
-                  href={`/projekte/${project.id}/waermepumpe/gebaeude`}
-                  className="flex items-center gap-1 text-xs font-medium text-emerald-600 hover:underline"
-                >
-                  Bearbeiten <ArrowRight size={12} />
-                </Link>
+                <StatusSelect
+                  variantId={heatPumpVariant.id}
+                  statuses={statusesByVariantType.get("WAERMEPUMPE") ?? []}
+                  currentStatusId={heatPumpVariant.statusId}
+                  action={updateStatusAction.bind(null, heatPumpVariant.id)}
+                />
               </div>
               {project.heatPumpData.calculatedHeatLoadKw ? (
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -157,17 +174,48 @@ export default async function ProjektDetailPage({
                   </Link>
                 </p>
               )}
+              {project.heatPumpData.calculatedHeatLoadKw && (
+                <div className="mt-3 border-t border-[var(--border)] pt-3 text-right">
+                  <Link
+                    href={`/projekte/${project.id}/waermepumpe/gebaeude`}
+                    className="flex items-center justify-end gap-1 text-xs font-medium text-emerald-600 hover:underline"
+                  >
+                    Bearbeiten <ArrowRight size={12} />
+                  </Link>
+                </div>
+              )}
             </Card>
           )}
 
-          {!hasWizard && (
+          {genericVariants.length > 0 && (
             <Card>
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-500">
-                <VariantIcon size={16} className="text-emerald-600" />
-                {labelFor(AUFTRAGSVARIANTEN, project.variantType)}
+              <h2 className="mb-3 text-sm font-semibold text-slate-500">
+                Weitere Leistungen
               </h2>
-              <p className="mt-2 text-sm text-slate-500">
-                Für diese Auftragsvariante gibt es noch keinen technischen
+              <div className="space-y-3">
+                {genericVariants.map((variant) => {
+                  const VariantIcon = VARIANT_ICONS[variant.variantType] ?? Sun;
+                  return (
+                    <div
+                      key={variant.id}
+                      className="flex items-center justify-between gap-2 border-t border-[var(--border)] pt-3 first:border-t-0 first:pt-0"
+                    >
+                      <span className="flex items-center gap-2 text-sm font-medium">
+                        <VariantIcon size={16} className="text-emerald-600" />
+                        {labelFor(AUFTRAGSVARIANTEN, variant.variantType)}
+                      </span>
+                      <StatusSelect
+                        variantId={variant.id}
+                        statuses={statusesByVariantType.get(variant.variantType) ?? []}
+                        currentStatusId={variant.statusId}
+                        action={updateStatusAction.bind(null, variant.id)}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="mt-3 text-xs text-slate-500">
+                Für diese Leistungen gibt es noch keinen technischen
                 Erfassungsassistenten. Kostenpositionen und Angebot unten
                 erfassen.
               </p>
@@ -187,8 +235,8 @@ export default async function ProjektDetailPage({
           <Card>
             <h2 className="mb-3 text-sm font-semibold text-slate-500">Angebot</h2>
             <p className="mb-4 text-sm text-slate-500">
-              Erzeuge ein PDF-Angebot mit den erfassten Daten und dem berechneten
-              Verkaufspreis.
+              Erzeuge ein gemeinsames PDF-Angebot mit allen erfassten Leistungen
+              und dem berechneten Verkaufspreis.
             </p>
             <LinkButton href={`/projekte/${project.id}/angebot`} className="w-full">
               <FileText size={16} />

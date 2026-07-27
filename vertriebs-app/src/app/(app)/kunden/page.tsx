@@ -22,7 +22,7 @@ export default async function KundenPage({
           ],
         }
       : undefined,
-    include: { projects: { select: { status: true } } },
+    include: { projects: { select: { id: true } } },
     orderBy: { createdAt: "desc" },
   });
 

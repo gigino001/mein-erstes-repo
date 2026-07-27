@@ -3,12 +3,12 @@
 import { useRef } from "react";
 
 export function StatusSelect({
-  projectId,
+  variantId,
   statuses,
   currentStatusId,
   action,
 }: {
-  projectId: string;
+  variantId: string;
   statuses: { id: string; name: string }[];
   currentStatusId: string;
   action: (formData: FormData) => void;
@@ -17,7 +17,7 @@ export function StatusSelect({
 
   return (
     <form ref={formRef} action={action}>
-      <input type="hidden" name="projectId" value={projectId} />
+      <input type="hidden" name="variantId" value={variantId} />
       <select
         name="statusId"
         defaultValue={currentStatusId}

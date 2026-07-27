@@ -11,29 +11,40 @@ export async function createProjectAction(formData: FormData) {
   }
 
   const customerId = formData.get("customerId");
-  const variantType = formData.get("variantType");
-  if (typeof customerId !== "string" || typeof variantType !== "string") {
-    throw new Error("customerId oder variantType fehlt");
+  const variantTypes = formData
+    .getAll("variantTypes")
+    .filter((v): v is string => typeof v === "string" && v.length > 0);
+  if (typeof customerId !== "string" || variantTypes.length === 0) {
+    throw new Error("customerId oder Auftragsvarianten fehlen");
   }
   const isNewBuilding = formData.get("isNewBuilding") === "on";
 
-  const startStatus = await prisma.statusDefinition.findFirst({
-    where: { variantType },
-    orderBy: { sortOrder: "asc" },
-  });
-  if (!startStatus) {
-    throw new Error(`Keine Status-Definition für ${variantType} gefunden`);
+  const startStatuses = await Promise.all(
+    variantTypes.map((variantType) =>
+      prisma.statusDefinition.findFirst({
+        where: { variantType },
+        orderBy: { sortOrder: "asc" },
+      })
+    )
+  );
+  const missingIndex = startStatuses.findIndex((s) => !s);
+  if (missingIndex !== -1) {
+    throw new Error(`Keine Status-Definition für ${variantTypes[missingIndex]} gefunden`);
   }
 
   const project = await prisma.project.create({
     data: {
       customerId,
       ownerId: session.user.id,
-      variantType,
       isNewBuilding,
-      statusId: startStatus.id,
-      pvData: variantType === "PV" ? { create: {} } : undefined,
-      heatPumpData: variantType === "WAERMEPUMPE" ? { create: {} } : undefined,
+      variants: {
+        create: variantTypes.map((variantType, i) => ({
+          variantType,
+          statusId: startStatuses[i]!.id,
+        })),
+      },
+      pvData: variantTypes.includes("PV") ? { create: {} } : undefined,
+      heatPumpData: variantTypes.includes("WAERMEPUMPE") ? { create: {} } : undefined,
       pricing: { create: {} },
     },
   });

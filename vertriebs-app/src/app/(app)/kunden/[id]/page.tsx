@@ -32,7 +32,10 @@ export default async function KundeDetailPage({
     prisma.customer.findUnique({
       where: { id },
       include: {
-        projects: { include: { status: true }, orderBy: { updatedAt: "desc" } },
+        projects: {
+          include: { variants: { include: { status: true } } },
+          orderBy: { updatedAt: "desc" },
+        },
       },
     }),
     prisma.fundingProgram.findMany({ where: { active: true } }),
@@ -163,13 +166,19 @@ export default async function KundeDetailPage({
             </h2>
             <form action={createProjectAction} className="space-y-3">
               <input type="hidden" name="customerId" value={customer.id} />
-              <Select name="variantType" defaultValue="PV" required>
+              <p className="text-xs text-slate-500">
+                Leistungen auswählen (mehrere möglich)
+              </p>
+              <div className="space-y-2">
                 {AUFTRAGSVARIANTEN.map((v) => (
-                  <option key={v.value} value={v.value}>
-                    {v.label}
-                  </option>
+                  <Checkbox
+                    key={v.value}
+                    name="variantTypes"
+                    value={v.value}
+                    label={v.label}
+                  />
                 ))}
-              </Select>
+              </div>
               <Checkbox name="isNewBuilding" label="Neubau (statt Bestandsgebäude)" />
               <Button type="submit" className="w-full">
                 Vorgang anlegen
@@ -190,17 +199,21 @@ export default async function KundeDetailPage({
               customer.projects.map((project) => (
                 <Link key={project.id} href={`/projekte/${project.id}`}>
                   <Card className="transition-shadow hover:shadow-md">
-                    <div className="flex items-center justify-between">
-                      <p className="font-medium">
-                        {labelFor(AUFTRAGSVARIANTEN, project.variantType)}
-                      </p>
-                      <StatusBadge
-                        name={project.status.name}
-                        sortOrder={project.status.sortOrder}
-                        isTerminal={project.status.isTerminal}
-                      />
+                    <div className="space-y-1.5">
+                      {project.variants.map((variant) => (
+                        <div key={variant.id} className="flex items-center justify-between">
+                          <p className="font-medium">
+                            {labelFor(AUFTRAGSVARIANTEN, variant.variantType)}
+                          </p>
+                          <StatusBadge
+                            name={variant.status.name}
+                            sortOrder={variant.status.sortOrder}
+                            isTerminal={variant.status.isTerminal}
+                          />
+                        </div>
+                      ))}
                     </div>
-                    <p className="mt-1 text-xs text-slate-400">
+                    <p className="mt-2 text-xs text-slate-400">
                       Angelegt am{" "}
                       {new Intl.DateTimeFormat("de-DE").format(project.createdAt)}
                     </p>
@@ -215,47 +228,50 @@ export default async function KundeDetailPage({
               <h2 className="text-sm font-semibold text-slate-500">
                 Mögliche Förderungen
               </h2>
-              {customer.projects.map((project) => {
-                const matches = matchFundingPrograms(fundingPrograms, {
-                  customer,
-                  project,
-                });
-                if (matches.length === 0) return null;
-                return (
-                  <Card key={project.id}>
-                    <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
-                      {labelFor(AUFTRAGSVARIANTEN, project.variantType)}
-                    </p>
-                    <ul className="space-y-3">
-                      {matches.map((program) => (
-                        <li
-                          key={program.id}
-                          className="rounded-xl bg-slate-50 p-3 dark:bg-slate-800"
-                        >
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <p className="flex items-center gap-1.5 text-sm font-medium">
-                              <BadgeEuro size={14} className="text-emerald-600" />
-                              {program.name}
-                            </p>
-                            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400">
-                              {FUNDING_TYPE_LABELS[program.fundingType] ?? program.fundingType}
-                              {program.percentageOfCost != null && ` · ${program.percentageOfCost}%`}
-                              {program.maxAmountEur != null &&
-                                ` · bis ${program.maxAmountEur.toLocaleString("de-DE")} €`}
-                            </span>
-                          </div>
-                          <p className="mt-1 text-xs text-slate-500">{program.description}</p>
-                          <p className="mt-1.5 text-xs text-slate-400">{program.conditions}</p>
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="mt-3 text-xs italic text-slate-400">
-                      Automatische Vorprüfung, keine verbindliche Förderzusage und
-                      keine Rechts-/Steuerberatung – bitte im Einzelfall prüfen.
-                    </p>
-                  </Card>
-                );
-              })}
+              {customer.projects.flatMap((project) =>
+                project.variants.map((variant) => {
+                  const matches = matchFundingPrograms(fundingPrograms, {
+                    customer,
+                    variantType: variant.variantType,
+                    isNewBuilding: project.isNewBuilding,
+                  });
+                  if (matches.length === 0) return null;
+                  return (
+                    <Card key={variant.id}>
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                        {labelFor(AUFTRAGSVARIANTEN, variant.variantType)}
+                      </p>
+                      <ul className="space-y-3">
+                        {matches.map((program) => (
+                          <li
+                            key={program.id}
+                            className="rounded-xl bg-slate-50 p-3 dark:bg-slate-800"
+                          >
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <p className="flex items-center gap-1.5 text-sm font-medium">
+                                <BadgeEuro size={14} className="text-emerald-600" />
+                                {program.name}
+                              </p>
+                              <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400">
+                                {FUNDING_TYPE_LABELS[program.fundingType] ?? program.fundingType}
+                                {program.percentageOfCost != null && ` · ${program.percentageOfCost}%`}
+                                {program.maxAmountEur != null &&
+                                  ` · bis ${program.maxAmountEur.toLocaleString("de-DE")} €`}
+                              </span>
+                            </div>
+                            <p className="mt-1 text-xs text-slate-500">{program.description}</p>
+                            <p className="mt-1.5 text-xs text-slate-400">{program.conditions}</p>
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="mt-3 text-xs italic text-slate-400">
+                        Automatische Vorprüfung, keine verbindliche Förderzusage und
+                        keine Rechts-/Steuerberatung – bitte im Einzelfall prüfen.
+                      </p>
+                    </Card>
+                  );
+                })
+              )}
             </div>
           )}
         </div>

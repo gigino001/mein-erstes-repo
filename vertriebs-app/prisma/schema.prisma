@@ -65,22 +65,23 @@ model StatusDefinition {
   isTerminal  Boolean @default(false)
   color       String?
 
-  projects Project[]
+  projectVariants ProjectVariant[]
 }
 
-// ---------- Projekt / Auftragsvariante ----------
+// ---------- Projekt (kann mehrere Auftragsvarianten bündeln) ----------
 
+// Ein Vorgang kann mehrere Leistungen zusammenfassen (z.B. PV + Wärmepumpe +
+// Wartung in einem Auftrag). Jede enthaltene Leistung bekommt über
+// ProjectVariant einen eigenen Status im jeweiligen Auftragsvarianten-
+// Workflow; Kostenpositionen, Preisfindung und Angebot bleiben je Vorgang
+// gebündelt (ein gemeinsames Angebot für alle Leistungen).
 model Project {
   id             String    @id @default(cuid())
   title          String? // z.B. "PV Musterstraße 1"
-  variantType    String // PV | WAERMEPUMPE | KLIMA | WARTUNG | ELEKTROINSTALLATION | HEIZUNG_SANITAER_NEUBAU
   offerExpiresAt DateTime? // Gültigkeit des zuletzt versendeten Angebots
   isNewBuilding  Boolean   @default(false) // Neubau vs. Bestandsgebäude (für Förderfähigkeit)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-
-  statusId String
-  status   StatusDefinition @relation(fields: [statusId], references: [id])
 
   customerId String
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
@@ -88,11 +89,26 @@ model Project {
   ownerId String
   owner   User   @relation(fields: [ownerId], references: [id])
 
+  variants     ProjectVariant[]
   pvData       PvData?
   heatPumpData HeatPumpData?
   costItems    CostItem[]
   pricing      Pricing?
   offers       Offer[]
+}
+
+// Eine im Vorgang enthaltene Leistung (Auftragsvariante) mit eigenem Status.
+model ProjectVariant {
+  id          String @id @default(cuid())
+  variantType String // PV | WAERMEPUMPE | KLIMA | WARTUNG | ELEKTROINSTALLATION | HEIZUNG_SANITAER_NEUBAU
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  statusId String
+  status   StatusDefinition @relation(fields: [statusId], references: [id])
+
+  @@unique([projectId, variantType])
 }
 
 // ---------- PV-Daten ----------

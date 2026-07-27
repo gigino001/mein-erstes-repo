@@ -17,10 +17,16 @@ export default async function AngebotPage({
 }) {
   const { id: projectId } = await params;
 
-  const project = await prisma.project.findUnique({ where: { id: projectId } });
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+    include: { variants: true },
+  });
   if (!project) {
     notFound();
   }
+  const hasWizardVariant = project.variants.some(
+    (v) => v.variantType === "PV" || v.variantType === "WAERMEPUMPE"
+  );
 
   const offerData = await buildOfferData(projectId);
   const previousOffers = await prisma.offer.findMany({
@@ -39,7 +45,7 @@ export default async function AngebotPage({
           <EmptyState
             title="Angebot noch nicht bereit"
             description={
-              project.variantType === "PV" || project.variantType === "WAERMEPUMPE"
+              hasWizardVariant
                 ? "Schließe zuerst die Komponentenauswahl ab, damit ein Angebot berechnet werden kann."
                 : "Erfasse zuerst mindestens eine Kostenposition, damit ein Angebot berechnet werden kann."
             }
@@ -116,7 +122,9 @@ export default async function AngebotPage({
           {!offerData.pv && !offerData.heatPump && (
             <Card>
               <h2 className="mb-1 text-sm font-semibold text-slate-500">
-                {labelFor(AUFTRAGSVARIANTEN, project.variantType)}
+                {project.variants
+                  .map((v) => labelFor(AUFTRAGSVARIANTEN, v.variantType))
+                  .join(", ")}
               </h2>
               <p className="text-sm text-slate-500">
                 Angebot auf Basis der erfassten Kostenpositionen.

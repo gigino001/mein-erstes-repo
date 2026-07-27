@@ -16,7 +16,10 @@ const VARIANT_ICONS: Record<string, typeof Sun> = {
 export default async function DashboardPage() {
   const customers = await prisma.customer.findMany({
     include: {
-      projects: { include: { status: true }, orderBy: { updatedAt: "desc" } },
+      projects: {
+        include: { variants: { include: { status: true } } },
+        orderBy: { updatedAt: "desc" },
+      },
     },
     orderBy: { updatedAt: "desc" },
   });
@@ -85,19 +88,21 @@ export default async function DashboardPage() {
                     </p>
                     {customer.projects.length > 0 && (
                       <div className="mt-3 flex flex-wrap gap-2">
-                        {customer.projects.map((project) => {
-                          const Icon = VARIANT_ICONS[project.variantType] ?? Sun;
-                          return (
-                            <span
-                              key={project.id}
-                              className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400"
-                              title={`${labelFor(AUFTRAGSVARIANTEN, project.variantType)}: ${project.status.name}`}
-                            >
-                              <Icon size={12} />
-                              {project.status.name}
-                            </span>
-                          );
-                        })}
+                        {customer.projects.flatMap((project) =>
+                          project.variants.map((variant) => {
+                            const Icon = VARIANT_ICONS[variant.variantType] ?? Sun;
+                            return (
+                              <span
+                                key={variant.id}
+                                className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400"
+                                title={`${labelFor(AUFTRAGSVARIANTEN, variant.variantType)}: ${variant.status.name}`}
+                              >
+                                <Icon size={12} />
+                                {variant.status.name}
+                              </span>
+                            );
+                          })
+                        )}
                       </div>
                     )}
                   </Card>

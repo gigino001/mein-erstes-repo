@@ -35,10 +35,10 @@ export async function renameStatusAction(statusId: string, formData: FormData) {
 }
 
 export async function deleteStatusAction(statusId: string) {
-  const inUse = await prisma.project.count({ where: { statusId } });
+  const inUse = await prisma.projectVariant.count({ where: { statusId } });
   if (inUse > 0) {
     throw new Error(
-      `Status kann nicht gelöscht werden: ${inUse} Vorgang/Vorgänge nutzen ihn noch.`
+      `Status kann nicht gelöscht werden: ${inUse} Leistung(en) nutzen ihn noch.`
     );
   }
   await prisma.statusDefinition.delete({ where: { id: statusId } });

@@ -1,8 +1,9 @@
-import type { Customer, FundingProgram, Project } from "@/generated/prisma/client";
+import type { Customer, FundingProgram } from "@/generated/prisma/client";
 
 export type FundingMatchInput = {
   customer: Pick<Customer, "usageType" | "annualHouseholdIncomeEur">;
-  project: Pick<Project, "variantType" | "isNewBuilding">;
+  variantType: string;
+  isNewBuilding: boolean;
 };
 
 /**
@@ -18,11 +19,11 @@ export function matchFundingPrograms(
   return programs.filter((program) => {
     if (!program.active) return false;
 
-    if (program.appliesTo !== "BEIDE" && program.appliesTo !== input.project.variantType) {
+    if (program.appliesTo !== "BEIDE" && program.appliesTo !== input.variantType) {
       return false;
     }
 
-    if (program.requiresExistingBuilding && input.project.isNewBuilding) {
+    if (program.requiresExistingBuilding && input.isNewBuilding) {
       return false;
     }
 
