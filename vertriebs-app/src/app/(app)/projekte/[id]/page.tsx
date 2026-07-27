@@ -55,21 +55,26 @@ export default async function ProjektDetailPage({
   }
 
   const variantTypes = project.variants.map((v) => v.variantType);
-  const [statusOptions, components, users, requiredPhotoTypes] = await Promise.all([
-    prisma.statusDefinition.findMany({
-      where: { variantType: { in: variantTypes } },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.component.findMany({
-      where: { active: true },
-      orderBy: [{ category: "asc" }, { manufacturer: "asc" }],
-    }),
-    prisma.user.findMany({ orderBy: { name: "asc" } }),
-    prisma.requiredPhotoType.findMany({
-      where: { variantType: { in: variantTypes } },
-      orderBy: [{ variantType: "asc" }, { sortOrder: "asc" }],
-    }),
-  ]);
+  const [statusOptions, components, users, requiredPhotoTypes, financingRates] =
+    await Promise.all([
+      prisma.statusDefinition.findMany({
+        where: { variantType: { in: variantTypes } },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.component.findMany({
+        where: { active: true },
+        orderBy: [{ category: "asc" }, { manufacturer: "asc" }],
+      }),
+      prisma.user.findMany({ orderBy: { name: "asc" } }),
+      prisma.requiredPhotoType.findMany({
+        where: { variantType: { in: variantTypes } },
+        orderBy: [{ variantType: "asc" }, { sortOrder: "asc" }],
+      }),
+      prisma.financingRate.findMany({
+        where: { active: true },
+        orderBy: { bankName: "asc" },
+      }),
+    ]);
   const statusesByVariantType = new Map<string, typeof statusOptions>();
   for (const status of statusOptions) {
     const list = statusesByVariantType.get(status.variantType) ?? [];
@@ -306,6 +311,7 @@ export default async function ProjektDetailPage({
               projectId={project.id}
               costItems={project.costItems}
               components={components}
+              financingRates={financingRates}
               pricing={project.pricing}
             />
           )}

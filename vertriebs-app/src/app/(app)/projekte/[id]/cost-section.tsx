@@ -2,7 +2,8 @@ import { Check, Trash2 } from "lucide-react";
 import { Card, Button } from "@/components/ui";
 import { Field, FormGrid, TextInput } from "@/components/form";
 import { AddCostItemForm } from "./add-cost-item-form";
-import type { Component, CostItem, Pricing } from "@/generated/prisma/client";
+import { FinancingRateField } from "./financing-rate-field";
+import type { Component, CostItem, FinancingRate, Pricing } from "@/generated/prisma/client";
 import {
   addCostItemAction,
   deleteCostItemAction,
@@ -29,11 +30,13 @@ export function CostSection({
   projectId,
   costItems,
   components,
+  financingRates,
   pricing,
 }: {
   projectId: string;
   costItems: CostItemWithComponent[];
   components: Component[];
+  financingRates: FinancingRate[];
   pricing: Pricing;
 }) {
   const totalCost = costItems.reduce((sum, item) => sum + item.amount, 0);
@@ -168,15 +171,10 @@ export function CostSection({
                 defaultValue={pricing.financingMonths ?? ""}
               />
             </Field>
-            <Field label="Zinssatz p.a. (%)" htmlFor="financingInterestPercent">
-              <TextInput
-                id="financingInterestPercent"
-                name="financingInterestPercent"
-                type="number"
-                step="0.01"
-                defaultValue={pricing.financingInterestPercent ?? ""}
-              />
-            </Field>
+            <FinancingRateField
+              rates={financingRates}
+              defaultValue={pricing.financingInterestPercent}
+            />
           </FormGrid>
           <Button type="submit" variant="secondary">
             Preis neu berechnen

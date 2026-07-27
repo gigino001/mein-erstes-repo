@@ -463,3 +463,15 @@ model Document {
   uploadedBy   User     @relation(fields: [uploadedById], references: [id])
   uploadedAt   DateTime @default(now())
 }
+
+// ---------- Finanzierungskonditionen ----------
+
+// Pflegbare Stammdaten für die Finanzierungsrechnung, damit
+// financingInterestPercent in der Preisfindung aus hinterlegten
+// Bank-Konditionen ausgewählt statt frei eingetippt werden kann.
+model FinancingRate {
+  id                 String  @id @default(cuid())
+  bankName           String
+  interestRatePercent Float
+  active             Boolean @default(true)
+}
