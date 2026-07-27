@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { calculatePv } from "@/lib/calculations/pv";
 import { calculateHeatPump } from "@/lib/calculations/heatpump";
+import { calculateKlima } from "@/lib/calculations/klima";
 import type { OfferDocumentProps } from "@/lib/pdf/offer-document";
 
 function parseSpecs(specsJson: string): Record<string, number> {
@@ -28,6 +29,7 @@ export async function buildOfferData(
         },
       },
       heatPumpData: { include: { heatPumpComponent: true } },
+      climaData: { include: { rooms: true, climaComponent: true } },
     },
   });
 
@@ -90,6 +92,28 @@ export async function buildOfferData(
     };
   }
 
+  let clima: OfferDocumentProps["clima"] = null;
+  const climaRooms = project.climaData?.rooms.filter((r) => r.areaSqm != null) ?? [];
+  if (climaRooms.length > 0) {
+    const result = calculateKlima({
+      insulationStandard: project.climaData!.insulationStandard,
+      rooms: climaRooms.map((r) => ({
+        areaSqm: r.areaSqm!,
+        shading: r.shading,
+        occupantsCount: r.occupantsCount,
+        hasHeatSources: r.hasHeatSources,
+      })),
+    });
+    clima = {
+      deviceLabel: project.climaData!.climaComponent
+        ? `${project.climaData!.climaComponent.manufacturer} ${project.climaData!.climaComponent.name}`
+        : null,
+      totalCoolingLoadKw: result.totalCoolingLoadKw,
+      recommendedUnitsCount: result.recommendedUnitsCount,
+      estimatedAnnualOperatingCostEur: result.estimatedAnnualOperatingCostEur,
+    };
+  }
+
   const offerNumber = `AN-${new Date().getFullYear()}-${project.id.slice(-6).toUpperCase()}`;
 
   return {
@@ -106,6 +130,7 @@ export async function buildOfferData(
     },
     pv,
     heatPump,
+    clima,
     salesPriceNet: project.pricing.salesPrice ?? 0,
     monthlyRate: project.pricing.monthlyRate,
   };

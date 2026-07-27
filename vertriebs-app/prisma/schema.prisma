@@ -92,6 +92,7 @@ model Project {
   variants     ProjectVariant[]
   pvData       PvData?
   heatPumpData HeatPumpData?
+  climaData    ClimaData?
   costItems    CostItem[]
   pricing      Pricing?
   offers       Offer[]
@@ -242,6 +243,47 @@ model HeatPumpData {
   calculatedCo2SavingsKg         Float?
 }
 
+// ---------- Klimaanlagen-Daten ----------
+
+model ClimaData {
+  id String @id @default(cuid())
+
+  projectId String  @unique
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Gebäude
+  insulationStandard String? // UNSANIERT, TEILSANIERT, SANIERT, NEUBAU
+
+  // gewählte Komponente (Klimagerät/-Set)
+  climaComponentId String?
+  climaComponent   Component? @relation("ClimaUnit", fields: [climaComponentId], references: [id])
+  unitsCount       Int?
+
+  // Berechnungsergebnisse (Cache)
+  calculatedTotalCoolingLoadKw           Float?
+  calculatedRecommendedUnitsCount        Int?
+  calculatedEstimatedAnnualOperatingCost Float?
+
+  rooms KlimaRoom[]
+}
+
+model KlimaRoom {
+  id String @id @default(cuid())
+
+  climaDataId String
+  climaData   ClimaData @relation(fields: [climaDataId], references: [id], onDelete: Cascade)
+
+  name           String?
+  areaSqm        Float?
+  ceilingHeightM Float?
+  shading        String? // KEINE, LEICHT, MITTEL, STARK (Sonneneinstrahlung/Verschattung)
+  occupantsCount Int?
+  hasHeatSources Boolean @default(false) // z.B. Küchengeräte, viel Elektronik
+  sortOrder      Int     @default(0)
+
+  calculatedLoadKw Float?
+}
+
 // ---------- Komponenten-Stammdaten ----------
 
 model Component {
@@ -270,6 +312,7 @@ model Component {
   pvMountingFor PvData[]       @relation("PvMounting")
   hpDeviceFor   HeatPumpData[] @relation("HpDevice")
   hpBufferFor   HeatPumpData[] @relation("HpBuffer")
+  climaFor      ClimaData[]    @relation("ClimaUnit")
 }
 
 // ---------- Kostenpositionen ----------

@@ -25,7 +25,7 @@ export default async function AngebotPage({
     notFound();
   }
   const hasWizardVariant = project.variants.some(
-    (v) => v.variantType === "PV" || v.variantType === "WAERMEPUMPE"
+    (v) => v.variantType === "PV" || v.variantType === "WAERMEPUMPE" || v.variantType === "KLIMA"
   );
 
   const offerData = await buildOfferData(projectId);
@@ -35,7 +35,8 @@ export default async function AngebotPage({
   });
 
   const isReady =
-    offerData && (offerData.pv || offerData.heatPump || offerData.salesPriceNet > 0);
+    offerData &&
+    (offerData.pv || offerData.heatPump || offerData.clima || offerData.salesPriceNet > 0);
 
   if (!offerData || !isReady) {
     return (
@@ -119,7 +120,35 @@ export default async function AngebotPage({
             </Card>
           )}
 
-          {!offerData.pv && !offerData.heatPump && (
+          {offerData.clima && (
+            <Card>
+              <h2 className="mb-3 text-sm font-semibold text-slate-500">
+                Klimaanlage
+              </h2>
+              <dl className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+                <div>
+                  <dt className="text-xs text-slate-400">Gerät</dt>
+                  <dd className="font-medium">{offerData.clima.deviceLabel ?? "–"}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-slate-400">Kühllast gesamt</dt>
+                  <dd className="font-medium">{offerData.clima.totalCoolingLoadKw} kW</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-slate-400">Inneneinheiten</dt>
+                  <dd className="font-medium">{offerData.clima.recommendedUnitsCount}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-slate-400">Betriebskosten/Jahr</dt>
+                  <dd className="font-medium">
+                    {eur(offerData.clima.estimatedAnnualOperatingCostEur)}
+                  </dd>
+                </div>
+              </dl>
+            </Card>
+          )}
+
+          {!offerData.pv && !offerData.heatPump && !offerData.clima && (
             <Card>
               <h2 className="mb-1 text-sm font-semibold text-slate-500">
                 {project.variants

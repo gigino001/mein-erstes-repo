@@ -48,3 +48,31 @@ export const HEAT_PUMP = {
     PELLET: { pricePerUnit: 0.32, co2KgPerUnit: 0.03 }, // €/kg, kg CO2/kg
   } as Record<string, { pricePerUnit: number; co2KgPerUnit: number }>,
 };
+
+// Grundlage: 60–70 W/m² im Standardfall, 90–120 W/m² bei hohem solarem Eintrag
+// bzw. schlechter Dämmung; 30–40 W pro m³ Rauminhalt als Alternativ-Faustformel.
+// Je Person ca. 100 W innere Last (sitzende Tätigkeit).
+export const CLIMA = {
+  baseCoolingLoadWPerSqm: {
+    NEUBAU: 55,
+    SANIERT: 65,
+    TEILSANIERT: 80,
+    UNSANIERT: 100,
+  } as Record<string, number>,
+  defaultCoolingLoadWPerSqm: 75,
+  // Verschattung reduziert die solare Last, keine Verschattung erhöht sie.
+  shadingFactor: {
+    KEINE: 1.3,
+    LEICHT: 1.15,
+    MITTEL: 1.0,
+    STARK: 0.85,
+  } as Record<string, number>,
+  occupantLoadW: 100,
+  heatSourceLoadW: 400,
+  // Bei mehreren Räumen/Inneneinheiten läuft selten alles gleichzeitig auf
+  // Volllast – üblicher Ansatz für Multisplit-Anlagen.
+  simultaneityFactorMultiRoom: 0.8,
+  assumedFullLoadHoursPerYear: 300,
+  assumedEer: 3.0,
+  electricityPriceEurPerKwh: 0.32,
+};

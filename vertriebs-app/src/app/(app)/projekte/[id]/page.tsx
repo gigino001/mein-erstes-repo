@@ -31,6 +31,7 @@ export default async function ProjektDetailPage({
       variants: { include: { status: true } },
       pvData: true,
       heatPumpData: true,
+      climaData: true,
       costItems: { orderBy: { sortOrder: "asc" } },
       pricing: true,
     },
@@ -54,8 +55,9 @@ export default async function ProjektDetailPage({
 
   const pvVariant = project.variants.find((v) => v.variantType === "PV");
   const heatPumpVariant = project.variants.find((v) => v.variantType === "WAERMEPUMPE");
+  const climaVariant = project.variants.find((v) => v.variantType === "KLIMA");
   const genericVariants = project.variants.filter(
-    (v) => v.variantType !== "PV" && v.variantType !== "WAERMEPUMPE"
+    (v) => v.variantType !== "PV" && v.variantType !== "WAERMEPUMPE" && v.variantType !== "KLIMA"
   );
 
   return (
@@ -178,6 +180,59 @@ export default async function ProjektDetailPage({
                 <div className="mt-3 border-t border-[var(--border)] pt-3 text-right">
                   <Link
                     href={`/projekte/${project.id}/waermepumpe/gebaeude`}
+                    className="flex items-center justify-end gap-1 text-xs font-medium text-emerald-600 hover:underline"
+                  >
+                    Bearbeiten <ArrowRight size={12} />
+                  </Link>
+                </div>
+              )}
+            </Card>
+          )}
+
+          {climaVariant && project.climaData && (
+            <Card>
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-500">
+                  <Snowflake size={16} className="text-sky-600" />
+                  Klimaanlage
+                </h2>
+                <StatusSelect
+                  variantId={climaVariant.id}
+                  statuses={statusesByVariantType.get("KLIMA") ?? []}
+                  currentStatusId={climaVariant.statusId}
+                  action={updateStatusAction.bind(null, climaVariant.id)}
+                />
+              </div>
+              {project.climaData.calculatedTotalCoolingLoadKw ? (
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <Stat
+                    label="Kühllast gesamt"
+                    value={`${project.climaData.calculatedTotalCoolingLoadKw} kW`}
+                  />
+                  <Stat
+                    label="Inneneinheiten"
+                    value={`${project.climaData.calculatedRecommendedUnitsCount}`}
+                  />
+                  <Stat
+                    label="Betriebskosten/Jahr"
+                    value={`${project.climaData.calculatedEstimatedAnnualOperatingCost?.toLocaleString("de-DE")} €`}
+                  />
+                </div>
+              ) : (
+                <p className="text-sm text-slate-500">
+                  Noch keine Daten erfasst.{" "}
+                  <Link
+                    href={`/projekte/${project.id}/klima/gebaeude`}
+                    className="text-emerald-600 hover:underline"
+                  >
+                    Jetzt starten
+                  </Link>
+                </p>
+              )}
+              {project.climaData.calculatedTotalCoolingLoadKw && (
+                <div className="mt-3 border-t border-[var(--border)] pt-3 text-right">
+                  <Link
+                    href={`/projekte/${project.id}/klima/gebaeude`}
                     className="flex items-center justify-end gap-1 text-xs font-medium text-emerald-600 hover:underline"
                   >
                     Bearbeiten <ArrowRight size={12} />

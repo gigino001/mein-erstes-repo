@@ -7,7 +7,7 @@ export const AUFTRAGSVARIANTEN = [
   { value: "HEIZUNG_SANITAER_NEUBAU", label: "Heizung/Sanitär Neubau" },
 ] as const;
 
-export const AUFTRAGSVARIANTEN_MIT_ASSISTENT = ["PV", "WAERMEPUMPE"] as const;
+export const AUFTRAGSVARIANTEN_MIT_ASSISTENT = ["PV", "WAERMEPUMPE", "KLIMA"] as const;
 
 export const PIPELINE_STATUS = [
   { value: "INTERESSENT", label: "Interessent" },

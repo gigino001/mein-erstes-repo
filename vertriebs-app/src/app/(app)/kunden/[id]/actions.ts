@@ -45,6 +45,7 @@ export async function createProjectAction(formData: FormData) {
       },
       pvData: variantTypes.includes("PV") ? { create: {} } : undefined,
       heatPumpData: variantTypes.includes("WAERMEPUMPE") ? { create: {} } : undefined,
+      climaData: variantTypes.includes("KLIMA") ? { create: {} } : undefined,
       pricing: { create: {} },
     },
   });

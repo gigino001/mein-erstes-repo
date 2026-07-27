@@ -228,7 +228,9 @@
     "productNumber": "8000045091",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 3.5
+    }
   },
   {
     "name": "climaVAIR multi VAM 1-050 A2NO, Außeneinheit – Art.-Nr. 8000010717",
@@ -239,7 +241,9 @@
     "productNumber": "8000010717",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 5.0
+    }
   },
   {
     "name": "climaVAIR multi VAM 1-070 A3NO, Außeneinheit – Art.-Nr. 8000010724",
@@ -250,7 +254,9 @@
     "productNumber": "8000010724",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 7.0
+    }
   },
   {
     "name": "climaVAIR multi VAM 1-080 A4NO, Außeneinheit – Art.-Nr. 8000010719",
@@ -261,7 +267,9 @@
     "productNumber": "8000010719",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 8.0
+    }
   },
   {
     "name": "climaVAIR multi VAM 1-120 A5NO, Außeneinheit – Art.-Nr. 8000010712",
@@ -272,7 +280,9 @@
     "productNumber": "8000010712",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 12.0
+    }
   },
   {
     "name": "climaVAIR plus Set VAIP 1-025 WN, Mono-Split Innen- und Außeneinheit – Art.-Nr. 8000041403",
@@ -283,7 +293,9 @@
     "productNumber": "8000041403",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 2.5
+    }
   },
   {
     "name": "climaVAIR plus Set VAIP 1-035 WN, Mono-Split Innen- und Außeneinheit – Art.-Nr. 8000041404",
@@ -294,7 +306,9 @@
     "productNumber": "8000041404",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 3.5
+    }
   },
   {
     "name": "climaVAIR plus Set VAIP 1-050 WN, Mono-Split Innen- und Außeneinheit – Art.-Nr. 8000041405",
@@ -305,7 +319,9 @@
     "productNumber": "8000041405",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 5.0
+    }
   },
   {
     "name": "climaVAIR plus Set VAIP 1-065 WN, Mono-Split Innen- und Außeneinheit – Art.-Nr. 8000041406",
@@ -316,7 +332,9 @@
     "productNumber": "8000041406",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 6.5
+    }
   },
   {
     "name": "climaVAIR plus VAIP 1-025 WNI, Wandkassette (Inneneinheit) – Art.-Nr. 8000010685",
@@ -327,7 +345,9 @@
     "productNumber": "8000010685",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 2.5
+    }
   },
   {
     "name": "climaVAIR plus VAIP 1-025 WNO, Mono-Split Außeneinheit – Art.-Nr. 8000010663",
@@ -338,7 +358,9 @@
     "productNumber": "8000010663",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 2.5
+    }
   },
   {
     "name": "climaVAIR plus VAIP 1-035 WNI, Wandkassette (Inneneinheit) – Art.-Nr. 8000010686",
@@ -349,7 +371,9 @@
     "productNumber": "8000010686",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 3.5
+    }
   },
   {
     "name": "climaVAIR plus VAIP 1-035 WNO, Mono-Split Außeneinheit – Art.-Nr. 8000010668",
@@ -360,7 +384,9 @@
     "productNumber": "8000010668",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 3.5
+    }
   },
   {
     "name": "climaVAIR plus VAIP 1-050 WNI, Wandkassette (Inneneinheit) – Art.-Nr. 8000010687",
@@ -371,7 +397,9 @@
     "productNumber": "8000010687",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 5.0
+    }
   },
   {
     "name": "climaVAIR plus VAIP 1-050 WNO, Mono-Split Außeneinheit – Art.-Nr. 8000010673",
@@ -382,7 +410,9 @@
     "productNumber": "8000010673",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 5.0
+    }
   },
   {
     "name": "climaVAIR plus VAIP 1-065 WNI, Wandkassette (Inneneinheit) – Art.-Nr. 8000010679",
@@ -393,7 +423,9 @@
     "productNumber": "8000010679",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 6.5
+    }
   },
   {
     "name": "climaVAIR plus VAIP 1-065 WNO, Mono-Split Außeneinheit – Art.-Nr. 8000010670",
@@ -404,7 +436,9 @@
     "productNumber": "8000010670",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 6.5
+    }
   },
   {
     "name": "DC Montage (C&W)",
@@ -879,7 +913,9 @@
     "productNumber": "8000052639",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 2.5
+    }
   },
   {
     "name": "Paket 5.014, climaVAIR plus VAIP 1-035 WNO mit VAIP 1-035 WNI + Zubehör, 10 m – Art.-Nr. 8000052640",
@@ -890,7 +926,9 @@
     "productNumber": "8000052640",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 3.5
+    }
   },
   {
     "name": "Paket 5.015, climaVAIR plus VAIP 1-050 WNO mit VAIP 1-050 WNI + Zubehör, 10 m – Art.-Nr. 8000052651",
@@ -901,7 +939,9 @@
     "productNumber": "8000052651",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 5.0
+    }
   },
   {
     "name": "Paket 5.016, climaVAIR plus VAIP 1-065 WNO mit VAIP 1-065 WNI + Zubehör, 10 m – Art.-Nr. 8000052652",
@@ -912,7 +952,9 @@
     "productNumber": "8000052652",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 6.5
+    }
   },
   {
     "name": "Paket 5.017, climaVAIR plus VAIP 1-025 WNO mit VAIP 1-025 WNI + Zubehör, 25 m – Art.-Nr. 8000052653",
@@ -923,7 +965,9 @@
     "productNumber": "8000052653",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 2.5
+    }
   },
   {
     "name": "Paket 5.018, climaVAIR plus VAIP 1-035 WNO mit VAIP 1-035 WNI + Zubehör, 25 m – Art.-Nr. 8000052654",
@@ -934,7 +978,9 @@
     "productNumber": "8000052654",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 3.5
+    }
   },
   {
     "name": "Paket 5.019, climaVAIR plus VAIP 1-050 WNO mit VAIP 1-050 WNI + Zubehör, 25 m – Art.-Nr. 8000052655",
@@ -945,7 +991,9 @@
     "productNumber": "8000052655",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 5.0
+    }
   },
   {
     "name": "Paket 5.020, climaVAIR plus VAIP 1-065 WNO mit VAIP 1-065 WNI + Zubehör, 25 m – Art.-Nr. 8000052656",
@@ -956,7 +1004,9 @@
     "productNumber": "8000052656",
     "category": "KLIMAGERAET",
     "manufacturer": "Vaillant",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 6.5
+    }
   },
   {
     "name": "Paket 5.021, climaVAIR multi Installationszubehör für Multi-Split-Klimagerät, 10 m – Art.-Nr. 8000052657",
@@ -989,7 +1039,9 @@
     "productNumber": "8000052659",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 5.0
+    }
   },
   {
     "name": "Paket 5.024, VAM 1-050 A2NO mit VAIP 1-025 WNI + VAIP 1-035 WNI – Art.-Nr. 8000052660",
@@ -1000,7 +1052,9 @@
     "productNumber": "8000052660",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 5.0
+    }
   },
   {
     "name": "Paket 5.025, VAM 1-050 A2NO mit 2x VAM 1-035 KNI – Art.-Nr. 8000052661",
@@ -1011,7 +1065,9 @@
     "productNumber": "8000052661",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 5.0
+    }
   },
   {
     "name": "Paket 5.026, VAM 1-070 A3NO mit 3x VAIP 1-025 WNI – Art.-Nr. 8000052662",
@@ -1022,7 +1078,9 @@
     "productNumber": "8000052662",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 7.0
+    }
   },
   {
     "name": "Paket 5.027, VAM 1-070 A3NO mit 2x VAIP 1-035 WNI – Art.-Nr. 8000052663",
@@ -1033,7 +1091,9 @@
     "productNumber": "8000052663",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 7.0
+    }
   },
   {
     "name": "Paket 5.028, VAM 1-070 A3NO mit 2x VAM 1-035 KNI – Art.-Nr. 8000052664",
@@ -1044,7 +1104,9 @@
     "productNumber": "8000052664",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 7.0
+    }
   },
   {
     "name": "Paket 5.029, VAM 1-070 A3NO mit 2x VAIP 1-025 WNI + VAIP 1-035 WNI – Art.-Nr. 8000052665",
@@ -1055,7 +1117,9 @@
     "productNumber": "8000052665",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 7.0
+    }
   },
   {
     "name": "Paket 5.030, VAM 1-080 A4NO mit 3x VAIP 1-025 WNI – Art.-Nr. 8000052666",
@@ -1066,7 +1130,9 @@
     "productNumber": "8000052666",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 8.0
+    }
   },
   {
     "name": "Paket 5.031, VAM 1-080 A4NO mit 2x VAIP 1-025 WNI + VAIP 1-035 WNI – Art.-Nr. 8000052667",
@@ -1077,7 +1143,9 @@
     "productNumber": "8000052667",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 8.0
+    }
   },
   {
     "name": "Paket 5.032, VAM 1-080 A4NO mit 4x VAIP 1-025 WNI – Art.-Nr. 8000052668",
@@ -1088,7 +1156,9 @@
     "productNumber": "8000052668",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 8.0
+    }
   },
   {
     "name": "Paket 5.033, VAM 1-080 A4NO mit 3x VAIP 1-025 WNI + VAIP 1-035 WNI – Art.-Nr. 8000052669",
@@ -1099,7 +1169,9 @@
     "productNumber": "8000052669",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 8.0
+    }
   },
   {
     "name": "Paket 5.034, VAM 1-080 A4NO mit 3x VAM 1-035 KNI – Art.-Nr. 8000052670",
@@ -1110,7 +1182,9 @@
     "productNumber": "8000052670",
     "category": "KLIMAGERAET",
     "manufacturer": "",
-    "specs": {}
+    "specs": {
+      "coolingPowerKw": 8.0
+    }
   },
   {
     "name": "Provisorische Warmwasserbereitung - Optional",

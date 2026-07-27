@@ -116,12 +116,18 @@ export type OfferDocumentProps = {
     savingsPerYearEur: number | null;
     co2SavingsKg: number | null;
   } | null;
+  clima: {
+    deviceLabel: string | null;
+    totalCoolingLoadKw: number;
+    recommendedUnitsCount: number;
+    estimatedAnnualOperatingCostEur: number;
+  } | null;
   salesPriceNet: number;
   monthlyRate: number | null;
 };
 
 export function OfferDocument(props: OfferDocumentProps) {
-  const { customer, pv, heatPump, salesPriceNet, monthlyRate } = props;
+  const { customer, pv, heatPump, clima, salesPriceNet, monthlyRate } = props;
   const salesPriceGross = salesPriceNet * (1 + VAT_RATE);
 
   return (
@@ -224,6 +230,34 @@ export function OfferDocument(props: OfferDocumentProps) {
                   <Text style={styles.statLabel}>Ersparnis / Jahr</Text>
                 </View>
               )}
+            </View>
+          </View>
+        )}
+
+        {clima && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Klimaanlage</Text>
+            {clima.deviceLabel && (
+              <View style={styles.row}>
+                <Text style={styles.rowLabel}>Gerät</Text>
+                <Text style={styles.rowValue}>{clima.deviceLabel}</Text>
+              </View>
+            )}
+            <View style={styles.statGrid}>
+              <View style={styles.statBox}>
+                <Text style={styles.statValue}>{clima.totalCoolingLoadKw} kW</Text>
+                <Text style={styles.statLabel}>Kühllast gesamt</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statValue}>{clima.recommendedUnitsCount}</Text>
+                <Text style={styles.statLabel}>Inneneinheiten</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statValue}>
+                  {eur(clima.estimatedAnnualOperatingCostEur)}
+                </Text>
+                <Text style={styles.statLabel}>Betriebskosten / Jahr</Text>
+              </View>
             </View>
           </View>
         )}
