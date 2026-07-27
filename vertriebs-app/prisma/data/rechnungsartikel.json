@@ -998,5 +998,1045 @@
     "productNumber": "8000052669",
     "category": "KLIMAGERAET",
     "manufacturer": ""
+  },
+  {
+    "name": "Paket 5.034, VAM 1-080 A4NO mit 3x VAM 1-035 KNI – Art.-Nr. 8000052670",
+    "longDescription": "Lieferung und Montage eines Vaillant climaVAIR multi Multi-Split-Klimaanlagenpakets 5.034, bestehend aus 1x Außeneinheit VAM 1-080 A4NO (ca. 8,0 kW, R32) und 3x Deckenkassette VAM 1-035 KNI (je ca. 3,5 kW) als Inneneinheiten. Enthalten sind Dämpfungsfüße sowie die betriebsfertige Montage und Inbetriebnahme durch zertifizierte Kälte-Fachkraft; Kältemittelleitungen separat zu bestellen.",
+    "price": 6971.31,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": "8000052670",
+    "category": "KLIMAGERAET",
+    "manufacturer": ""
+  },
+  {
+    "name": "Provisorische Warmwasserbereitung - Optional",
+    "longDescription": "Bereitstellung und Installation einer provisorischen Warmwasseralternative zur temporären Versorgung während der Außerbetriebnahme bzw. Demontage der bestehenden Heizungsanlage und bis zur Inbetriebnahme der neuen Wärmepumpenanlage.\nDie Ausführung erfolgt je nach örtlichen Gegebenheiten beispielsweise über einen elektrischen Durchlauferhitzer, einen Warmwasserboiler oder eine vergleichbare Übergangslösung. Voraussetzung hierfür sind geeignete elektrische Anschlussmöglichkeiten sowie eine technisch umsetzbare Einbindung in die vorhandene Trinkwasserinstallation.\nDie provisorische Warmwasserlösung dient ausschließlich der temporären Grundversorgung und ersetzt keine vollwertige dauerhafte Warmwasserbereitung. Bei dieser Position handelt es sich um ein Richtpreis. Die Abrechnung erfolgt tageweise nach der tatsächlichen Standzeit der provisorischen Warmwasseralternative vor Ort.\nAlternativ kann diese Position auch vollständig kundenseitig durchgeführt bzw. beauftragt werden. In diesem Fall entfällt diese Position aus unserem Leistungsumfang. - WMP",
+    "price": 108.5,
+    "vatRatePercent": 19.0,
+    "unit": "Tag",
+    "productNumber": null,
+    "category": "DIENSTLEISTUNG",
+    "manufacturer": ""
+  },
+  {
+    "name": "Pufferspeicher",
+    "longDescription": "Lieferung und Montage eines Heizungs-Pufferspeichers mit 100–200 Litern Speichervolumen zur hydraulischen Entkopplung und Optimierung des Wärmepumpenbetriebs. Der Pufferspeicher verbessert die Laufzeiten der Wärmepumpe, reduziert Taktungen und sorgt für einen stabilen Anlagenbetrieb. Zusätzlich beinhaltet die Position die Lieferung und Montage einer Pumpengruppe mit Mischer für die Anbindung eines gemischten oder eines ungemischten Heizkreises. Die Regelung und Erweiterung der Heizkreise erfolgt über ein Vaillant VR 71 Mischermodul, welches die Erweiterung um bis zu drei Mischerkreise sowie die Einbindung weiterer Systemfunktionen, z. B. Solar, ermöglicht. - WMP\n\nLeistungsumfang:\n\nLieferung eines wärmegedämmten Pufferspeichers\nHydraulische Einbindung in das Heizsystem\nAnschluss von Vor- und Rücklauf\nEinbau von Entlüftungs- und Entleerungseinrichtungen\nLieferung und Montage der erforderlichen Pumpengruppe mit Mischer\nAnbindung eines gemischten oder eines ungemischten Heizkreises\nLieferung und Einbindung des Vaillant VR 71 Mischermoduls\nLieferung und Montage aller erforderlichen Armaturen und Dämmungen\nVorbereitung für zukünftige Erweiterungen, z. B. weiterer Heizkreis oder PV-Überschussnutzung\n\nDer Pufferspeicher dient der Sicherstellung der vom Hersteller geforderten Mindestwassermenge und gewährleistet einen effizienten und langlebigen Betrieb der Wärmepumpenanlage. Die Heizkreis-Pumpengruppe sowie das Mischermodul ermöglichen eine bedarfsgerechte Verteilung und Regelung der Heizkreise.",
+    "price": 677.12,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "PUFFERSPEICHER",
+    "manufacturer": ""
+  },
+  {
+    "name": "Roll-/Fassadengerüst (EnL)",
+    "longDescription": "Alle arbeiten werden mit einem Roll-/Fassadengerüst ausgeführt.",
+    "price": 50.0,
+    "vatRatePercent": 0.0,
+    "unit": "je Feld",
+    "productNumber": "ENX0023",
+    "category": "MONTAGE",
+    "manufacturer": ""
+  },
+  {
+    "name": "Roll-/Fassadengerüst (GT3)",
+    "longDescription": "Alle arbeiten werden mit einem Roll-/Fassadengerüst ausgeführt.",
+    "price": 50.0,
+    "vatRatePercent": 0.0,
+    "unit": "je Feld",
+    "productNumber": "ENX0024",
+    "category": "MONTAGE",
+    "manufacturer": ""
+  },
+  {
+    "name": "Roll-/Fassadengerüst (LaEx)",
+    "longDescription": "Alle arbeiten werden mit einem Roll-/Fassadengerüst ausgeführt.",
+    "price": 50.0,
+    "vatRatePercent": 0.0,
+    "unit": "je Feld",
+    "productNumber": "ENX0025",
+    "category": "MONTAGE",
+    "manufacturer": ""
+  },
+  {
+    "name": "Roll-/Fassadengerüst (PS)",
+    "longDescription": "Alle arbeiten werden mit einem Roll-/Fassadengerüst ausgeführt.",
+    "price": 50.0,
+    "vatRatePercent": 0.0,
+    "unit": "je Feld",
+    "productNumber": "ENX0026",
+    "category": "MONTAGE",
+    "manufacturer": ""
+  },
+  {
+    "name": "SBH Battery Module 5,0 KWH Speichernachrüstung",
+    "longDescription": "Der Sungrow SBH Batteriespeicher kann mit bis zu 8 Batteriemodulen bestückt werden. Die Kapazität beträgt 5 kWh pro Batteriemodul.  \n  \nProdukteigenschaften Sungrow SBH 5 kWh Batteriemodul  \nBatteriekapazität: 5 kWh  \nGewicht: 45 kg  \nSchutzklasse: IP55  \nAbmessungen: 675 x 160 x 350 mm",
+    "price": 1993.15,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENS0056",
+    "category": "SPEICHER",
+    "manufacturer": ""
+  },
+  {
+    "name": "Sigen Energy Controller 10.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Energy Controller 10,0 kW (dreiphasig) erhältst du einen zentralen Systembaustein zur Einbindung und Steuerung von PV und Speicher innerhalb der Sigenergy-Plattform. Der Energy Controller ist in zehn dreiphasigen AC-Ausgangsleistungen von 5 bis 30 kW verfügbar – die 10,0-kW-Variante ist dabei als Leistungsstufe aufgeführt. \nProduktmerkmale: \n• AC-Leistung: 10,0 kW, dreiphasig \n• DC/AC-Überlast: bis Faktor 1,6 \n• MPPT: bis zu 4 MPPT je Gerät \n• Schutzklasse: IP66 (für Außenaufstellung geeignet) \n• Abmessungen (laut Grafik): 700 × 300 × 260 mm \n• Installation & Inbetriebnahme (System): keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder; Inbetriebnahme per Installateurs-App via WLAN (QR-Code am SigenStor EC scannen); Bodenmontage innen/außen, auch Wandmontage möglich \n• Verbindungsüberwachung (System): Interlocking-Signale prüfen permanent die Verbindung; bei Verbindungsfehler wird der Energiefluss innerhalb von 50 ms unterbrochen \n• Diagnose/Service (System): kontinuierliche Systemdiagnose über die App inkl. Service-Ticket-Funktion \n• Garantie (laut Unterlage): 10 Jahre Vollgarantie auf Energy Controller (inkl. Ersatzteile, Transport- und Einbaukosten), optional Verlängerung auf 15 Jahre; Aktivierung automatisch bei Inbetriebnahme",
+    "price": 2198.5,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0059",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Energy Controller 12.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Energy Controller 12,0 kW (dreiphasig) erhältst du den zentralen Systembaustein zur Einbindung und Steuerung von PV und Speicher innerhalb der Sigenergy-Plattform. Laut Unterlage gibt es den dreiphasigen Energy Controller in zehn AC-Ausgangsleistungen von 5 bis 30 kW – die 12,0-kW-Variante ist dabei als Leistungsstufe aufgeführt. \nProduktmerkmale: \n• AC-Leistung: 12,0 kW, dreiphasig \n• DC/AC-Überlast: bis Faktor 1,6 \n• MPPT: bis zu 4 MPP-Tracker je Gerät \n• Schutzklasse: IP66 (für Außenaufstellung geeignet) \n• Abmessungen (laut Grafik): 700 × 300 × 260 mm \n• Installation & Inbetriebnahme (System): keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder; Inbetriebnahme per Installateurs-App via WLAN (QR-Code am SigenStor EC scannen); Bodenmontage innen/außen, auch Wandmontage möglich \n• Diagnose/Service (System): kontinuierliche Systemdiagnose über die App inkl. Service-Ticket-Funktion \n• Garantie: 10 Jahre Vollgarantie auf Energy Controller (inkl. Ersatzteile, Transport- und Einbaukosten), optional Verlängerung auf 15 Jahre; Aktivierung automatisch bei Inbetriebnahme",
+    "price": 2606.02,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0060",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Energy Controller 15.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Energy Controller 15,0 kW (dreiphasig) erhältst du den zentralen Systembaustein zur Einbindung und Steuerung von PV und Speicher innerhalb der Sigenergy-Plattform. Laut Unterlage ist die dreiphasige Serie für AC-Ausgangsleistungen von 5 bis 30 kW ausgelegt – 15,0 kW ist dabei als Leistungsstufe aufgeführt. \nProduktmerkmale: \n• AC-Leistung: 15,0 kW, dreiphasig (Leistungsstufe in der TP-Serie) \n• DC/AC-Überlast: bis Faktor 1,6 \n• MPPT: bis zu 4 MPP-Tracker je Gerät \n• Schutzklasse: IP66 (für Außenaufstellung geeignet) \n• Abmessungen (laut Grafik): 700 × 300 × 260 mm \n• Installation & Inbetriebnahme (System): keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder; Inbetriebnahme per Installateurs-App via WLAN (QR-Code am SigenStor EC scannen); Bodenmontage innen/außen, auch Wandmontage möglich \n• Verbindungsüberwachung (System): Interlocking-Signale prüfen permanent die Verbindung; bei Fehler wird der Energiefluss innerhalb von 50 ms unterbrochen \n• Diagnose/Service (System): kontinuierliche Systemdiagnose über die App inkl. Service-Ticket-Funktion \n• Garantie: 10 Jahre Vollgarantie auf Energy Controller (inkl. Ersatzteile, Transport- und Einbaukosten), optional Verlängerung auf 15 Jahre; Aktivierung automatisch bei Inbetriebnahme",
+    "price": 2917.03,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0061",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Energy Controller 17.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Energy Controller 17,0 kW (dreiphasig) erhältst du einen leistungsstarken System-Controller zur Einbindung und Steuerung von PV und Speicher innerhalb der Sigenergy-Plattform. In der EC-Übersicht ist die 17,0-kW-Variante als dreiphasige Leistungsstufe aufgeführt und dem Bereich mit 4 MPPT zugeordnet – ideal für komplexere String-Aufteilungen und flexible Dachbelegungen. \nProduktmerkmale: \n• AC-Leistung: 17,0 kW, dreiphasig \n• MPPT: 4 MPP-Tracker (Zuordnung für 17,0 kW) \n• DC/AC-Überlast: bis Faktor 1,6 \n• Schutzklasse: IP66, für Außenaufstellung geeignet \n• Abmessungen (laut Grafik): 700 × 300 × 260 mm \nInstallation & System-Highlights (laut Unterlage): \n• Keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder für schnellen, fehlerarmen Aufbau \n• Einfache Inbetriebnahme über Installateurs-App per WLAN (QR-Code am SigenStor EC scannen), Bodenmontage innen/außen, auch Wandmontage möglich \n• Verbindungsüberwachung: Interlocking-Signale prüfen permanent die Verbindung; bei Fehler wird der Energiefluss innerhalb von 50 ms unterbrochen \n• Diagnose/Service: kontinuierliche Systemdiagnose über die App inkl. Service-Ticket-Funktion \n• Garantie: 10 Jahre Vollgarantie auf Energy Controller (inkl. Ersatzteile, Transport- und Einbaukosten), optional Verlängerung auf 15 Jahre, Aktivierung automatisch bei Inbetriebnahme",
+    "price": 3092.64,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0062",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Energy Controller 20.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Energy Controller 20,0 kW (dreiphasig) erhältst du einen leistungsstarken System-Controller zur Einbindung und Steuerung von PV und Speicher innerhalb der Sigenergy-Plattform. In der Übersicht ist die 20,0-kW-Variante als dreiphasige Leistungsstufe aufgeführt und dem Bereich mit 4 MPP-Trackern zugeordnet – ideal für flexible String-Aufteilungen bei größeren Anlagen. \nProduktmerkmale: \n• AC-Leistung: 20,0 kW, dreiphasig \n• MPPT: 4 MPP-Tracker (Zuordnung für 20,0 kW) \n• DC/AC-Überlast: bis Faktor 1,6 \n• Schutzklasse: IP66 (für Außenaufstellung geeignet) \n• Abmessungen (laut Grafik): 700 × 300 × 260 mm \nInstallation & System-Highlights (laut Unterlage): \n• Schnelle Installation: keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder \n• Einfache Inbetriebnahme: über Installateurs-App per WLAN (QR-Code am SigenStor EC), Bodenmontage innen/außen, auch Wandmontage möglich \n• Verbindungsüberwachung: Interlocking-Signale prüfen permanent die Verbindung; bei Fehler wird der Energiefluss innerhalb von 50 ms unterbrochen \n• Diagnose/Service: kontinuierliche Systemdiagnose über die App inkl. Service-Ticket-Funktion \n• Garantie: 10 Jahre Vollgarantie auf Energy Controller (inkl. Ersatzteile, Transport- und Einbaukosten), optional Verlängerung auf 15 Jahre; Aktivierung automatisch bei Inbetriebnahme",
+    "price": 3256.19,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0063",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Energy Controller 25.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Energy Controller 25,0 kW (dreiphasig) erhältst du einen leistungsstarken System-Controller zur Einbindung und Steuerung von PV und Speicher innerhalb der Sigenergy SigenStor-Plattform. In der EC-Übersicht ist die 25,0-kW-Variante explizit als dreiphasige Leistungsstufe aufgeführt und dem Bereich mit 4 MPPT zugeordnet – ideal für flexible String-Aufteilungen bei größeren Anlagen. \nProduktmerkmale: \n• AC-Leistung: 25,0 kW, dreiphasig \n• MPPT: 4 MPP-Tracker (Zuordnung für 25,0 kW) \n• DC/AC-Überlast: bis Faktor 1,6 \n• Schutzklasse: IP66 (für Außenaufstellung geeignet) \n• Abmessungen (laut Grafik): 700 × 300 × 260 mm \nInstallation & System-Highlights (laut Unterlage): \n• Schnelle & sichere Installation: keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder \n• Inbetriebnahme: über Installateurs-App per WLAN, QR-Code am SigenStor EC scannen; Bodenmontage innen/außen, auch Wandmontage möglich \n• Verbindungsüberwachung: Interlocking-Signale prüfen permanent die Verbindung; bei Fehler wird der Energiefluss innerhalb von 50 ms unterbrochen \n• Diagnose/Service: kontinuierliche Systemdiagnose über die App inkl. Service-Ticket-Funktion \n• Garantie: 10 Jahre Vollgarantie auf Energy Controller (inkl. Ersatzteile, Transport- und Einbaukosten); optional Verlängerung auf 15 Jahre, Aktivierung automatisch bei Inbetriebnahme",
+    "price": 3799.11,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0064",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Energy Controller 30.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Energy Controller 30,0 kW (dreiphasig) erhältst du einen leistungsstarken System-Controller zur Einbindung und Steuerung von PV und Speicher innerhalb der Sigenergy-Plattform. Laut Unterlage umfasst die dreiphasige Serie zehn AC-Ausgangsleistungen von 5 bis 30 kW – damit ist der 30-kW-Energy-Controller für größere Anlagen und anspruchsvolle String-Layouts ausgelegt. \nProduktmerkmale: \n• AC-Leistung: 30,0 kW, dreiphasig (TP-Serie 5–30 kW) \n• DC/AC-Überlast: bis Faktor 1,6 \n• MPPT: bis zu 4 MPP-Tracker je Gerät \n• Schutzklasse: IP66 (für Außenaufstellung geeignet) \n• Abmessungen (laut Grafik): 700 × 300 × 260 mm \nInstallation & System-Highlights (laut Unterlage): \n• Schnelle & sichere Installation: keine externe Verkabelung zwischen den Komponenten notwendig, integrierte Schnellverbinder \n• Inbetriebnahme: per Installateurs-App via WLAN, QR-Code am SigenStor EC scannen; Bodenmontage innen/außen, auch Wandmontage möglich \n• Verbindungsüberwachung: bei Verbindungsfehler wird der Energiefluss innerhalb von 50 ms unterbrochen \n• Diagnose/Service: kontinuierliche Systemdiagnose über die App inkl. Service-Ticket-Funktion \n• Garantie: 10 Jahre Vollgarantie auf Energy Controller (inkl. Ersatzteile, Transport- und Einbaukosten), optional Verlängerung auf 15 Jahre, Aktivierung automatisch bei Inbetriebnahme",
+    "price": 4128.88,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0065",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Energy Controller 5.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Energy Controller 5,0 kW (dreiphasig) bekommst du einen leistungsstarken Energy-Controller für moderne PV- und Speichersysteme. Die dreiphasige Serie umfasst zehn AC-Ausgangsleistungen von 5 bis 30 kW – die 5,0-kW-Variante ist dabei explizit aufgeführt. \nFür die PV-Anbindung nennt die Unterlage bis Faktor 1,6 DC/AC-Überlast, bis zu 4 MPP-Tracker je Gerät (modellabhängig) und IP66 (Außenaufstellung geeignet). \nProduktmerkmale: \n• AC-Leistung: 5,0 kW, dreiphasig (Teil der TP-Serie 5–30 kW) \n• PV-Flexibilität: bis zu 4 MPPT je Gerät (modellabhängig) \n• DC/AC-Überlast: bis Faktor 1,6 \n• Schutzklasse: IP66, für Außenaufstellung geeignet \n• Abmessungen (laut Grafik): 700 × 300 × 260 mm \n• Installation & Inbetriebnahme (System): keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder; Inbetriebnahme per Installateurs-App via WLAN (QR-Code am SigenStor EC scannen); Bodenmontage innen/außen, auch Wandmontage möglich \n• Diagnose/Service (System): kontinuierliche Systemdiagnose über die App inkl. Service-Ticket-Funktion \n• Garantie: 10 Jahre Vollgarantie auf Energy Controller (inkl. Ersatzteile, Transport- und Einbaukosten), optional Verlängerung auf 15 Jahre; Aktivierung automatisch bei Inbetriebnahme",
+    "price": 1862.02,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0056",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Energy Controller 6.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Energy Controller 6,0 kW (dreiphasig) bekommst du einen zentralen Systembaustein der Sigenergy-Plattform zur Steuerung und Einbindung von PV und Speicher. Die Unterlage nennt zehn dreiphasige AC-Ausgangsleistungen von 5 bis 30 kW – die 6,0-kW-Variante ist dabei als Leistungsstufe aufgeführt. \nFür die PV-Anbindung bietet der Energy Controller laut Übersicht eine höhere DC/AC-Überlast bis Faktor 1,6, bis zu 4 MPP-Tracker je Gerät sowie IP66 (Außenaufstellung geeignet). \nProduktmerkmale: \n• AC-Leistung: 6,0 kW, dreiphasig \n• DC/AC-Überlast: bis Faktor 1,6 \n• MPPT: bis zu 4 MPPT je Gerät \n• Schutzklasse: IP66 (für Außenaufstellung geeignet) \n• Abmessungen (laut Grafik): 700 × 300 × 260 mm \n• Installation & Inbetriebnahme (System): keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder; Inbetriebnahme per Installateurs-App via WLAN (QR-Code am SigenStor EC), Bodenmontage innen/außen, auch Wandmontage möglich \n• Diagnose/Service (System): kontinuierliche Systemdiagnose über die App inkl. Service-Ticket-Funktion \n• Garantie: 10 Jahre Vollgarantie auf Energy Controller (inkl. Ersatzteile, Transport- und Einbaukosten); optional Verlängerung auf 15 Jahre, Aktivierung automatisch bei Inbetriebnahme",
+    "price": 2038.97,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0057",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Energy Controller 8.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Energy Controller 8,0 kW (dreiphasig) erhältst du einen zentralen Systembaustein zur Einbindung und Steuerung von PV und Speicher innerhalb der Sigenergy-Plattform. Die Unterlage führt den Energy Controller in zehn dreiphasigen AC-Ausgangsleistungen von 5 bis 30 kW – die 8,0-kW-Variante ist dabei als Leistungsstufe aufgeführt. \nProduktmerkmale: \n• AC-Leistung: 8,0 kW, dreiphasig \n• DC/AC-Überlast: bis Faktor 1,6 \n• MPPT: bis zu 4 MPPT je Gerät \n• Schutzklasse: IP66 (für Außenaufstellung geeignet) \n• Abmessungen (laut Grafik): 700 × 300 × 260 mm \n• Installation & Inbetriebnahme (System): keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder; Inbetriebnahme über Installateurs-App per WLAN (QR-Code am SigenStor EC scannen); Bodenmontage innen/außen, auch Wandmontage möglich \n• Sicherheits-/Überwachung (System): Interlocking-Signale prüfen permanent die Verbindung; bei Fehler wird der Energiefluss innerhalb von 50 ms unterbrochen \n• Garantie (laut Unterlage): 10 Jahre Vollgarantie auf Energy Controller (inkl. Ersatzteile, Transport- und Einbaukosten) sowie Option Verlängerung auf 15 Jahre; Aktivierung automatisch bei Inbetriebnahme",
+    "price": 2114.04,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0058",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Energy Gateway HomeMax Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Energy Gateway HomeMax (dreiphasig) erhältst du eine leistungsstarke Energiezentrale für das Sigenergy-System. Im Falle eines Netzausfalls schaltet das Gateway laut Unterlage unterbrechungsfrei in 0 ms in den Notstrombetrieb – Verbraucher im Haus laufen dadurch ohne Unterbrechung weiter. Ebenso kann bei angebundenem Notstromgenerator stufenlos zwischen Netz und Generator gewechselt werden; auch Zu-/Wegschalten des Generators sowie die Rückschaltung aufs Netz erfolgen jeweils in 0 ms. \nProduktmerkmale: \n• Ausführung: Three Phase (dreiphasig) – Sigen Gateway HomeMax TP / in der Übersicht als Sigen Energy Gateway HomeMax C60-2 Three Phase bezeichnet \n• Unterbrechungsfreie Umschaltung: 0 ms in den Notstrombetrieb (USV-Verhalten) \n• Generator-/Last-Anbindung: Generator kann in 0 ms zu-/weggeschaltet werden; alternativ Versorgung aus PV/Batterie ebenfalls in 0 ms (wenn Generator nicht verfügbar) \n• Anschlüsse laut Schema: INV #1, INV #2, Backup Port, Grid Port, Smart Port (Generator/controllable load) sowie Communication \n• Nennströme (Übersicht): \no Inv Port #1: 45,6 A \no Inv Port #2: 45,6 A \no Backup Port: 91,2 A \no Grid connection: 91,2 A \no Generator / Controllable load: 91,2 A \n• Abmessungen: 795 × 510 × 173 mm",
+    "price": 1059.03,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENA0084",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen EV AC Charger 11 kW 4G 5m Cable Type2White",
+    "longDescription": "Mit dem Sigen EV AC Charger 11 kW laden Sie Ihr E-Auto intelligent, sicher und PV-optimiert – ideal als Ergänzung zur Sigenergy-Heimenergiellösung. Die Wallbox ist für 3-phasiges Laden bis 11 kW ausgelegt und bietet dank 4G / WLAN / Ethernet eine zuverlässige Konnektivität. Robuste Schutzklassen (IP65 & IK10) machen sie sowohl für den Innen- als auch Außeneinsatz geeignet. Über App/LED-Anzeige sowie smarte Zeitpläne, PV-Überschussladen und dynamische Funktionen lässt sich das Laden komfortabel an Ihren Alltag und Ihre Stromtarife anpassen.   \nProduktmerkmale:   \n• Leistung: 11 kW AC-Ladeleistung (3-phasig), Ladestrom 6–16 A   \n• Anschluss/Variante: Typ-2 Ladekabel (5 m), Ausführung White   \n• Konnektivität: 4G / Wi-Fi / FE (Ethernet), zusätzlich RS-485 (Modbus RTU)   \n• Smart Charging: Zeitplanung & Lademodi (u. a. PV-Überschussladen und Schnellladen), optional mit dynamischem Tarif/AI-Modus   \n• Lastmanagement & Komfort: Dynamisches Lastmanagement und Phasenumschaltung (systemabhängig)   \n• Sicherheit: integrierte DC-Fehlererkennung (6 mA) und AC-Fehlererkennung (30 mA) sowie umfangreiche Schutzfunktionen (u. a. Über/Unterspannung, Übertemperatur, PEN-Schutz)   \n• Robustheit: IP65 Schutzklasse, natürliche Konvektion, Standby &lt; 3,6 W   \n• Montage & Maße: Wandmontage, 234 × 384 × 126 mm, Kabeleinführung unten/oben/hinten   \n• Schnittstellen/Standard: OCPP 1.6J (je nach Nutzung), relevante Normen u. a. EN IEC 61851-1 / 61851-21-2",
+    "price": 809.56,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENA0080",
+    "category": "WALLBOX",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen EV AC Charger 22 kW 4G 5m Cable Type2White",
+    "longDescription": "Mit dem Sigen EV AC Charger 22 kW laden Sie Ihr E-Auto besonders schnell, sicher und intelligent – ideal in Kombination mit der Sigenergy-Heimenergiellösung. Die Wallbox unterstützt 3-phasiges AC-Laden bis 22 kW und bietet dank 4G / WLAN / Ethernet eine stabile Konnektivität für App-Steuerung und smarte Ladefunktionen. Durch die robuste Ausführung mit IP65 & IK10 eignet sie sich hervorragend für den sorgenfreien Außen- und Inneneinsatz. Intelligente Lademodi wie PV-Überschussladen, Zeitplanung und Schnellladen helfen dabei, den Eigenverbrauch zu erhöhen und das Laden optimal an Ihren Tagesablauf anzupassen.     \n    \nEnergielösung für Zuhause - Sig…    \n    \nProduktmerkmale:    \n    \nLeistung: 22 kW Nennladeleistung (3-phasig), Ladestrom 6–32 A, 50/60 Hz     \n    \nEnergielösung für Zuhause - Sig…    \n    \nSpannung/Netz: 220–240 / 380–415 V (3W+N+PE)     \n    \nEnergielösung für Zuhause - Sig…    \n    \nAnschluss/Variante: Fahrzeuganschluss Typ-2, inklusive 5 m Typ-2 Ladekabel, Ausführung White    \n    \nKonnektivität & Protokolle: 4G / Wi-Fi / FE (Ethernet) sowie RS-485 (Modbus RTU), OCPP 1.6J    \n    \nSmart Charging: Zeitplanung & Lademodi (u. a. PV-Überschussladen und Schnellladen), inkl. dynamischer Tarif/AI-Modus (systemabhängig)     \n    \nEnergielösung für Zuhause - Sig…    \n    \nLastmanagement & Komfort: Dynamisches Lastmanagement und Phasenumschaltung (systemabhängig)    \n    \nSicherheit: integrierte DC-Fehlererkennung 6 mA und AC-Fehlererkennung 30 mA sowie Schutzfunktionen (u. a. Über/Unterspannung, Übertemperatur, PEN-Schutz, Erdschluss)     \n    \nEnergielösung für Zuhause - Sig…    \n    \nRobustheit: IP65, IK10, natürliche Konvektion, Standby &lt; 3,6 W    \n    \nMontage & Maße: Wandmontage, 234 × 384 × 126 mm, Kabeleinführungen unten/oben/hinten    \n    \nNormen: u. a. EN IEC 61851-1 und EN IEC 61851-21-2",
+    "price": 1059.56,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENA0081",
+    "category": "WALLBOX",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen EV DC Charging Module 12 kW 10m CableCCS2",
+    "longDescription": "Mit dem Sigenergy Sigen EV DC Charging Module (12 kW) erhältst du ein DC-Lademodul für die Sigenergy-Plattform, das als Baustein für komfortables und effizientes Laden zu Hause gedacht ist. Das Modul ist mit CCS2-Anschluss und 10 m Ladekabel ausgeführt (gemäß Artikelvariante) und lässt sich in das Sigenergy-Systemkonzept integrieren, das DC-Laden als Schnelllade-Option vorsieht. \nProduktmerkmale: \n• Leistung (Variante): 12 kW DC-Laden (diese Ausführung) \n• Anschluss / Kabel: CCS2, 10 m Ladekabel (diese Ausführung) \n• Systemidee (Sigenergy-Plattform): Sigenergy beschreibt eine Schnellladelösung für zu Hause mit hoher Kompatibilität zu 400-V und 800-V EVs. \n• Energiequellen (systemabhängig): Laden kann – je nach Systemaufbau – PV, Heimspeicher und Netz gleichzeitig nutzen (PV-/Batterie-unterstütztes Laden zur „virtuellen Erweiterung“ der Netzleistung). \n• DC-Schnellladen in der Plattform (systemabhängig): In der Sigenergy-Unterlage wird DC-Laden bis zu 25 kW als Plattform-/Systemfunktion beschrieben (je nach Ausführung/Setup); das hier ist die 12-kW-Variante. \n• Stabiler Ladevorgang (systemabhängig): Sigenergy stellt heraus, dass der Ladevorgang bei Stromausfall nicht abrupt abbricht und so Spannungsschwankungen vermieden werden können.",
+    "price": 3390.94,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENA0082",
+    "category": "WALLBOX",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen EV DC Charging Module 25 kW 10m CableCCS2",
+    "longDescription": "Mit dem Sigenergy Sigen EV DC Charging Module (25 kW) erhältst du eine DC-Schnelllade-Lösung für zu Hause, ausgelegt auf hohe Ladeleistungen und breite Fahrzeugkompatibilität. Das Systemkonzept ist laut Unterlage sowohl für 400-V- als auch 800-V-E-Fahrzeuge geeignet und unterstützt damit die vollen Ladeanforderungen unterschiedlicher Spannungsebenen. \nProduktmerkmale: \n• DC-Ladeleistung (Variante): bis zu 25 kW Schnellladen \n• Anschluss / Kabel (Artikelvariante): CCS2, 10 m Ladekabel \n• Hohe Kompatibilität 400 V / 800 V: Sigenergy beschreibt die 25-kW-DC-Ladelösung als kompatibel mit 400-V- und 800-V-EVs und weist darauf hin, dass bei Nutzung eines 400-V-Anschlusses für 800-V-Fahrzeuge sonst fahrzeugseitig „geboostet“ werden muss (mit Energieverlusten). \n• Mehr Energiequellen gleichzeitig (systemabhängig): PV-Leistung + Heimbatterie + Stromnetz können gleichzeitig zum Laden genutzt werden („virtuelle Erweiterung des Stromnetzes“). \n• Laden auch bei Störungen (systemabhängig): „Keine Angst vor Stromausfällen mitten im Ladevorgang“ – Sigenergy beschreibt, dass so plötzliche Spannungsschwankungen vermieden und damit Risiken für die Fahrzeugbatterie reduziert werden können.",
+    "price": 4315.22,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENA0083",
+    "category": "WALLBOX",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Hybrid Inverter 10.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Hybrid Inverter 10,0 kW (dreiphasig) erhältst du einen leistungsstarken Hybrid-Wechselrichter für moderne PV-Systeme, der sich in die Sigenergy-Systemwelt flexibel integrieren lässt. Die dreiphasige Plattform umfasst AC-Ausgangsleistungen von 5 bis 30 kW – die 10-kW-Variante ist dabei als eigene Leistungsstufe aufgeführt.  \nFür die PV-Auslegung nennt die Unterlage bis zu 4 MPP-Tracker je Gerät, eine höhere DC/AC-Überlast bis Faktor 1,6 sowie IP66 (Außenaufstellung geeignet).  \nIn Kombination mit dem Sigen Energy Gateway ist bei Netzausfall eine unterbrechungsfreie Umschaltung in 0 ms in den Notstrombetrieb beschrieben.  \nProduktmerkmale:  \n• AC-Leistung: 10,0 kW, dreiphasig (als Leistungsstufe in der TP-Serie genannt)  \n• PV-Flexibilität: bis zu 4 MPPT je Gerät  \n• DC/AC-Überlast: bis Faktor 1,6  \n• Schutzklasse: IP66, für Außenaufstellung geeignet  \n• Notstrom (System): mit Sigen Energy Gateway 0 ms Umschaltung  \n• Installation & Inbetriebnahme (System): keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder, Inbetriebnahme über Installateurs-App per WLAN (QR-Code-Scan)",
+    "price": 1353.95,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0071",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Hybrid Inverter 12.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Hybrid Inverter 12,0 kW (dreiphasig) erhältst du einen leistungsstarken Hybrid-Wechselrichter aus der Sigen Hybrid V2 Plattform. Die dreiphasige Serie ist in AC-Ausgangsleistungen von 5 bis 30 kW verfügbar – die 12,0-kW-Variante ist dabei als Leistungsstufe aufgeführt. \nFür eine flexible PV-Auslegung nennt die Unterlage höhere DC/AC-Überlast bis Faktor 1,6, IP66 (Außenaufstellung geeignet) sowie bis zu 4 MPPT je Gerät (modellabhängig). \nIn Kombination mit dem Sigen Energy Gateway ist bei Netzausfall eine unterbrechungsfreie Umschaltung in 0 ms in den Notstrombetrieb beschrieben. \nProduktmerkmale: \n• AC-Leistung: 12,0 kW, dreiphasig (Teil der 5–30-kW-TP-Serie) \n• PV-Flexibilität: bis zu 4 MPPT je Gerät (modellabhängig) \n• DC/AC-Überlast: bis Faktor 1,6 \n• Schutzklasse: IP66, für Außenaufstellung geeignet \n• Notstrom (System): mit Sigen Energy Gateway 0 ms Umschaltung \n• Installation & Inbetriebnahme (System): keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder, Inbetriebnahme per Installateurs-App via WLAN (QR-Code-Scan)",
+    "price": 1387.47,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0072",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Hybrid Inverter 3.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Hybrid Inverter (3,0 kW, dreiphasig) erhältst du einen modernen Hybrid-Wechselrichter für anspruchsvolle PV-Anlagen mit Speicheroption. Das Gerät kombiniert sehr hohe Effizienz mit einem ultraflachen, wohnraumtauglichen Design und arbeitet dabei extrem leise. Dank IP66-Schutzklasse und großem Betriebstemperaturbereich eignet sich der Wechselrichter auch für anspruchsvolle Umgebungen. Für zusätzliche Erträge ist ein hohes DC/AC-Verhältnis möglich – und im Off-Grid-Betrieb steht kurzzeitig 200 % Spitzenleistung bereit. \nProduktmerkmale: \n• AC-Leistung: 3,0 kW, dreiphasig \n• Effizienz: bis 99,0 % maximale Effizienz \n• Design & Geräusch: 99 mm ultradünn, nur 25 dB (superleise) \n• Schutz & Robustheit: IP66 (Außen geeignet), −30 °C bis +60 °C Betriebstemperatur \n• Ertrag & Reserve: 200 % DC/AC-Verhältnis für höhere Erträge sowie 200 % Spitzenleistung im Off-Grid-Modus (10 s) \n• Notstrom (System): In Kombination mit dem Sigen Energy Gateway ist eine unterbrechungsfreie Umschaltung (0 ms) möglich",
+    "price": 1041.6,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0066",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Hybrid Inverter 4.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Hybrid Inverter 4,0 kW (dreiphasig) erhältst du einen modernen Hybrid-Wechselrichter für PV-Anlagen, der auf hohe Effizienz, leisen Betrieb und ein besonders schlankes Design ausgelegt ist. In Kombination mit dem Sigen Energy Gateway kann das System bei Netzausfall unterbrechungsfrei (0 ms) in den Notstrombetrieb wechseln – für eine durchgängige Versorgung wichtiger Verbraucher. \nProduktmerkmale: \n• AC-Leistung: 4,0 kW, dreiphasig \n• Design & Geräusch: ultradünnes Design (99 mm) und superleiser Betrieb (25 dB) \n• Schutz & Einsatzbereich: IP66, geeignet für Außenaufstellung, breiter Betriebstemperaturbereich −30 °C bis +60 °C \n• Effizienz & Leistungsreserve: bis 99,0 % max. Effizienz, 200 % Spitzenleistung im Off-Grid-Modus (10 s) sowie hohes DC/AC-Verhältnis (200 %) für höhere Erträge \n• Notstrom (System): mit Sigen Energy Gateway Umschaltung in 0 ms (USV-Verhalten) \n• App/Cloud-Funktionen: Einbindung in Sigen Cloud / mySigen App, inkl. Funktionen rund um Betriebsdaten und (je nach Setup) dynamische Stromtarife/Optimierung",
+    "price": 1056.35,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0067",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Hybrid Inverter 5.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Hybrid Inverter 5,0 kW (dreiphasig) setzt du auf einen modernen Hybrid-Wechselrichter aus der Sigen Hybrid V2 Produktlinie (einphasig & dreiphasig). Die dreiphasigen Geräte sind in AC-Leistungsstufen von 5 bis 30 kW verfügbar – ideal, um Anlagen sauber auf Hausverbrauch und Systemgröße auszulegen.  \nIn Kombination mit dem Sigen Energy Gateway kann das System bei Netzausfall unterbrechungsfrei in 0 ms in den Notstrombetrieb umschalten, sodass Verbraucher im Haus ohne Unterbrechung weiterlaufen.  \nProduktmerkmale:  \n• AC-Leistung: 5,0 kW, dreiphasig (Teil der dreiphasigen 5–30-kW-Serie)  \n• Notstrom (System): mit Sigen Energy Gateway 0 ms Umschaltung in den Notstrombetrieb  \n• E-Mobilität / Tarife (System): Nutzung flexibler Stromtarife & bidirektionales Laden per App-Funktionen; DC-Laden bis 25 kW über integrierten DC-Charger (systemabhängig)  \n• Service & Diagnose (System): kontinuierliche Systemdiagnose über die App inkl. Service-Ticket-Funktion",
+    "price": 1073.78,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0068",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Hybrid Inverter 6.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Hybrid Inverter 6,0 kW (dreiphasig) setzt du auf einen Hybrid-Wechselrichter innerhalb der Sigenergy-Plattform mit flexibel skalierbaren Systemkomponenten. Für die dreiphasige Serie sind AC-Ausgangsleistungen von 5 bis 30 kW vorgesehen – die 6,0-kW-Variante eignet sich damit ideal für typische Einfamilienhaus-Anlagen mit Speicheroption. \nFür die PV-Anbindung bietet das System bis zu 4 MPP-Tracker je Gerät, eine höhere DC/AC-Überlast bis Faktor 1,6 sowie IP66 (für die Außenaufstellung geeignet). \nIn Kombination mit dem Sigen Energy Gateway ist bei Netzausfall eine unterbrechungsfreie Umschaltung in 0 ms in den Notstrombetrieb beschrieben. \nProduktmerkmale: \n• AC-Leistung: 6,0 kW, dreiphasig (Teil der 5–30-kW-Serie) \n• PV-Flexibilität: bis zu 4 MPP-Tracker je Gerät \n• DC/AC-Überlast: bis Faktor 1,6 \n• Schutzklasse: IP66, für Außenaufstellung geeignet \n• Notstrom (System): mit Sigen Energy Gateway 0 ms Umschaltung \n• Inbetriebnahme/Installation (System): keine Verkabelung der Komponenten notwendig, integrierte Schnellverbinder, Inbetriebnahme über Installateurs-App per WLAN (QR-Code-Scan)",
+    "price": 1195.77,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0069",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sigen Hybrid Inverter 8.0 kW Three Phase",
+    "longDescription": "Mit dem Sigenergy Sigen Hybrid Inverter 8,0 kW (dreiphasig) erhältst du einen Hybrid-Wechselrichter aus der dreiphasigen Sigenergy-Serie, die AC-Ausgangsleistungen von 5 bis 30 kW abdeckt – ideal zur sauberen Auslegung für unterschiedliche Anlagengrößen. \nFür eine flexible PV-Auslegung sind bis zu 4 MPP-Tracker je Gerät möglich; zusätzlich unterstützt das System eine höhere DC/AC-Überlast bis Faktor 1,6 und ist dank IP66 auch für die Außenaufstellung geeignet. \nIn Kombination mit dem Sigen Energy Gateway ist eine unterbrechungsfreie Umschaltung in den Notstrombetrieb in 0 ms beschrieben. \nProduktmerkmale: \n• AC-Leistung: 8,0 kW, dreiphasig (Teil der dreiphasigen 5–30-kW-Serie) \n• PV-Flexibilität: bis zu 4 MPPT je Gerät \n• DC/AC-Überlast: bis Faktor 1,6 \n• Schutzklasse: IP66 – Außenaufstellung geeignet \n• Notstrom (System): mit Sigen Energy Gateway 0 ms Umschaltung \n• Service/Diagnose (System): kontinuierliche Systemdiagnose über die App inkl. Service-Ticket-Funktion",
+    "price": 1265.48,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0070",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "SigenStor BAT 10.0",
+    "longDescription": "Mit dem Sigenergy SigenStor erhältst du ein modulares Batteriemodul im SigenStor-System. In unserem Sortiment bieten wir die Batteriemodule in 5,0 kWh, 6,0 kWh und 9,0 kWh an – alle Varianten sind untereinander kombinierbar und lassen sich bei Bedarf jederzeit erweitern (Nachrüstung) innerhalb des Systems.  \nProduktmerkmale (System-/Technik-Highlights aus der PDF):  \n• Skalierbarkeit: bis 60 kWh pro Stack, bis zu 20 Stacks parallel installierbar  \n• BMS auf Modulebene: für maximale Nutzung der vorhandenen Kapazität und zeitlich unbegrenzte Nachrüstung  \n• Schnelle & sichere Installation: keine externe Verkabelung zwischen Modulen nötig; integrierte Schnellverbinder, keine Kurzschlussgefahr bei der Installation  \n• Verbindungsüberwachung: Interlocking-Signale prüfen permanent die Verbindung; bei Fehler wird der Energiefluss innerhalb von 50 ms unterbrochen  \n• Sicherheit im Batteriemodul: „5-fach Schutz“ (u. a. Temperaturmessung, Isolierpads, integrierter Feuerlöscher, Sicherheits-/Überdruckventil)  \no Details: 7 Temperatursensoren, Isolierpads bis 700 °C, Überdruckventil öffnet ab 5 kPa  \n• Garantie: 10 Jahre Vollgarantie (Ersatzteile, Transport- und Einbaukosten); optional Verlängerung auf 15 Jahre möglich, automatische Aktivierung bei Inbetriebnahme",
+    "price": 3592.66,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENS0063",
+    "category": "SPEICHER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "SigenStor BAT 6.0",
+    "longDescription": "Mit dem Sigenergy SigenStor erhältst du ein modulares Batteriemodul im SigenStor-System. In unserem Sortiment bieten wir die Batteriemodule in 5,0 kWh, 6,0 kWh und 9,0 kWh an – alle Varianten sind untereinander kombinierbar und lassen sich bei Bedarf jederzeit erweitern (Nachrüstung) innerhalb des Systems. \nProduktmerkmale (System-/Technik-Highlights aus der PDF): \n• Skalierbarkeit: bis 60 kWh pro Stack, bis zu 20 Stacks parallel installierbar \n• BMS auf Modulebene: für maximale Nutzung der vorhandenen Kapazität und zeitlich unbegrenzte Nachrüstung \n• Schnelle & sichere Installation: keine externe Verkabelung zwischen Modulen nötig; integrierte Schnellverbinder, keine Kurzschlussgefahr bei der Installation \n• Verbindungsüberwachung: Interlocking-Signale prüfen permanent die Verbindung; bei Fehler wird der Energiefluss innerhalb von 50 ms unterbrochen \n• Sicherheit im Batteriemodul: „5-fach Schutz“ (u. a. Temperaturmessung, Isolierpads, integrierter Feuerlöscher, Sicherheits-/Überdruckventil) \no Details: 7 Temperatursensoren, Isolierpads bis 700 °C, Überdruckventil öffnet ab 5 kPa \n• Garantie: 10 Jahre Vollgarantie (Ersatzteile, Transport- und Einbaukosten); optional Verlängerung auf 15 Jahre möglich, automatische Aktivierung bei Inbetriebnahme",
+    "price": 2898.26,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENS0062",
+    "category": "SPEICHER",
+    "manufacturer": "Sigenergy"
+  },
+  {
+    "name": "Sungrow Hybrid SH10RT - V112",
+    "longDescription": "Diese neuen dreiphasigen Hybrid-Wechselrichter verfügen über einen dreiphasigen Ersatzstromausgang mit Drehstrom zu 100% schieflastfähig. Zusammen mit dem Hochvolt-Batterie-Anschluss und 2 unabhängigen MPP-Trackern lässt der Sungrow Wechselrichter keine Wünsche mehr offen. Up to date wird dieses Gerät via iSolarCloudAssistent konfiguriert und sendet seine Daten über die bereits integrierten WiFi- oder Ethernet-Schnittstellen an das kostenfreie iSolarCloud-Portal oder iSolarCloud-App. Für die Anbindung von Datenloggern von Drittanbietern ist RS485 (Modbus RTU) und Ethernet (Modbus TCP) möglich. Ein 3-Phasen-Smartmeter liegt bereits bei.    \n    \nExterne Anschlüsse, großzügiger Anschlussbereich und eine integrierte Wasserwaage ermöglichen eine schnelle Installation.    \n    \nProduktvorteile    \n    \n- Eingangsspannungsbereich von 200-950 V   \n- Hoher Wirkungsgrad von bis zu 98,4 %    \n- Natürliche Konvektion     \n- AC + DC Überspannungsschutz 2 integriert    \n- externe Anschlüsse, kein Öffnen des Wechselrichters nötig    \n- integrierte Wasserwaage    \n- SG-Ready Kontakt vorhanden (zur Ansteuerung z.B. Wärmepumpe)     \n- Geräuschemission 30dB (A)    \n    \nProdukteigenschaften Sungrow Hybrid HV SH10RT:    \n    \n- Netzanschluss: 3 Phasig    \n- AC Leistung: 10,0 kVA (10,0 kW nom. / 12 kW 5min.) Notstromleistung über separaten Ausgang   \n- Verpolungsschutz    \n- MPP Tracker: 2    \n- 1 MC4 Eingang pro MPPT    \n- Batterieanschluss    \n- Schnittstellen: Ethernet    \n- Kabelquerschnitt AC-Anschluss 6 - 10mm² möglich    \n- Kabelquerschnitt DC-Anschluss 4 - 6 mm² möglich    \n- Abmessungen: 540 x 460 x 170 mm (H x B x T)    \n- Gewicht: 27 kg    \n- Schutzklasse: IP 65",
+    "price": 1139.46,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0004",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow Hybrid SH15T - V11",
+    "longDescription": "Diese neuen dreiphasigen Hybrid-Wechselrichter verfügen über einen dreiphasigen Ersatzstromausgang mit Drehstrom (schieflastfähig). Zusammen mit dem Hochvolt-Batterie-Anschluss und 3 MPP-Trackern lässt der Sungrow Wechselrichter keine Wünsche mehr offen. Up to date wird dieses Gerät via iSolarCloudAssistent konfiguriert und sendet seine Daten über die bereits integrierten WiFi- oder Ethernet-Schnittstellen an das kostenfreie iSolarCloud-Portal oder iSolarCloud-App. Für die Anbindung von Datenloggern von Drittanbietern ist RS485 (Modbus RTU) und Ethernet (Modbus TCP) möglich. Externe Anschlüsse, großzügiger Anschlussbereich und eine integrierte Wasserwaage ermöglichen eine schnelle Installation.  \n  \nProduktvorteile:  \nEingangsspannungsbereich von 150-950 V  \nHoher Wirkungsgrad von bis zu 98,1 %  \nNatürliche Konvektion  \nAC + DC Überspannungsschutz 2 integriert  \nexterne Anschlüsse, kein Öffnen des Wechselrichters nötig  \nintegrierte Wasserwaage  \nPotentialfreier Kontakt (SG-Ready Kontakt) vorhanden (zur: Ansteuerung z.B. Wärmepumpe)  \ndirekter Anschluss eines Funkrundsteuerempfängers möglich  \nGeräuschemission 35dB (A)  \n  \nAnwendungen:  \nBetrieb ohne Batterie als reiner Wechselrichter  \nDC Betrieb mit PV und Batterie   \nAC Betrieb ohne PV und mit Batterie  \n  \nProdukteigenschaften Sungrow Hybrid HV SH15T:  \nNetzanschluss: 3 Phasig  \nAC Leistung: 15,0 kVA - Notstromleistung über separaten Ausgang  \nVerpolungsschutz  \nMPP Tracker: 3  \nMPPT 1: 2 MC4 Eingänge; MPPT 2: 2 MC4 Eingänge; MPPT 3: 1 MC4 Eingang  \nMaximaler Eingangsstrom: 80A ( 32A / 32A / 16A )  \nMaximaler Kurzschlussstrom Isc: 100A ( 40A / 40A / 20A)  \nBatterieanschluss  \nSchnittstellen: Ethernet  \nKabelquerschnitt AC-Anschluss 6 - 10 mm² möglich  \nKabelquerschnitt DC-Anschluss 4 - 6 mm² möglich  \nAbmessungen: 620 x 480 x 245 mm (H x B x T)  \nGewicht: 38 kg  \nSchutzklasse: IP 65",
+    "price": 2747.99,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0045",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow Hybrid SH20T - V11",
+    "longDescription": "Diese neuen dreiphasigen Hybrid-Wechselrichter verfügen über einen dreiphasigen Ersatzstromausgang mit Drehstrom (schieflastfähig). Zusammen mit dem Hochvolt-Batterie-Anschluss und 3 MPP-Trackern lässt der Sungrow Wechselrichter keine Wünsche mehr offen. Up to date wird dieses Gerät via iSolarCloudAssistent konfiguriert und sendet seine Daten über die bereits integrierten WiFi- oder Ethernet-Schnittstellen an das kostenfreie iSolarCloud-Portal oder iSolarCloud-App. Für die Anbindung von Datenloggern von Drittanbietern ist RS485 (Modbus RTU) und Ethernet (Modbus TCP) möglich. Externe Anschlüsse, großzügiger Anschlussbereich und eine integrierte Wasserwaage ermöglichen eine schnelle Installation. \n \nProduktvorteile: \nEingangsspannungsbereich von 150-950 V \nHoher Wirkungsgrad von bis zu 98,1 % \nNatürliche Konvektion \nAC + DC Überspannungsschutz 2 integriert \nexterne Anschlüsse, kein Öffnen des Wechselrichters nötig \nintegrierte Wasserwaage \nPotentialfreier Kontakt (SG-Ready Kontakt) vorhanden (zur: Ansteuerung z.B. Wärmepumpe) \ndirekter Anschluss eines Funkrundsteuerempfängers möglich \nGeräuschemission 35dB (A) \n \nAnwendungen: \nBetrieb ohne Batterie als reiner Wechselrichter \nDC Betrieb mit PV und Batterie  \nAC Betrieb ohne PV und mit Batterie \n \nProdukteigenschaften Sungrow Hybrid HV SH20T: \nNetzanschluss: 3 Phasig \nAC Leistung: 20,0 kVA - Notstromleistung über separaten Ausgang \nVerpolungsschutz \nMPP Tracker: 3 \nMPPT 1: 2 MC4 Eingänge; MPPT 2: 2 MC4 Eingänge; MPPT 3: 1 MC4 Eingang \nMaximaler Eingangsstrom: 80A ( 32A / 32A / 16A ) \nMaximaler Kurzschlussstrom Isc: 100A ( 40A / 40A / 20A) \nBatterieanschluss \nSchnittstellen: Ethernet \nKabelquerschnitt AC-Anschluss 6 - 10 mm² möglich \nKabelquerschnitt DC-Anschluss 4 - 6 mm² möglich \nAbmessungen: 620 x 480 x 245 mm (H x B x T) \nGewicht: 38 kg \nSchutzklasse: IP 65",
+    "price": 2947.86,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0046",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow Hybrid SH25T - V11",
+    "longDescription": "Diese neuen dreiphasigen Hybrid-Wechselrichter verfügen über einen dreiphasigen Ersatzstromausgang mit Drehstrom (schieflastfähig). Zusammen mit dem Hochvolt-Batterie-Anschluss und 3 MPP-Trackern lässt der Sungrow Wechselrichter keine Wünsche mehr offen. Up to date wird dieses Gerät via iSolarCloudAssistent konfiguriert und sendet seine Daten über die bereits integrierten WiFi- oder Ethernet-Schnittstellen an das kostenfreie iSolarCloud-Portal oder iSolarCloud-App. Für die Anbindung von Datenloggern von Drittanbietern ist RS485 (Modbus RTU) und Ethernet (Modbus TCP) möglich. Externe Anschlüsse, großzügiger Anschlussbereich und eine integrierte Wasserwaage ermöglichen eine schnelle Installation. \n \nProduktvorteile: \nEingangsspannungsbereich von 150-950 V \nHoher Wirkungsgrad von bis zu 98,2 % \nLüfter Konvektion \nAC + DC Überspannungsschutz 2 integriert \nexterne Anschlüsse, kein Öffnen des Wechselrichters nötig \nintegrierte Wasserwaage \nPotentialfreier Kontakt (SG-Ready Kontakt) vorhanden (zur: Ansteuerung z.B. Wärmepumpe) \ndirekter Anschluss eines Funkrundsteuerempfängers möglich \nGeräuschemission 50dB (A) \n \nAnwendungen: \nBetrieb ohne Batterie als reiner Wechselrichter \nDC Betrieb mit PV und Batterie  \nAC Betrieb ohne PV und mit Batterie  \n \nProdukteigenschaften Sungrow Hybrid HV SH25T: \nNetzanschluss: 3 Phasig \nAC Leistung: 25,0 kVA - Notstromleistung über separaten Ausgang \nVerpolungsschutz \nMPP Tracker: 3 \nMPPT 1: 2 MC4 Eingänge; MPPT 2: 2 MC4 Eingänge; MPPT 3: 1 MC4 Eingang \nMaximaler Eingangsstrom: 80A ( 32A / 32A / 16A ) \nMaximaler Kurzschlussstrom Isc: 100A ( 40A / 40A / 20A) \nBatterieanschluss \nSchnittstellen: Ethernet \nKabelquerschnitt AC-Anschluss 6 - 10 mm² möglich \nKabelquerschnitt DC-Anschluss 4 - 6 mm² möglich \nAbmessungen: 620 x 480 x 245 mm (H x B x T) \nGewicht: 40 kg \nSchutzklasse: IP 65",
+    "price": 3148.94,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0051",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow Hybrid SH5.0RT - V112",
+    "longDescription": "Diese neuen dreiphasigen Hybrid-Wechselrichter verfügen über einen dreiphasigen Ersatzstromausgang mit Drehstrom zu 100% schieflastfähig. Zusammen mit dem Hochvolt-Batterie-Anschluss und 2 unabhängigen MPP-Trackern lässt der Sungrow Wechselrichter keine Wünsche mehr offen. Up to date wird dieses Gerät via iSolarCloudAssistent konfiguriert und sendet seine Daten über die bereits integrierten WiFi- oder Ethernet-Schnittstellen an das kostenfreie iSolarCloud-Portal oder iSolarCloud-App. Für die Anbindung von Datenloggern von Drittanbietern ist RS485 (Modbus RTU) und Ethernet (Modbus TCP) möglich. Ein 3-Phasen-Smartmeter liegt bereits bei.   \n   \nExterne Anschlüsse, großzügiger Anschlussbereich und eine integrierte Wasserwaage ermöglichen eine schnelle Installation.   \n   \nProduktvorteile   \n   \n-Eingangsspannungsbereich von 150-950 V   \n-Hoher Wirkungsgrad von bis zu 98,0 %   \n-Natürliche Konvektion    \n-AC + DC Überspannungsschutz 2 integriert   \n-externe Anschlüsse, kein Öffnen des Wechselrichters nötig   \n-integrierte Wasserwaage   \n-SG-Ready Kontakt vorhanden (zur Ansteuerung z.B. Wärmepumpe)    \n-Geräuschemission 30dB (A)   \n   \nProdukteigenschaften Sungrow Hybrid HV SH5.0RT:   \n   \n-Netzanschluss: 3 Phasig   \n-AC Leistung: 5,0 kVA (5,0 kW nom. /  6,0 kW 5 min. / 10 kW 10 sec.) Notstromleistung über separaten Ausgang   \n-Verpolungsschutz   \n-MPP Tracker: 2   \n-1 MC4 Eingang pro MPPT   \n-Batterieanschluss   \n-Schnittstellen: Ethernet   \n-Kabelquerschnitt AC-Anschluss 6 - 10mm² möglich   \n-Kabelquerschnitt DC-Anschluss 4 - 6 mm² möglich   \n-Abmessungen: 540 x 460 x 170 mm (H x B x T)   \n-Gewicht: 27 kg   \n-Schutzklasse: IP 65",
+    "price": 870.01,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0001",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow Hybrid SH6.0RT - V112",
+    "longDescription": "Diese neuen dreiphasigen Hybrid-Wechselrichter verfügen über einen dreiphasigen Ersatzstromausgang mit Drehstrom zu 100% schieflastfähig. Zusammen mit dem Hochvolt-Batterie-Anschluss und 2 unabhängigen MPP-Trackern lässt der Sungrow Wechselrichter keine Wünsche mehr offen. Up to date wird dieses Gerät via iSolarCloudAssistent konfiguriert und sendet seine Daten über die bereits integrierten WiFi- oder Ethernet-Schnittstellen an das kostenfreie iSolarCloud-Portal oder iSolarCloud-App. Für die Anbindung von Datenloggern von Drittanbietern ist RS485 (Modbus RTU) und Ethernet (Modbus TCP) möglich. Ein 3-Phasen-Smartmeter liegt bereits bei.   \n   \nExterne Anschlüsse, großzügiger Anschlussbereich und eine integrierte Wasserwaage ermöglichen eine schnelle Installation.   \n   \nProduktvorteile   \n   \n- Eingangsspannungsbereich von 200-950 V  \n- Hoher Wirkungsgrad von bis zu 98,2 %   \n- Natürliche Konvektion    \n- AC + DC Überspannungsschutz 2 integriert   \n- externe Anschlüsse, kein Öffnen des Wechselrichters nötig   \n- integrierte Wasserwaage   \n- SG-Ready Kontakt vorhanden (zur Ansteuerung z.B. Wärmepumpe)    \n- Geräuschemission 30dB (A)   \n   \nProdukteigenschaften Sungrow Hybrid HV SH6.0RT:   \n   \n- Netzanschluss: 3 Phasig   \n- AC Leistung: 6,0 kVA (6,0 kW nom. /  7,2 kW 5 min. / 10 kW 10 sec.) Notstromleistung über separaten Ausgang   \n- Verpolungsschutz   \n- MPP Tracker: 2   \n- 1 MC4 Eingang pro MPPT   \n- Batterieanschluss   \n- Schnittstellen: Ethernet   \n- Kabelquerschnitt AC-Anschluss 6 - 10mm² möglich   \n- Kabelquerschnitt DC-Anschluss 4 - 6 mm² möglich   \n- Abmessungen: 540 x 460 x 170 mm (H x B x T)   \n- Gewicht: 27 kg   \n- Schutzklasse: IP 65",
+    "price": 938.25,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0002",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow Hybrid SH8.0RT - V112",
+    "longDescription": "Diese neuen dreiphasigen Hybrid-Wechselrichter verfügen über einen dreiphasigen Ersatzstromausgang mit Drehstrom zu 100% schieflastfähig. Zusammen mit dem Hochvolt-Batterie-Anschluss und 2 unabhängigen MPP-Trackern lässt der Sungrow Wechselrichter keine Wünsche mehr offen. Up to date wird dieses Gerät via iSolarCloudAssistent konfiguriert und sendet seine Daten über die bereits integrierten WiFi- oder Ethernet-Schnittstellen an das kostenfreie iSolarCloud-Portal oder iSolarCloud-App. Für die Anbindung von Datenloggern von Drittanbietern ist RS485 (Modbus RTU) und Ethernet (Modbus TCP) möglich. Ein 3-Phasen-Smartmeter liegt bereits bei.   \n   \nExterne Anschlüsse, großzügiger Anschlussbereich und eine integrierte Wasserwaage ermöglichen eine schnelle Installation.   \n   \nProduktvorteile   \n   \n- Eingangsspannungsbereich von 200-950 V  \n- Hoher Wirkungsgrad von bis zu 98,4 %   \n- Natürliche Konvektion    \n- AC + DC Überspannungsschutz 2 integriert   \n- externe Anschlüsse, kein Öffnen des Wechselrichters nötig   \n- integrierte Wasserwaage   \n- SG-Ready Kontakt vorhanden (zur Ansteuerung z.B. Wärmepumpe)    \n- Geräuschemission 30dB (A)   \n   \nProdukteigenschaften Sungrow Hybrid HV SH8.0RT:   \n   \n- Netzanschluss: 3 Phasig   \n- AC Leistung: 8,0 kVA (8,0 kW nom. /  12 kW 5 min.) Notstromleistung über separaten Ausgang  \n- Verpolungsschutz   \n- MPP Tracker: 2   \n- 1 MC4 Eingang pro MPPT   \n- Batterieanschluss   \n- Schnittstellen: Ethernet   \n- Kabelquerschnitt AC-Anschluss 6 - 10mm² möglich   \n- Kabelquerschnitt DC-Anschluss 4 - 6 mm² möglich   \n- Abmessungen: 540 x 460 x 170 mm (H x B x T)   \n- Gewicht: 27 kg   \n- Schutzklasse: IP 65",
+    "price": 1005.28,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0003",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow IHomeManager",
+    "longDescription": "Sungrow ASQ00297 IHomeManager, Energiemanagementsystem  \n  \nDer iHomeManager von Sungrow ist die intelligente Steuerzentrale für Heimanlagen. Die Anbindung an das PV-Speichersystem, dynamische Stromtarife und lokale steuerbare Verbraucher ermöglicht die bestmögliche Energienutzung. Da er mit je 3 CT-Anschlüssen für den Netzanschlusspunkt sowie lokale Erzeugung ausgestattet ist wird kein weiterer Energy Meter im System benötigt.  \n  \nSpezifikationen  \nAnbindung Wechselrichter: RS485  \nmaximale Teilnehmer: 7 (5x Wechselrichter,1x Wallbox, 1x Wärmepumpe)  \nMontage: Hutschiene",
+    "price": 227.89,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENA0076",
+    "category": "ENERGIEMANAGER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow Leistungsoptimierer SP600S Optimizer",
+    "longDescription": "Sungrow vervollständigt ihr eigenes Sortiment mit dem SP600S Optimierer und folgt damit dem neuen Trend der PV-Branche. Mit der Shade-Proof-Technologie kann die Stromerzeugung um bis zu 30% gesteigert werden. Der Optimierer verfügt über eine integrierte Lichtbogenerkennung und Sicherheitsabschaltung bei Netzausfall. Es bietet flexible Einsatzmöglichkeiten, einschließlich extralanger Strings und schneller Datenübertragung über Powerline. Mit einem maximalen Kurzschlussstrom von 20 Ampere ist dieser Optimierer für jede Modulkombination geeignet.  \n \n \n \nProduktvorteile: \n \n•⁠  ⁠Integrierte Lichtbogenerkennung \n•⁠  ⁠Sicherheitsabschaltung bei Netzausfall \n•⁠  ⁠für Teil- und Volloptimierung einsetzbar \n•⁠  ⁠bei Volloptimierung extralange Strings möglich \n•⁠  ⁠Überwachung in der iSolarCloud  \n \nProdukteigenschaften: \n \n•⁠  ⁠Nenneingangsleistung: 600 Wp \n•⁠  ⁠Kurzschlussstrom Isc: 20 A  \n•⁠  ⁠Max. MPP-Eingangsspannung: 80 V \n•⁠  ⁠Min. MPP-Eingangsspannung: 8 V \n•⁠  ⁠Max. Eingangsspannung DC: 80 V \n•⁠  ⁠Schnittstelle: Powerline \n•⁠  ⁠DC Stecker Typ: MC4 oder MC4 steckbar \n•⁠  ⁠Kabellänge Ausgang plus: 120 cm \n•⁠  ⁠Kabellänge Ausgang minus: 120 cm \n•⁠  ⁠Gewicht: 0,500 kg",
+    "price": 42.74,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "END0015",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow Residential SG10.0RT-V115",
+    "longDescription": "Der Sungrow SG10.0RT-V115 ist ein dreiphasiger Solar-Wechselrichter mit einer Ausgangsleistung von 5 kW, der speziell für den Einsatz in privaten Solaranlagen konzipiert wurde. Mit einem Gewicht von nur 18 kg, ist er deutlich leichter als seine Vorgängerversion und erleichtert somit die Installation. Dank der PID Recovery Funktion, die die Depolarisation der Solarmodule in der Nacht reduziert, und der Kompatibilität mit bifazialen Modulen, steigert der Wechselrichter die Effizienz und Zuverlässigkeit von PV-Systemen.\n\nDer Sungrow SG10.0RT-V115 verfügt über integrierte Schutzfunktionen wie einen Fehlerlichtbogenschutz (AFCI) und einen Überspannungsschutz Typ II sowohl auf der DC- als auch auf der AC-Seite. Diese Merkmale sorgen für zusätzliche Sicherheit und eine längere Lebensdauer des Systems. Die Installation wird durch Plug-and-Play-Anschlüsse und das WiNet-Modul für WLAN und Ethernet besonders benutzerfreundlich gestaltet. Zudem ermöglicht die App-basierte Inbetriebnahme eine schnelle Einrichtung.\n\nProduktvorteile\nPID Recovery Funktion reduziert Depolarisation der Module in der Nacht\nHoher Wirkungsgrad von bis zu 98,5 % für maximale Energieausbeute\nWiNet-Modul für einfache Überwachung über WLAN und Ethernet\nIntegrierter DC- und AC-Überspannungsschutz Typ II für mehr Sicherheit\nNiedriger Anlaufstrom und breiter Eingangsspannungsbereich von 160–1000 V\nKompatibel mit bifazialen Solarmodulen\nLeichtes Design mit nur 18 kg für einfache Installation\nRemote-Firmware Updates für stets aktuelle Funktionen",
+    "price": 603.11,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0007",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow Residential SG8.0RT-V115",
+    "longDescription": "Mit dem dreiphasigen Wechselrichter bringt Sungrow eine neue Generation von String Wechselrichtern auf den Markt. Die PID Recovery Funktion verringert Depolarisation der Module in der Nacht. Die RT-Version kommt mit einem Gesamtgewicht von 18 kg und ist damit 2 kg leichter als die Vorgängerversion. Das geringere Gewicht macht auch die Installation einfacher. \n \nProduktvorteile \n \n- PID Recovery Funktion \n- Eingangsspannungsbereich von 160–1000 V  \n- Niedriger Anlaufstrom \n- Hoher Wirkungsgrad von bis zu 97,8 % \n- WiNet-Modul: Wifi und Ethernet Anschluss \n- DC und AC Überspannungsschutz Typ 2 \n- Kühlsystem \n- Remote-Firmware Updates \n \nProdukteigenschaften Sungrow Residential SG8.0RT-V115 \n \n- 8,0 kVA Leistung 3 Phasig \n- 2 MPP Tracker 160-1000 V, bei Nennleistung 180-600 V \n- 2/1 MC4 Eingänge pro MPPT (Gesamt 3 DC-Eingänge) \n- WiNet-Modul im Lieferumfang! \n- AC-Anschluss: Plug and Play Verbinder \n- Abmessungen: 480 x 370 x 195 mm (H x B x T) \n- Schutzklasse: IP65 \n- Gewicht: 18 kg",
+    "price": 469.06,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0007",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow SBH100 (nur komp. SH15,20,25T)",
+    "longDescription": "Der Sungrow SBH-Speicher startet mit 2 Batteriemodulen, wobei sich die Batterie mit bis zu 8 Modulen bestücken lässt. Die Kapazität kann von 10 kWh auf bis zu 40 kWh modular erweitert werden. Das macht das System sehr flexibel. Durch den modularen Aufbau und das schlanke Design kann der Speicher einfach per Plug and Play installiert werden. \n \nDer Sungrow-Hybridwechselrichter erkennt den Batteriespeicher nach der Installation und integriert ihn automatisch in das System. Das optimal abgestimmte Notstromsystem mit modernster Lastregelung und einer Umschaltzeit von unter 10 ms bietet maximale Zuverlässigkeit.  \n \nProduktvorteile: \nPermanenter 50 A Lade- und Entladestrom möglich \nLebenslang erweiterbares System \nZellchemie: Lithium-Eisenphosphat \nZertifiziertes mehrstufiges Schutzkonzept, u.a. VDE 2510-50 \nPlug and Play Aufbau \nLeistungsstarke Not- und Ersatzstrom-Funktionalität \n10 Jahre Produktgarantie \nProdukteigenschaften Sungrow SBH100 Batterie \nBatteriekapazität: 10 kWh \nNennspannung: 140,8 V \nMax. Lade-/Entladestrom: 50 A \nGewicht: 106 kg \nSchutzklasse: IP55 \nAbmessungen: 675 x 580 x 350 mm",
+    "price": 4288.41,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENS0049",
+    "category": "SPEICHER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow SBH150 (nur komp. SH15,20,25T)",
+    "longDescription": "Der Sungrow SBH-Speicher startet mit 2 Batteriemodulen, wobei sich die Batterie mit bis zu 8 Modulen bestücken lässt. Die Kapazität kann von 10 kWh auf bis zu 40 kWh modular erweitert werden. Das macht das System sehr flexibel. Durch den modularen Aufbau und das schlanke Design kann der Speicher einfach per Plug and Play installiert werden.  \n  \nDer Sungrow-Hybridwechselrichter erkennt den Batteriespeicher nach der Installation und integriert ihn automatisch in das System. Das optimal abgestimmte Notstromsystem mit modernster Lastregelung und einer Umschaltzeit von unter 10 ms bietet maximale Zuverlässigkeit.  \n  \nProduktvorteile:  \nPermanenter 50 A Lade- und Entladestrom möglich  \nLebenslang erweiterbares System  \nZellchemie: Lithium-Eisenphosphat  \nZertifiziertes mehrstufiges Schutzkonzept, u.a. VDE 2510-50  \nPlug and Play Aufbau  \nLeistungsstarke Not- und Ersatzstrom-Funktionalität  \n10 Jahre Produktgarantie  \nProdukteigenschaften Sungrow SBH150 Batterie  \nBatteriekapazität: 15 kWh  \nNennspannung: 211,2 V  \nMax. Lade-/Entladestrom: 50 A  \nGewicht: 151 kg  \nSchutzklasse: IP55  \nAbmessungen: 675 x 740 x 350 mm",
+    "price": 5628.95,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENS0050",
+    "category": "SPEICHER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow SBH200 (nur komp. SH15,20,25T)",
+    "longDescription": "Der Sungrow SBH-Speicher startet mit 2 Batteriemodulen, wobei sich die Batterie mit bis zu 8 Modulen bestücken lässt. Die Kapazität kann von 10 kWh auf bis zu 40 kWh modular erweitert werden. Das macht das System sehr flexibel. Durch den modularen Aufbau und das schlanke Design kann der Speicher einfach per Plug and Play installiert werden.  \n  \nDer Sungrow-Hybridwechselrichter erkennt den Batteriespeicher nach der Installation und integriert ihn automatisch in das System. Das optimal abgestimmte Notstromsystem mit modernster Lastregelung und einer Umschaltzeit von unter 10 ms bietet maximale Zuverlässigkeit.   \n  \nProduktvorteile:  \nPermanenter 50 A Lade- und Entladestrom möglich  \nLebenslang erweiterbares System  \nZellchemie: Lithium-Eisenphosphat  \nZertifiziertes mehrstufiges Schutzkonzept, u.a. VDE 2510-50  \nPlug and Play Aufbau  \nLeistungsstarke Not- und Ersatzstrom-Funktionalität  \n10 Jahre Produktgarantie  \nProdukteigenschaften Sungrow SBH200 Batterie  \nBatteriekapazität: 20 kWh  \nNennspannung: 281,6 V  \nMax. Lade-/Entladestrom: 50 A  \nGewicht: 196 kg  \nSchutzklasse: IP55  \nAbmessungen: 675 x 900 x 350 mm",
+    "price": 7505.72,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENS0051",
+    "category": "SPEICHER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow SBH250 (nur komp. SH15,20,25T)",
+    "longDescription": "Der Sungrow SBH-Speicher startet mit 2 Batteriemodulen, wobei sich die Batterie mit bis zu 8 Modulen bestücken lässt. Die Kapazität kann von 10 kWh auf bis zu 40 kWh modular erweitert werden. Das macht das System sehr flexibel. Durch den modularen Aufbau und das schlanke Design kann der Speicher einfach per Plug and Play installiert werden. \n \nDer Sungrow-Hybridwechselrichter erkennt den Batteriespeicher nach der Installation und integriert ihn automatisch in das System. Das optimal abgestimmte Notstromsystem mit modernster Lastregelung und einer Umschaltzeit von unter 10 ms bietet maximale Zuverlässigkeit.  \n \nProduktvorteile: \nPermanenter 50 A Lade- und Entladestrom möglich \nLebenslang erweiterbares System \nZellchemie: Lithium-Eisenphosphat \nZertifiziertes mehrstufiges Schutzkonzept, u.a. VDE 2510-50 \nPlug and Play Aufbau \nLeistungsstarke Not- und Ersatzstrom-Funktionalität \n10 Jahre Produktgarantie \nProdukteigenschaften Sungrow SBH250 Batterie \nBatteriekapazität: 25 kWh \nNennspannung: 352,0 V \nMax. Lade-/Entladestrom: 50 A \nGewicht: 241 kg \nSchutzklasse: IP55 \nAbmessungen: 675 x 1060 x 350 mm",
+    "price": 9918.7,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENS0052",
+    "category": "SPEICHER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow SBH300 (nur komp. SH15,20,25T)",
+    "longDescription": "Der Sungrow SBH-Speicher startet mit 2 Batteriemodulen, wobei sich die Batterie mit bis zu 8 Modulen bestücken lässt. Die Kapazität kann von 10 kWh auf bis zu 40 kWh modular erweitert werden. Das macht das System sehr flexibel. Durch den modularen Aufbau und das schlanke Design kann der Speicher einfach per Plug and Play installiert werden.  \n  \nDer Sungrow-Hybridwechselrichter erkennt den Batteriespeicher nach der Installation und integriert ihn automatisch in das System. Das optimal abgestimmte Notstromsystem mit modernster Lastregelung und einer Umschaltzeit von unter 10 ms bietet maximale Zuverlässigkeit.   \n  \nProduktvorteile:  \nPermanenter 50 A Lade- und Entladestrom möglich  \nLebenslang erweiterbares System  \nZellchemie: Lithium-Eisenphosphat  \nZertifiziertes mehrstufiges Schutzkonzept, u.a. VDE 2510-50  \nPlug and Play Aufbau  \nLeistungsstarke Not- und Ersatzstrom-Funktionalität  \n10 Jahre Produktgarantie  \nProdukteigenschaften Sungrow SBH300 Batterie  \nBatteriekapazität: 30 kWh  \nNennspannung: 422,4 V  \nMax. Lade-/Entladestrom: 50 A  \nGewicht: 286 kg  \nSchutzklasse: IP55  \nAbmessungen: 675 x 1220 x 350 mm",
+    "price": 11259.25,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENS0053",
+    "category": "SPEICHER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow SBH350 (nur komp. SH15,20,25T)",
+    "longDescription": "Der Sungrow SBH-Speicher startet mit 2 Batteriemodulen, wobei sich die Batterie mit bis zu 8 Modulen bestücken lässt. Die Kapazität kann von 10 kWh auf bis zu 40 kWh modular erweitert werden. Das macht das System sehr flexibel. Durch den modularen Aufbau und das schlanke Design kann der Speicher einfach per Plug and Play installiert werden.  \n  \nDer Sungrow-Hybridwechselrichter erkennt den Batteriespeicher nach der Installation und integriert ihn automatisch in das System. Das optimal abgestimmte Notstromsystem mit modernster Lastregelung und einer Umschaltzeit von unter 10 ms bietet maximale Zuverlässigkeit.   \n  \nProduktvorteile:  \nPermanenter 50 A Lade- und Entladestrom möglich  \nLebenslang erweiterbares System  \nZellchemie: Lithium-Eisenphosphat  \nZertifiziertes mehrstufiges Schutzkonzept, u.a. VDE 2510-50  \nPlug and Play Aufbau  \nLeistungsstarke Not- und Ersatzstrom-Funktionalität  \n10 Jahre Produktgarantie  \nProdukteigenschaften Sungrow SBH350 Batterie  \nBatteriekapazität: 35 kWh  \nNennspannung: 492,8 V  \nMax. Lade-/Entladestrom: 50 A  \nGewicht: 331 kg  \nSchutzklasse: IP55  \nAbmessungen: 675 x 1380 x 350 mm",
+    "price": 13136.01,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENS0054",
+    "category": "SPEICHER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow SBH400 (nur komp. SH15,20,25T)",
+    "longDescription": "Der Sungrow SBH-Speicher startet mit 2 Batteriemodulen, wobei sich die Batterie mit bis zu 8 Modulen bestücken lässt. Die Kapazität kann von 10 kWh auf bis zu 40 kWh modular erweitert werden. Das macht das System sehr flexibel. Durch den modularen Aufbau und das schlanke Design kann der Speicher einfach per Plug and Play installiert werden.   \n   \nDer Sungrow-Hybridwechselrichter erkennt den Batteriespeicher nach der Installation und integriert ihn automatisch in das System. Das optimal abgestimmte Notstromsystem mit modernster Lastregelung und einer Umschaltzeit von unter 10 ms bietet maximale Zuverlässigkeit.    \n   \nProduktvorteile:   \nPermanenter 50 A Lade- und Entladestrom möglich   \nLebenslang erweiterbares System   \nZellchemie: Lithium-Eisenphosphat   \nZertifiziertes mehrstufiges Schutzkonzept, u.a. VDE 2510-50   \nPlug and Play Aufbau   \nLeistungsstarke Not- und Ersatzstrom-Funktionalität   \n10 Jahre Produktgarantie   \nProdukteigenschaften Sungrow SBH400 Batterie   \nBatteriekapazität: 40 kWh   \nNennspannung: 563,2 V   \nMax. Lade-/Entladestrom: 50 A   \nGewicht: 376 kg   \nSchutzklasse: IP55   \nAbmessungen: 675 x 1540 x 350 mm",
+    "price": 15012.78,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENS0055",
+    "category": "SPEICHER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow SG125 CX-P2",
+    "longDescription": "Seit 1997 entwickelt Sungrow Produkte für die PV Industrie und ist zum führenden Hersteller für Wechselrichter weltweit geworden. Sungrow hat bis Heute über 224 GW Wechselrichter-Leistung weltweit Installiert und in Europa ein führendere Hersteller im Bereich Projekt Wechselrichter. \n \nProduktvorteile: \nSowohl VDE-AR-N 4105 also auch 4110/4120 zertifiziert. (siehe Downloadbereich) \nStatus LED \nEingangsspannungsbereich von 180-1000 V \nHoher Wirkungsgrad von bis zu 98,5 % \nTemperaturgesteuerte intelligente Umluftkühlung \nDC Überspannungsschutz Typ 1 + 2 \nAC Überspannungsschutz Typ 2 \nFehlerlichtbogen-Schutzeinrichtung (AFCI) \nMit integriertem Kuppelschalter \nProdukteigenschaften Sungrow SG125CX Premium \n125 kVA Leistung 3 Phasig \n12 MPP Tracker 180 - 1000 V \n2 MC4-Evo2 (max. 6mm²) Eingänge pro MPPT \n1 x RS485 \nKommunikation & Monitoring via optionalen Sungrow WiNet-S Communication Dongle oder COM100E \nAbmessungen: 1019 x 793 x 360 mm \nSchutzklasse: IP66 \nGeräuschemission: 73db(A) \nGewicht: 87 kg",
+    "price": 4691.78,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0014",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow SG33 CX Premium V112",
+    "longDescription": "Seit 1997 entwickelt Sungrow Produkte für die PV Industrie und ist zum führenden Hersteller für Wechselrichter weltweit geworden. Sungrow hat bis heute über 87 GW Wechselrichter-Leistung weltweit installiert und in Europa ein führender Hersteller im Bereich Projekt Wechselrichter. \n \nProduktvorteile: \n \n- Status LED \n- Eingangsspannungsbereich von 200-1000 V \n- Hoher Wirkungsgrad von bis zu 98,6 % \n- Temperaturgesteuerte aktive Kühlung \n- DC Überspannungsschutz Typ 1+2 \n- AC Überspannungsschutz Typ 2 \n- Externe NA-Schutzlösung mit Netzwächter nach VDE 4105 möglich \n \nProdukteigenschaften Sungrow SG33CX Premium: \n \n- 33 kVA Leistung 3 Phasig \n- 3 MPP Tracker  \n- 2 MC4 Eingänge pro MPPT \n- 1 x RS485 \n- Kommunikation & Monitoring via optionalen Sungrow WiNet-S Communication Dongle \n- Abmessungen: 702 x 595 x 310 mm \n- Schutzklasse: IP66 \n- Gewicht: 50 kg",
+    "price": 2010.69,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0012",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow SG50 CX-P2",
+    "longDescription": "Der Sungrow Gewerbewechselrichter der nächsten Generation ist da! Die neue SG33-50CX P2-Serie setzt auf Einheitlichkeit und bietet gleichzeitig viel Innovation. Die Größe  SG50CX-P2 besitzt 4 MPP Tracker mit EVO2 DC Anschlüssen. Dank je 30 A DC-Input pro MPPT können alle Leistungsklassen eingebunden werden.  \n \nProduktvorteile: \nStatus LED \nEingangsspannungsbereich von 160-1000 V \nHoher Wirkungsgrad von bis zu 98,3 % \nTemperaturgesteuerte aktive Kühlung \nDC Überspannungsschutz Typ 1+2 \nAC Überspannungsschutz Typ 2 \nExterne NA-Schutzlösung mit Netzwächter nach VDE 4105 möglich \nFehlerlichtbogen-Schutzeinrichtung (AFCI) \nProdukteigenschaften Sungrow SG50CX Premium \n50 kVA Leistung 3 Phasig \n4 MPP Tracker \n2 MC4 Eingänge pro MPPT \n30 A pro MPPT \n1 x RS485 \nKommunikation & Monitoring via optionalen Sungrow WiNet-S Communication Dongle \nAbmessungen: 645*575*245 mm  \nSchutzklasse: IP66 \nGewicht: 41 kg",
+    "price": 2545.7,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENW0013",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Sungrow Wallbox 22kW AC022E-01",
+    "longDescription": "Der AC22E-01 EV-Charger von Sungrow ist eine zuverlässige und vielseitige Lösung für das Laden von Elektrofahrzeugen. Er verfügt über eine integrierte 6 mA DC-Fehlererkennung und UV-Beständigkeit und ist zur Wand- oder Pfostenmontage ausgelegt. Darüber hinaus ermöglicht der Charger ein intelligentes Laden, das zeitlich festgelegt werden kann. Nachhaltigkeit ist ein weiterer wichtiger Aspekt, da es in PV- und Batteriesysteme für den Heimbereich integriert werden kann. Es bietet drei verschiedene Lademodi, einschließlich des grünen Lademodus und verbaut mit einem 7m langen Ladekabel mit Typ 2 Stecker. Im Lieferumfang sind zwei RFID-Karte enthalten.",
+    "price": 1094.63,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENA0079",
+    "category": "WALLBOX",
+    "manufacturer": "Sungrow"
+  },
+  {
+    "name": "Synergierabatt",
+    "longDescription": "Durch die gemeinsame Installation mit einer PV-Anlage entstehen Synergieeffekte, die wir als Preisvorteil an Sie weitergeben.",
+    "price": 1000.0,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "SONSTIGES",
+    "manufacturer": ""
+  },
+  {
+    "name": "Tigo TS4-A-O Optimierer 700W/15A",
+    "longDescription": "Der Tigo TS4-A-O Solarmodul-Optimierer (MPN: TS4-A-O) bietet die Möglichkeit die Energieeffizienz deiner Solaranlage zu steigern. So optimiert der Tigo die Energieproduktion leistungsschwacher Module, die durch ungleiche Stringlängen, eine gemischte Ausrichtung, Fehlanpassungen und Strangausfälle durch Verschattung entstehen. Die Installation des Optimierers erfolgt schnell und unkompliziert, einfach auf der Rückseite des jeweiligen Solarmoduls.",
+    "price": 42.09,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "END0009",
+    "category": "WECHSELRICHTER",
+    "manufacturer": "Tigo"
+  },
+  {
+    "name": "Überdruck- und Ausgleichspaket",
+    "longDescription": "Überdruck- und Ausgleichspaket für den fachgerechten Anschluss und sicheren Betrieb des Heizkreises. Enthalten sind die erforderlichen Komponenten wie Ausdehnungsgefäß, Sicherheits- und Überdruckventile sowie weitere notwendige Anschluss- und Sicherungskomponenten gemäß den technischen Anforderungen der Anlage.\n\nDie Ausführung erfolgt passend zur geplanten Wärmepumpenanlage und den örtlichen Gegebenheiten. - WMP",
+    "price": 1066.01,
+    "vatRatePercent": 19.0,
+    "unit": "Pauschale",
+    "productNumber": null,
+    "category": "MONTAGE",
+    "manufacturer": ""
+  },
+  {
+    "name": "UK Flachdach einseitig pro Modul",
+    "longDescription": "Montagesystem für eine fachgerechte Montage. Aufgrund der uns vorliegenden Daten mit der Systemsoftware des Herstellers der Unterkonstruktion wird eine Systemstatik hergestellt.",
+    "price": 125.81,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "END0002",
+    "category": "MONTAGESYSTEM",
+    "manufacturer": ""
+  },
+  {
+    "name": "UK Flachdach zweiseitig pro Modul",
+    "longDescription": "Montagesystem für eine fachgerechte Montage. Aufgrund der uns vorliegenden Daten mit der Systemsoftware des Herstellers der Unterkonstruktion wird eine Systemstatik hergestellt.",
+    "price": 59.96,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "END0003",
+    "category": "MONTAGESYSTEM",
+    "manufacturer": ""
+  },
+  {
+    "name": "UK Kurzschiene für Trapez",
+    "longDescription": "Fachgerechte Montage der Unterkonstruktion auf Trapezblech, sowie der Module inkl. der Verstringung bis hin zum Wechselrichter. Aufgrund der uns vorliegenden Daten mit der Systemsoftware des Herstellers der Unterkonstruktion wird eine Systemstatik hergestellt.",
+    "price": 27.22,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "END0014",
+    "category": "MONTAGESYSTEM",
+    "manufacturer": ""
+  },
+  {
+    "name": "UK Schieferdach pro Modul",
+    "longDescription": "Montagesystem für eine fachgerechte Montage.",
+    "price": 93.02,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "END0006",
+    "category": "MONTAGESYSTEM",
+    "manufacturer": ""
+  },
+  {
+    "name": "UK Ziegeldach pro Modul",
+    "longDescription": "Montagesystem für die Fachgerechte Montage auf einem Ziegeldach . Aufgrund der uns vorliegenden Daten mit der Systemsoftware des Herstellers der Unterkonstruktion wird eine Systemstatik hergestellt.",
+    "price": 77.98,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "END0001",
+    "category": "MONTAGESYSTEM",
+    "manufacturer": ""
+  },
+  {
+    "name": "Unterkonstruktion (LaEx)",
+    "longDescription": "Bereitstellung der fachgerechten Unterkonstruktion.",
+    "price": 175.0,
+    "vatRatePercent": 0.0,
+    "unit": "kWp",
+    "productNumber": "ENX0028",
+    "category": "MONTAGESYSTEM",
+    "manufacturer": ""
+  },
+  {
+    "name": "VA Paket 4.1200 aroTHERM pro /7.1 VWL 55/7.1 A 230V mit uniTOWER plus /7.1",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.1200) bestehend aus der Außeneinheit aroTHERM pro /7.1 VWL 55/7.1 A (230V) und der Inneneinheit uniTOWER plus zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Die kompakte Inneneinheit uniTOWER plus vereint Hydraulikstation mit Hocheffizienzpumpe, integrierte Sicherheitsgruppe, elektrischen Heizstab, Vaillant sensoCOMFORT Regelung sowie einen integrierten Warmwasserspeicher (ca. 190 Liter) in einem platzsparenden Gerät.\n\nEnthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung, die komplette Verrohrung innerhalb der Inneneinheit sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 4,8 kW bei A-7/W35\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 230V\n-Schallleistungspegel außen ca. 49 dB(A)",
+    "price": 10444.62,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.1201 aroTHERM pro /7.1 VWL 75/7.1 A 230V mit uniTOWER plus /7.1",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.1201) bestehend aus der Außeneinheit aroTHERM pro /7.1 VWL 75/7.1 A (230V) und der Inneneinheit uniTOWER plus zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Die kompakte Inneneinheit uniTOWER plus vereint Hydraulikstation mit Hocheffizienzpumpe, integrierte Sicherheitsgruppe, elektrischen Heizstab, Vaillant sensoCOMFORT Regelung sowie einen integrierten Warmwasserspeicher (ca. 190 Liter) in einem platzsparenden Gerät.\n\nEnthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung, die komplette Verrohrung innerhalb der Inneneinheit sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 6,4 kW bei A-7/W35\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 230V\n-Schallleistungspegel außen ca. 49 dB(A)",
+    "price": 11327.74,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.1202 aroTHERM pro /7.1 VWL 115/7.1 A 400V mit uniTOWER plus /7.1",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.1202) bestehend aus der Außeneinheit aroTHERM pro /7.1 VWL 115/7.1 A (400V) und der Inneneinheit uniTOWER plus zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Die kompakte Inneneinheit uniTOWER plus vereint Hydraulikstation mit Hocheffizienzpumpe, integrierte Sicherheitsgruppe, elektrischen Heizstab, Vaillant sensoCOMFORT Regelung sowie einen integrierten Warmwasserspeicher (ca. 190 Liter) in einem platzsparenden Gerät.\n\nEnthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung, die komplette Verrohrung innerhalb der Inneneinheit sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 11,1 kW bei A-7/W35\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 400V\n-Schallleistungspegel außen ca. 54,8 dB(A)",
+    "price": 13508.05,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.1300 aroTHERM pro /7.1 VWL 55/7.1 A 230V mit VWZ MEH 97/7",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.1300) bestehend aus der Außeneinheit aroTHERM pro /7.1 VWL 55/7.1 A (230V) und der Vaillant Hydraulikstation VWZ MEH 97/7 zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nIm Unterschied zur Systemvariante mit uniTOWER-Inneneinheit erfolgt die Warmwasserbereitung bei dieser Ausführung über einen separaten, getrennt zu wählenden Warmwasserspeicher (siehe Position „Inneneinheit – Warmwasseraufbereitung 300 L. Variante“). Die Hydraulikstation VWZ MEH 97/7 beinhaltet die für den Betrieb erforderlichen hydraulischen Komponenten inklusive Hocheffizienzpumpe und Sicherheitsgruppe.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Enthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 4,8 kW bei A-7/W35\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 230V\n-Schallleistungspegel außen ca. 49 dB(A)",
+    "price": 10133.49,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.1301 aroTHERM pro /7.1 VWL 75/7.1 A 230V mit VWZ MEH 97/7",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.1301) bestehend aus der Außeneinheit aroTHERM pro /7.1 VWL 75/7.1 A (230V) und der Vaillant Hydraulikstation VWZ MEH 97/7 zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nIm Unterschied zur Systemvariante mit uniTOWER-Inneneinheit erfolgt die Warmwasserbereitung bei dieser Ausführung über einen separaten, getrennt zu wählenden Warmwasserspeicher (siehe Position „Inneneinheit – Warmwasseraufbereitung 300 L. Variante“). Die Hydraulikstation VWZ MEH 97/7 beinhaltet die für den Betrieb erforderlichen hydraulischen Komponenten inklusive Hocheffizienzpumpe und Sicherheitsgruppe.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Enthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 6,4 kW bei A-7/W35\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 230V\n-Schallleistungspegel außen ca. 49 dB(A)",
+    "price": 11019.94,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.1302 aroTHERM pro /7.1 VWL 115/7.1 A 400V mit VWZ MEH 97/7",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.1302) bestehend aus der Außeneinheit aroTHERM pro /7.1 VWL 115/7.1 A (400V) und der Vaillant Hydraulikstation VWZ MEH 97/7 zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nIm Unterschied zur Systemvariante mit uniTOWER-Inneneinheit erfolgt die Warmwasserbereitung bei dieser Ausführung über einen separaten, getrennt zu wählenden Warmwasserspeicher (siehe Position „Inneneinheit – Warmwasseraufbereitung 300 L. Variante“). Die Hydraulikstation VWZ MEH 97/7 beinhaltet die für den Betrieb erforderlichen hydraulischen Komponenten inklusive Hocheffizienzpumpe und Sicherheitsgruppe.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Enthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 11,1 kW bei A-7/W35\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 400V\n-Schallleistungspegel außen ca. 54,8 dB(A)",
+    "price": 13205.06,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.3212 aroTHERM plus /8.1 VWL 35/8.1 A 230V mit uniTOWER plus /7.1",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.3212) bestehend aus der Außeneinheit aroTHERM plus /8.1 VWL 35/8.1 A (230V) und der Inneneinheit uniTOWER plus zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Die kompakte Inneneinheit uniTOWER plus vereint Hydraulikstation mit Hocheffizienzpumpe, integrierte Sicherheitsgruppe, elektrischen Heizstab, Vaillant sensoCOMFORT Regelung sowie einen integrierten Warmwasserspeicher (ca. 190 Liter) in einem platzsparenden Gerät.\n\nEnthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung, die komplette Verrohrung innerhalb der Inneneinheit sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 4,3 kW bei A-7/W35\n-Energieeffizienzklasse A+++ bei 35 °C Vorlauftemperatur\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 230V\n-Besonders leiser Nachtbetrieb ab ca. 27,5 dB(A) in 3 m Abstand",
+    "price": 11074.73,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.3213 aroTHERM plus /8.1 VWL 55/8.1 A 230V mit uniTOWER plus /7.1",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.3213) bestehend aus der Außeneinheit aroTHERM plus /8.1 VWL 55/8.1 A (230V) und der Inneneinheit uniTOWER plus zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Die kompakte Inneneinheit uniTOWER plus vereint Hydraulikstation mit Hocheffizienzpumpe, integrierte Sicherheitsgruppe, elektrischen Heizstab, Vaillant sensoCOMFORT Regelung sowie einen integrierten Warmwasserspeicher (ca. 190 Liter) in einem platzsparenden Gerät.\n\nEnthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung, die komplette Verrohrung innerhalb der Inneneinheit sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 5,6 kW bei A-7/W35\n-Energieeffizienzklasse A+++ bei 35 °C Vorlauftemperatur\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 230V\n-Besonders leiser Nachtbetrieb ab ca. 27,5 dB(A) in 3 m Abstand",
+    "price": 11604.28,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.3214 aroTHERM plus /8.1 VWL 75/8.1 A 230V mit uniTOWER plus /7.1",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.3214) bestehend aus der Außeneinheit aroTHERM plus /8.1 VWL 75/8.1 A (230V) und der Inneneinheit uniTOWER plus zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Die kompakte Inneneinheit uniTOWER plus vereint Hydraulikstation mit Hocheffizienzpumpe, integrierte Sicherheitsgruppe, elektrischen Heizstab, Vaillant sensoCOMFORT Regelung sowie einen integrierten Warmwasserspeicher (ca. 190 Liter) in einem platzsparenden Gerät.\n\nEnthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung, die komplette Verrohrung innerhalb der Inneneinheit sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 6,9 kW bei A-7/W35\n-Energieeffizienzklasse A+++ bei 35 °C Vorlauftemperatur\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 230V\n-Besonders leiser Nachtbetrieb ab ca. 27,5 dB(A) in 3 m Abstand",
+    "price": 12568.71,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.3215 aroTHERM plus /8.1 VWL 105/8.1 A 400V mit uniTOWER plus /7.1",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.3215) bestehend aus der Außeneinheit aroTHERM plus /8.1 VWL 105/8.1 A (400V) und der Inneneinheit uniTOWER plus zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Die kompakte Inneneinheit uniTOWER plus vereint Hydraulikstation mit Hocheffizienzpumpe, integrierte Sicherheitsgruppe, elektrischen Heizstab, Vaillant sensoCOMFORT Regelung sowie einen integrierten Warmwasserspeicher (ca. 190 Liter) in einem platzsparenden Gerät.\n\nEnthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung, die komplette Verrohrung innerhalb der Inneneinheit sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 10,6 kW bei A-7/W35\n-Energieeffizienzklasse A+++ bei 35 °C Vorlauftemperatur\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 400V\n-Besonders leiser Nachtbetrieb ab ca. 27,5 dB(A) in 3 m Abstand",
+    "price": 15277.88,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.3216 aroTHERM plus /8.1 VWL 125/8.1 A 400V mit uniTOWER plus /7.1",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.3216) bestehend aus der Außeneinheit aroTHERM plus /8.1 VWL 125/8.1 A (400V) und der Inneneinheit uniTOWER plus zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Die kompakte Inneneinheit uniTOWER plus vereint Hydraulikstation mit Hocheffizienzpumpe, integrierte Sicherheitsgruppe, elektrischen Heizstab, Vaillant sensoCOMFORT Regelung sowie einen integrierten Warmwasserspeicher (ca. 190 Liter) in einem platzsparenden Gerät.\n\nEnthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung, die komplette Verrohrung innerhalb der Inneneinheit sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 12,1 kW bei A-7/W35\n-Energieeffizienzklasse A+++ bei 35 °C Vorlauftemperatur\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 400V\n-Besonders leiser Nachtbetrieb ab ca. 27,5 dB(A) in 3 m Abstand",
+    "price": 16571.27,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.3321 aroTHERM plus /8.1 VWL 35/8.1 A 230V mit VWZ MEH 97/7",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.3321) bestehend aus der Außeneinheit aroTHERM plus /8.1 VWL 35/8.1 A (230V) und der Vaillant Hydraulikstation VWZ MEH 97/7 zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nIm Unterschied zur Systemvariante mit uniTOWER-Inneneinheit erfolgt die Warmwasserbereitung bei dieser Ausführung über einen separaten, getrennt zu wählenden Warmwasserspeicher (siehe Position „Inneneinheit – Warmwasseraufbereitung 300 L. Variante“). Die Hydraulikstation VWZ MEH 97/7 beinhaltet die für den Betrieb erforderlichen hydraulischen Komponenten inklusive Hocheffizienzpumpe und Sicherheitsgruppe.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Enthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 4,3 kW bei A-7/W35\n-Energieeffizienzklasse A+++ bei 35 °C Vorlauftemperatur\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 230V\n-Besonders leiser Nachtbetrieb ab ca. 27,5 dB(A) in 3 m Abstand",
+    "price": 10775.07,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.3322 aroTHERM plus /8.1 VWL 55/8.1 A 230V mit VWZ MEH 97/7",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.3322) bestehend aus der Außeneinheit aroTHERM plus /8.1 VWL 55/8.1 A (230V) und der Vaillant Hydraulikstation VWZ MEH 97/7 zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nIm Unterschied zur Systemvariante mit uniTOWER-Inneneinheit erfolgt die Warmwasserbereitung bei dieser Ausführung über einen separaten, getrennt zu wählenden Warmwasserspeicher (siehe Position „Inneneinheit – Warmwasseraufbereitung 300 L. Variante“). Die Hydraulikstation VWZ MEH 97/7 beinhaltet die für den Betrieb erforderlichen hydraulischen Komponenten inklusive Hocheffizienzpumpe und Sicherheitsgruppe.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Enthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 5,6 kW bei A-7/W35\n-Energieeffizienzklasse A+++ bei 35 °C Vorlauftemperatur\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 230V\n-Besonders leiser Nachtbetrieb ab ca. 27,5 dB(A) in 3 m Abstand",
+    "price": 11309.43,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.3323 aroTHERM plus /8.1 VWL 75/8.1 A 230V mit VWZ MEH 97/7",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.3323) bestehend aus der Außeneinheit aroTHERM plus /8.1 VWL 75/8.1 A (230V) und der Vaillant Hydraulikstation VWZ MEH 97/7 zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nIm Unterschied zur Systemvariante mit uniTOWER-Inneneinheit erfolgt die Warmwasserbereitung bei dieser Ausführung über einen separaten, getrennt zu wählenden Warmwasserspeicher (siehe Position „Inneneinheit – Warmwasseraufbereitung 300 L. Variante“). Die Hydraulikstation VWZ MEH 97/7 beinhaltet die für den Betrieb erforderlichen hydraulischen Komponenten inklusive Hocheffizienzpumpe und Sicherheitsgruppe.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Enthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 6,9 kW bei A-7/W35\n-Energieeffizienzklasse A+++ bei 35 °C Vorlauftemperatur\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 230V\n-Besonders leiser Nachtbetrieb ab ca. 27,5 dB(A) in 3 m Abstand",
+    "price": 12277.93,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.3324 aroTHERM plus /8.1 VWL 105/8.1 A 400V mit VWZ MEH 97/7",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.3324) bestehend aus der Außeneinheit aroTHERM plus /8.1 VWL 105/8.1 A (400V) und der Vaillant Hydraulikstation VWZ MEH 97/7 zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nIm Unterschied zur Systemvariante mit uniTOWER-Inneneinheit erfolgt die Warmwasserbereitung bei dieser Ausführung über einen separaten, getrennt zu wählenden Warmwasserspeicher (siehe Position „Inneneinheit – Warmwasseraufbereitung 300 L. Variante“). Die Hydraulikstation VWZ MEH 97/7 beinhaltet die für den Betrieb erforderlichen hydraulischen Komponenten inklusive Hocheffizienzpumpe und Sicherheitsgruppe.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Enthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 10,6 kW bei A-7/W35\n-Energieeffizienzklasse A+++ bei 35 °C Vorlauftemperatur\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 400V\n-Besonders leiser Nachtbetrieb ab ca. 27,5 dB(A) in 3 m Abstand",
+    "price": 14990.43,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VA Paket 4.3325 aroTHERM plus /8.1 VWL 125/8.1 A 400V mit VWZ MEH 97/7",
+    "longDescription": "Lieferung und Montage eines kompletten Vaillant Systempakets (VA Paket 4.3325) bestehend aus der Außeneinheit aroTHERM plus /8.1 VWL 125/8.1 A (400V) und der Vaillant Hydraulikstation VWZ MEH 97/7 zur hydraulischen Einbindung der Wärmepumpe in das Heizsystem.\n\nIm Unterschied zur Systemvariante mit uniTOWER-Inneneinheit erfolgt die Warmwasserbereitung bei dieser Ausführung über einen separaten, getrennt zu wählenden Warmwasserspeicher (siehe Position „Inneneinheit – Warmwasseraufbereitung 300 L. Variante“). Die Hydraulikstation VWZ MEH 97/7 beinhaltet die für den Betrieb erforderlichen hydraulischen Komponenten inklusive Hocheffizienzpumpe und Sicherheitsgruppe.\n\nDie Wärmepumpe arbeitet mit dem natürlichen Kältemittel R290 (Propan) und eignet sich aufgrund der hohen Vorlauftemperaturen besonders für die Sanierung von Bestandsgebäuden. Enthalten sind die Montage auf dem vorbereiteten Fundament einschließlich Schwingungsdämpfern und Kondensatführung sowie die betriebsfertige Montage und Verdrahtung beider Komponenten. - WMP\n\nTechnische Daten Außeneinheit:\n-Heizleistung ca. 12,1 kW bei A-7/W35\n-Energieeffizienzklasse A+++ bei 35 °C Vorlauftemperatur\n-Natürliches Kältemittel R290 (GWP 3)\n-Stromanschluss 400V\n-Besonders leiser Nachtbetrieb ab ca. 27,5 dB(A) in 3 m Abstand",
+    "price": 16287.88,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "WAERMEPUMPE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "Vaillant Kältemittelleitung 1/2\", Länge 10 m – Art.-Nr. 0010035543",
+    "longDescription": "Lieferung eines Vaillant Kältemittelleitungssatzes 1/2\", Länge 10 m, zur Verbindung von Innen- und Außeneinheit. Inkl. Isolierung; Montage durch zertifizierte Kälte-Fachkraft.",
+    "price": 130.15,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": "0010035543",
+    "category": "MONTAGE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "Vaillant Kältemittelleitung 1/4\", Länge 10 m – Art.-Nr. 0010035542",
+    "longDescription": "Lieferung eines Vaillant Kältemittelleitungssatzes 1/4\", Länge 10 m, zur Verbindung von Innen- und Außeneinheit (Flüssigkeitsleitung). Inkl. Isolierung; Montage durch zertifizierte Kälte-Fachkraft.",
+    "price": 108.5,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": "0010035542",
+    "category": "MONTAGE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "Vaillant Kältemittelleitung 3/8\", Länge 10 m – Art.-Nr. 0010035544",
+    "longDescription": "Lieferung eines Vaillant Kältemittelleitungssatzes 3/8\", Länge 10 m, zur Verbindung von Innen- und Außeneinheit (Saugleitung). Inkl. Isolierung; Montage durch zertifizierte Kälte-Fachkraft.",
+    "price": 121.38,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": "0010035544",
+    "category": "MONTAGE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "Vaillant Kältemittelleitung 5/8\", Länge 10 m – Art.-Nr. 0010035545",
+    "longDescription": "Lieferung eines Vaillant Kältemittelleitungssatzes 5/8\", Länge 10 m, zur Verbindung von Innen- und Außeneinheit. Inkl. Isolierung; Montage durch zertifizierte Kälte-Fachkraft.",
+    "price": 186.46,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": "0010035545",
+    "category": "MONTAGE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "Vaillant Kondensatpumpe Mini Orange silent+ – Art.-Nr. 0010040565",
+    "longDescription": "Lieferung und Montage einer Vaillant Kondensatpumpe Mini Orange silent+ zur aktiven Ableitung des Kondensats der Inneneinheit, geräuscharmer Betrieb, inkl. Schlauchanschluss und Funktionsprüfung.",
+    "price": 239.11,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": "0010040565",
+    "category": "MONTAGE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "Vaillant Montagekasten Unterputz – Art.-Nr. 0020003518",
+    "longDescription": "Lieferung und Montage eines Vaillant Unterputz-Montagekastens zur verdeckten Installation der Kältemittel- und Elektroanschlüsse zwischen Innen- und Außeneinheit im Mauerwerk.",
+    "price": 37.04,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": "0020003518",
+    "category": "MONTAGE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "Vaillant On-Off Kontakt – Art.-Nr. 0020257890",
+    "longDescription": "Lieferung und Montage eines Vaillant On-Off-Kontakts zur externen Ein-/Ausschaltung der climaVAIR-Außeneinheit, z. B. über Gebäudeleittechnik oder Smart-Home-Steuerung. Inkl. Anschluss und Funktionsprüfung.",
+    "price": 28.95,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": "0020257890",
+    "category": "MONTAGE",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "Vaillant Wandhalterung für climaVAIR – Art.-Nr. 0020003517",
+    "longDescription": "Lieferung und Montage einer Vaillant Wandhalterung zur witterungsgeschützten Aufstellung der climaVAIR-Außeneinheit an der Gebäudewand, inkl. Befestigungsmaterial.",
+    "price": 208.32,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": "0020003517",
+    "category": "KLIMAGERAET",
+    "manufacturer": "Vaillant"
+  },
+  {
+    "name": "VDE konforme Elektroinstallation/Inbetriebnahme & Service Leistungen",
+    "longDescription": "VDE-konformer Zählerplatz:    \nErrichtung oder Erweiterung des Zählerplatzes gemäß den geltenden VDE-Vorschriften sowie den TAB-Vorgaben des zuständigen Netzbetreibers. Enthalten sind alle erforderlichen Materialien, Schutz- und Sicherungseinrichtungen sowie die fachgerechte Ausführung für einen sicheren und normgerechten Betrieb. Die Anlage wird, soweit erforderlich, gemäß §14a EnWG VDE-konform errichtet und für die Einbindung steuerbarer Verbrauchseinrichtungen vorbereitet.   \n    \nProjektierung:    \nPlanung Ihrer PV-Anlage von der Standortanalyse über die Auswahl der Komponenten bis hin zur Auslegung entsprechend Ihrer Anforderungen und Vorschriften.    \n    \nNetzverträglichkeitsprüfung:    \nBeantragung der Netzverträglichkeitsprüfung beim zuständigen Netzbetreiber zur Klärung der Einspeisemöglichkeit der PV-Anlage. Die erteilte Einspeisezusage ist uns anschließend bereitzustellen.    \n    \nAnmeldung Marktstammdatenregister:    \nRegistrierung Ihrer PV-Anlage, optional auch des Speichers, sowie Anmeldung im Marktstammdatenregister der Bundesnetzagentur.    \n    \nNetzanmeldung (TAB):    \nEinreichung aller erforderlichen Unterlagen und Anträge zur Netzanschlussgenehmigung gemäß den TAB-Vorgaben des zuständigen Netzbetreibers.    \n    \nRemote-Service:    \nTechnischer Support bei Rückfragen, Durchführung erforderlicher Updates sowie regelmäßige Überwachung der Anlage zur Sicherstellung eines zuverlässigen Betriebs.    \n    \nLogistik & Transport:    \nLagerung, Verpackung, Kommissionierung, Versand und Lieferung der bestellten Komponenten an den Projektstandort.",
+    "price": 3454.65,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENA0078",
+    "category": "DIENSTLEISTUNG",
+    "manufacturer": ""
+  },
+  {
+    "name": "Verrohrung Wärmepumpe inkl. Hausanschluss",
+    "longDescription": "Hydraulische Verbindung zwischen Außen- und Inneneinheit der Wärmepumpenanlage einschließlich Lieferung und Montage der erforderlichen Vor- und Rücklaufleitungen, Wärmedämmung gemäß GEG, Wand- und Deckendurchführungen, Befestigungsmaterial sowie Anschluss an das bestehende Heizsystem. - WMP",
+    "price": 4589.55,
+    "vatRatePercent": 19.0,
+    "unit": "Pauschale",
+    "productNumber": null,
+    "category": "MONTAGE",
+    "manufacturer": ""
+  },
+  {
+    "name": "Vogelschutz (C&W)",
+    "longDescription": "53,- pro h / pro AK",
+    "price": 53.0,
+    "vatRatePercent": 0.0,
+    "unit": "Stunden",
+    "productNumber": "ENX0027",
+    "category": "MONTAGE",
+    "manufacturer": ""
+  },
+  {
+    "name": "Vorläufig berücksichtigte Basisförderung (30 %)",
+    "longDescription": "Der ausgewiesene Förderbetrag wurde auf Grundlage der aktuell geplanten Anlagenkonfiguration und der derzeit gültigen Förderbedingungen als Basisförderung vorläufig berechnet und in diesem Angebot berücksichtigt. Änderungen der Anlagenkomponenten, der Förderbedingungen oder der gesetzlichen Vorgaben können zu einer abweichenden Förderhöhe führen. Ein Rechtsanspruch besteht erst nach Bewilligung durch die zuständige Förderstelle.",
+    "price": 0.0,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "SONSTIGES",
+    "manufacturer": ""
+  },
+  {
+    "name": "Vorläufig berücksichtigter Einkommensbonus (10 %)",
+    "longDescription": "Der ausgewiesene Förderbetrag wurde auf Grundlage der vom Auftraggeber angegebenen Einkommensverhältnisse sowie der derzeit gültigen Förderbedingungen vorläufig berechnet und berücksichtigt. Die endgültige Förderhöhe richtet sich nach den gegenüber der Förderstelle nachgewiesenen Voraussetzungen. Änderungen der Einkommensverhältnisse, der Anlagenkonfiguration oder der Förderrichtlinien können zu einer abweichenden Förderhöhe führen. Ein Rechtsanspruch besteht erst nach Bewilligung durch die zuständige Förderstelle.",
+    "price": 0.0,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "SONSTIGES",
+    "manufacturer": ""
+  },
+  {
+    "name": "Vorläufig berücksichtigter Einkommensbonus (30 %)",
+    "longDescription": "Der ausgewiesene Förderbetrag wurde auf Grundlage der vom Auftraggeber angegebenen Einkommensverhältnisse sowie der derzeit gültigen Förderbedingungen vorläufig berechnet und berücksichtigt. Die endgültige Förderhöhe richtet sich nach den gegenüber der Förderstelle nachgewiesenen Voraussetzungen. Änderungen der Einkommensverhältnisse, der Anlagenkonfiguration oder der Förderrichtlinien können zu einer abweichenden Förderhöhe führen. Ein Rechtsanspruch besteht erst nach Bewilligung durch die zuständige Förderstelle.",
+    "price": 0.0,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "SONSTIGES",
+    "manufacturer": ""
+  },
+  {
+    "name": "Vorläufig berücksichtigter Einkommensbonus (40 %)",
+    "longDescription": "Der ausgewiesene Förderbetrag wurde auf Grundlage der vom Auftraggeber angegebenen Einkommensverhältnisse sowie der derzeit gültigen Förderbedingungen vorläufig berechnet und berücksichtigt. Die endgültige Förderhöhe richtet sich nach den gegenüber der Förderstelle nachgewiesenen Voraussetzungen. Änderungen der Einkommensverhältnisse, der Anlagenkonfiguration oder der Förderrichtlinien können zu einer abweichenden Förderhöhe führen. Ein Rechtsanspruch besteht erst nach Bewilligung durch die zuständige Förderstelle.",
+    "price": 0.0,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "SONSTIGES",
+    "manufacturer": ""
+  },
+  {
+    "name": "Vorläufig berücksichtigter Klimageschwindigkeitsbonus (16 %)",
+    "longDescription": "Der ausgewiesene Förderbetrag wurde auf Grundlage der aktuell geplanten Anlagenkonfiguration sowie der derzeit geltenden Voraussetzungen für den Klimageschwindigkeitsbonus vorläufig berechnet und berücksichtigt. Voraussetzung ist insbesondere der förderfähige Austausch einer bestehenden Heizung gemäß den aktuell gültigen Förderbedingungen. Änderungen der Anlagenkomponenten, der Ausgangssituation oder der Förderrichtlinien können zu einer abweichenden Förderhöhe führen. Ein Rechtsanspruch besteht erst nach Bewilligung durch die zuständige Förderstelle.",
+    "price": 0.0,
+    "vatRatePercent": 19.0,
+    "unit": "Stück",
+    "productNumber": null,
+    "category": "SONSTIGES",
+    "manufacturer": ""
+  },
+  {
+    "name": "Warten auf Finanzierungszusage",
+    "longDescription": "Der Vertrag ist nur nichtig, wenn uns eine negative Finanzierungszusage von einem Kreditinstitut schriftlich vorliegt.",
+    "price": 0.0,
+    "vatRatePercent": 0.0,
+    "unit": "Pauschale",
+    "productNumber": "ENL0003",
+    "category": "SONSTIGES",
+    "manufacturer": ""
+  },
+  {
+    "name": "Wartung PV-Anlage mit 1 Wechselrichter mit Notstrom-/Ersatzstromfunktion",
+    "longDescription": "Einmalige Wartung einer PV-Anlage bis zu einer installierten Leistung von 29,99 kWp mit einem Wechselrichter mit Notstrom- oder Ersatzstromfunktion zur Überprüfung des allgemeinen Anlagenzustands und der ordnungsgemäßen Funktion. Die Wartung umfasst eine Sicht- und Funktionsprüfung der wesentlichen Anlagenkomponenten, Wechselrichter, Schutz- und Sicherungseinrichtungen, Notstrom-/Ersatzstromkomponenten und gegebenenfalls vorhandene Speicherkomponenten, sowie eine Sichtprüfung der PV-Module, sichtbaren Unterkonstruktion und DC-Verkabelung. \n \nZiel der Wartung ist das frühzeitige Erkennen sichtbarer Beschädigungen, Schwachstellen, Fehlermeldungen oder sonstiger Auffälligkeiten. Die Prüfung erfolgt im Rahmen der vorhandenen Zugänglichkeit und ohne Demontage von Anlagenkomponenten. \n \nNicht enthalten sind Reparaturen, der Austausch von Komponenten, Reinigungsarbeiten, aufwendige Messungen, umfangreiche Funktionstests der Notstrom-/Ersatzstromversorgung unter Last, Gerüst- oder Hubarbeitsbühnenkosten sowie Arbeiten, die über den üblichen Wartungsumfang hinausgehen, sofern diese nicht gesondert angeboten werden. \n \n \nSofern es sich um den ersten Wartungstermin nach der Dachmontage handelt, erfolgt dieser voraussichtlich ca. 12 Monate nach der Montage.  \n  \nDiese Position kann sich reduzieren, wenn im Rahmen des Termins weitere Serviceleistungen beauftragt werden.",
+    "price": 234.0,
+    "vatRatePercent": 0.0,
+    "unit": "Pauschale",
+    "productNumber": null,
+    "category": "DIENSTLEISTUNG",
+    "manufacturer": ""
+  },
+  {
+    "name": "Wartung PV-Anlage mit 1 Wechselrichter ohne Notstrom-/Ersatzstromfunktion",
+    "longDescription": "Einmalige Wartung einer PV-Anlage bis zu einer installierten Leistung von 29,99 kWp mit einem Wechselrichter ohne Notstrom- oder Ersatzstromfunktion zur Überprüfung des allgemeinen Anlagenzustands und der ordnungsgemäßen Funktion. Die Wartung umfasst eine Sicht- und Funktionsprüfung der wesentlichen Anlagenkomponenten, Wechselrichter, Schutz- und Sicherungseinrichtungen und gegebenenfalls vorhandene Speicherkomponenten, sowie eine Sichtprüfung der PV-Module, sichtbaren Unterkonstruktion und DC-Verkabelung.\n\nZiel der Wartung ist das frühzeitige Erkennen sichtbarer Beschädigungen, Schwachstellen, Fehlermeldungen oder sonstiger Auffälligkeiten. Die Prüfung erfolgt im Rahmen der vorhandenen Zugänglichkeit und ohne Demontage von Anlagenkomponenten.\n\nNicht enthalten sind Reparaturen, der Austausch von Komponenten, Reinigungsarbeiten, aufwendige Messungen, umfangreiche Funktionstests der Notstrom-/Ersatzstromversorgung unter Last, Gerüst- oder Hubarbeitsbühnenkosten sowie Arbeiten, die über den üblichen Wartungsumfang hinausgehen, sofern diese nicht gesondert angeboten werden. \n\nSofern es sich um den ersten Wartungstermin nach der Dachmontage handelt, erfolgt dieser voraussichtlich ca. 12 Monate nach der Montage.\n\nDiese Position kann sich reduzieren, wenn im Rahmen des Termins weitere Serviceleistungen beauftragt werden.",
+    "price": 189.0,
+    "vatRatePercent": 0.0,
+    "unit": "Pauschale",
+    "productNumber": null,
+    "category": "DIENSTLEISTUNG",
+    "manufacturer": ""
+  },
+  {
+    "name": "Wartung PV-Anlage mit 2 Wechselrichter mit Notstrom-/Ersatzstromfunktion",
+    "longDescription": "Einmalige Wartung einer PV-Anlage bis zu einer installierten Leistung von 29,99 kWp mit zwei Wechselrichtern ohne Notstrom- oder Ersatzstromfunktion zur Überprüfung des allgemeinen Anlagenzustands und der ordnungsgemäßen Funktion.  Die Wartung umfasst eine Sicht- und Funktionsprüfung der wesentlichen Anlagenkomponenten, Wechselrichter, Schutz- und Sicherungseinrichtungen, Notstrom-/Ersatzstromkomponenten und gegebenenfalls vorhandene Speicherkomponenten, sowie eine Sichtprüfung der PV-Module, sichtbaren Unterkonstruktion und DC-Verkabelung.\n\nZiel der Wartung ist das frühzeitige Erkennen sichtbarer Beschädigungen, Schwachstellen, Fehlermeldungen oder sonstiger Auffälligkeiten. Die Prüfung erfolgt im Rahmen der vorhandenen Zugänglichkeit und ohne Demontage von Anlagenkomponenten. \n\nNicht enthalten sind Reparaturen, der Austausch von Komponenten, Reinigungsarbeiten, aufwendige Messungen, umfangreiche Funktionstests der Notstrom-/Ersatzstromversorgung unter Last, Gerüst- oder Hubarbeitsbühnenkosten sowie Arbeiten, die über den üblichen Wartungsumfang hinausgehen, sofern diese nicht gesondert angeboten werden. \n\nSofern es sich um den ersten Wartungstermin nach der Dachmontage handelt, erfolgt dieser voraussichtlich ca. 12 Monate nach der Montage.\n\nDiese Position kann sich reduzieren, wenn im Rahmen des Termins weitere Serviceleistungen beauftragt werden.",
+    "price": 279.0,
+    "vatRatePercent": 0.0,
+    "unit": "Pauschale",
+    "productNumber": null,
+    "category": "DIENSTLEISTUNG",
+    "manufacturer": ""
+  },
+  {
+    "name": "Wartung PV-Anlage mit 2 Wechselrichter ohne Notstrom-/Ersatzstromfunktion",
+    "longDescription": "Einmalige Wartung einer PV-Anlage bis zu einer installierten Leistung von 29,99 kWp mit zwei Wechselrichtern ohne Notstrom- oder Ersatzstromfunktion zur Überprüfung des allgemeinen Anlagenzustands und der ordnungsgemäßen Funktion. Die Wartung umfasst eine Sicht- und Funktionsprüfung der wesentlichen Anlagenkomponenten, insbesondere PV-Module, sichtbare Unterkonstruktion, DC-Verkabelung, Wechselrichter, Schutz- und Sicherungseinrichtungen sowie gegebenenfalls vorhandene Speicherkomponenten.  \n  \nZiel der Wartung ist das frühzeitige Erkennen sichtbarer Beschädigungen, Schwachstellen, Fehlermeldungen oder sonstiger Auffälligkeiten. Die Prüfung erfolgt im Rahmen der vorhandenen Zugänglichkeit und ohne Demontage von Anlagenkomponenten.  \n  \nNicht enthalten sind Reparaturen, der Austausch von Komponenten, Reinigungsarbeiten, aufwendige Messungen, Gerüst- oder Hubarbeitsbühnenkosten sowie Arbeiten, die über den üblichen Wartungsumfang hinausgehen, sofern diese nicht gesondert angeboten werden.  \n  \nSofern es sich um den ersten Wartungstermin nach der Dachmontage handelt, erfolgt dieser voraussichtlich ca. 12 Monate nach der Montage.  \n   \nDiese Position kann sich reduzieren, wenn im Rahmen des Termins weitere Serviceleistungen beauftragt werden.",
+    "price": 244.0,
+    "vatRatePercent": 0.0,
+    "unit": "Pauschale",
+    "productNumber": null,
+    "category": "DIENSTLEISTUNG",
+    "manufacturer": ""
+  },
+  {
+    "name": "Wartung Wallbox",
+    "longDescription": "Einmalige Wartung einer Wallbox zur Überprüfung des allgemeinen Anlagenzustands und der ordnungsgemäßen Funktion. Die Wartung umfasst eine Sicht- und Funktionsprüfung der wesentlichen Komponenten, insbesondere Wallbox, Anschlussleitung soweit sichtbar zugänglich, Schutz- und Sicherungseinrichtungen sowie vorhandene Kommunikations- bzw. Steuerungskomponenten. \n \nZiel der Wartung ist das frühzeitige Erkennen sichtbarer Beschädigungen, Schwachstellen, Fehlermeldungen oder sonstiger Auffälligkeiten. Die Prüfung erfolgt im Rahmen der vorhandenen Zugänglichkeit und ohne Demontage von Anlagenkomponenten. \n \nNicht enthalten sind Reparaturen, der Austausch von Komponenten, Reinigungsarbeiten, Änderungen an der Elektroinstallation, Anpassungen am kundenseitigen Netzwerk/Router sowie Arbeiten, die über den üblichen Wartungsumfang hinausgehen, sofern diese nicht gesondert angeboten werden.",
+    "price": 89.0,
+    "vatRatePercent": 0.0,
+    "unit": "Pauschale",
+    "productNumber": null,
+    "category": "WALLBOX",
+    "manufacturer": ""
+  },
+  {
+    "name": "Wiederherstellung der Internetverbindung",
+    "longDescription": "Wiederherstellung der Internetverbindung zwischen Wechselrichter/Kommunikationseinheit und dem vorhandenen Router bzw. Kundennetzwerk. Enthalten ist die erneute Einrichtung mit der bestehenden Infrastruktur. \n \nNicht enthalten sind die Lieferung oder Verlegung von LAN-Kabeln, D-LAN, Repeatern, Access Points oder sonstigen Netzwerkkomponenten sowie Arbeiten am kundenseitigen Netzwerk, Router oder Internetanschluss. \n \nDiese Position kann sich reduzieren, wenn im Rahmen des Termins weitere Serviceleistungen beauftragt werden.",
+    "price": 89.0,
+    "vatRatePercent": 0.0,
+    "unit": "Pauschale",
+    "productNumber": "ENA0075",
+    "category": "DIENSTLEISTUNG",
+    "manufacturer": ""
+  },
+  {
+    "name": "Zuleitung Wallbox pro Meter",
+    "longDescription": "Zuleitung der Wallbox bis zum Zählerkasten pro Meter ab dem 11 Meter einschließlich",
+    "price": 29.53,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENA0061",
+    "category": "WALLBOX",
+    "manufacturer": ""
+  },
+  {
+    "name": "Zwischenzähler (Hutschienenzähler m.Display MID)",
+    "longDescription": "Nicht geeichte Messeinrichtung, zur kundenseitigen Energiemessung in kWh",
+    "price": 409.24,
+    "vatRatePercent": 0.0,
+    "unit": "Stück",
+    "productNumber": "ENA0072",
+    "category": "SONSTIGES",
+    "manufacturer": ""
   }
 ]
