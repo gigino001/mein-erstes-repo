@@ -1,4 +1,13 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+// Image wird als PdfImage importiert: es ist kein HTML-<img>, sondern das
+// PDF-Primitive – unter dem Originalnamen greift sonst die alt-Text-Lintregel.
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  Image as PdfImage,
+  StyleSheet,
+} from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   page: {
@@ -64,6 +73,15 @@ const styles = StyleSheet.create({
   },
   priceTotalLabel: { fontSize: 12, fontWeight: 700 },
   priceTotalValue: { fontSize: 14, fontWeight: 700, color: "#059669" },
+  signatureBox: { marginTop: 20 },
+  signatureImage: {
+    width: 200,
+    height: 60,
+    objectFit: "contain",
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#94a3b8",
+  },
+  signatureCaption: { fontSize: 8, color: "#64748b", marginTop: 4 },
   footer: {
     position: "absolute",
     bottom: 30,
@@ -124,11 +142,22 @@ export type OfferDocumentProps = {
   vatRatePercent: number;
   salesPriceGross: number;
   monthlyRate: number | null;
+  // Unterschrift des Kunden als PNG; wird nur beim PDF-Export nachgeladen.
+  signature?: { data: Buffer; signedAt: Date } | null;
 };
 
 export function OfferDocument(props: OfferDocumentProps) {
-  const { customer, pv, heatPump, clima, salesPriceNet, vatRatePercent, salesPriceGross, monthlyRate } =
-    props;
+  const {
+    customer,
+    pv,
+    heatPump,
+    clima,
+    salesPriceNet,
+    vatRatePercent,
+    salesPriceGross,
+    monthlyRate,
+    signature,
+  } = props;
 
   return (
     <Document>
@@ -282,6 +311,23 @@ export function OfferDocument(props: OfferDocumentProps) {
             </View>
           )}
         </View>
+
+        {signature && (
+          <View style={styles.signatureBox}>
+            <Text style={styles.sectionTitle}>Auftragsbestätigung</Text>
+            <PdfImage
+              src={{ data: signature.data, format: "png" }}
+              style={styles.signatureImage}
+            />
+            <Text style={styles.signatureCaption}>
+              Unterschrift {customer.firstName} {customer.lastName} –{" "}
+              {new Intl.DateTimeFormat("de-DE", {
+                dateStyle: "medium",
+                timeStyle: "short",
+              }).format(signature.signedAt)}
+            </Text>
+          </View>
+        )}
 
         <Text style={styles.footer}>
           Angaben zu Ertrag, Verbrauch und Amortisation sind unverbindliche

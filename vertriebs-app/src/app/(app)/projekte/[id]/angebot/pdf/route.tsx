@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { getBlob } from "@/lib/blob-storage";
 import { buildOfferData } from "@/lib/offer-data";
-import { OfferDocument } from "@/lib/pdf/offer-document";
+import { OfferDocument, type OfferDocumentProps } from "@/lib/pdf/offer-document";
 
 export async function GET(
   _request: Request,
@@ -19,7 +21,23 @@ export async function GET(
     return NextResponse.json({ error: "Angebot nicht verfügbar" }, { status: 404 });
   }
 
-  const buffer = await renderToBuffer(<OfferDocument {...offerData} />);
+  // Liegt für das zuletzt gespeicherte Angebot eine Unterschrift vor, wird
+  // sie als Nachweis mit ins PDF übernommen.
+  let signature: OfferDocumentProps["signature"] = null;
+  const latestOffer = await prisma.offer.findFirst({
+    where: { projectId: id },
+    orderBy: { createdAt: "desc" },
+  });
+  if (latestOffer?.signatureBlobKey && latestOffer.signedAt) {
+    const data = await getBlob(latestOffer.signatureBlobKey);
+    if (data) {
+      signature = { data, signedAt: latestOffer.signedAt };
+    }
+  }
+
+  const buffer = await renderToBuffer(
+    <OfferDocument {...offerData} signature={signature} />
+  );
 
   return new NextResponse(new Uint8Array(buffer), {
     headers: {

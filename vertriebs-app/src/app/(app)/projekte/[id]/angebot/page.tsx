@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
-import { Download, Save } from "lucide-react";
+import { Download, PenLine, Save } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { buildOfferData } from "@/lib/offer-data";
 import { PageHeader, Card, Button, EmptyState, LinkButton } from "@/components/ui";
 import { labelFor, AUFTRAGSVARIANTEN } from "@/lib/options";
 import { saveOfferAction } from "./actions";
+import { SignatureSection } from "./signature-section";
+import { saveSignatureAction, deleteSignatureAction } from "./signature-actions";
 
 function eur(value: number | null | undefined) {
   return (value ?? 0).toLocaleString("de-DE", { style: "currency", currency: "EUR" });
@@ -33,6 +35,8 @@ export default async function AngebotPage({
     where: { projectId },
     orderBy: { createdAt: "desc" },
   });
+  // Unterschrieben wird immer das zuletzt gespeicherte Angebot.
+  const latestOffer = previousOffers[0] ?? null;
 
   const isReady =
     offerData &&
@@ -169,7 +173,17 @@ export default async function AngebotPage({
               <ul className="space-y-1.5 text-sm">
                 {previousOffers.map((offer) => (
                   <li key={offer.id} className="flex items-center justify-between">
-                    <span>{offer.offerNumber}</span>
+                    <span className="flex items-center gap-1.5">
+                      {offer.offerNumber}
+                      {offer.signedAt && (
+                        <span
+                          className="text-emerald-600"
+                          title="Vom Kunden unterschrieben"
+                        >
+                          <PenLine size={13} />
+                        </span>
+                      )}
+                    </span>
                     <span className="text-slate-400">
                       {new Intl.DateTimeFormat("de-DE").format(offer.createdAt)}
                     </span>
@@ -211,6 +225,26 @@ export default async function AngebotPage({
               </form>
             </div>
           </Card>
+
+          {latestOffer ? (
+            <SignatureSection
+              offerId={latestOffer.id}
+              offerNumber={latestOffer.offerNumber}
+              signedAt={latestOffer.signedAt}
+              saveAction={saveSignatureAction.bind(null, projectId, latestOffer.id)}
+              deleteAction={deleteSignatureAction.bind(null, projectId, latestOffer.id)}
+            />
+          ) : (
+            <Card>
+              <h2 className="mb-1 text-sm font-semibold text-slate-500">
+                Unterschrift
+              </h2>
+              <p className="text-xs text-slate-400">
+                Speichere das Angebot zuerst, danach kann der Kunde hier direkt
+                auf dem Tablet unterschreiben.
+              </p>
+            </Card>
+          )}
         </div>
       </div>
     </div>
