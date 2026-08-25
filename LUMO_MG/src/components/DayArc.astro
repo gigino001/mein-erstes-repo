@@ -1,13 +1,19 @@
 ---
-import { dayArc, hoursArePlaceholder } from '../data/site';
+import { dayArc } from '../data/site';
 
 /*
-  Der Sonnenbogen aus der Wortmarke wird zum Strukturelement: eine Kurve
-  über den Tagesverlauf, von Brunch bis Late Night. Die Stationen sitzen
-  auf berechneten Punkten der Bézier-Kurve.
+  Der Sonnenbogen aus der Wortmarke als Tagesverlauf.
+
+  Ab 900 px liegen die Stationen auf berechneten Punkten einer
+  Bézier-Kurve. Darunter wird daraus eine senkrechte Zeitachse mit
+  demselben Motiv (Linie und Punkte) und denselben Daten.
+
+  Grund: Die frühere Fassung erzwang 820 px Mindestbreite in einem
+  335 px breiten Container. Auf dem Handy — laut Projektvorgabe die
+  Mehrheit des Verkehrs — sah man „Brunch" und die Hälfte von „Lunch".
+  Ein Leitmotiv, das die Mehrheit nicht sehen kann, ist keins.
 */
 
-// Kurve: M 110 258 C 250 40, 650 40, 790 258 im viewBox 0 0 900 295
 const P0 = { x: 110, y: 258 };
 const C1 = { x: 250, y: 40 };
 const C2 = { x: 650, y: 40 };
@@ -29,122 +35,156 @@ const stops = dayArc.map((stop, i) => {
 });
 ---
 
-<div class="arc reveal">
-  <div class="arc__inner">
-    <svg viewBox={`0 0 ${VB.w} ${VB.h}`} preserveAspectRatio="none" aria-hidden="true">
-      <path
-        class="arc__path"
-        d={`M ${P0.x} ${P0.y} C ${C1.x} ${C1.y}, ${C2.x} ${C2.y}, ${P3.x} ${P3.y}`}
-      ></path>
-    </svg>
+<div class="day">
+  {/* Bis 899 px: senkrechte Achse */}
+  <ol class="day__list reveal">
+    {
+      stops.map((stop) => (
+        <li>
+          <span class="day__dot" aria-hidden="true" />
+          <b>{stop.title}</b>
+          <span class="day__note">{stop.note}</span>
+        </li>
+      ))
+    }
+  </ol>
 
-    <ol class="arc__stops">
+  {/* Ab 900 px: der Bogen */}
+  <div class="day__arc reveal" aria-hidden="true">
+    <div class="day__canvas">
+      <svg viewBox={`0 0 ${VB.w} ${VB.h}`} aria-hidden="true">
+        <path
+          class="day__path"
+          d={`M ${P0.x} ${P0.y} C ${C1.x} ${C1.y}, ${C2.x} ${C2.y}, ${P3.x} ${P3.y}`}
+        ></path>
+      </svg>
+
       {
         stops.map((stop) => (
-          <li class="arc__stop" style={`left:${stop.left}%;top:${stop.top}%`}>
-            <span class="arc__dot" aria-hidden="true" />
+          <p class="day__stop" style={`left:${stop.left}%;top:${stop.top}%`}>
+            <span class="day__dot" />
             <b>{stop.title}</b>
-            <span class="arc__note">{stop.note}</span>
-          </li>
+            <span class="day__note">{stop.note}</span>
+          </p>
         ))
       }
-    </ol>
+    </div>
   </div>
 </div>
 
-{
-  hoursArePlaceholder && (
-    <p class="arc__disclaimer">Zeiten als Platzhalter — kommen aus den echten Öffnungszeiten</p>
-  )
-}
-
 <style>
-  .arc {
+  .day {
     margin-top: var(--space-l);
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: var(--space-2xs);
   }
 
-  .arc__inner {
-    position: relative;
-    min-width: 820px;
-    max-width: 980px;
-    height: 295px;
-    margin-inline: auto;
-  }
-
-  .arc svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .arc__path {
-    fill: none;
-    stroke: var(--line-strong);
-    stroke-width: 1;
-    stroke-dasharray: 1400;
-    stroke-dashoffset: 1400;
-    transition: stroke-dashoffset 2.2s var(--ease);
-  }
-
-  .arc.is-visible .arc__path {
-    stroke-dashoffset: 0;
-  }
-
-  .arc__stops {
+  /* ---------- senkrechte Achse (Standard) ---------- */
+  .day__list {
+    display: grid;
+    gap: var(--space-m);
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 var(--space-m);
     list-style: none;
+    border-left: 1px solid var(--line-strong);
   }
 
-  .arc__stop {
+  .day__list li {
+    position: relative;
+    margin: 0;
+  }
+
+  .day__list .day__dot {
     position: absolute;
-    width: 9rem;
-    transform: translate(-50%, -50%);
-    text-align: center;
+    left: calc(-1 * var(--space-m) - 4px);
+    top: 0.55em;
   }
 
-  .arc__dot {
+  .day__dot {
     display: block;
     width: 7px;
     height: 7px;
-    margin: 0 auto var(--space-xs);
     border-radius: 50%;
     background: var(--gold);
     box-shadow: 0 0 0 4px rgb(138 98 32 / 15%);
   }
 
-  .arc__stop b {
+  .day b {
     display: block;
     font-family: var(--font-display);
     font-weight: 400;
     font-size: var(--step-1);
+    line-height: 1.2;
     color: var(--ink);
   }
 
-  .arc__note {
+  .day__note {
     display: block;
-    margin-top: 0.2rem;
-    font-size: 0.63rem;
-    letter-spacing: 0.22em;
+    margin-top: 0.15rem;
+    font-size: var(--step--2);
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--gold);
   }
 
-  .arc__disclaimer {
-    margin-top: var(--space-xs);
-    text-align: center;
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
+  .day__arc {
+    display: none;
+  }
+
+  /* ---------- Bogen ab 900 px ---------- */
+  @media (min-width: 900px) {
+    .day__list {
+      display: none;
+    }
+
+    .day__arc {
+      display: block;
+    }
+
+    .day__canvas {
+      position: relative;
+      max-width: 980px;
+      height: 295px;
+      margin-inline: auto;
+    }
+
+    /* Kein preserveAspectRatio="none" mehr — das verzerrte ausgerechnet
+       die Strichstärke des Markenmotivs. */
+    .day__canvas svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .day__path {
+      fill: none;
+      stroke: var(--line-strong);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-dasharray: 1400;
+      stroke-dashoffset: 1400;
+      transition: stroke-dashoffset 2.2s var(--ease);
+    }
+
+    .day__arc.is-visible .day__path {
+      stroke-dashoffset: 0;
+    }
+
+    .day__stop {
+      position: absolute;
+      /* Feste 9rem ließen die Beschriftungen um bis zu 43 px überlappen.
+         Die Breite folgt jetzt dem Abstand der Stationen. */
+      width: min(11rem, 15vw);
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .day__stop .day__dot {
+      margin: 0 auto var(--space-xs);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .arc__path {
+    .day__path {
       stroke-dashoffset: 0;
       transition: none;
     }

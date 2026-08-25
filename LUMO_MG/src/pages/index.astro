@@ -11,7 +11,7 @@ import RestaurantSchema from '../components/RestaurantSchema.astro';
 import Figure from '../components/Figure.astro';
 import Countdown from '../components/Countdown.astro';
 import MapConsent from '../components/MapConsent.astro';
-import { site, venue, openingLong, TODO } from '../data/site';
+import { site, venue, openingLong, openingHours, serviceTimes, TODO } from '../data/site';
 import { menu, menuIsPlaceholder } from '../data/menu';
 import { images } from '../data/demo';
 
@@ -25,6 +25,11 @@ const upcoming = all.filter((e) => e.data.date >= now).slice(0, 3);
 const teaserSections = menu.filter((s) => s.id === 'brunch' || s.id === 'drinks');
 
 const hasCapacity = venue.partySeated !== TODO;
+
+// Die Zeiten lagen bestaetigt in site.ts und kamen auf der Startseite nie vor.
+const ruhetage = openingHours.filter((d) => !d.from).map((d) => d.day);
+const beispielTermine = upcoming.some((e) => e.data.placeholder);
+const geoeffnet = openingHours.filter((d) => d.from);
 ---
 
 <Base title={site.name} path="/">
@@ -52,7 +57,7 @@ const hasCapacity = venue.partySeated !== TODO;
 
   {/* ---------------- Tagesverlauf ---------------- */}
   <Section veil="open" id="tag" labelledby="tag-titel">
-    <div class="head reveal">
+    <div class="head on-paper reveal">
       <span class="label">Von morgens bis spät</span>
       <h2 id="tag-titel">Ein Ort, der den ganzen Tag trägt</h2>
       <p>
@@ -62,6 +67,43 @@ const hasCapacity = venue.partySeated !== TODO;
     </div>
 
     <DayArc />
+
+    <div class="hours reveal">
+      <div class="hours__days">
+        {
+          geoeffnet.map((d) => (
+            <div>
+              <dt>{d.short}</dt>
+              <dd>
+                {d.from} – {d.to}
+              </dd>
+            </div>
+          ))
+        }
+      </div>
+      {
+        ruhetage.length > 0 && (
+          <p class="hours__closed">
+            <strong>{ruhetage.join(' und ')}</strong> ist Ruhetag.
+          </p>
+        )
+      }
+      <ul class="hours__service">
+        {
+          serviceTimes.map((st) => (
+            <li>
+              <b>{st.title}</b>
+              {st.slots.map((slot) => (
+                <span>
+                  {slot.days} · {slot.from}–{slot.to}
+                </span>
+              ))}
+            </li>
+          ))
+        }
+      </ul>
+      <a class="hours__link" href="/kontakt">Alle Zeiten und Anfahrt</a>
+    </div>
   </Section>
 
   {/* ---------------- Das LUMO ---------------- */}
@@ -115,7 +157,7 @@ const hasCapacity = venue.partySeated !== TODO;
         ratio="16 / 10"
       />
 
-      <div class="copy reveal">
+      <div class="copy on-paper reveal">
         <span class="label label--matcha">Matcha at LUMO</span>
         <h2 id="matcha-titel">Mehr als ein Trend</h2>
         <p class="lead">Ein Ritual. Ein Moment. Ein Lebensgefühl.</p>
@@ -145,7 +187,11 @@ const hasCapacity = venue.partySeated !== TODO;
       <a class="btn btn--ink" href="/speisekarte">Vollständige Karte</a>
     </div>
 
-    {menuIsPlaceholder && <Note>Gerichte und Preise sind Beispielinhalte und noch nicht die echte Karte.</Note>}
+    {
+      menuIsPlaceholder && (
+        <p class="hint">Ein Vorgeschmack — die vollständige Karte folgt zur Eröffnung.</p>
+      )
+    }
   </Section>
 
   {/* ---------------- Events ---------------- */}
@@ -173,6 +219,12 @@ const hasCapacity = venue.partySeated !== TODO;
       )
     }
 
+    {
+      beispielTermine && (
+        <p class="hint">Beispieltermine — das echte Programm folgt zur Eröffnung.</p>
+      )
+    }
+
     <div class="center-cta reveal">
       <a class="btn btn--ghost" href="/events">Alle Events</a>
     </div>
@@ -181,7 +233,7 @@ const hasCapacity = venue.partySeated !== TODO;
   {/* ---------------- Feiern ---------------- */}
   <Section veil="open" id="feiern" labelledby="feiern-titel">
     <div class="split">
-      <div class="copy reveal">
+      <div class="copy on-paper reveal">
         <span class="label">Feiern &amp; Mieten</span>
         <h2 id="feiern-titel">Eure Feier im LUMO</h2>
         <p>
@@ -234,7 +286,7 @@ const hasCapacity = venue.partySeated !== TODO;
         <span class="label">Finden</span>
         <h2 id="finden-titel">{site.address.street}</h2>
         <p>
-          {site.address.postalCode} {site.address.city} — {site.parking.toLowerCase()}.
+          {site.address.postalCode} {site.address.city}. {site.parking}.
         </p>
         <p>
           Wir öffnen am <strong>{openingLong}</strong>. Bis dahin halten wir euch auf Instagram
@@ -411,13 +463,18 @@ const hasCapacity = venue.partySeated !== TODO;
     list-style: none;
   }
 
+  /* Frueher mit Rahmen und Versalien — optisch nicht von .btn--ghost zu
+     unterscheiden, obwohl sie nichts tun. Jetzt klar als Aufzaehlung. */
   .pills li {
-    padding: 0.45rem 0.9rem;
-    border: 1px solid var(--line-strong);
-    font-size: 0.66rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    padding: 0.25rem 0;
+    font-size: var(--step--1);
     color: var(--ink-soft);
+  }
+
+  .pills li:not(:last-child)::after {
+    content: '·';
+    margin-left: var(--space-2xs);
+    color: var(--gold);
   }
 
   /* ---------------- Bildraster ---------------- */
@@ -431,6 +488,104 @@ const hasCapacity = venue.partySeated !== TODO;
     grid-row: span 2;
     aspect-ratio: auto !important;
   }
+  /* ---------------- Oeffnungszeiten ---------------- */
+  .hours {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-s);
+    max-width: 54rem;
+    margin: var(--space-l) auto 0;
+    padding: var(--space-m);
+    background: rgb(253 249 240 / 94%);
+    border: 1px solid var(--line-faint);
+    text-align: center;
+  }
+
+  .hours__days {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xs) var(--space-m);
+    margin: 0;
+  }
+
+  .hours__days > div {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  .hours__days dt {
+    font-size: var(--step--2);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .hours__days dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+    font-size: var(--step--1);
+    color: var(--ink);
+  }
+
+  .hours__closed {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .hours__closed strong {
+    color: var(--ink);
+  }
+
+  .hours__service {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-s) var(--space-m);
+    margin: 0;
+    padding: var(--space-s) 0 0;
+    border-top: 1px solid var(--line-faint);
+    list-style: none;
+    width: 100%;
+  }
+
+  .hours__service li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    margin: 0;
+  }
+
+  .hours__service b {
+    font-size: var(--step--2);
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .hours__service span {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hours__link {
+    font-size: var(--step--1);
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .hint {
+    margin-top: var(--space-m);
+    text-align: center;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
   /* ---------------- Ergaenzende Layoutklassen ---------------- */
   .head--left {
     margin-inline: 0;

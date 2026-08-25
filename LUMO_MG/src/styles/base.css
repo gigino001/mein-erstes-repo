@@ -122,6 +122,22 @@ video {
   color: var(--gold);
 }
 
+/*
+  Textflaeche fuer die offenen Sektionen.
+
+  Das Wandbild liegt fest hinter der Seite, also laeuft jede Sektion im
+  Lauf des Scrollens auch ueber die dunklen Palmenpartien — dort fiel der
+  Kontrast auf 2:1. Statt die ganze Sektion zuzudecken und die Idee zu
+  toeten, traegt die Textspalte ihre eigene Flaeche. Das Motiv bleibt
+  daneben und dazwischen sichtbar.
+*/
+.on-paper {
+  padding: clamp(1.4rem, 4vw, 2.4rem);
+  background: rgb(253 249 240 / 94%);
+  border: 1px solid var(--line-faint);
+  backdrop-filter: blur(2px);
+}
+
 .lead {
   font-family: var(--font-display);
   font-size: var(--step-1);
@@ -219,7 +235,15 @@ video {
 
 .btn--sm {
   padding: 0.7rem 1.3rem;
-  font-size: 0.68rem;
+  font-size: var(--step--2);
+}
+
+/* Tippziele unter 44 px sind auf dem Handy nicht zuverlaessig treffbar */
+@media (pointer: coarse) {
+  .btn,
+  .btn--sm {
+    min-height: 44px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { event, headingLevel = 'h3' } = Astro.props;
-const { title, date, doors, until, category, teaser, placeholder } = event.data;
+const { title, date, doors, until, category, teaser } = event.data;
 
 const Heading = headingLevel;
 const bild = eventImages[event.id];
@@ -45,10 +45,7 @@ const time = until
       </p>
       <Heading class="event__title">{title}</Heading>
       <p class="event__teaser">{teaser}</p>
-      <p class="event__meta">
-        {weekday} · {time} · {category}
-        {placeholder && <em> · Beispiel</em>}
-      </p>
+      <p class="event__meta">{weekday} · {time} · {category}</p>
     </div>
   </a>
 </article>

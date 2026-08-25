@@ -35,14 +35,16 @@ const { veil = 'dense', id, class: className = '', labelledby } = Astro.props;
   }
 
   .section--medium {
-    background: rgb(253 249 240 / 74%);
+    background: rgb(253 249 240 / 88%);
   }
 
   .section--dense {
-    background: rgb(253 249 240 / 90%);
+    background: rgb(253 249 240 / 92%);
   }
 
+  /* Ein Band soll ein Band sein. Bei 88 % schien das Motiv durch und
+     drueckte den Kontrast der Labels auf 3,87:1. */
   .section--band {
-    background: rgb(234 221 194 / 88%);
+    background: var(--surface-band);
   }
 </style>

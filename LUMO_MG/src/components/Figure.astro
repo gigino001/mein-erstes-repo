@@ -53,9 +53,7 @@ const {
           quality={76}
         />
         {demoImages && !hideBadge && (
-          <figcaption class="figure__badge" title="KI-generiertes Demobild, zeigt nicht das echte LUMO">
-            Demobild
-          </figcaption>
+          <figcaption class="figure__badge">Demobild</figcaption>
         )}
       </>
     ) : (
@@ -86,7 +84,7 @@ const {
 
   .figure__placeholder {
     padding: var(--space-s);
-    font-size: 0.62rem;
+    font-size: var(--step--2);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: rgb(43 33 23 / 50%);
@@ -96,12 +94,12 @@ const {
     position: absolute;
     right: 0.5rem;
     bottom: 0.5rem;
-    padding: 0.28em 0.6em;
-    background: rgb(43 33 23 / 62%);
-    color: rgb(253 249 240 / 92%);
-    font-size: 0.58rem;
+    padding: 0.24em 0.55em;
+    background: rgb(43 33 23 / 52%);
+    color: rgb(253 249 240 / 88%);
+    font-size: var(--step--2);
     font-weight: 400;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     backdrop-filter: blur(3px);
   }

@@ -18,14 +18,16 @@
 
   /* Deckkraft der Sektionen über dem Wandbild.
      Textlastige Sektionen dicht, erzählende Sektionen offen. */
-  --veil-dense: 0.9;
-  --veil-medium: 0.74;
-  --veil-open: 0.4;
+  --veil-dense: 0.92;
+  --veil-medium: 0.88;
+  --veil-open: 0.42;
 
   /* ---------- Schrift ---------- */
   --ink: #2b2117;
   --ink-soft: #6a5b47;
-  --ink-faint: #8a7a63;
+  /* Nachgerechnet: 5.83:1 auf --surface, 4.56:1 auf --surface-band.
+     Der vorherige Wert #8a7a63 lag bei 3.96:1 und verfehlte AA. */
+  --ink-faint: #715f46;
 
   /* ---------- Akzent ---------- */
   /* Das Gold der Leuchtbuchstaben ist auf Sand zu kontrastarm für kleine
@@ -33,7 +35,8 @@
      für alles Lesbare; --gold-light nur für große, dekorative Elemente. */
   --gold: #7e5718;
   --gold-dark: #5c3e0d;
-  --gold-light: #9a6f22;
+  /* Nur fuer grosse Zahlen und Zierflaechen — 4.28:1, fuer Kleintext zu wenig */
+  --gold-light: #8f671f;
   --matcha: #5a6c36; /* Nebenakzent, sehr sparsam */
 
   /* ---------- Linien ---------- */
@@ -42,6 +45,9 @@
   --line-faint: rgb(122 86 22 / 12%);
 
   /* ---------- Typografie ---------- */
+  /* Kleinste zugelassene Schriftgroesse. Alles darunter ist auf einem
+     Handy im Sonnenlicht nicht mehr lesbar — besonders in Versalien. */
+  --step--2: 0.72rem;
   --step--1: clamp(0.82rem, 0.79rem + 0.14vw, 0.89rem);
   --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.09rem);
   --step-1: clamp(1.2rem, 1.13rem + 0.36vw, 1.42rem);

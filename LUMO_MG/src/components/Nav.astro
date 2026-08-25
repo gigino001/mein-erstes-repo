@@ -27,7 +27,7 @@ import { nav, site } from '../data/site';
   </button>
 </header>
 
-<div class="drawer" id="nav-drawer" hidden>
+<div class="drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Menü" hidden>
   <nav aria-label="Hauptnavigation, mobil">
     {nav.map((item) => <a href={item.href}>{item.label}</a>)}
     <a class="btn drawer__cta" href="/reservieren">Reservieren</a>
@@ -43,19 +43,20 @@ import { nav, site } from '../data/site';
     align-items: center;
     justify-content: space-between;
     gap: var(--space-s);
-    padding: 1rem var(--gutter);
+    padding: 0.75rem var(--gutter);
     background: rgb(253 249 240 / 0%);
     border-bottom: 1px solid transparent;
+    /* Frueher lag hier auch `padding` in der Uebergangsliste. Padding
+       loest ein Reflow aus — bei einer klebenden Leiste also bei jedem
+       Scrollen. Jetzt wechseln nur noch Farbe und Rand. */
     transition:
       background 0.4s var(--ease),
-      border-color 0.4s var(--ease),
-      padding 0.4s var(--ease);
+      border-color 0.4s var(--ease);
   }
 
   .nav.is-solid {
     background: rgb(253 249 240 / 93%);
     border-bottom-color: var(--line);
-    padding-block: 0.7rem;
     backdrop-filter: blur(6px);
   }
 
@@ -91,21 +92,36 @@ import { nav, site } from '../data/site';
     color: var(--gold-dark);
   }
 
+  /* Frueher erst ab 940 px sichtbar. Auf einer knapp 9300 px langen
+     Mobilseite gab es damit keinen dauerhaften Weg zur Reservierung —
+     nur den Burger. Jetzt steht der Knopf immer da, mobil kompakter. */
   .nav__cta {
-    display: none;
+    padding: 0.6rem 0.9rem;
+    font-size: var(--step--2);
+    letter-spacing: 0.12em;
   }
 
   @media (min-width: 940px) {
-    .nav__links,
+    .nav__links {
+      display: flex;
+    }
+
     .nav__cta {
-      display: inline-flex;
+      padding: 0.7rem 1.3rem;
+      letter-spacing: var(--tracking-wide);
     }
   }
 
   .nav__burger {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 5px;
+    /* 44 x 44 — darunter ist ein Tippziel mit dem Daumen nicht
+       zuverlaessig zu treffen. Vorher 38 x 29. */
+    min-width: 44px;
+    min-height: 44px;
     padding: 0.5rem;
     background: none;
     border: 0;
@@ -198,14 +214,39 @@ import { nav, site } from '../data/site';
       burger.setAttribute('aria-expanded', String(open));
       burger.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
       document.body.style.overflow = open ? 'hidden' : '';
+      if (open) drawer.querySelector<HTMLElement>('a')?.focus();
     };
 
     burger.addEventListener('click', () => setOpen(!isOpen));
     drawer.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (!isOpen) return;
+
+      if (e.key === 'Escape') {
         setOpen(false);
         burger.focus();
+        return;
+      }
+
+      /*
+        Fokusfalle. Ohne sie wandert der Fokus hinter das Overlay in die
+        Seite, die optisch verdeckt ist — wer mit der Tastatur navigiert,
+        verliert die Orientierung vollstaendig.
+      */
+      if (e.key === 'Tab') {
+        const focusable = drawer.querySelectorAll<HTMLElement>('a[href], button');
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     });
   }
