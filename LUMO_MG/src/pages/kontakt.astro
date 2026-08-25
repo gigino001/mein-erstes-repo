@@ -80,6 +80,15 @@ const hasEmail = contact.email !== TODO;
         </div>
 
         <div class="info__block">
+          <h2>Arbeiten im LUMO</h2>
+          <p>
+            Wir suchen Verstärkung für Theke, Bar und Service. Schick uns einfach ein paar Zeilen
+            zu dir — ein förmliches Anschreiben brauchen wir nicht.
+          </p>
+          <a href={`mailto:${contact.emailJobs}?subject=Bewerbung`}>{contact.emailJobs}</a>
+        </div>
+
+        <div class="info__block">
           <h2>Wann es was gibt</h2>
           <dl class="service">
             {

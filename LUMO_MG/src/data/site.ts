@@ -57,8 +57,12 @@ export const openingWithWeekday = openingDate.toLocaleDateString('de-DE', {
 interface Contact {
   phone: string;
   phoneE164: string;
+  /** Allgemeine Anfragen, Impressum, Datenschutz */
   email: string;
+  /** Tischreservierungen */
   emailReservation: string;
+  /** Bewerbungen */
+  emailJobs: string;
 }
 
 export const contact: Contact = {
@@ -66,13 +70,15 @@ export const contact: Contact = {
   phone: '0160 91797206',
   /** Für tel:-Links und strukturierte Daten */
   phoneE164: '+4916091797206',
+  /*
+    Durchgehend kleingeschrieben. Der Teil vor dem @ ist laut Norm zwar
+    gross-/kleinschreibungsempfindlich, in der Praxis behandelt ihn aber
+    jeder Anbieter gleich — und Kleinschreibung ist die uebliche und
+    fehlerunanfaelligste Form.
+  */
   email: 'info@lumo-mg.de',
-  /**
-   * Reservierungen laufen bewusst ueber dieselbe Adresse. Eine eigene
-   * reservierung@ liesse sich bei ALL-INKL jederzeit kostenlos anlegen —
-   * dann genuegt hier eine Zeile.
-   */
-  emailReservation: 'info@lumo-mg.de',
+  emailReservation: 'reservierung@lumo-mg.de',
+  emailJobs: 'bewerbung@lumo-mg.de',
 };
 
 /**

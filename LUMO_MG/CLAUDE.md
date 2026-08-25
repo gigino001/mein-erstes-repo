@@ -61,10 +61,11 @@ Dark-first, einthemig — die Marke ist außen schwarz/gold, innen creme/warm.
 - **Nach Eroeffnung:** Hetzner Cloud CX22, ca. 4,50 EUR/Monat + Backups,
   Standort Nuernberg/Falkenstein -> Node fuer Stufe 2.
 - Domain + Mail bleiben dauerhaft bei ALL-INKL (SPF/DKIM automatisch)
-- Mailadresse: **info@lumo-mg.de** — eine Adresse fuer alles
-  (Kontakt, Reservierungen, Feiern, Formularabsender). Weitere lassen
-  sich bei ALL-INKL kostenlos anlegen; dann `contact` in site.ts und
-  `formular.config.php` anpassen.
+- Mailadressen (alle eingerichtet):
+  - `info@lumo-mg.de` — allgemein, Impressum, Datenschutz, Feieranfragen
+  - `reservierung@lumo-mg.de` — Reservierungsformular, Empfaenger + Absender
+  - `bewerbung@lumo-mg.de` — Jobs, verlinkt im Footer und auf /kontakt
+  Zuordnung je Formularart in `public/formular.config.php`.
 - AVV bei beiden Anbietern abschliessen; Vertragsinhaber = Unternehmen
 
 ## Zweistufige Umsetzung (entschieden)

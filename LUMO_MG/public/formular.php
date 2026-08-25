@@ -26,7 +26,14 @@ if (!is_file($configFile)) {
     http_response_code(500);
     exit('Formular ist noch nicht eingerichtet.');
 }
-/** @var array{to:string,from:string,site:string,rateDir:string} $config */
+/**
+ * @var array{
+ *   to: string|array<string,string>,
+ *   from: string|array<string,string>,
+ *   site: string,
+ *   rateDir: string
+ * } $config
+ */
 $config = require $configFile;
 
 const MIN_FILL_SECONDS = 3;      // schneller ausgefüllt = Bot
@@ -53,6 +60,19 @@ function field(string $name, int $maxLength = 500): string
 function oneLine(string $value): string
 {
     return str_replace(["\r", "\n"], ' ', $value);
+}
+
+/**
+ * Loest Empfaenger und Absender auf. Beide duerfen entweder eine einzelne
+ * Adresse sein oder ein Feld je Formularart, damit Reservierungen an eine
+ * andere Adresse gehen koennen als allgemeine Anfragen.
+ */
+function addressFor(string|array $value, string $type): string
+{
+    if (is_string($value)) {
+        return $value;
+    }
+    return (string) ($value[$type] ?? $value['*'] ?? reset($value));
 }
 
 function fail(string $message, int $status = 400): never
@@ -189,11 +209,18 @@ $lines[] = '';
 $lines[] = '--';
 $lines[] = 'Gesendet über ' . $config['site'] . ' am ' . date('d.m.Y H:i');
 
+$recipient = addressFor($config['to'], $type);
+$sender = addressFor($config['from'], $type);
+
+if ($recipient === '' || $sender === '') {
+    fail('Formular ist nicht vollständig eingerichtet.', 500);
+}
+
 $subject = '[LUMO] ' . $labels[$type] . ' — ' . oneLine($name);
 $body = implode("\n", $lines);
 
 $headers = [
-    'From: LUMO Website <' . $config['from'] . '>',
+    'From: LUMO Website <' . $sender . '>',
     'Reply-To: ' . oneLine($name) . ' <' . oneLine($email) . '>',
     'Content-Type: text/plain; charset=UTF-8',
     'Content-Transfer-Encoding: 8bit',
@@ -201,11 +228,11 @@ $headers = [
 ];
 
 $sent = @mail(
-    $config['to'],
+    $recipient,
     '=?UTF-8?B?' . base64_encode($subject) . '?=',
     $body,
     implode("\r\n", $headers),
-    '-f' . $config['from'],
+    '-f' . $sender,
 );
 
 if (!$sent) {
@@ -236,11 +263,13 @@ $guestBody = implode("\n", [
     '=?UTF-8?B?' . base64_encode('Wir haben deine Anfrage erhalten — LUMO') . '?=',
     $guestBody,
     implode("\r\n", [
-        'From: LUMO <' . $config['from'] . '>',
+        // Absender = zustaendige Adresse, damit eine Antwort des
+        // Gastes dort ankommt, wo die Anfrage bearbeitet wird
+        'From: LUMO <' . $sender . '>',
         'Content-Type: text/plain; charset=UTF-8',
         'Content-Transfer-Encoding: 8bit',
     ]),
-    '-f' . $config['from'],
+    '-f' . $sender,
 );
 
 redirect($config['site'] . '/danke');

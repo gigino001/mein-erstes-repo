@@ -6,24 +6,41 @@
  * und die Werte prüfen. Die echte Datei gehört NICHT ins Repository —
  * sie steht in .gitignore und wird von .htaccess vom Ausliefern
  * ausgeschlossen.
- *
- * Alles läuft über eine einzige Adresse: info@lumo-mg.de.
  */
 return [
-    // Wohin die Anfragen gehen — Reservierungen, Kontakt und Feiern.
-    'to' => 'info@lumo-mg.de',
+    /*
+     * Empfänger je Formularart. Reservierungen landen dadurch im
+     * eigenen Postfach und gehen an einem vollen Abend nicht zwischen
+     * Werbung und Bewerbungen unter.
+     *
+     * Statt eines Feldes ist auch eine einzelne Adresse als Zeichenkette
+     * erlaubt — dann geht alles dorthin. Der Schlüssel '*' dient als
+     * Auffangwert für Arten, die hier nicht aufgeführt sind.
+     */
+    'to' => [
+        'reservierung' => 'reservierung@lumo-mg.de',
+        'kontakt' => 'info@lumo-mg.de',
+        'feiern' => 'info@lumo-mg.de',
+        '*' => 'info@lumo-mg.de',
+    ],
 
     /*
-     * Absender der Bestätigungsmails.
+     * Absender der Bestätigungsmails, ebenfalls je Formularart.
      *
-     * Bewusst dieselbe Adresse und ausdrücklich kein noreply@:
-     * Antwortet ein Gast auf die Bestätigung, soll die Antwort im
-     * Postfach ankommen und nicht ins Leere laufen.
+     * Bewusst dieselbe Adresse wie der Empfänger und ausdrücklich kein
+     * noreply@: Antwortet ein Gast auf die Bestätigung — etwa um eine
+     * Uhrzeit zu verschieben — soll die Antwort dort ankommen, wo die
+     * Anfrage bearbeitet wird.
      *
      * Die Adresse MUSS zur eigenen Domain gehören. Eine fremde Adresse
      * als Absender lässt SPF scheitern, und die Mail landet im Spam.
      */
-    'from' => 'info@lumo-mg.de',
+    'from' => [
+        'reservierung' => 'reservierung@lumo-mg.de',
+        'kontakt' => 'info@lumo-mg.de',
+        'feiern' => 'info@lumo-mg.de',
+        '*' => 'info@lumo-mg.de',
+    ],
 
     // Ohne abschließenden Schrägstrich
     'site' => 'https://lumo-mg.de',
