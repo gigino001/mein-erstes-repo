@@ -18,6 +18,7 @@ const read = (p) => readFileSync(join(root, p), 'utf8');
 
 const site = read('src/data/site.ts');
 const menu = read('src/data/menu.ts');
+const demo = read('src/data/demo.ts');
 
 const blocking = [];
 const nonBlocking = [];
@@ -59,6 +60,9 @@ if (/export const menuIsPlaceholder = true/.test(menu)) {
 }
 if (/export const hoursArePlaceholder = true/.test(site)) {
   blocking.push('Öffnungszeiten sind Platzhalter');
+}
+if (/export const demoImages = true/.test(demo)) {
+  nonBlocking.push('Alle Bilder sind KI-generierte Demobilder, keine Fotos des Hauses');
 }
 
 // Beispiel-Events

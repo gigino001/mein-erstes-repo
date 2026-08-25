@@ -8,8 +8,10 @@ import EventCard from '../components/EventCard.astro';
 import MenuList from '../components/MenuList.astro';
 import Note from '../components/Note.astro';
 import RestaurantSchema from '../components/RestaurantSchema.astro';
+import Figure from '../components/Figure.astro';
 import { site, venue, openingLong, TODO } from '../data/site';
 import { menu, menuIsPlaceholder } from '../data/menu';
+import { images } from '../data/demo';
 
 const now = new Date();
 const all = (await getCollection('events', ({ data }) => !data.draft)).sort(
@@ -91,9 +93,15 @@ const hasCapacity = venue.partySeated !== TODO;
       </div>
 
       <div class="figures reveal">
-        <div class="figure figure--tall"><span>Foto — Innenraum, Bouclé &amp; Stoffdecke</span></div>
-        <div class="figure"><span>Foto — Bar mit Wandbild</span></div>
-        <div class="figure"><span>Foto — Brunch-Tafel</span></div>
+        <Figure
+          class="figure--tall"
+          src={images.innenraum.src}
+          alt={images.innenraum.alt}
+          ratio="3 / 5"
+          eager
+        />
+        <Figure src={images.bar.src} alt={images.bar.alt} ratio="1 / 1" hideBadge />
+        <Figure src={images.brunch.src} alt={images.brunch.alt} ratio="1 / 1" hideBadge />
       </div>
     </div>
   </Section>
@@ -101,7 +109,12 @@ const hasCapacity = venue.partySeated !== TODO;
   {/* ---------------- Matcha ---------------- */}
   <Section veil="open" id="matcha" class="matcha" labelledby="matcha-titel">
     <div class="split split--reverse">
-      <div class="figure figure--wide reveal"><span>Foto — Matcha Latte, Bowls &amp; Cake</span></div>
+      <Figure
+        class="reveal"
+        src={images.matcha.src}
+        alt={images.matcha.alt}
+        ratio="16 / 10"
+      />
 
       <div class="copy reveal">
         <span class="label label--matcha">Matcha at LUMO</span>
@@ -206,7 +219,12 @@ const hasCapacity = venue.partySeated !== TODO;
         <a class="btn self-start" href="/feiern">Unverbindlich anfragen</a>
       </div>
 
-      <div class="figure figure--portrait reveal"><span>Foto — Lounge-Bereich am Abend</span></div>
+      <Figure
+        class="reveal"
+        src={images.lounge.src}
+        alt={images.lounge.alt}
+        ratio="3 / 4"
+      />
     </div>
   </Section>
 
@@ -231,7 +249,12 @@ const hasCapacity = venue.partySeated !== TODO;
         </div>
       </div>
 
-      <div class="figure figure--wide reveal"><span>Foto — Fassade bei Abendlicht</span></div>
+      <Figure
+        class="reveal"
+        src={images.fassade.src}
+        alt={images.fassade.alt}
+        ratio="16 / 10"
+      />
     </div>
   </Section>
 
@@ -418,35 +441,16 @@ const hasCapacity = venue.partySeated !== TODO;
     color: var(--ink-soft);
   }
 
-  /* ---------------- Bildplatzhalter ---------------- */
+  /* ---------------- Bildraster ---------------- */
   .figures {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-xs);
   }
 
-  .figure {
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    aspect-ratio: 1 / 1;
-    border: 1px solid var(--line);
-    background:
-      radial-gradient(ellipse 60% 50% at 50% 100%, rgb(199 154 84 / 30%), transparent 66%),
-      linear-gradient(155deg, #f0e2c7 0%, #e4d3b1 60%, #dac7a0 100%);
-  }
-
-  .figure--tall {
+  .figures :global(.figure--tall) {
     grid-row: span 2;
-    aspect-ratio: auto;
-  }
-
-  .figure span {
-    padding: var(--space-s);
-    font-size: 0.62rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgb(43 33 23 / 50%);
+    aspect-ratio: auto !important;
   }
   /* ---------------- Ergaenzende Layoutklassen ---------------- */
   .head--left {
@@ -480,14 +484,6 @@ const hasCapacity = venue.partySeated !== TODO;
     display: flex;
     justify-content: center;
     margin-top: var(--space-l);
-  }
-
-  .figure--wide {
-    aspect-ratio: 16 / 10;
-  }
-
-  .figure--portrait {
-    aspect-ratio: 3 / 4;
   }
 
   .menu-grid {

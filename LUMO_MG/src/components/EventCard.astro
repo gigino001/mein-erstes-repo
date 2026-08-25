@@ -1,5 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import Figure from './Figure.astro';
+import { eventImages } from '../data/demo';
 
 interface Props {
   event: CollectionEntry<'events'>;
@@ -10,6 +12,7 @@ const { event, headingLevel = 'h3' } = Astro.props;
 const { title, date, doors, until, category, teaser, placeholder } = event.data;
 
 const Heading = headingLevel;
+const bild = eventImages[event.id];
 
 const day = date.toLocaleDateString('de-DE', { day: '2-digit' });
 const month = date.toLocaleDateString('de-DE', { month: 'long' });
@@ -25,7 +28,13 @@ const time = until
 
 <article class="event reveal">
   <a class="event__link" href={`/events/${event.id}`}>
-    <div class="event__figure"><span>Event-Bild</span></div>
+    <Figure
+      class="event__figure"
+      src={bild?.src}
+      alt={bild?.alt ?? ''}
+      placeholder="Event-Bild folgt"
+      ratio="16 / 11"
+    />
 
     <div class="event__body">
       <p class="event__date">
@@ -64,22 +73,9 @@ const time = until
     height: 100%;
   }
 
-  .event__figure {
-    display: flex;
-    align-items: flex-end;
-    aspect-ratio: 16 / 11;
+  .event :global(.event__figure) {
+    border: 0;
     border-bottom: 1px solid var(--line);
-    background:
-      radial-gradient(ellipse 60% 50% at 50% 100%, rgb(199 154 84 / 30%), transparent 66%),
-      linear-gradient(155deg, #f0e2c7 0%, #e4d3b1 60%, #dac7a0 100%);
-  }
-
-  .event__figure span {
-    padding: var(--space-s);
-    font-size: 0.62rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgb(43 33 23 / 50%);
   }
 
   .event__body {
