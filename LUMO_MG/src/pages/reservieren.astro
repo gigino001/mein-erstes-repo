@@ -120,7 +120,7 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
           <h2>Lieber telefonisch?</h2>
           {
             hasPhone ? (
-              <a class="aside__phone" href={`tel:${contact.phone.replace(/\s/g, '')}`}>
+              <a class="aside__phone" href={`tel:${contact.phoneE164}`}>
                 {contact.phone}
               </a>
             ) : (

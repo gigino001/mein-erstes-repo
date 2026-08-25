@@ -20,7 +20,7 @@ const hasPhone = contact.phone !== TODO;
         {site.address.street}<br />
         {site.address.postalCode}&nbsp;{site.address.city}
       </address>
-      {hasPhone && <a href={`tel:${contact.phone.replace(/\s/g, '')}`}>{contact.phone}</a>}
+      {hasPhone && <a href={`tel:${contact.phoneE164}`}>{contact.phone}</a>}
       <a href="/kontakt">Anfahrt &amp; Parken</a>
       <a href="/reservieren">Tisch reservieren</a>
     </div>

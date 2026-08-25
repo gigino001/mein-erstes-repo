@@ -5,7 +5,7 @@ import PageHeader from '../components/PageHeader.astro';
 import FormShell from '../components/FormShell.astro';
 import MapConsent from '../components/MapConsent.astro';
 import Note from '../components/Note.astro';
-import { site, contact, openingHours, hoursArePlaceholder, TODO } from '../data/site';
+import { site, contact, openingHours, hoursArePlaceholder, serviceTimes, TODO } from '../data/site';
 
 const hasPhone = contact.phone !== TODO;
 const hasEmail = contact.email !== TODO;
@@ -41,7 +41,7 @@ const hasEmail = contact.email !== TODO;
         <div class="info__block">
           <h2>Erreichbar</h2>
           {hasPhone ? (
-            <a class="big" href={`tel:${contact.phone.replace(/\s/g, '')}`}>{contact.phone}</a>
+            <a class="big" href={`tel:${contact.phoneE164}`}>{contact.phone}</a>
           ) : (
             <Note>Telefonnummer folgt.</Note>
           )}
@@ -68,6 +68,29 @@ const hasEmail = contact.email !== TODO;
             }
           </dl>
           {hoursArePlaceholder && <Note>Die Zeiten sind Platzhalter und stehen noch nicht fest.</Note>}
+        </div>
+
+        <div class="info__block">
+          <h2>Wann es was gibt</h2>
+          <dl class="service">
+            {
+              serviceTimes.map((s) => (
+                <div class="service__item">
+                  <dt>{s.title}</dt>
+                  <dd>
+                    {s.slots.map((slot) => (
+                      <span>
+                        {slot.days}
+                        <b>
+                          {slot.from} – {slot.to}
+                        </b>
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
         </div>
       </div>
 
@@ -191,6 +214,44 @@ const hasEmail = contact.email !== TODO;
 
   .hours__row--closed dd {
     color: var(--ink-faint);
+  }
+
+  .service {
+    width: 100%;
+    max-width: 26rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+  }
+
+  .service__item dt {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .service__item dd {
+    margin: var(--space-2xs) 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .service__item dd span {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-s);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .service__item dd b {
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    white-space: nowrap;
   }
 
   .write {

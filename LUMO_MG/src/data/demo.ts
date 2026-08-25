@@ -29,7 +29,7 @@ import event2 from '../assets/demo/event-2.jpg';
 import event3 from '../assets/demo/event-3.jpg';
 
 /** Auf false setzen, sobald echte Fotos eingesetzt sind */
-export const demoImages = true;
+export const demoImages: boolean = true;
 
 export const images = {
   innenraum: {

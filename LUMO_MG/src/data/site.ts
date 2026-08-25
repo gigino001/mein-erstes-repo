@@ -52,46 +52,87 @@ export const openingWithWeekday = openingDate.toLocaleDateString('de-DE', {
   year: 'numeric',
 });
 
-/** Noch offen — vor dem Livegang zwingend zu füllen */
-export const contact = {
-  /** TODO: Telefonnummer des Hauses */
-  phone: TODO as string,
-  /** TODO: auf eigene Domain umstellen, sobald sie steht */
-  email: TODO as string,
-  emailReservation: TODO as string,
-} as const;
+interface Contact {
+  phone: string;
+  phoneE164: string;
+  email: string;
+  emailReservation: string;
+}
+
+export const contact: Contact = {
+  /** Mobilnummer des Hauses */
+  phone: '0160 91797206',
+  /** Für tel:-Links und strukturierte Daten */
+  phoneE164: '+4916091797206',
+  email: 'info@lumo-mg.de',
+  /**
+   * TODO: eigene Adresse fuer Reservierungen anlegen. Bis dahin laufen
+   * die Formulare ueber info@ — das funktioniert, vermischt aber
+   * Reservierungen mit allem anderen im selben Postfach.
+   */
+  emailReservation: TODO,
+};
 
 /**
- * Öffnungszeiten.
- * TODO: durch die echten Zeiten ersetzen. `kitchen` ist der Küchenschluss,
- * `null` bedeutet Ruhetag.
+ * Öffnungszeiten des Hauses. `null` bedeutet Ruhetag.
+ * Das Haus ist durchgehend geöffnet; die einzelnen Küchenzeiten stehen
+ * weiter unten in `serviceTimes`.
  */
 export const openingHours: ReadonlyArray<{
   day: string;
   short: string;
   from: string | null;
   to: string | null;
-  kitchen: string | null;
 }> = [
-  { day: 'Montag', short: 'Mo', from: null, to: null, kitchen: null },
-  { day: 'Dienstag', short: 'Di', from: '09:00', to: '23:00', kitchen: '21:30' },
-  { day: 'Mittwoch', short: 'Mi', from: '09:00', to: '23:00', kitchen: '21:30' },
-  { day: 'Donnerstag', short: 'Do', from: '09:00', to: '23:00', kitchen: '21:30' },
-  { day: 'Freitag', short: 'Fr', from: '09:00', to: '01:00', kitchen: '22:30' },
-  { day: 'Samstag', short: 'Sa', from: '09:00', to: '01:00', kitchen: '22:30' },
-  { day: 'Sonntag', short: 'So', from: '09:00', to: '22:00', kitchen: '21:00' },
+  { day: 'Montag', short: 'Mo', from: null, to: null },
+  { day: 'Dienstag', short: 'Di', from: '08:00', to: '22:00' },
+  { day: 'Mittwoch', short: 'Mi', from: '08:00', to: '22:00' },
+  { day: 'Donnerstag', short: 'Do', from: '08:00', to: '22:00' },
+  { day: 'Freitag', short: 'Fr', from: '08:00', to: '23:00' },
+  { day: 'Samstag', short: 'Sa', from: '09:30', to: '23:00' },
+  { day: 'Sonntag', short: 'So', from: '09:30', to: '22:00' },
 ];
 
-export const hoursArePlaceholder = true;
+export const hoursArePlaceholder: boolean = false;
+
+/**
+ * Was wann serviert wird. Das ist der Teil, nach dem Gäste tatsächlich
+ * suchen — „bis wann gibt es Frühstück" ist die häufigste Frage an ein
+ * Brunch-Lokal.
+ */
+export const serviceTimes: ReadonlyArray<{
+  title: string;
+  note?: string;
+  slots: ReadonlyArray<{ days: string; from: string; to: string }>;
+}> = [
+  {
+    title: 'Brunch à la carte',
+    slots: [
+      { days: 'Dienstag – Freitag', from: '08:00', to: '13:00' },
+      { days: 'Samstag & Sonntag', from: '09:30', to: '14:00' },
+    ],
+  },
+  {
+    title: 'Mittagsangebote',
+    slots: [{ days: 'Dienstag – Freitag', from: '12:00', to: '14:00' }],
+  },
+  {
+    title: 'Dinner',
+    slots: [
+      { days: 'Dienstag – Donnerstag & Sonntag', from: '17:00', to: '22:00' },
+      { days: 'Freitag & Samstag', from: '17:00', to: '23:00' },
+    ],
+  },
+];
 
 /** Der Tagesbogen aus dem Logo — Leitmotiv der Startseite */
 export const dayArc = [
-  { title: 'Brunch', note: 'ab 9 Uhr' },
-  { title: 'Lunch', note: 'Mittagsangebote' },
-  { title: 'Coffee & Kuchen', note: 'Speciality' },
+  { title: 'Brunch', note: 'ab 8 Uhr' },
+  { title: 'Lunch', note: 'ab 12 Uhr' },
+  { title: 'Coffee & Kuchen', note: 'nachmittags' },
   { title: 'Matcha', note: 'den ganzen Tag' },
-  { title: 'Dinner', note: 'abends' },
-  { title: 'Signature Drinks', note: 'late night' },
+  { title: 'Dinner', note: 'ab 17 Uhr' },
+  { title: 'Signature Drinks', note: 'bis 23 Uhr' },
 ] as const;
 
 export const nav = [
@@ -103,18 +144,35 @@ export const nav = [
 ] as const;
 
 /** Kapazitäten für „Feiern & Mieten". TODO: echte Zahlen. */
-export const venue = {
-  seatsIndoor: TODO as string,
-  seatsOutdoor: TODO as string,
-  partySeated: TODO as string,
-  partyStanding: TODO as string,
-} as const;
+export const venue: Record<'seatsIndoor' | 'seatsOutdoor' | 'partySeated' | 'partyStanding', string> = {
+  seatsIndoor: TODO,
+  seatsOutdoor: TODO,
+  partySeated: TODO,
+  partyStanding: TODO,
+};
 
-/** Impressumsdaten. TODO: vollständig — ohne diese darf die Seite nicht live. */
-export const imprint = {
-  company: TODO as string,
-  represented: TODO as string,
-  register: TODO as string,
-  vatId: TODO as string,
-  responsible: TODO as string,
-} as const;
+/**
+ * Impressumsdaten.
+ *
+ * ACHTUNG: Eine GmbH MUSS nach §5 DDG Handelsregister und Registernummer
+ * angeben. Ohne diese Angabe ist das Impressum unvollständig.
+ */
+interface Imprint {
+  company: string;
+  represented: string;
+  register: string;
+  vatId: string;
+  responsible: string;
+}
+
+export const imprint: Imprint = {
+  company: 'LUMO Gastro und Event GmbH',
+  /** TODO: Schreibweise des Geschäftsführernamens bestätigen */
+  represented: TODO,
+  /** TODO: Amtsgericht und HRB-Nummer */
+  register: TODO,
+  /** TODO: USt-IdNr. */
+  vatId: TODO,
+  /** TODO: inhaltlich Verantwortliche(r) — meist der Geschäftsführer */
+  responsible: TODO,
+};

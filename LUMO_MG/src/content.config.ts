@@ -26,7 +26,7 @@ const events = defineCollection({
     /** Ein bis zwei Sätze für Übersicht und Teilen-Vorschau */
     teaser: z.string().max(200),
     /** Externer Ticketverkauf, falls vorhanden */
-    ticketUrl: z.string().url().optional(),
+    ticketUrl: z.url().optional(),
     /** Entwurf — erscheint nicht auf der Seite */
     draft: z.boolean().default(false),
     /**

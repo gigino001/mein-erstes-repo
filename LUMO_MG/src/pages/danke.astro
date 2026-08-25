@@ -29,7 +29,7 @@ const hasPhone = contact.phone !== TODO;
       <div class="thanks__actions">
         <a class="btn btn--ink" href="/">Zur Startseite</a>
         {hasPhone && (
-          <a class="btn btn--ghost" href={`tel:${contact.phone.replace(/\s/g, '')}`}>
+          <a class="btn btn--ghost" href={`tel:${contact.phoneE164}`}>
             {contact.phone}
           </a>
         )}
