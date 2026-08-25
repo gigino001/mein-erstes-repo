@@ -1,6 +1,6 @@
 ---
 import Sunmark from './Sunmark.astro';
-import { site, contact, TODO } from '../data/site';
+import { site, contact, openingLong, TODO } from '../data/site';
 
 const year = new Date().getFullYear();
 const hasPhone = contact.phone !== TODO;
@@ -44,7 +44,7 @@ const hasPhone = contact.phone !== TODO;
 
   <div class="container footer__bottom">
     <span>© {year} {site.fullName}</span>
-    <span>Neueröffnung 1. September 2026</span>
+    <span>Neueröffnung {openingLong}</span>
   </div>
 </footer>
 

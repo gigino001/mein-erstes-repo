@@ -20,10 +20,11 @@ ein (veroeffentlichte Seiten muessen in sich geschlossen sein), die
 Projektfassung referenziert es ueber `../assets/wandbild.jpg`.
 
 ## Harte Fakten (aus Instagram @lumo.mg)
-- **Neueröffnung: 01.09.2026** — sehr knapper Zeitrahmen
+- **Neueröffnung: 03.09.2026** — sehr knapper Zeitrahmen
 - Adresse: Krefelder Straße 219, 41065 Mönchengladbach
 - Eigene Parkplätze direkt vor dem Haus
-- Claim/Tagline im Logo: BRUNCH · COFFEE · DRINKS · EVENTS
+- Tagline auf der Seite: BRUNCH · CAFÉ · BAR · EVENTS
+  (am Gebaeude steht noch BRUNCH · COFFEE · DRINKS · EVENTS)
 - Küche: türkisches Frühstück trifft moderne Brunch-Klassiker;
   Lunchangebote, Kuchen & Torten, Matcha-Welt, Signature Cocktails
 - Positionierung: "Warm tones. Natural textures. Good coffee."
@@ -61,7 +62,7 @@ Dark-first, einthemig — die Marke ist außen schwarz/gold, innen creme/warm.
 - AVV bei beiden Anbietern abschliessen; Vertragsinhaber = Unternehmen
 
 ## Zweistufige Umsetzung (entschieden)
-- **Stufe 1 — bis 01.09.2026:** vollständige statische Astro-Seite
+- **Stufe 1 — bis 03.09.2026:** vollständige statische Astro-Seite
   (Start, Speisekarte, Events, Feiern, Kontakt, Impressum, Datenschutz),
   Reservierung als Anfrageformular per Mail. Läuft auf jedem Webspace,
   damit die offene Hoster-Frage die Eröffnung nicht blockiert.
@@ -116,7 +117,7 @@ public/formular.php   Formularempfang fuer Stufe 1 (laeuft auf jedem
 - Kein Drittanbieter laedt automatisch. Google Maps erst nach Klick
 
 ## Offen / noch zu klären
-Zwingend vor dem Livegang am 01.09.:
+Zwingend vor dem Livegang am 03.09.:
 - [ ] Impressumsdaten (Firmierung, Inhaber, HR, USt-IdNr.)
 - [ ] Telefonnummer + offizielle E-Mail auf eigener Domain
 - [ ] Öffnungs- und Küchenzeiten, Ruhetag

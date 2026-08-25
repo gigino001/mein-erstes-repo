@@ -8,7 +8,7 @@ import EventCard from '../components/EventCard.astro';
 import MenuList from '../components/MenuList.astro';
 import Note from '../components/Note.astro';
 import RestaurantSchema from '../components/RestaurantSchema.astro';
-import { site, venue, TODO } from '../data/site';
+import { site, venue, openingLong, TODO } from '../data/site';
 import { menu, menuIsPlaceholder } from '../data/menu';
 
 const now = new Date();
@@ -37,7 +37,7 @@ const hasCapacity = venue.partySeated !== TODO;
 
       <p class="hero__opening">
         <span class="label">Neueröffnung</span>
-        <span class="hero__date">1. September 2026</span>
+        <span class="hero__date">{openingLong}</span>
       </p>
 
       <div class="hero__cta">
@@ -220,7 +220,7 @@ const hasCapacity = venue.partySeated !== TODO;
           {site.address.postalCode} {site.address.city} — {site.parking.toLowerCase()}.
         </p>
         <p>
-          Wir öffnen am <strong>1. September 2026</strong>. Bis dahin halten wir euch auf Instagram
+          Wir öffnen am <strong>{openingLong}</strong>. Bis dahin halten wir euch auf Instagram
           auf dem Laufenden.
         </p>
         <div class="row">

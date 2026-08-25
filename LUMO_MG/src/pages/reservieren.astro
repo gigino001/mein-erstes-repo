@@ -4,7 +4,7 @@ import Section from '../components/Section.astro';
 import PageHeader from '../components/PageHeader.astro';
 import FormShell from '../components/FormShell.astro';
 import Note from '../components/Note.astro';
-import { contact, site, TODO } from '../data/site';
+import { contact, site, openingLong, TODO } from '../data/site';
 
 const hasPhone = contact.phone !== TODO;
 
@@ -134,7 +134,7 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
         </div>
 
         <Note variant="info">
-          Bis zur Eröffnung am 1. September 2026 nehmen wir Anfragen entgegen und bestätigen sie
+          Bis zur Eröffnung am {openingLong} nehmen wir Anfragen entgegen und bestätigen sie
           gesammelt.
         </Note>
       </aside>

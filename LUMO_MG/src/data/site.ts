@@ -14,12 +14,12 @@ export type Todo = typeof TODO;
 export const site = {
   name: 'LUMO',
   fullName: 'LUMO Mönchengladbach',
-  tagline: ['Brunch', 'Coffee', 'Drinks', 'Events'],
+  tagline: ['Brunch', 'Café', 'Bar', 'Events'],
   claim: 'Warm tones. Natural textures. Good coffee.',
   description:
     'Modern Boho Brunch- und Dinner-Spot in Mönchengladbach. Türkisches Frühstück trifft moderne Brunch-Klassiker, dazu Speciality Coffee, Matcha, Signature Cocktails und Events.',
   url: 'https://lumo-mg.de',
-  opening: '2026-09-01',
+  opening: '2026-09-03',
   address: {
     street: 'Krefelder Straße 219',
     postalCode: '41065',
@@ -32,6 +32,25 @@ export const site = {
     url: 'https://www.instagram.com/lumo.mg/',
   },
 } as const;
+
+/**
+ * Eröffnungsdatum in den Schreibweisen, die auf der Seite vorkommen.
+ * Wird überall daraus abgeleitet — das Datum steht nur einmal im Code.
+ */
+export const openingDate = new Date(site.opening + 'T00:00:00+02:00');
+
+export const openingLong = openingDate.toLocaleDateString('de-DE', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+export const openingWithWeekday = openingDate.toLocaleDateString('de-DE', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
 
 /** Noch offen — vor dem Livegang zwingend zu füllen */
 export const contact = {
