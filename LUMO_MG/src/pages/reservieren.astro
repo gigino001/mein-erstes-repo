@@ -4,27 +4,17 @@ import Section from '../components/Section.astro';
 import PageHeader from '../components/PageHeader.astro';
 import FormShell from '../components/FormShell.astro';
 import Note from '../components/Note.astro';
-import { contact, site, openingLong, openingDate, openingHours, TODO } from '../data/site';
+import { contact, site, openingLong, TODO } from '../data/site';
 
 const hasPhone = contact.phone !== TODO;
 const hasMail = contact.emailReservation !== TODO;
 
-/*
-  Frühestens morgen — aber nie vor der Eröffnung. Vorher ließ das
-  Formular Termine zu, an denen es das Lokal noch gar nicht gab.
-*/
+// Frühestens morgen, längstens in 90 Tagen
 const tomorrow = new Date();
 tomorrow.setDate(tomorrow.getDate() + 1);
-const earliest = tomorrow > openingDate ? tomorrow : openingDate;
-
-const max = new Date(earliest);
+const max = new Date();
 max.setDate(max.getDate() + 90);
-
 const iso = (d: Date) => d.toISOString().slice(0, 10);
-
-// Für die Prüfung im Browser: Ruhetage und Zeitfenster je Wochentag
-const hoursForClient = openingHours.map((d) => ({ from: d.from, to: d.to }));
-const closedDays = openingHours.filter((d) => !d.from).map((d) => d.day);
 ---
 
 <Base
@@ -50,16 +40,14 @@ const closedDays = openingHours.filter((d) => !d.from).map((d) => d.day);
                 id="datum"
                 name="datum"
                 required
-                min={iso(earliest)}
+                min={iso(tomorrow)}
                 max={iso(max)}
-                data-datum
               />
             </div>
 
             <div class="field">
               <label for="uhrzeit">Uhrzeit <span class="req">*</span></label>
-              <input type="time" id="uhrzeit" name="uhrzeit" required step="1800" data-uhrzeit />
-              <span class="field__hint" data-zeitfenster></span>
+              <input type="time" id="uhrzeit" name="uhrzeit" required step="1800" />
             </div>
 
             <div class="field">
@@ -74,12 +62,6 @@ const closedDays = openingHours.filter((d) => !d.from).map((d) => d.day);
               </select>
             </div>
           </div>
-
-          {closedDays.length > 0 && (
-            <p class="field__hint">
-              Ruhetag: {closedDays.join(', ')}. An diesen Tagen können wir keinen Tisch anbieten.
-            </p>
-          )}
 
           <p class="field__hint">
             Ab 13 Personen ist es eine Feier — nutzt dafür bitte
@@ -165,65 +147,6 @@ const closedDays = openingHours.filter((d) => !d.from).map((d) => d.day);
     </div>
   </Section>
 </Base>
-
-<script is:inline define:vars={{ hoursForClient }}>
-  /*
-    Prüft Wochentag und Uhrzeit gegen die echten Öffnungszeiten und
-    meldet über die eingebaute Formularprüfung des Browsers zurück.
-    Das ersetzt kein Buchungssystem — es verhindert nur, dass jemand
-    einen Tisch für einen Ruhetag oder drei Uhr nachts anfragt und erst
-    Tage später eine Absage bekommt.
-  */
-  const datum = document.querySelector('[data-datum]');
-  const uhrzeit = document.querySelector('[data-uhrzeit]');
-  const hinweis = document.querySelector('[data-zeitfenster]');
-
-  if (datum && uhrzeit) {
-    const tage = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
-
-    const fuerDatum = (wert) => {
-      if (!wert) return null;
-      // Datum bewusst als lokale Zeit lesen, nicht als UTC
-      const [j, m, t] = wert.split('-').map(Number);
-      const d = new Date(j, m - 1, t);
-      return { index: (d.getDay() + 6) % 7, name: tage[(d.getDay() + 6) % 7] };
-    };
-
-    const pruefen = () => {
-      const tag = fuerDatum(datum.value);
-      if (!tag) return;
-
-      const zeiten = hoursForClient[tag.index];
-
-      if (!zeiten || !zeiten.from) {
-        datum.setCustomValidity(`${tag.name} ist unser Ruhetag. Bitte wähle einen anderen Tag.`);
-        uhrzeit.removeAttribute('min');
-        uhrzeit.removeAttribute('max');
-        if (hinweis) hinweis.textContent = '';
-        return;
-      }
-
-      datum.setCustomValidity('');
-      uhrzeit.min = zeiten.from;
-      uhrzeit.max = zeiten.to;
-      if (hinweis) hinweis.textContent = `${tag.name}: ${zeiten.from} – ${zeiten.to} Uhr`;
-
-      if (uhrzeit.value && (uhrzeit.value < zeiten.from || uhrzeit.value > zeiten.to)) {
-        uhrzeit.setCustomValidity(
-          `Am ${tag.name} haben wir von ${zeiten.from} bis ${zeiten.to} Uhr geöffnet.`,
-        );
-      } else {
-        uhrzeit.setCustomValidity('');
-      }
-    };
-
-    datum.addEventListener('change', pruefen);
-    datum.addEventListener('input', pruefen);
-    uhrzeit.addEventListener('change', pruefen);
-    uhrzeit.addEventListener('input', pruefen);
-    pruefen();
-  }
-</script>
 
 <style>
   .layout {

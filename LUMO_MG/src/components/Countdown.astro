@@ -26,13 +26,8 @@ import { site, openingDate, openingWithWeekday, openingHours } from '../data/sit
 >
   <p class="countdown__head" data-head>Neueröffnung</p>
 
-  {/*
-    Das Datum bleibt stehen, auch wenn der Ticker laeuft. Eine Zahl wie
-    „noch 8 Tage" kann niemand in den Kalender eintragen, ein Datum schon
-    — und geteilte Screenshots des Heros waeren sonst am naechsten Tag
-    falsch.
-  */}
-  <p class="countdown__date" data-fallback>{openingWithWeekday}</p>
+  {/* Vor dem Start des Skripts und ohne JavaScript sichtbar */}
+  <p class="countdown__fallback" data-fallback>{openingWithWeekday}</p>
 
   <div class="countdown__grid" data-grid hidden aria-hidden="true">
     <div><b data-days>–</b><span>Tage</span></div>
@@ -59,34 +54,26 @@ import { site, openingDate, openingWithWeekday, openingHours } from '../data/sit
 
   .countdown__head {
     font-family: var(--font-ui);
-    font-size: var(--step--2);
+    font-size: 0.68rem;
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
     color: var(--gold);
   }
 
-  .countdown__date {
+  .countdown__fallback {
     font-family: var(--font-display);
-    font-size: var(--step-1);
+    font-size: var(--step-2);
     color: var(--ink);
   }
 
-  /* Nach der Eroeffnung traegt diese Zeile den Oeffnungsstatus und wird
-     zur Hauptaussage — dann groesser. */
-  .countdown__date.is-status {
-    font-size: var(--step-2);
-  }
-
-  .countdown__date[hidden] {
+  .countdown__fallback[hidden] {
     display: none;
   }
 
   .countdown__grid {
     display: flex;
     gap: 1.4rem;
-    margin-top: 0.35rem;
-    padding-top: 0.55rem;
-    border-top: 1px solid var(--line-faint);
+    margin-top: 0.2rem;
     font-variant-numeric: tabular-nums;
   }
 
@@ -111,7 +98,7 @@ import { site, openingDate, openingWithWeekday, openingHours } from '../data/sit
   }
 
   .countdown__grid span {
-    font-size: var(--step--2);
+    font-size: 0.6rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--ink-soft);
@@ -188,7 +175,6 @@ import { site, openingDate, openingWithWeekday, openingHours } from '../data/sit
       head.textContent = 'Willkommen';
       fallback.textContent = text;
       fallback.hidden = false;
-      fallback.classList.add('is-status');
       grid.hidden = true;
       sr.textContent = text;
     };
@@ -211,6 +197,7 @@ import { site, openingDate, openingWithWeekday, openingHours } from '../data/sit
       out.min.textContent = pad(m);
       out.sec.textContent = pad(s);
 
+      fallback.hidden = true;
       grid.hidden = false;
 
       // Screenreader nur minutengenau, nicht sekündlich
