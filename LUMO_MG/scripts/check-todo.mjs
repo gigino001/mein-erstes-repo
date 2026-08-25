@@ -4,12 +4,12 @@
   Läuft über die Stammdaten und die Platzhalter-Schalter. Gibt Exit-Code 1
   zurück, wenn etwas Blockierendes offen ist — so lässt sich das später in
   einen Deploy-Schritt hängen, damit die Seite nicht versehentlich mit
-  erfundenen Preisen online geht.
+  erfundenen Preisen oder unvollständigem Impressum online geht.
 
   Aufruf: npm run check:todo
 */
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -23,15 +23,29 @@ const demo = read('src/data/demo.ts');
 const blocking = [];
 const nonBlocking = [];
 
-// TODO-Konstanten in den Stammdaten
-const todoFields = [...site.matchAll(/^\s*(\w+):\s*TODO as string,/gm)].map((m) => m[1]);
+// Erfasst beide Schreibweisen: `feld: TODO,` und `feld: TODO as string,`
+const todoFields = [...site.matchAll(/^[ \t]*(\w+):[ \t]*TODO\b[^,\n]*,/gm)].map((m) => m[1]);
+
+/*
+  Sicherung gegen genau den Fehler, der hier schon einmal passiert ist:
+  Als die Schreibweise in site.ts von `TODO as string` auf `TODO` wechselte,
+  fand das alte Suchmuster nichts mehr — und das Skript meldete Entwarnung,
+  obwohl sämtliche Impressumsangaben fehlten. Ein Prüfskript, das still
+  versagt, ist schlimmer als keines. Deshalb lieber laut abbrechen.
+*/
+if (todoFields.length === 0 && /:[ \t]*TODO\b/.test(site)) {
+  console.error('\n  FEHLER: In site.ts stehen TODO-Werte, die dieses Skript');
+  console.error('  nicht erkennt. Bitte das Suchmuster hier anpassen.\n');
+  process.exit(2);
+}
+
 const labels = {
   phone: 'Telefonnummer',
   email: 'Öffentliche E-Mail-Adresse',
   emailReservation: 'E-Mail für Reservierungen',
   company: 'Impressum: Firmierung',
   represented: 'Impressum: vertretungsberechtigte Person',
-  register: 'Impressum: Handelsregister',
+  register: 'Impressum: Handelsregister und Registernummer',
   vatId: 'Impressum: USt-IdNr.',
   responsible: 'Impressum: inhaltlich Verantwortliche',
   seatsIndoor: 'Sitzplätze innen',
@@ -55,13 +69,13 @@ for (const field of todoFields) {
   (blockingFields.has(field) ? blocking : nonBlocking).push(label);
 }
 
-if (/export const menuIsPlaceholder = true/.test(menu)) {
+if (/export const menuIsPlaceholder(\s*:\s*boolean)?\s*=\s*true/.test(menu)) {
   blocking.push('Speisekarte: Gerichte und Preise sind erfunden');
 }
-if (/export const hoursArePlaceholder = true/.test(site)) {
+if (/export const hoursArePlaceholder(\s*:\s*boolean)?\s*=\s*true/.test(site)) {
   blocking.push('Öffnungszeiten sind Platzhalter');
 }
-if (/export const demoImages = true/.test(demo)) {
+if (/export const demoImages(\s*:\s*boolean)?\s*=\s*true/.test(demo)) {
   nonBlocking.push('Alle Bilder sind KI-generierte Demobilder, keine Fotos des Hauses');
 }
 
@@ -69,7 +83,6 @@ if (/export const demoImages = true/.test(demo)) {
 const eventsDir = 'src/content/events';
 let placeholderEvents = 0;
 try {
-  const { readdirSync } = await import('node:fs');
   for (const file of readdirSync(join(root, eventsDir))) {
     if (file.endsWith('.md') && /^placeholder:\s*true/m.test(read(join(eventsDir, file)))) {
       placeholderEvents += 1;
@@ -79,7 +92,7 @@ try {
   /* Verzeichnis fehlt — dann gibt es auch keine Beispiele */
 }
 if (placeholderEvents > 0) {
-  nonBlocking.push(`${placeholderEvents} Beispiel-Event(s) noch in src/content/events/`);
+  nonBlocking.push(`${placeholderEvents} Beispiel-Event(s) noch in ${eventsDir}/`);
 }
 
 // Ausgabe
