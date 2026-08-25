@@ -1,0 +1,377 @@
+<title>LUMO Hosting-Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Newsreader:opsz,wght@6..72,400;6..72,600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ground:#E9EDEA; --surface:#F8FAF8; --surface-2:#F0F3F0;
+  --ink:#151F1C; --ink-soft:#3B4A45; --muted:#63736D;
+  --line:#D3DBD6; --line-soft:#E1E7E3;
+  --accent:#0E6459; --accent-soft:#D9E8E4;
+  --brass:#8C6516; --brass-soft:#F0E6D0;
+  --risk:#98392B; --risk-soft:#F5E1DC;
+  --shadow:0 1px 2px rgba(21,31,28,.05), 0 8px 24px -12px rgba(21,31,28,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0D1412; --surface:#141D1A; --surface-2:#1A2521;
+    --ink:#E5EBE7; --ink-soft:#C2CDC8; --muted:#8B9A94;
+    --line:#26332E; --line-soft:#1E2A26;
+    --accent:#5CC4B4; --accent-soft:#123330;
+    --brass:#D3A455; --brass-soft:#2E2618;
+    --risk:#E08472; --risk-soft:#33201C;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0D1412; --surface:#141D1A; --surface-2:#1A2521;
+  --ink:#E5EBE7; --ink-soft:#C2CDC8; --muted:#8B9A94;
+  --line:#26332E; --line-soft:#1E2A26;
+  --accent:#5CC4B4; --accent-soft:#123330;
+  --brass:#D3A455; --brass-soft:#2E2618;
+  --risk:#E08472; --risk-soft:#33201C;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Newsreader",Georgia,serif;font-size:1.0625rem;line-height:1.65;
+  font-optical-sizing:auto;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1060px;margin:0 auto;padding:0 clamp(1.25rem,4vw,3rem);}
+h1,h2,h3,h4{font-family:"Bricolage Grotesque",-apple-system,"Segoe UI",sans-serif;font-weight:700;margin:0;letter-spacing:-.02em;line-height:1.14;text-wrap:balance;}
+p{margin:0;} ul,ol{margin:0;padding-left:1.15em;} li{margin:.3em 0;}
+li::marker{color:var(--muted);}
+strong{font-weight:600;}
+a{color:var(--accent);text-underline-offset:.18em;}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+code,.mono{font-family:"JetBrains Mono",ui-monospace,Consolas,monospace;font-size:.82em;}
+code{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:4px;padding:.1em .35em;}
+
+.mast{padding:clamp(3rem,8vw,5rem) 0 clamp(1.75rem,4vw,2.75rem);border-bottom:1px solid var(--line);}
+.kicker{font-family:"JetBrains Mono",monospace;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+.mast h1{font-size:clamp(2.3rem,6vw,3.8rem);margin:.6rem 0 0;max-width:18ch;}
+.mast .lede{margin-top:1.35rem;max-width:60ch;font-size:1.15rem;color:var(--ink-soft);}
+
+section{border-bottom:1px solid var(--line);padding:clamp(2.25rem,5vw,3.5rem) 0;}
+.grid{display:grid;grid-template-columns:1fr;gap:1.4rem;}
+@media (min-width:900px){.grid{grid-template-columns:9rem 1fr;gap:2.5rem;align-items:start;}
+  .rail{position:sticky;top:2rem;}}
+.rail{font-family:"JetBrains Mono",monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-top:.5rem;border-top:2px solid var(--ink);display:inline-block;}
+.body{display:flex;flex-direction:column;gap:1.35rem;min-width:0;}
+.body > h2{font-size:clamp(1.55rem,3.2vw,2.05rem);}
+.body > h3{font-size:1.12rem;font-weight:500;margin-top:.4rem;}
+.prose{max-width:64ch;display:flex;flex-direction:column;gap:.9rem;}
+.prose p{color:var(--ink-soft);}
+
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;}
+.chip{font-family:"JetBrains Mono",monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:.28em .6em;border-radius:3px;}
+.chip.ok{color:var(--accent);background:var(--accent-soft);}
+.chip.open{color:var(--brass);background:var(--brass-soft);}
+.chip.risk{color:var(--risk);background:var(--risk-soft);}
+
+.buy{border:1px solid var(--line);border-radius:6px;background:var(--surface);box-shadow:var(--shadow);overflow:hidden;}
+.buy__head{padding:1.15rem 1.35rem;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:baseline;justify-content:space-between;background:var(--surface-2);}
+.buy__head h4{font-size:1.15rem;}
+.buy__price{font-family:"JetBrains Mono",monospace;font-size:.95rem;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.buy__body{padding:1.15rem 1.35rem;display:flex;flex-direction:column;gap:.85rem;}
+.buy__body p{font-size:.97rem;color:var(--ink-soft);}
+.buy__body ul{font-size:.96rem;color:var(--ink-soft);}
+
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.93rem;min-width:32rem;}
+th,td{text-align:left;padding:.62rem .9rem;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+thead th{font-family:"JetBrains Mono",monospace;font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap;}
+tbody tr:last-child td{border-bottom:none;}
+tfoot td{border-top:1px solid var(--line);font-weight:600;background:var(--surface-2);}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap;}
+td.mono{font-family:"JetBrains Mono",monospace;font-size:.82rem;white-space:nowrap;}
+
+.note{border-left:2px solid var(--brass);background:var(--brass-soft);padding:.9rem 1.1rem;border-radius:0 5px 5px 0;font-size:.97rem;}
+.note.warn{border-left-color:var(--risk);background:var(--risk-soft);}
+.note.good{border-left-color:var(--accent);background:var(--accent-soft);}
+.note strong{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:.85rem;margin-bottom:.2rem;}
+
+.checks{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+.check{background:var(--surface);padding:.85rem 1.1rem;display:grid;grid-template-columns:1.4rem 1fr;gap:.85rem;align-items:start;}
+.check i{display:block;width:1.05rem;height:1.05rem;border:1.5px solid var(--muted);border-radius:3px;margin-top:.35rem;}
+.check b{font-family:"Bricolage Grotesque",sans-serif;font-size:.97rem;font-weight:700;display:block;}
+.check span{font-size:.9rem;color:var(--muted);}
+
+.no{display:grid;gap:.5rem;}
+.no div{font-size:.95rem;color:var(--ink-soft);padding-left:1.6rem;position:relative;}
+.no div::before{content:"×";position:absolute;left:.3rem;top:-.05rem;color:var(--risk);font-size:1.1rem;font-family:"Bricolage Grotesque",sans-serif;}
+
+footer{padding:2.5rem 0 4rem;color:var(--muted);font-size:.88rem;display:flex;flex-direction:column;gap:.6rem;}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">Für den Betreiber · Stand 25. August 2026</div>
+  <h1>Was für die LUMO-Website gebucht werden muss</h1>
+  <p class="lede">Eine Bestellliste mit genau zwei Positionen — eine davon sofort, die andere erst nach der Eröffnung. Zusammen unter elf Euro im Monat, alles in Deutschland gehostet.</p>
+</header>
+
+<!-- ===== Kurzfassung ===== -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Kurzfassung</span></div>
+  <div class="body">
+   <h2>Die Antwort in zwei Sätzen</h2>
+   <div class="prose">
+     <p><strong>Jetzt sofort:</strong> ein Webhosting-Paket bei ALL-INKL.COM, Tarif „Privat" für 4,95 € im Monat. Damit sind Domain, alle E-Mail-Adressen, SSL und der Speicherplatz für die Eröffnungsseite abgedeckt.</p>
+     <p><strong>Nach der Eröffnung:</strong> zusätzlich ein kleiner Server bei Hetzner Cloud, Typ CX22, für rund 4,50 € im Monat. Den braucht erst das eigene Reservierungssystem — vorher nicht.</p>
+   </div>
+   <div class="note good">
+     <strong>Warum nicht gleich alles zusammen?</strong>
+     Weil Domain und E-Mail dauerhaft beim Webhoster bleiben, egal wo die Website später läuft. Es wird also nichts doppelt gekauft. Der Server kommt einfach dazu, wenn er gebraucht wird, und die Domain zeigt dann darauf.
+   </div>
+   <div class="note warn">
+     <strong>Der eine Fehler, der teuer wird</strong>
+     Ein klassisches PHP-Webhosting-Paket allein reicht für das spätere Reservierungssystem <em>nicht</em> — auch kein größeres. Dafür braucht es einen eigenen Server, der Node.js dauerhaft laufen lässt. Wer jetzt ein teures „Business"-Paket kauft in der Annahme, damit später alles zu können, zahlt doppelt.
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ===== Schritt 1 ===== -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Schritt 1</span></div>
+  <div class="body">
+   <h2>Webhosting und Domain — jetzt bestellen</h2>
+   <div class="chips"><span class="chip risk">Vor dem 1. September</span></div>
+
+   <div class="buy">
+     <div class="buy__head">
+       <h4>ALL-INKL.COM · Tarif „Privat"</h4>
+       <span class="buy__price">4,95 € / Monat</span>
+     </div>
+     <div class="buy__body">
+       <p>Deutscher Anbieter mit eigenen Rechenzentren in Deutschland, sehr gut bedienbare Verwaltungsoberfläche (KAS), Auftragsverarbeitungsvertrag online abschließbar.</p>
+       <ul>
+         <li><strong>3 Domains inklusive</strong> — die <code>.de</code> kostet also nichts extra</li>
+         <li><strong>Unbegrenzt E-Mail-Adressen</strong> mit Postfächern und SMTP-Zugang</li>
+         <li>50 GB Speicherplatz — ein Vielfaches dessen, was die Seite braucht</li>
+         <li>SSL-Zertifikat kostenlos inklusive (Let's Encrypt)</li>
+         <li>PHP und MySQL — reicht für die Formulare der Eröffnungsseite</li>
+       </ul>
+       <p><strong>Vertragsbedingungen:</strong> Der erste Monat ist kostenlos, es gibt keine Mindestlaufzeit, monatlich kündbar. Das Risiko ist damit praktisch null.</p>
+     </div>
+   </div>
+
+   <h3>Falls es etwas mehr sein soll</h3>
+   <div class="prose">
+     <p>Der Tarif <strong>„Premium" für 9,95 €</strong> bringt zusätzlich <strong>tägliche Backups</strong> und SSH-Zugang. Für die Eröffnungsseite ist das nicht nötig — die Seite liegt ohnehin vollständig im Projektarchiv und ist jederzeit neu aufspielbar. Interessant wird der Tarif erst, wenn euch die automatische Sicherung der Postfächer wichtig ist.</p>
+     <p>Mein Rat: mit „Privat" starten. Hochstufen geht jederzeit, herunterstufen ebenso.</p>
+   </div>
+
+   <h3>Beim Bestellen die Domain gleich mitnehmen</h3>
+   <div class="prose">
+     <p>Im Bestellprozess wird nach der Wunschdomain gefragt. Verfügbarkeit wird dort direkt geprüft. Kandidaten in der Reihenfolge, in der ich sie nehmen würde:</p>
+   </div>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th class="mono">Domain</th><th>Warum</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">lumo-mg.de</td><td>Kurz, tippbar, passt zum Instagram-Namen <code>@lumo.mg</code> — erste Wahl</td></tr>
+        <tr><td class="mono">lumo-moenchengladbach.de</td><td>Länger, aber gut für die lokale Suche. Als Zweitdomain sinnvoll, die auf die erste weiterleitet</td></tr>
+        <tr><td class="mono">lumomg.de</td><td>Falls die erste vergeben ist</td></tr>
+        <tr><td class="mono">lumo-restaurant.de</td><td>Notnagel — sagt weniger über den Ort</td></tr>
+      </tbody>
+    </table>
+   </div>
+   <div class="note warn">
+     <strong>Wichtig beim Domaininhaber</strong>
+     Die Domain muss auf das <strong>Unternehmen</strong> registriert werden — mit der Firmierung, die auch ins Impressum kommt. Nicht privat auf denjenigen, der gerade bestellt. Sonst gehört die Domain im Streitfall der falschen Person, und ein Inhaberwechsel ist später mühsam. Dasselbe gilt für den Hosting-Vertrag selbst.
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ===== Schritt 2 ===== -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Schritt 2</span></div>
+  <div class="body">
+   <h2>E-Mail-Adressen anlegen</h2>
+   <div class="prose">
+     <p>Adressen sind unbegrenzt im Paket enthalten, sie kosten also nichts extra. Diese vier braucht das Projekt:</p>
+   </div>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th class="mono">Adresse</th><th>Wofür</th><th>Art</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">info@</td><td>Öffentliche Adresse fürs Impressum und allgemeine Anfragen</td><td>Postfach</td></tr>
+        <tr><td class="mono">reservierung@</td><td>Hier landen die Reservierungs- und Feieranfragen aus der Website. Wird auch als Absender der Bestätigungsmails genutzt, damit Gäste direkt antworten können</td><td>Postfach</td></tr>
+        <tr><td class="mono">events@</td><td>Anfragen zu Veranstaltungen und Kooperationen</td><td>Weiterleitung auf <code>info@</code> genügt</td></tr>
+        <tr><td class="mono">jobs@</td><td>Bewerbungen — ersetzt die GMX-Adresse aus der Stellenanzeige</td><td>Weiterleitung auf <code>info@</code> genügt</td></tr>
+      </tbody>
+    </table>
+   </div>
+   <div class="note">
+     <strong>Die GMX-Adresse sollte abgelöst werden</strong>
+     In der Stellenanzeige steht derzeit eine GMX-Adresse. Als öffentliche Gastadresse wirkt das improvisiert — und wichtiger: Automatische Bestätigungsmails, die von einer Freemail-Adresse verschickt werden, landen deutlich häufiger im Spam. Sobald die Domain steht, sollte alles darüber laufen.
+   </div>
+
+   <h3>Was nach dem Anlegen noch passieren muss</h3>
+   <div class="prose">
+     <p>Damit Bestätigungsmails zuverlässig ankommen, müssen im DNS drei Einträge gesetzt sein: <code>SPF</code>, <code>DKIM</code> und <code>DMARC</code>. Wenn Domain und Postfächer beide bei ALL-INKL liegen, richtet der Anbieter SPF und DKIM automatisch ein — das ist ein wesentlicher Grund, beides beim selben Anbieter zu lassen. Den DMARC-Eintrag ergänze ich, sobald ich Zugriff habe.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ===== Schritt 3 ===== -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Schritt 3</span></div>
+  <div class="body">
+   <h2>Der Server — erst nach der Eröffnung</h2>
+   <div class="chips"><span class="chip open">Nicht vor Oktober nötig</span></div>
+   <div class="prose">
+     <p>Sobald das eigene Reservierungssystem gebaut wird, braucht es eine Maschine, die dauerhaft Node.js ausführt. Bitte jetzt noch <strong>nicht</strong> bestellen — er würde nur ungenutzt Geld kosten.</p>
+   </div>
+
+   <div class="buy">
+     <div class="buy__head">
+       <h4>Hetzner Cloud · CX22</h4>
+       <span class="buy__price">ca. 4,50 € / Monat</span>
+     </div>
+     <div class="buy__body">
+       <ul>
+         <li>2 vCPU, 4 GB RAM, 40 GB NVMe — für ein Restaurant großzügig dimensioniert</li>
+         <li><strong>Standort Nürnberg oder Falkenstein</strong> — bei der Bestellung ausdrücklich einen deutschen Standort wählen, nicht Helsinki</li>
+         <li>Stündliche Abrechnung, jederzeit kündbar, Größe jederzeit änderbar</li>
+         <li>Backup-Option für rund 20 % Aufpreis dazubuchen — das sind etwa 0,90 € im Monat und sollte gesetzt werden</li>
+       </ul>
+       <p>Hetzner hat die Cloud-Preise im Juni 2026 angehoben. Den aktuellen Betrag bitte im Bestellprozess prüfen, die Größenordnung stimmt.</p>
+     </div>
+   </div>
+
+   <div class="note good">
+     <strong>Was beim Umzug passiert — und was nicht</strong>
+     Domain und E-Mail bleiben unverändert bei ALL-INKL. Es ändert sich nur ein einziger DNS-Eintrag, der auf den neuen Server zeigt. Die Postfächer werden nicht angefasst, niemand muss seine Adresse wechseln, und die Website ist während des Umzugs durchgehend erreichbar.
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ===== Kosten ===== -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Kosten</span></div>
+  <div class="body">
+   <h2>Was das Ganze kostet</h2>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th>Position</th><th>Ab wann</th><th class="num">Pro Monat</th><th class="num">Pro Jahr</th></tr></thead>
+      <tbody>
+        <tr><td>ALL-INKL „Privat" — Hosting, Domain, E-Mail, SSL</td><td>sofort</td><td class="num">4,95 €</td><td class="num">59,40 €</td></tr>
+        <tr><td>Hetzner Cloud CX22 — Server für das Buchungssystem</td><td>nach der Eröffnung</td><td class="num">ca. 4,50 €</td><td class="num">ca. 54,00 €</td></tr>
+        <tr><td>Hetzner Backups</td><td>mit dem Server</td><td class="num">ca. 0,90 €</td><td class="num">ca. 10,80 €</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="2">Zusammen im Endausbau</td><td class="num">ca. 10,35 €</td><td class="num">ca. 124 €</td></tr>
+      </tfoot>
+    </table>
+   </div>
+   <div class="prose">
+     <p>Bis zur Eröffnung fallen also nur die 4,95 € an — und der erste Monat davon ist geschenkt. Alle Preise verstehen sich inklusive Mehrwertsteuer.</p>
+     <p>Zum Vergleich: Ein externes Reservierungstool wie resmio oder Quandoo liegt je nach Umfang zwischen 30 und 90 € im Monat. Das eigene System ist nach wenigen Monaten günstiger — und das Design gehört euch.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ===== Nicht kaufen ===== -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Nicht kaufen</span></div>
+  <div class="body">
+   <h2>Was im Bestellprozess angeboten wird und weg kann</h2>
+   <div class="prose">
+     <p>Hoster verkaufen beim Bestellen gern Zusatzpakete. Nichts davon wird für dieses Projekt gebraucht:</p>
+   </div>
+   <div class="no">
+     <div><strong>Homepage-Baukasten</strong> — die Seite wird selbst gebaut, der Baukasten würde nur im Weg stehen</div>
+     <div><strong>Kostenpflichtiges SSL-Zertifikat</strong> — Let's Encrypt ist im Tarif enthalten und für eine Restaurantseite genauso gut</div>
+     <div><strong>SEO-Pakete oder Eintragsdienste</strong> — die lokale Sichtbarkeit kommt über das Google-Business-Profil, und das ist kostenlos</div>
+     <div><strong>Microsoft 365 oder Google Workspace</strong> — die E-Mail-Adressen sind im Hosting bereits enthalten</div>
+     <div><strong>Jahresvorauszahlung</strong> — solange nicht klar ist, ob der Anbieter passt, lieber monatlich zahlen</div>
+     <div><strong>Ein zweiter, größerer Hosting-Tarif</strong> — mehr Speicher löst das Node-Problem nicht, dafür ist der Server da</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ===== Rechtliches ===== -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Pflichten</span></div>
+  <div class="body">
+   <h2>Zwei Dinge, die rechtlich dazugehören</h2>
+   <div class="prose">
+     <p><strong>Auftragsverarbeitungsvertrag (AVV).</strong> Sobald über die Website Gästedaten verarbeitet werden — und das passiert ab der ersten Reservierungsanfrage —, braucht es mit jedem beteiligten Dienstleister einen AVV. Bei ALL-INKL und bei Hetzner lässt sich der jeweils im Kundenkonto mit wenigen Klicks abschließen. Das dauert fünf Minuten und sollte gleich bei der Bestellung erledigt werden.</p>
+     <p><strong>Vertragsinhaber.</strong> Hosting-Vertrag, Domain und Server sollten auf das Unternehmen laufen, nicht auf eine Privatperson. Das betrifft die Haftung, das Impressum und die Frage, wem die Domain im Zweifel gehört.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ===== Zugänge ===== -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Zugänge</span></div>
+  <div class="body">
+   <h2>Was danach an mich muss</h2>
+   <div class="prose">
+     <p>Sobald das Paket gebucht ist, brauche ich für den Livegang diese Zugänge. Am besten über einen Passwortmanager oder einen verschlüsselten Kanal, nicht per normaler E-Mail.</p>
+   </div>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th>Zugang</th><th>Wofür</th></tr></thead>
+      <tbody>
+        <tr><td>FTP- oder SFTP-Daten</td><td>Um die fertige Seite hochzuladen</td></tr>
+        <tr><td>Zugang zur DNS-Verwaltung</td><td>Für die Mail-Einträge und später den Serverwechsel</td></tr>
+        <tr><td>SMTP-Daten von <code>reservierung@</code></td><td>Damit die Website Bestätigungsmails verschicken kann</td></tr>
+        <tr><td>Die gewählte Domain</td><td>Für Impressum, Datenschutzerklärung und die Schema-Daten</td></tr>
+      </tbody>
+    </table>
+   </div>
+   <div class="note">
+     <strong>Alternative, falls die Zugänge nicht rausgehen sollen</strong>
+     Ich kann die fertigen Dateien auch einfach übergeben und eine bebilderte Anleitung dazulegen, sodass der Upload selbst erledigt wird. Das kostet einen Abstimmungsdurchgang mehr, ist aber völlig machbar.
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ===== Checkliste ===== -->
+<section style="border-bottom:none;">
+ <div class="grid">
+  <div><span class="rail">Checkliste</span></div>
+  <div class="body">
+   <h2>Der Reihe nach</h2>
+   <div class="checks">
+     <div class="check"><i></i><div><b>ALL-INKL „Privat" bestellen, Domain im Bestellprozess mitnehmen</b><span>Inhaber ist das Unternehmen. Erster Monat gratis, keine Mindestlaufzeit.</span></div></div>
+     <div class="check"><i></i><div><b>AVV im Kundenkonto abschließen</b><span>Fünf Minuten, direkt bei der Bestellung erledigen.</span></div></div>
+     <div class="check"><i></i><div><b>Vier E-Mail-Adressen anlegen</b><span>info@, reservierung@, events@, jobs@ — die letzten beiden als Weiterleitung.</span></div></div>
+     <div class="check"><i></i><div><b>SSL für die Domain aktivieren</b><span>In der KAS-Oberfläche ein Klick, Let's Encrypt ist enthalten.</span></div></div>
+     <div class="check"><i></i><div><b>Zugangsdaten weitergeben</b><span>FTP, DNS, SMTP — über einen sicheren Kanal.</span></div></div>
+     <div class="check"><i></i><div><b>Google-Business-Profil anlegen</b><span>Kostenlos und lokal wirksamer als jede Maßnahme auf der Website selbst.</span></div></div>
+     <div class="check"><i></i><div><b>Nach der Eröffnung: Hetzner CX22 mit Backups bestellen</b><span>Deutscher Standort, dann AVV auch dort abschließen.</span></div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<footer>
+  <div>LUMO Mönchengladbach · Hosting-Setup · 25. August 2026</div>
+  <div>Preise geprüft am 25.08.2026 und inklusive Mehrwertsteuer. Anbieterpreise ändern sich — die Beträge im Bestellprozess sind maßgeblich.</div>
+</footer>
+
+</div>
