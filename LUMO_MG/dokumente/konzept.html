@@ -1,0 +1,813 @@
+<title>LUMO Website-Konzept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Newsreader:opsz,wght@6..72,400;6..72,600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ground:#E9EDEA;
+  --surface:#F8FAF8;
+  --surface-2:#F0F3F0;
+  --ink:#151F1C;
+  --ink-soft:#3B4A45;
+  --muted:#63736D;
+  --line:#D3DBD6;
+  --line-soft:#E1E7E3;
+  --accent:#0E6459;
+  --accent-soft:#D9E8E4;
+  --brass:#8C6516;
+  --brass-soft:#F0E6D0;
+  --risk:#98392B;
+  --risk-soft:#F5E1DC;
+  --shadow:0 1px 2px rgba(21,31,28,.05), 0 8px 24px -12px rgba(21,31,28,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0D1412;
+    --surface:#141D1A;
+    --surface-2:#1A2521;
+    --ink:#E5EBE7;
+    --ink-soft:#C2CDC8;
+    --muted:#8B9A94;
+    --line:#26332E;
+    --line-soft:#1E2A26;
+    --accent:#5CC4B4;
+    --accent-soft:#123330;
+    --brass:#D3A455;
+    --brass-soft:#2E2618;
+    --risk:#E08472;
+    --risk-soft:#33201C;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0D1412;
+  --surface:#141D1A;
+  --surface-2:#1A2521;
+  --ink:#E5EBE7;
+  --ink-soft:#C2CDC8;
+  --muted:#8B9A94;
+  --line:#26332E;
+  --line-soft:#1E2A26;
+  --accent:#5CC4B4;
+  --accent-soft:#123330;
+  --brass:#D3A455;
+  --brass-soft:#2E2618;
+  --risk:#E08472;
+  --risk-soft:#33201C;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"Newsreader",Georgia,"Times New Roman",serif;
+  font-size:1.0625rem;
+  line-height:1.65;
+  font-optical-sizing:auto;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(1.25rem,4vw,3rem);}
+
+h1,h2,h3,h4{font-family:"Bricolage Grotesque",-apple-system,"Segoe UI",sans-serif;font-weight:700;text-wrap:balance;margin:0;letter-spacing:-.02em;line-height:1.12;}
+p{margin:0;}
+ul,ol{margin:0;padding-left:1.15em;}
+li{margin:.3em 0;}
+li::marker{color:var(--muted);}
+strong{font-weight:600;color:var(--ink);}
+a{color:var(--accent);text-underline-offset:.18em;text-decoration-thickness:1px;}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+code,.mono{font-family:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;font-size:.82em;}
+code{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:4px;padding:.1em .35em;}
+
+/* ---------- masthead ---------- */
+.mast{padding:clamp(3rem,9vw,6rem) 0 clamp(2rem,5vw,3.5rem);border-bottom:1px solid var(--line);}
+.kicker{font-family:"JetBrains Mono",monospace;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+.mast h1{font-size:clamp(2.5rem,6.5vw,4.25rem);margin:.65rem 0 0;max-width:16ch;}
+.mast .lede{margin-top:1.5rem;max-width:62ch;font-size:1.2rem;color:var(--ink-soft);}
+.metaline{display:flex;flex-wrap:wrap;gap:.5rem 2rem;margin-top:2.25rem;font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;}
+
+/* ---------- section grid ---------- */
+section{border-bottom:1px solid var(--line);padding:clamp(2.5rem,6vw,4rem) 0;}
+.grid{display:grid;grid-template-columns:1fr;gap:1.5rem;}
+@media (min-width:900px){
+  .grid{grid-template-columns:9.5rem 1fr;gap:2.75rem;align-items:start;}
+  .rail{position:sticky;top:2rem;}
+}
+.rail{font-family:"JetBrains Mono",monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-top:.5rem;border-top:2px solid var(--ink);display:inline-block;}
+.body{display:flex;flex-direction:column;gap:1.5rem;min-width:0;}
+.body > h2{font-size:clamp(1.6rem,3.2vw,2.1rem);}
+.body > h3{font-size:1.15rem;font-weight:500;letter-spacing:-.01em;margin-top:.5rem;}
+.prose{max-width:66ch;display:flex;flex-direction:column;gap:1rem;}
+
+/* ---------- chips ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;}
+.chip{font-family:"JetBrains Mono",monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:.28em .6em;border-radius:3px;border:1px solid;}
+.chip.ok{color:var(--accent);background:var(--accent-soft);border-color:transparent;}
+.chip.open{color:var(--brass);background:var(--brass-soft);border-color:transparent;}
+.chip.risk{color:var(--risk);background:var(--risk-soft);border-color:transparent;}
+
+/* ---------- decision list ---------- */
+.decisions{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+.dec{background:var(--surface);padding:1.1rem 1.25rem;display:grid;gap:.35rem;}
+@media (min-width:640px){.dec{grid-template-columns:11rem 1fr;gap:.35rem 1.5rem;align-items:baseline;}}
+.dec dt{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.dec dd{margin:0;}
+.dec dd em{font-style:normal;color:var(--muted);display:block;font-size:.95rem;margin-top:.15rem;}
+
+/* ---------- cards ---------- */
+.cards{display:grid;gap:1rem;grid-template-columns:1fr;}
+@media (min-width:720px){.cards.two{grid-template-columns:1fr 1fr;}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:1.25rem 1.35rem;display:flex;flex-direction:column;gap:.6rem;box-shadow:var(--shadow);}
+.card h4{font-size:1rem;font-weight:700;}
+.card p,.card ul{font-size:.97rem;color:var(--ink-soft);}
+
+/* ---------- flow ---------- */
+.flow{display:grid;gap:0;counter-reset:step;border-left:1px solid var(--line);margin-left:.6rem;}
+.step{position:relative;padding:0 0 1.4rem 2rem;counter-increment:step;}
+.step:last-child{padding-bottom:0;}
+.step::before{
+  content:counter(step);
+  position:absolute;left:-.85rem;top:.05rem;
+  width:1.7rem;height:1.7rem;border-radius:50%;
+  background:var(--surface);border:1px solid var(--line);
+  color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:.72rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.step h4{font-size:1rem;font-weight:700;margin-bottom:.2rem;}
+.step p{font-size:.97rem;color:var(--ink-soft);}
+.branch{margin-top:.5rem;display:grid;gap:.4rem;}
+.branch div{font-size:.93rem;padding:.45rem .7rem;border-radius:4px;background:var(--surface-2);border-left:2px solid var(--accent);}
+.branch div.alt{border-left-color:var(--brass);}
+
+/* ---------- tables ---------- */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.93rem;min-width:34rem;}
+th,td{text-align:left;padding:.65rem .9rem;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+thead th{font-family:"JetBrains Mono",monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap;}
+tbody tr:last-child td{border-bottom:none;}
+td.mono,th.mono{font-family:"JetBrains Mono",monospace;font-size:.82rem;white-space:nowrap;}
+td .num{font-variant-numeric:tabular-nums;}
+
+/* ---------- phases ---------- */
+.phases{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+.phase{background:var(--surface);padding:1.15rem 1.3rem;display:grid;gap:.5rem;}
+@media (min-width:760px){.phase{grid-template-columns:3.5rem 1fr 7rem;gap:.5rem 1.5rem;align-items:start;}}
+.phase .no{font-family:"JetBrains Mono",monospace;font-size:1.35rem;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;}
+.phase h4{font-size:1.02rem;}
+.phase h4 .chip{margin-left:.55rem;vertical-align:.16em;font-weight:400;}
+.phase p{font-size:.95rem;color:var(--ink-soft);margin-top:.25rem;}
+.phase .load{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;}
+
+/* ---------- callout ---------- */
+.note{border-left:2px solid var(--brass);background:var(--brass-soft);padding:.9rem 1.1rem;border-radius:0 5px 5px 0;font-size:.97rem;}
+.note.warn{border-left-color:var(--risk);background:var(--risk-soft);}
+.note strong{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:.85rem;letter-spacing:.02em;margin-bottom:.2rem;}
+
+/* ---------- questions ---------- */
+.qs{display:grid;gap:.55rem;}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:.85rem 1.05rem;display:grid;gap:.15rem;}
+.q b{font-family:"Bricolage Grotesque",sans-serif;font-size:.97rem;font-weight:700;}
+.q span{font-size:.92rem;color:var(--muted);}
+
+footer{padding:3rem 0 4rem;color:var(--muted);font-size:.9rem;}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">Konzept &amp; Planung &middot; Stand 24. August 2026 &middot; Version 2</div>
+  <h1>LUMO Mönchengladbach</h1>
+  <p class="lede">Modern Boho brunch &amp; dinner spot an der Krefelder Straße 219 — eine Website mit eigenem Reservierungssystem, redaktionell gepflegten Events und einem Admin-Bereich, den das Team ohne Entwickler bedienen kann. Eröffnung am 1. September 2026.</p>
+  <div class="metaline">
+    <span>Sprache: Deutsch</span>
+    <span>Mobile first</span>
+    <span>Astro</span>
+    <span>Zwei Stufen</span>
+    <span>Hoster-neutral, Betrieb in Deutschland</span>
+  </div>
+</header>
+
+<!-- ============ Location ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Die Location</span></div>
+  <div class="body">
+   <h2>Was das LUMO ist</h2>
+   <div class="prose">
+     <p>Ein Modern-Boho-Lokal mit Bali-Handschrift: schwarze Fassade mit goldenen Leuchtbuchstaben nach außen, innen drapierte Stoffbahnen unter der Decke, Rattan- und Makramee-Leuchten, creme Bouclé-Sofas an dunklen Holztischen, Olivenbäume in schweren Tontöpfen, geschnitzte Mandala-Paneele und ein balinesisches Wandbild hinter der Bar. Grundstimmung: warmes Kerzenlicht.</p>
+   </div>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th>Angabe</th><th>Stand</th></tr></thead>
+      <tbody>
+        <tr><td>Eröffnung</td><td><strong>1. September 2026</strong></td></tr>
+        <tr><td>Adresse</td><td>Krefelder Straße 219, 41065 Mönchengladbach — eigene Parkplätze direkt vor dem Haus</td></tr>
+        <tr><td>Positionierung</td><td>„Warm tones. Natural textures. Good coffee." &middot; Tagline: Brunch &middot; Coffee &middot; Drinks &middot; Events</td></tr>
+        <tr><td>Küche</td><td>Türkisches Frühstück trifft moderne Brunch-Klassiker; dazu Lunchangebote, Speciality Coffee, Kuchen &amp; Torten, eine eigene Matcha-Welt, Dinner und Signature Cocktails</td></tr>
+        <tr><td>Kanäle</td><td>Instagram <code>@lumo.mg</code></td></tr>
+      </tbody>
+    </table>
+   </div>
+   <div class="note warn">
+     <strong>Die Innenraumbilder sind Renderings</strong>
+     Instagram kennzeichnet die Interior-Aufnahmen als KI-Inhalte — es sind offenbar Visualisierungen aus der Planungsphase. Für die Website braucht es Fotos der fertig eingerichteten Räume. Renderings, die sich vom echten Lokal unterscheiden, enttäuschen beim ersten Besuch und sind bei lokalen Unternehmen auch für Google ein schlechtes Signal. Ein Fotograf für einen Abendtermin kurz nach der Eröffnung wäre gut investiert.
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Zeitplan ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Zeitplan</span></div>
+  <div class="body">
+   <h2>Zwei Stufen statt einer</h2>
+   <div class="chips">
+     <span class="chip risk">8 Tage bis zur Eröffnung</span>
+   </div>
+   <div class="prose">
+     <p>Ein Buchungssystem mit Kapazitätslogik, Admin, Mailversand und Löschkonzept lässt sich in acht Tagen nicht seriös bauen und schon gar nicht testen. Eine Reservierung, die am Eröffnungswochenende doppelt bucht oder deren Bestätigungsmail im Spam landet, schadet mehr als gar keine Website. Deshalb wird in zwei Stufen ausgeliefert — für den Gast unsichtbar getrennt.</p>
+   </div>
+   <div class="cards two">
+     <div class="card">
+       <h4>Stufe 1 — bis zum 1. September</h4>
+       <p>Die vollständige, gestaltete Seite: Startseite, Speisekarte, Events, Feiern &amp; Mieten, Kontakt, Anfahrt, Impressum, Datenschutz. Reservierung als <strong>Anfrageformular</strong> — der Gast füllt Datum, Uhrzeit und Personenzahl aus, das LUMO bestätigt per Mail oder Telefon.</p>
+       <p>Technisch ein rein statisches Astro-Build plus ein kleines Formular-Skript. Läuft damit auf <strong>jedem</strong> Webspace, auch auf dem günstigsten Paket — die Hoster-Entscheidung blockiert die Eröffnung nicht.</p>
+     </div>
+     <div class="card">
+       <h4>Stufe 2 — danach, ohne Zeitdruck</h4>
+       <p>Umstellung auf Astro im SSR-Modus, Datenbank, Login, das echte Buchungssystem mit Kapazitätsprüfung und automatischer Bestätigung, dazu der Admin-Bereich für Events, Speisekarte und Öffnungszeiten.</p>
+       <p>Das Anfrageformular aus Stufe 1 wird dabei durch die echte Buchungsroute ersetzt — Design, Texte und Adressen bleiben unverändert. Voraussetzung: der Node-fähige Server steht.</p>
+     </div>
+   </div>
+   <div class="note">
+     <strong>Was Stufe 1 zur Eröffnung bereits kann</strong>
+     Reservierungsanfragen entgegennehmen, Speisekarte und Events zeigen, Feier-Anfragen sammeln, bei Google mit Restaurant-Schema und korrekten Öffnungszeiten auftreten, und den Instagram-Traffic auffangen. Für die Eröffnungswoche ist das das Entscheidende.
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Entschieden ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Entschieden</span></div>
+  <div class="body">
+   <h2>Was bereits feststeht</h2>
+   <div class="prose">
+     <p>Diese vier Weichen sind gestellt und bestimmen alles Weitere. Sie sind bewusst so dokumentiert, dass auch der spätere Betreiber nachvollziehen kann, warum die Seite so gebaut ist.</p>
+   </div>
+
+   <dl class="decisions">
+     <div class="dec">
+       <dt>Reservierung</dt>
+       <dd>Eigenes Buchungssystem, hybride Bestätigung
+       <em>Bis 6 Personen bestätigt das System sofort, ab 7 Personen entscheidet das Team im Admin. Kein externer Dienst, kein fremdes Design, keine monatliche Lizenz — dafür tragt ihr die Verantwortung für die Gästedaten selbst.</em></dd>
+     </div>
+     <div class="dec">
+       <dt>Technik</dt>
+       <dd>Astro im SSR-Modus mit Node-Adapter
+       <em>Öffentliche Seiten werden statisch schnell ausgeliefert, Reservierung und Admin laufen serverseitig. Content-Collections für Events und Speisekarte.</em></dd>
+     </div>
+     <div class="dec">
+       <dt>Struktur</dt>
+       <dd>Hybrid: erzählende Startseite plus eigene Unterseiten
+       <em>Die Startseite verkauft die Atmosphäre, die Unterseiten holen die Google-Suchen ab (Speisekarte, Events, Feiern &amp; Mieten, Reservierung).</em></dd>
+     </div>
+     <div class="dec">
+       <dt>Betrieb</dt>
+       <dd>Deutscher Hoster, Auswahl bleibt offen
+       <em>Das Projekt wird übergeben. Deshalb wird nichts an einen bestimmten Anbieter gekoppelt: Datenbank, Mailversand und Domain sind reine Konfiguration.</em></dd>
+     </div>
+   </dl>
+
+   <div class="note warn">
+     <strong>Hosting-Voraussetzung, bitte früh prüfen</strong>
+     Ein eigenes Buchungssystem braucht einen Server, der Node.js dauerhaft ausführt. Klassisches PHP-Webhosting (All-Inkl, IONOS Webhosting, 1blu &amp; Co.) reicht dafür nicht. Geeignet sind ein kleiner VPS bei Hetzner oder netcup (ca. 5–10 €/Monat, Standort Deutschland) oder ein Managed-Node-Angebot. Diese Frage sollte geklärt sein, bevor Phase 4 beginnt.
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Ziele ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Ziele</span></div>
+  <div class="body">
+   <h2>Was die Seite leisten muss</h2>
+   <div class="prose">
+     <p>Eine Gastro-Seite hat selten nur eine Aufgabe. Beim LUMO kommen drei sehr unterschiedliche Besuchergruppen zusammen — und jede davon muss in unter zehn Sekunden zu ihrem Ziel kommen, überwiegend auf dem Handy, oft unterwegs.</p>
+   </div>
+   <div class="cards two">
+     <div class="card">
+       <h4>Der spontane Gast</h4>
+       <p>Sucht abends „Restaurant Mönchengladbach“ oder klickt aus dem Google-Profil. Will wissen: Habt ihr offen? Wo seid ihr? Was kostet das ungefähr? Bekomme ich jetzt noch einen Tisch?</p>
+       <p><strong>Antwort der Seite:</strong> Öffnungsstatus live, Adresse mit Routen-Link, Speisekarte ohne PDF-Download, Reservierung in unter einer Minute.</p>
+     </div>
+     <div class="card">
+       <h4>Der Ausgeh-Gast</h4>
+       <p>Folgt euch auf Instagram, sucht nach „was geht am Wochenende“. Will Stimmung sehen und wissen, was als Nächstes läuft.</p>
+       <p><strong>Antwort der Seite:</strong> Große Bilder, eine gepflegte Event-Übersicht mit Datum, Einlass und Musikrichtung, Detailseiten, die sich teilen lassen.</p>
+     </div>
+     <div class="card">
+       <h4>Die Feier-Anfrage</h4>
+       <p>Geburtstag, Firmenfeier, Hochzeit, Taufe. Sucht konkret nach Kapazität, Räumen und Verpflegung — und ist der wirtschaftlich wertvollste Besucher der Seite.</p>
+       <p><strong>Antwort der Seite:</strong> Eine eigene Seite „Feiern &amp; Mieten“ mit Raumgrößen, Personenzahlen, Bestuhlungsvarianten, Beispielpaketen und einem Anfrageformular, das die richtigen Angaben abfragt.</p>
+     </div>
+     <div class="card">
+       <h4>Google selbst</h4>
+       <p>Die lokale Sichtbarkeit entscheidet über den Großteil des Traffics. Die Seite muss maschinenlesbar machen, was sie ist.</p>
+       <p><strong>Antwort der Seite:</strong> <code>Restaurant</code>- und <code>Event</code>-Schema als JSON-LD, saubere Öffnungszeiten-Daten, Verknüpfung mit dem Google-Business-Profil, schnelle Ladezeiten.</p>
+     </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Seitenplan ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Seitenplan</span></div>
+  <div class="body">
+   <h2>Aufbau der Seite</h2>
+   <div class="prose">
+     <p>Die Startseite erzählt in Sektionen und verweist in die Tiefe; die Unterseiten tragen den Inhalt, der eigenständig ranken und verlinkt werden soll.</p>
+   </div>
+
+   <h3>Startseite — Sektionen von oben nach unten</h3>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th>Sektion</th><th>Inhalt</th><th>Handlungsziel</th></tr></thead>
+      <tbody>
+        <tr><td>Hero</td><td>Vollflächiges Bild oder kurze Videoschleife, Name, Ein-Satz-Positionierung, Öffnungsstatus („Heute bis 1 Uhr geöffnet“)</td><td>Tisch reservieren</td></tr>
+        <tr><td>Das LUMO</td><td>Zwei bis drei Absätze über Konzept, Küche und Abend — begleitet von zwei Bildern</td><td>Vertrauen aufbauen</td></tr>
+        <tr><td>Küche &amp; Bar</td><td>Auszug aus der Karte: Signature-Gerichte, Signature-Drinks mit Preis</td><td>Zur Speisekarte</td></tr>
+        <tr><td>Nächste Events</td><td>Die drei kommenden Termine als Karten mit Datum, Titel, Einlass</td><td>Zur Event-Übersicht</td></tr>
+        <tr><td>Feiern im LUMO</td><td>Teaser mit Kapazität und drei Anlässen</td><td>Zur Anfrage</td></tr>
+        <tr><td>Galerie</td><td>Bildstrecke, auf dem Handy horizontal wischbar</td><td>Atmosphäre vermitteln</td></tr>
+        <tr><td>Finden &amp; Kontakt</td><td>Adresse, Öffnungszeiten, Karte (erst nach Klick geladen), Telefon, Kontaktformular</td><td>Anrufen oder anfahren</td></tr>
+      </tbody>
+    </table>
+   </div>
+
+   <h3>Unterseiten</h3>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th class="mono">Pfad</th><th>Seite</th><th>Besonderheit</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">/speisekarte</td><td>Speisekarte &amp; Getränke</td><td>Nach Kategorien gefiltert, Allergene und Vegan/Veggie-Kennzeichnung, aus der Datenbank gepflegt, kein PDF</td></tr>
+        <tr><td class="mono">/events</td><td>Event-Übersicht</td><td>Kommende und vergangene Events, filterbar nach Kategorie</td></tr>
+        <tr><td class="mono">/events/[slug]</td><td>Event-Detailseite</td><td>Eigene Teilen-Vorschau für Instagram und WhatsApp, Event-Schema, optional Ticket-Link</td></tr>
+        <tr><td class="mono">/reservieren</td><td>Tisch reservieren</td><td>Der Buchungsablauf, siehe nächster Abschnitt</td></tr>
+        <tr><td class="mono">/feiern</td><td>Feiern &amp; Mieten</td><td>Räume, Kapazitäten, Pakete, spezialisiertes Anfrageformular</td></tr>
+        <tr><td class="mono">/kontakt</td><td>Kontakt &amp; Anfahrt</td><td>Formular, Parken, ÖPNV, Karte nach Klick</td></tr>
+        <tr><td class="mono">/impressum</td><td>Impressum</td><td>Pflicht nach §5 DDG</td></tr>
+        <tr><td class="mono">/datenschutz</td><td>Datenschutzerklärung</td><td>Mit eigenem Abschnitt zur Reservierungsverarbeitung</td></tr>
+        <tr><td class="mono">/admin</td><td>Verwaltung</td><td>Passwortgeschützt, nicht in der Navigation, für Suchmaschinen gesperrt</td></tr>
+      </tbody>
+    </table>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Reservierung ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Reservierung</span></div>
+  <div class="body">
+   <h2>Das Buchungssystem</h2>
+   <div class="prose">
+     <p>Das ist das Herzstück und der Teil, an dem die meiste Arbeit hängt. Entscheidend ist, dass es <strong>nie überbucht</strong> und dass der Gast in jedem Fall eine verlässliche Rückmeldung bekommt — auch wenn niemand am Rechner sitzt.</p>
+   </div>
+
+   <h3>Ablauf für den Gast</h3>
+   <div class="flow">
+     <div class="step">
+       <h4>Datum wählen</h4>
+       <p>Kalender mit ausgegrauten Ruhetagen, Feiertagen und Schließzeiten. Vorlauf mindestens zwei Stunden, maximal 90 Tage im Voraus.</p>
+     </div>
+     <div class="step">
+       <h4>Personenzahl angeben</h4>
+       <p>1 bis 12 direkt wählbar. Ab 13 Personen leitet das System automatisch auf das Formular für Gruppen und Feiern um — solche Buchungen gehören nicht in den regulären Tischbestand.</p>
+     </div>
+     <div class="step">
+       <h4>Freie Uhrzeit wählen</h4>
+       <p>Das System zeigt nur Zeitfenster, in denen für diese Personenzahl noch Platz ist. Belegte Fenster erscheinen gar nicht erst — das vermeidet Frust nach dem Ausfüllen.</p>
+     </div>
+     <div class="step">
+       <h4>Kontaktdaten und Wünsche</h4>
+       <p>Name, E-Mail, Telefon, optional Anlass und Anmerkung (Kinderstuhl, Allergie, Terrasse). Dazu die Datenschutz-Bestätigung mit Link zur Erklärung.</p>
+     </div>
+     <div class="step">
+       <h4>Antwort</h4>
+       <div class="branch">
+         <div><strong>Bis 6 Personen:</strong> sofortige Bestätigung auf der Seite und per E-Mail, inklusive Link zum Stornieren oder Ändern. Das Team bekommt parallel eine Benachrichtigung.</div>
+         <div class="alt"><strong>Ab 7 Personen:</strong> „Anfrage eingegangen, wir melden uns“. Das Team bestätigt oder lehnt im Admin mit einem Klick ab, der Gast wird automatisch per E-Mail informiert.</div>
+       </div>
+     </div>
+     <div class="step">
+       <h4>Erinnerung</h4>
+       <p>Am Vortag geht automatisch eine kurze Erinnerungsmail mit Storno-Link raus. Das ist die wirksamste Maßnahme gegen No-Shows und kostet nichts.</p>
+     </div>
+   </div>
+
+   <h3>Wie die Kapazität berechnet wird</h3>
+   <div class="prose">
+     <p>Bewusst kein echter Tischplan zum Start — der ist aufwendig, fehleranfällig und in der Praxis selten nötig. Stattdessen ein Platzkontingent pro Zeitfenster, das sich in fünf Minuten einstellen lässt:</p>
+   </div>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th>Stellschraube</th><th>Bedeutung</th><th>Startwert, anpassbar</th></tr></thead>
+      <tbody>
+        <tr><td>Zeitfenster</td><td>Raster, in dem Reservierungen möglich sind</td><td>alle 30 Minuten</td></tr>
+        <tr><td>Verweildauer</td><td>Wie lange ein Platz blockiert wird</td><td><span class="num">2 h</span> bis 4 Personen, <span class="num">2,5 h</span> darüber</td></tr>
+        <tr><td>Plätze pro Fenster</td><td>Wie viele Gäste gleichzeitig sitzen können</td><td>je Wochentag einstellbar</td></tr>
+        <tr><td>Online-Anteil</td><td>Reserve für Laufkundschaft und Telefon</td><td><span class="num">60 %</span> der Plätze online buchbar</td></tr>
+        <tr><td>Schwelle „manuell“</td><td>Ab wann das Team entscheidet</td><td>ab <span class="num">7</span> Personen</td></tr>
+        <tr><td>Letzte Buchung</td><td>Wie lange vor Küchenschluss noch buchbar</td><td><span class="num">60</span> Minuten vorher</td></tr>
+      </tbody>
+    </table>
+   </div>
+   <div class="prose">
+     <p>Eine Reservierung belegt alle Zeitfenster, die ihre Verweildauer überschneidet. Ein Tisch für vier um 19:00 Uhr nimmt also den Fenstern von 19:00 bis 20:30 jeweils vier Plätze weg. Damit lässt sich ein Abend realistisch abbilden, ohne einen einzigen Tisch zu modellieren.</p>
+     <p>Ein echter Tischplan mit Zuweisung ist später nachrüstbar — das Datenmodell steht dem nicht im Weg.</p>
+   </div>
+
+   <h3>Was das System außerdem abfangen muss</h3>
+   <div class="cards two">
+     <div class="card">
+       <h4>Spam ohne Captcha</h4>
+       <p>Kein Google reCAPTCHA — das wäre eine Datenübermittlung in die USA auf einer Seite, die sonst ohne Cookie-Banner auskommt. Stattdessen: unsichtbares Honeypot-Feld, Mindest-Ausfüllzeit, Ratenbegrenzung pro IP und eine Sperre gegen Mehrfachbuchungen derselben Adresse im selben Zeitfenster.</p>
+     </div>
+     <div class="card">
+       <h4>Zustellbarkeit der E-Mails</h4>
+       <p>Bestätigungsmails, die im Spam landen, machen das ganze System wertlos. Versand über den SMTP-Zugang der eigenen Domain, dazu <code>SPF</code>, <code>DKIM</code> und <code>DMARC</code> im DNS. Das gehört fest in die Übergabe-Checkliste.</p>
+     </div>
+     <div class="card">
+       <h4>Gleichzeitige Buchungen</h4>
+       <p>Zwei Gäste, die im selben Moment das letzte Zeitfenster buchen, dürfen nicht beide durchkommen. Kapazitätsprüfung und Speichern laufen deshalb in einer einzigen Datenbank-Transaktion.</p>
+     </div>
+     <div class="card">
+       <h4>Der Ausfall-Fall</h4>
+       <p>Wenn der Mailversand hakt oder die Seite nicht erreichbar ist, muss der Gast trotzdem reservieren können. Die Telefonnummer bleibt deshalb immer sichtbar, und jede Reservierung wird gespeichert, bevor die Mail rausgeht — nicht danach.</p>
+     </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Datenmodell ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Datenmodell</span></div>
+  <div class="body">
+   <h2>Was in der Datenbank liegt</h2>
+   <div class="prose">
+     <p>Bewusst schlank gehalten. Jede Tabelle hat einen klaren Zweck, und alles Personenbezogene lässt sich gezielt löschen oder anonymisieren.</p>
+   </div>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th class="mono">Tabelle</th><th>Zweck</th><th>Wichtigste Felder</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">reservations</td><td>Jede Tischreservierung</td><td>Datum, Uhrzeit, Personen, Name, E-Mail, Telefon, Anlass, Anmerkung, Status (offen / bestätigt / abgelehnt / storniert / nicht erschienen), Storno-Token, Zeitpunkt der Einwilligung</td></tr>
+        <tr><td class="mono">opening_hours</td><td>Regelöffnungszeiten je Wochentag</td><td>Wochentag, Öffnung, Schluss, Küchenschluss</td></tr>
+        <tr><td class="mono">closures</td><td>Ruhetage, Feiertage, Betriebsferien, Privatveranstaltungen</td><td>Von, Bis, Grund, öffentlich sichtbar ja/nein</td></tr>
+        <tr><td class="mono">capacity_rules</td><td>Plätze und Online-Anteil je Wochentag oder Einzeldatum</td><td>Geltungsbereich, Zeitfenster, maximale Gäste</td></tr>
+        <tr><td class="mono">events</td><td>Veranstaltungen</td><td>Titel, Slug, Datum, Einlass, Beschreibung, Bild, Kategorie, Ticket-Link, Entwurf oder veröffentlicht</td></tr>
+        <tr><td class="mono">menu_sections<br>menu_items</td><td>Speise- und Getränkekarte</td><td>Kategorie, Name, Beschreibung, Preis, Allergene, Kennzeichnung, Reihenfolge, sichtbar</td></tr>
+        <tr><td class="mono">inquiries</td><td>Kontakt- und Feier-Anfragen</td><td>Typ, Name, Kontakt, Anlass, Personenzahl, Wunschtermin, Nachricht, Bearbeitungsstatus</td></tr>
+        <tr><td class="mono">users</td><td>Zugänge fürs Team</td><td>E-Mail, Passwort-Hash, Rolle (Inhaber oder Team)</td></tr>
+        <tr><td class="mono">audit_log</td><td>Wer hat wann was bestätigt oder geändert</td><td>Benutzer, Aktion, Objekt, Zeitpunkt</td></tr>
+      </tbody>
+    </table>
+   </div>
+   <div class="note">
+     <strong>Datenbank-Wahl</strong>
+     Zum Start SQLite als Datei — für ein Restaurant völlig ausreichend, macht das Backup zu einem Dateikopie-Vorgang und spart dem Betreiber einen zweiten Dienst. Der Datenbankzugriff wird über eine dünne Schicht gekapselt, sodass ein Wechsel auf PostgreSQL später ohne Umbau der Anwendung möglich ist.
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Admin ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Admin</span></div>
+  <div class="body">
+   <h2>Der Verwaltungsbereich</h2>
+   <div class="prose">
+     <p>Gebaut für ein Handy hinter dem Tresen, nicht für einen Bürorechner. Der wichtigste Bildschirm ist die Ansicht des heutigen Abends — alles andere ist zweitrangig.</p>
+   </div>
+   <div class="cards two">
+     <div class="card">
+       <h4>Heute</h4>
+       <ul>
+         <li>Reservierungen nach Uhrzeit, mit Gästesumme pro Zeitfenster</li>
+         <li>Ein Fingertipp: angekommen &middot; nicht erschienen &middot; storniert</li>
+         <li>Anmerkungen des Gastes direkt sichtbar</li>
+         <li>Offene Anfragen als Zähler im Menü</li>
+       </ul>
+     </div>
+     <div class="card">
+       <h4>Woche &amp; Kalender</h4>
+       <ul>
+         <li>Auslastung pro Tag auf einen Blick</li>
+         <li>Tag manuell schließen oder Kapazität kurzfristig reduzieren</li>
+         <li>Telefonreservierung von Hand eintragen</li>
+         <li>Gästeliste als CSV exportieren</li>
+       </ul>
+     </div>
+     <div class="card">
+       <h4>Redaktion</h4>
+       <ul>
+         <li>Events anlegen, Bild hochladen, als Entwurf speichern, veröffentlichen</li>
+         <li>Speisekarte pflegen: Preise ändern, Gerichte aus- und einblenden</li>
+         <li>Öffnungszeiten und Schließtage setzen</li>
+         <li>Startseitentexte und Galeriebilder tauschen</li>
+       </ul>
+     </div>
+     <div class="card">
+       <h4>Einstellungen</h4>
+       <ul>
+         <li>Kapazitäten und Reservierungsregeln</li>
+         <li>Empfängeradressen für Benachrichtigungen</li>
+         <li>Weitere Team-Zugänge anlegen</li>
+         <li>Datenbank-Sicherung herunterladen</li>
+       </ul>
+     </div>
+   </div>
+   <div class="prose">
+     <p>Anmeldung mit E-Mail und Passwort, Passwörter als Argon2-Hash, Sitzungen über HttpOnly-Cookies mit CSRF-Schutz. Kein öffentlicher Registrierungsweg — Zugänge legt nur der Inhaber an.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Recht ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Recht</span></div>
+  <div class="body">
+   <h2>Datenschutz und Pflichten</h2>
+   <div class="prose">
+     <p>Sobald ihr Reservierungen selbst speichert, verarbeitet ihr personenbezogene Daten in eigener Verantwortung. Das ist kein Hindernis, aber es gehören ein paar Dinge dazu — und die sind im Bau billiger als in der Nachrüstung.</p>
+   </div>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th>Thema</th><th>Umsetzung</th></tr></thead>
+      <tbody>
+        <tr><td>Impressum</td><td>Nach §5 DDG: Firmierung, Vertretungsberechtigte, Anschrift, Telefon, E-Mail, Handelsregister und USt-IdNr., Verantwortliche für den Inhalt, Hinweis zur EU-Streitschlichtung</td></tr>
+        <tr><td>Datenschutzerklärung</td><td>Eigene Abschnitte für Reservierung, Kontaktformular, Server-Logfiles und Kartendienst — jeweils mit Rechtsgrundlage, Speicherdauer und Betroffenenrechten</td></tr>
+        <tr><td>Löschkonzept</td><td>Reservierungen werden 90 Tage nach dem Termin automatisch anonymisiert (die Zahlen für die Auslastungsstatistik bleiben erhalten), Anfragen nach sechs Monaten gelöscht. Läuft als nächtlicher Job.</td></tr>
+        <tr><td>Google Maps</td><td>Wird nicht automatisch geladen. Stattdessen ein statisches Kartenbild mit Klickfläche; erst der Klick lädt die interaktive Karte, und darüber steht, was dabei passiert.</td></tr>
+        <tr><td>Schriften</td><td>Werden lokal ausgeliefert, keine Verbindung zu Google-Servern</td></tr>
+        <tr><td>Cookie-Banner</td><td>Wird nicht gebraucht: Es gibt nur die technisch notwendige Sitzung des Admin-Bereichs. Für Statistik — falls gewünscht — cookiefreies Matomo oder Plausible auf eigenem Server.</td></tr>
+        <tr><td>Auftragsverarbeitung</td><td>AV-Vertrag mit dem gewählten Hoster abschließen. Bei Hetzner und netcup sind die Standardverträge online abrufbar.</td></tr>
+        <tr><td>Verarbeitungsverzeichnis</td><td>Kurzes Dokument, das die Reservierungsverarbeitung beschreibt — liefere ich als Vorlage mit</td></tr>
+        <tr><td>Allergene</td><td>Kennzeichnung nach LMIV auch online, wenn Gerichte mit Zutaten dargestellt werden</td></tr>
+      </tbody>
+    </table>
+   </div>
+   <div class="note warn">
+     <strong>Kein Rechtsrat</strong>
+     Ich baue die Struktur, die Textbausteine und das Löschkonzept — die finale Prüfung von Impressum und Datenschutzerklärung sollte jemand mit juristischem Hintergrund übernehmen, gerade weil hier Gästedaten selbst gespeichert werden.
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Gestaltung ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Gestaltung</span></div>
+  <div class="body">
+   <h2>Design-Richtung</h2>
+   <div class="chips">
+     <span class="chip ok">Festgelegt &middot; Entwurf liegt vor</span>
+   </div>
+   <div class="prose">
+     <p>Abgeleitet aus Wortmarke, Fassade und Innenraum. Die Seite ist bewusst einthemig dunkel mit hellen Sand-Sektionen — genau wie das Lokal außen schwarz-golden und innen warm-hell ist.</p>
+   </div>
+
+   <h3>Palette</h3>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th>Rolle</th><th class="mono">Wert</th><th>Herkunft</th></tr></thead>
+      <tbody>
+        <tr><td>Nacht — Grundfläche</td><td class="mono">#0C0B09</td><td>Die schwarze Fassade, minimal warm gebrochen</td></tr>
+        <tr><td>Nacht tief / Karten</td><td class="mono">#131009 &middot; #1E180F</td><td>Abstufungen für Sektionen und Kartenflächen</td></tr>
+        <tr><td>Gold — Akzent</td><td class="mono">#C79A54</td><td>Die Leuchtbuchstaben über dem Eingang</td></tr>
+        <tr><td>Lichtgold</td><td class="mono">#E9C88C</td><td>Kerzenlicht, Strahler, Hover-Zustände</td></tr>
+        <tr><td>Gold dunkel</td><td class="mono">#8A6425</td><td>Dieselbe Farbe für hellen Grund, damit der Kontrast hält</td></tr>
+        <tr><td>Creme — Text</td><td class="mono">#F0E7D8</td><td>Die Bouclé-Sofas und Stoffbahnen</td></tr>
+        <tr><td>Creme gedimmt</td><td class="mono">#B6A992</td><td>Fließtext auf dunklem Grund</td></tr>
+        <tr><td>Sand — helle Sektionen</td><td class="mono">#EDE2CE</td><td>Der Logo-Hintergrund, Leinen</td></tr>
+        <tr><td>Olive &middot; Matcha</td><td class="mono">#6E7A55 &middot; #8FA36B</td><td>Die Olivenbäume — nur für die Matcha-Welt, sehr sparsam</td></tr>
+      </tbody>
+    </table>
+   </div>
+
+   <h3>Typografie</h3>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th>Rolle</th><th>Schrift</th><th>Einsatz</th></tr></thead>
+      <tbody>
+        <tr><td>Display</td><td><strong>Cormorant Garamond</strong> 300/400</td><td>Überschriften, Gerichtsnamen, Zahlen. Kommt der Wortmarke mit ihrem hohen Strichkontrast sehr nah. In großen Größen weit gesperrt.</td></tr>
+        <tr><td>Funktion</td><td><strong>Jost</strong> 300/400/500</td><td>Fließtext, Navigation, Buttons, Labels. Die geometrische Anmutung entspricht der gesperrten Versal-Tagline im Logo.</td></tr>
+      </tbody>
+    </table>
+   </div>
+   <div class="prose">
+     <p>Beide Schriften werden lokal ausgeliefert, keine Verbindung zu Google-Servern.</p>
+   </div>
+
+   <h3>Leitmotiv</h3>
+   <div class="prose">
+     <p>Der Sonnenbogen aus der Wortmarke wird zum Strukturelement der Seite: Eine Sektion spannt einen Bogen über den Tagesverlauf — Brunch, Lunch, Coffee &amp; Kuchen, Matcha, Dinner, Signature Drinks. Das ist keine Dekoration, sondern erzählt die Kernaussage des Hauses, dass der Tag nicht nach dem Frühstück endet. Der Bogen zeichnet sich beim Scrollen.</p>
+     <p>Weitere Prinzipien:</p>
+   </div>
+   <div class="cards two">
+     <div class="card">
+       <h4>Bilder tragen die Seite</h4>
+       <p>Boho lebt von Textur und Licht, nicht von Ornamenten im Code. Große, ruhig gesetzte Fotos, wenig Dekoration drumherum. Dafür werden die Bilder technisch sauber aufbereitet: moderne Formate, mehrere Größen, feste Seitenverhältnisse gegen springendes Layout.</p>
+     </div>
+     <div class="card">
+       <h4>Zwei Schriften, klare Rollen</h4>
+       <p>Eine charaktervolle Display-Schrift für Überschriften und Zahlen, eine ruhige, gut lesbare Schrift für Fließtext, Karte und Formulare. Beide lokal eingebunden. Die Speisekarte muss auch bei schlechtem Licht im Lokal lesbar sein — das begrenzt, wie zart die Typografie werden darf.</p>
+     </div>
+     <div class="card">
+       <h4>Ein Akzent, konsequent</h4>
+       <p>Genau eine Akzentfarbe für alles Handelnde — Reservieren-Button, Links, aktive Zustände. Sie muss auf hellem und dunklem Grund den Kontrastwert 4,5:1 erreichen, sonst wird sie angepasst.</p>
+     </div>
+     <div class="card">
+       <h4>Bewegung sparsam</h4>
+       <p>Sanftes Einblenden beim Scrollen, ein feiner Hover-Effekt auf Karten, mehr nicht. <code>prefers-reduced-motion</code> wird respektiert. Formulare und Buchung bleiben immer ohne Animation bedienbar.</p>
+     </div>
+   </div>
+   <div class="note">
+     <strong>Der Entwurf ist da</strong>
+     Die gestaltete Startseite liegt als anklickbarer Entwurf vor und zeigt Palette, Typografie, Sektionsrhythmus und den Sonnenbogen im Zusammenspiel. Bildflächen, Preise, Öffnungszeiten und Events darin sind Platzhalter.
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Qualität ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Qualität</span></div>
+  <div class="body">
+   <h2>Was der Anspruch technisch bedeutet</h2>
+   <div class="prose">
+     <p>Der Unterschied zu einer Baukasten-Seite liegt selten im Bild, sondern in diesen Punkten:</p>
+   </div>
+   <div class="tablewrap">
+    <table>
+      <thead><tr><th>Bereich</th><th>Anspruch</th></tr></thead>
+      <tbody>
+        <tr><td>Ladezeit</td><td>Startseite unter 1,5 Sekunden auf Mobilfunk, Lighthouse ab 95 in allen vier Kategorien, keine springenden Layouts</td></tr>
+        <tr><td>Barrierefreiheit</td><td>Vollständig per Tastatur bedienbar, sichtbarer Fokus, beschriftete Formularfelder, geprüfte Kontraste, Screenreader-tauglicher Buchungsablauf</td></tr>
+        <tr><td>Suchmaschinen</td><td><code>Restaurant</code>-Schema mit Öffnungszeiten und Preisniveau, <code>Event</code>-Schema je Veranstaltung, <code>Menu</code>-Schema, Sitemap, saubere Teilen-Vorschauen für WhatsApp und Instagram</td></tr>
+        <tr><td>Fehlerverhalten</td><td>Eigene 404- und Fehlerseite, verständliche Formularfehler in Klartext, alle Inhalte auch ohne JavaScript erreichbar</td></tr>
+        <tr><td>Tests</td><td>Automatisierte Tests für die Kapazitätsberechnung — dort tut ein Fehler am meisten weh</td></tr>
+        <tr><td>Wartbarkeit</td><td>Kommentierter Code, dokumentierte Umgebungsvariablen, ein Befehl zum Starten, ein Befehl fürs Backup</td></tr>
+      </tbody>
+    </table>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Ablauf ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Ablauf</span></div>
+  <div class="body">
+   <h2>Reihenfolge der Umsetzung</h2>
+   <div class="prose">
+     <p>Die Phasen 1 bis 4 gehören zu Stufe 1 und müssen bis zum 1. September stehen. Alles ab Phase 5 ist Stufe 2 und läuft nach der Eröffnung.</p>
+   </div>
+   <div class="phases">
+     <div class="phase">
+       <div class="no">01</div>
+       <div><h4>Fundament <span class="chip ok">Stufe 1</span></h4><p>Astro-Projekt, Design-Tokens aus der Palette, Cormorant und Jost lokal einbinden, Layout-Raster, Basiskomponenten (Navigation, Button, Karte, Formularfeld, Footer).</p></div>
+       <div class="load">klein</div>
+     </div>
+     <div class="phase">
+       <div class="no">02</div>
+       <div><h4>Öffentliche Seite <span class="chip ok">Stufe 1</span></h4><p>Startseite nach dem Entwurf, Speisekarte, Events, Feiern &amp; Mieten, Kontakt und Anfahrt, Impressum, Datenschutz. Inhalte kommen aus Dateien im Projekt.</p></div>
+       <div class="load">groß</div>
+     </div>
+     <div class="phase">
+       <div class="no">03</div>
+       <div><h4>Formulare <span class="chip ok">Stufe 1</span></h4><p>Reservierungsanfrage, Kontakt und Feier-Anfrage. Versand per Mail an das LUMO, Bestätigungsmail an den Gast, Honeypot und Zeitfalle gegen Spam. Umgesetzt so, dass es auf jedem Webspace läuft.</p></div>
+       <div class="load">klein</div>
+     </div>
+     <div class="phase">
+       <div class="no">04</div>
+       <div><h4>Livegang <span class="chip ok">Stufe 1</span></h4><p>Echte Inhalte einpflegen, Restaurant-Schema und Öffnungszeiten, Teilen-Vorschauen, Performance- und Barrierefreiheits-Durchgang, Test auf echten Geräten, Domain aufschalten. <strong>Deadline 1. September.</strong></p></div>
+       <div class="load">mittel</div>
+     </div>
+     <div class="phase">
+       <div class="no">05</div>
+       <div><h4>Server, Datenbank, Login <span class="chip open">Stufe 2</span></h4><p>Auf SSR umstellen, Datenmodell anlegen, Anmeldung und Sitzungen, Grundgerüst des Admin-Bereichs, Öffnungszeiten und Schließtage pflegbar.</p></div>
+       <div class="load">mittel</div>
+     </div>
+     <div class="phase">
+       <div class="no">06</div>
+       <div><h4>Reservierungssystem <span class="chip open">Stufe 2</span></h4><p>Kapazitätsberechnung samt Tests, Buchungsablauf für den Gast, Storno-Link, sämtliche E-Mails, Freigabe- und Tagesansicht im Admin. Ersetzt das Anfrageformular aus Stufe 1.</p></div>
+       <div class="load">sehr groß</div>
+     </div>
+     <div class="phase">
+       <div class="no">07</div>
+       <div><h4>Redaktion <span class="chip open">Stufe 2</span></h4><p>Events und Speisekarte im Admin pflegbar, Bild-Upload mit automatischer Aufbereitung, Anfragen-Verwaltung.</p></div>
+       <div class="load">mittel</div>
+     </div>
+     <div class="phase">
+       <div class="no">08</div>
+       <div><h4>Übergabe <span class="chip open">Stufe 2</span></h4><p>Deployment auf den gewählten Server, Mail-Einträge im DNS, Backup-Routine, Betriebsdokumentation, kurze Einweisung fürs Team.</p></div>
+       <div class="load">klein</div>
+     </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Übergabe ============ -->
+<section>
+ <div class="grid">
+  <div><span class="rail">Übergabe</span></div>
+  <div class="body">
+   <h2>Weil das Projekt weitergegeben wird</h2>
+   <div class="prose">
+     <p>Du baust die Seite nicht für dich selbst, sondern übergibst sie. Das ändert die Bauweise: Nichts darf an einen Anbieter, an deinen Rechner oder an dein Wissen gekoppelt sein.</p>
+   </div>
+   <div class="cards two">
+     <div class="card">
+       <h4>Alles ist Konfiguration</h4>
+       <p>Datenbankpfad, SMTP-Zugang, Absenderadresse, Empfänger für Benachrichtigungen, Domain, Admin-Startkonto — alles in einer <code>.env</code>-Datei mit dokumentierter Vorlage. Kein Zugangsdatum steht im Code.</p>
+     </div>
+     <div class="card">
+       <h4>Start mit einem Befehl</h4>
+       <p>Ein <code>docker compose up</code> bringt die Seite auf jedem VPS zum Laufen — unabhängig davon, ob der Betreiber Hetzner, netcup oder etwas anderes wählt. Alternativ eine dokumentierte Installation direkt mit Node.</p>
+     </div>
+     <div class="card">
+       <h4>Backup, das jemand ausführt</h4>
+       <p>Nächtliche Sicherung von Datenbank und hochgeladenen Bildern, sieben Stände vorgehalten, plus ein Download-Knopf im Admin. Ein Backup, das man nicht wiederherstellen kann, ist keines — die Wiederherstellung wird einmal durchgespielt und dokumentiert.</p>
+     </div>
+     <div class="card">
+       <h4>Zwei Dokumente</h4>
+       <p>Eine <strong>Betriebsanleitung</strong> für den Entwickler (Installation, Aktualisierung, Backup, Fehlersuche) und eine <strong>Kurzanleitung</strong> für das Restaurant-Team in Alltagssprache: Wie lege ich ein Event an, wie schließe ich einen Tag, wie bestätige ich eine große Gruppe.</p>
+     </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ Offen ============ -->
+<section style="border-bottom:none;">
+ <div class="grid">
+  <div><span class="rail">Offen</span></div>
+  <div class="body">
+   <h2>Was ich von dir brauche</h2>
+   <div class="prose">
+     <p>Ich baue Stufe 1 ab sofort mit Platzhaltern weiter — blockiert ist nichts. Aber je früher diese Angaben da sind, desto weniger muss kurz vor der Eröffnung nachgezogen werden. Die ersten vier sind für den Livegang <strong>zwingend</strong>.</p>
+   </div>
+
+   <h3>Zwingend vor dem Livegang</h3>
+   <div class="qs">
+     <div class="q"><b>Impressumsdaten</b><span>Firmierung, Inhaber, Anschrift, Telefon, E-Mail, Handelsregister und USt-IdNr., verantwortliche Person. Ohne vollständiges Impressum darf die Seite nicht online — das ist abmahnfähig.</span></div>
+     <div class="q"><b>Telefonnummer und offizielle E-Mail-Adresse</b><span>Die Nummer ist zur Eröffnung der wichtigste Reservierungsweg. <code>bentos-mg@gmx.de</code> aus der Stellenanzeige ist als öffentliche Gastadresse nicht ideal — besser eine Adresse auf der eigenen Domain.</span></div>
+     <div class="q"><b>Öffnungszeiten und Küchenzeiten</b><span>Inklusive Ruhetag und der Frage, ob Bar und Küche unterschiedlich lange geöffnet haben.</span></div>
+     <div class="q"><b>Speise- und Getränkekarte</b><span>In beliebigem Format, gerne auch als Foto der Druckfahne — ich strukturiere das um. Preise im Entwurf sind erfunden und müssen raus.</span></div>
+   </div>
+
+   <h3>Wichtig, aber nachlieferbar</h3>
+   <div class="qs">
+     <div class="q"><b>Logo als Vektordatei</b><span>SVG, AI oder PDF. Das Sonnen-Ornament im Entwurf ist von mir nachgebaut — für die fertige Seite gehört das echte hinein.</span></div>
+     <div class="q"><b>Fotos der fertigen Räume</b><span>Innen, außen bei Abendlicht, Bar, Terrasse, Brunch-Tafel, Drinks. Ohne echte Fotos bleibt die Seite eine Hülle.</span></div>
+     <div class="q"><b>Sitzplätze innen und außen</b><span>Plus Kapazität für Feiern — sitzend und stehend, und ob sich der Raum teilen lässt.</span></div>
+     <div class="q"><b>Feiern &amp; Mieten</b><span>Welche Anlässe, gibt es Menü- oder Getränkepauschalen? Preise öffentlich oder nur auf Anfrage?</span></div>
+     <div class="q"><b>Erste Events</b><span>Steht für die Eröffnungswoche schon etwas fest? Ein Opening-Event auf der Seite wäre der stärkste Grund, sie am 1. September zu besuchen.</span></div>
+   </div>
+
+   <h3>Für Stufe 2</h3>
+   <div class="qs">
+     <div class="q"><b>Hoster und Domain</b><span>Steht in Klärung. Wichtig ist nur: für Stufe 2 muss der Server Node ausführen können.</span></div>
+     <div class="q"><b>Reservierungsregeln</b><span>Ab welcher Gruppengröße wollt ihr selbst entscheiden? Wie lange bleibt ein Tisch geblockt? Ab wann verlangt ihr eine verbindliche Zusage?</span></div>
+     <div class="q"><b>Google-Business-Profil</b><span>Falls noch nicht angelegt: sofort machen. Für ein Lokal an der Krefelder Straße bringt das lokal mehr als jede einzelne Maßnahme auf der Website.</span></div>
+     <div class="q"><b>Wie technisch ist dein Freund?</b><span>Das bestimmt, wie tief die Betriebsanleitung geht und ob wir eher auf Docker oder auf eine klickbare Oberfläche setzen.</span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<footer>
+  LUMO Mönchengladbach &middot; Website-Konzept &middot; 24. August 2026 &middot; Version 2 — Design-Richtung festgelegt, Umsetzung auf zwei Stufen aufgeteilt.
+</footer>
+
+</div>

@@ -5,11 +5,19 @@ Neue Homepage für das LUMO in Mönchengladbach — "Modern Boho brunch &
 dinner spot": Brunch, Speciality Coffee, Matcha, Dinner, Signature
 Cocktails, Events. Projekt startet bei null (noch kein Code).
 
-- Detailkonzept: https://claude.ai/code/artifact/3865dd84-8d20-45a3-a542-c639ba2bef61
-- Hosting-Setup (fuer den Betreiber): https://claude.ai/code/artifact/1204cadc-5830-4d1f-b47b-82aa33865265
-- Entwurf dunkel: https://claude.ai/code/artifact/47093235-d4e6-4ab0-bd17-79827e7f5857
-- Entwurf Sunset: https://claude.ai/code/artifact/fb3580c5-ac02-4d37-b689-c3f9d1277380
-- **Entwurf Daylight (gewaehlt)**: https://claude.ai/code/artifact/1ce703e9-f60e-46b8-8309-910c2b833739
+Alle Entwuerfe und Dokumente liegen auch im Projekt (Doppelklick genuegt):
+
+| Im Projekt | Veroeffentlicht |
+|---|---|
+| `dokumente/konzept.html` | https://claude.ai/code/artifact/3865dd84-8d20-45a3-a542-c639ba2bef61 |
+| `dokumente/hosting-setup.html` | https://claude.ai/code/artifact/1204cadc-5830-4d1f-b47b-82aa33865265 |
+| **`entwuerfe/daylight.html` (gewaehlt)** | https://claude.ai/code/artifact/1ce703e9-f60e-46b8-8309-910c2b833739 |
+| `entwuerfe/sunset.html` | https://claude.ai/code/artifact/fb3580c5-ac02-4d37-b689-c3f9d1277380 |
+| `entwuerfe/dunkel.html` | https://claude.ai/code/artifact/47093235-d4e6-4ab0-bd17-79827e7f5857 |
+
+Unterschied: Die Artifact-Fassungen betten `assets/wandbild.jpg` als Base64
+ein (veroeffentlichte Seiten muessen in sich geschlossen sein), die
+Projektfassung referenziert es ueber `../assets/wandbild.jpg`.
 
 ## Harte Fakten (aus Instagram @lumo.mg)
 - **Neueröffnung: 01.09.2026** — sehr knapper Zeitrahmen

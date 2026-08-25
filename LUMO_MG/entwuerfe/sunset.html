@@ -1,0 +1,1018 @@
+<title>LUMO Sunset</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@300;400;500&display=swap">
+
+<style>
+:root{
+  /* Nacht — die Fassade */
+  --night:#0C0B09;
+  --night-2:#131009;
+  --ember:#1E180F;
+  --ember-2:#2A2115;
+
+  /* Licht — Leuchtbuchstaben und Kerzen */
+  --gold:#C79A54;
+  --gold-lit:#E9C88C;
+  --gold-deep:#8A6425;
+
+  /* Innenraum — Bouclé, Leinen, Sand */
+  --cream:#F0E7D8;
+  --cream-dim:#B6A992;
+  --sand:#EDE2CE;
+  --sand-2:#F7F0E2;
+  --sand-line:#DCCDB2;
+  --bark:#241B10;
+
+  /* Olivenbäume */
+  --olive:#6E7A55;
+  --matcha:#8FA36B;
+
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--night);
+  color:var(--cream);
+  font-family:"Jost",-apple-system,"Segoe UI",sans-serif;
+  font-weight:300;
+  font-size:1rem;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:300;margin:0;line-height:1.08;text-wrap:balance;}
+p{margin:0;}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--gold-lit);outline-offset:4px;}
+img{max-width:100%;display:block;}
+
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem);}
+.label{
+  font-family:"Jost",sans-serif;font-weight:400;font-size:.68rem;
+  letter-spacing:.34em;text-transform:uppercase;color:var(--gold);
+}
+.label.dim{color:var(--gold-deep);}
+
+/* ================= Navigation ================= */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:60;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:1rem clamp(1.25rem,5vw,3rem);
+  background:rgba(12,11,9,0);
+  border-bottom:1px solid rgba(199,154,84,0);
+  transition:background .4s ease,border-color .4s ease,padding .4s ease;
+}
+.nav.solid{background:rgba(12,11,9,.94);border-bottom-color:rgba(199,154,84,.18);padding-top:.7rem;padding-bottom:.7rem;}
+.nav__brand{display:flex;align-items:center;gap:.6rem;}
+.nav__brand .word{font-family:"Cormorant Garamond",serif;font-size:1.15rem;letter-spacing:.42em;color:var(--cream);padding-left:.42em;}
+.nav__links{display:none;gap:2rem;}
+.nav__links a{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-dim);transition:color .25s;}
+.nav__links a:hover{color:var(--gold-lit);}
+@media(min-width:940px){.nav__links{display:flex;}}
+.burger{
+  display:flex;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:.5rem;
+}
+.burger span{display:block;width:22px;height:1px;background:var(--cream);transition:transform .3s,opacity .3s;}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0;}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+@media(min-width:940px){.burger{display:none;}}
+.drawer{
+  position:fixed;inset:0;z-index:55;background:var(--night-2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6rem;
+  opacity:0;pointer-events:none;transition:opacity .35s ease;
+}
+.drawer.open{opacity:1;pointer-events:auto;}
+.drawer a{font-family:"Cormorant Garamond",serif;font-size:2rem;color:var(--cream);}
+.drawer a:hover{color:var(--gold-lit);}
+
+/* ================= Buttons ================= */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+  font-family:"Jost",sans-serif;font-size:.74rem;font-weight:400;
+  letter-spacing:.24em;text-transform:uppercase;
+  padding:.95rem 1.9rem;border:1px solid var(--gold);
+  color:var(--night);background:var(--gold);
+  transition:background .3s,color .3s,border-color .3s,transform .3s;
+  cursor:pointer;
+}
+.btn:hover{background:var(--gold-lit);border-color:var(--gold-lit);transform:translateY(-1px);}
+.btn--ghost{background:transparent;color:var(--gold);}
+.btn--ghost:hover{background:rgba(199,154,84,.12);color:var(--gold-lit);transform:translateY(-1px);}
+.btn--dark{background:var(--bark);border-color:var(--bark);color:var(--sand-2);}
+.btn--dark:hover{background:var(--gold-deep);border-color:var(--gold-deep);color:var(--sand-2);}
+.btn--sm{padding:.7rem 1.3rem;font-size:.68rem;}
+
+/* ================= Hero ================= */
+.hero{
+  position:relative;min-height:100svh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:7rem 1.25rem 4rem;overflow:hidden;
+  background:#0C0B09;
+}
+
+/* ---- Wandbild als Hintergrund ---- */
+.mural-wrap{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.mural{
+  position:absolute;inset:-4%;width:108%;height:108%;
+  animation:drift 52s ease-in-out infinite alternate;
+  transform-origin:58% 45%;
+}
+@keyframes drift{
+  from{transform:scale(1.02) translate3d(0,0,0);}
+  to{transform:scale(1.09) translate3d(-1.2%,-1%,0);}
+}
+.mural-scrim{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 64% 54% at 50% 44%, rgba(8,6,4,.80), rgba(8,6,4,.40) 62%, rgba(8,6,4,.52) 100%),
+    linear-gradient(180deg, rgba(8,6,4,.92) 0%, rgba(8,6,4,.30) 24%, rgba(8,6,4,.32) 56%, rgba(12,11,9,.94) 88%, #0C0B09 100%);
+}
+.mural-grain{
+  position:absolute;inset:0;
+  background-image:var(--grain);opacity:.08;mix-blend-mode:overlay;
+}
+
+/* ---- Fries über dem Footer ---- */
+.frieze{position:relative;height:clamp(110px,14vw,190px);background:linear-gradient(180deg,#131009 0%,#0C0B09 60%,#080806 100%);overflow:hidden;}
+.frieze svg{position:absolute;inset:0;width:100%;height:100%;}
+.hero__inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:1.5rem;}
+.mark{width:clamp(96px,17vw,150px);color:var(--gold);}
+.hero__word{
+  font-family:"Cormorant Garamond",serif;font-weight:300;
+  font-size:clamp(3.6rem,15vw,9rem);line-height:.9;
+  letter-spacing:.2em;padding-left:.2em;color:var(--cream);
+}
+.hero__tag{font-size:clamp(.6rem,2vw,.78rem);letter-spacing:.42em;text-transform:uppercase;color:var(--gold);}
+.hero__place{font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim);}
+.hero__rule{width:64px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.opening{
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  border:1px solid rgba(199,154,84,.3);padding:1.1rem 1.8rem;
+  background:rgba(30,24,15,.5);backdrop-filter:blur(2px);
+}
+.opening__head{font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);}
+.opening__count{
+  display:flex;gap:1.4rem;font-variant-numeric:tabular-nums;
+}
+.opening__count div{display:flex;flex-direction:column;align-items:center;gap:.1rem;}
+.opening__count b{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:1.9rem;line-height:1;color:var(--cream);}
+.opening__count span{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim);}
+.hero__cta{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;margin-top:.5rem;}
+.scrollhint{
+  position:absolute;bottom:1.6rem;left:50%;transform:translateX(-50%);z-index:2;
+  font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cream-dim);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+}
+.scrollhint i{display:block;width:1px;height:34px;background:linear-gradient(180deg,var(--gold),transparent);}
+
+/* ================= Sections ================= */
+section{position:relative;}
+.dark{background:var(--night);padding:clamp(4.5rem,11vw,8rem) 0;}
+.dark.deep{background:linear-gradient(180deg,var(--night) 0%,var(--night-2) 100%);}
+.light{background:var(--sand);color:var(--bark);padding:clamp(4.5rem,11vw,8rem) 0;}
+.light h1,.light h2,.light h3{color:var(--bark);}
+.light .label{color:var(--gold-deep);}
+
+.head{display:flex;flex-direction:column;gap:1rem;max-width:44ch;}
+.head h2{font-size:clamp(2.2rem,5.5vw,3.6rem);}
+.head p{color:var(--cream-dim);max-width:52ch;}
+.light .head p{color:#5C5040;}
+.center{align-items:center;text-align:center;margin-inline:auto;}
+
+/* ================= Sonnenbogen / Tagesverlauf ================= */
+.day{padding-bottom:clamp(3rem,7vw,5rem);}
+.arc{position:relative;margin-top:3rem;overflow-x:auto;overflow-y:hidden;padding-bottom:.5rem;}
+.arc__inner{position:relative;min-width:820px;height:295px;margin:0 auto;max-width:980px;}
+.arc svg{position:absolute;inset:0;width:100%;height:100%;}
+.arc__path{fill:none;stroke:rgba(199,154,84,.35);stroke-width:1;stroke-dasharray:1400;stroke-dashoffset:1400;}
+.arc.on .arc__path{transition:stroke-dashoffset 2.2s cubic-bezier(.4,0,.2,1);stroke-dashoffset:0;}
+.stop{position:absolute;transform:translate(-50%,-50%);text-align:center;width:9rem;}
+.stop b{
+  display:block;font-family:"Cormorant Garamond",serif;font-weight:400;
+  font-size:1.28rem;color:var(--cream);letter-spacing:.02em;
+}
+.stop span{display:block;font-size:.63rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-top:.2rem;}
+.stop i{
+  display:block;width:7px;height:7px;border-radius:50%;background:var(--gold);
+  margin:0 auto .7rem;box-shadow:0 0 0 4px rgba(199,154,84,.16);
+}
+.arc__note{text-align:center;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim);margin-top:.5rem;}
+
+/* ================= Split ================= */
+.split{display:grid;gap:clamp(2rem,5vw,4rem);align-items:center;}
+@media(min-width:880px){.split{grid-template-columns:1fr 1fr;}
+  .split.wide-left{grid-template-columns:1.15fr .85fr;}}
+.copy{display:flex;flex-direction:column;gap:1.35rem;max-width:54ch;}
+.copy p{color:var(--cream-dim);}
+.light .copy p{color:#5C5040;}
+.copy h2{font-size:clamp(2rem,4.6vw,3.1rem);}
+.lead{font-family:"Cormorant Garamond",serif;font-size:clamp(1.25rem,2.6vw,1.6rem);line-height:1.45;color:var(--cream)!important;font-style:italic;}
+.light .lead{color:var(--bark)!important;}
+
+/* Bildplatzhalter */
+.ph{
+  position:relative;border:1px solid rgba(199,154,84,.22);
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 100%, rgba(233,200,140,.20), transparent 65%),
+    linear-gradient(155deg,#2A2115 0%,#171208 60%,#100C07 100%);
+  display:flex;align-items:flex-end;justify-content:flex-start;
+  aspect-ratio:4/5;overflow:hidden;
+}
+.ph::after{content:"";position:absolute;inset:0;background-image:var(--grain);opacity:.06;mix-blend-mode:overlay;}
+.ph span{
+  position:relative;z-index:2;padding:1rem 1.1rem;font-size:.62rem;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(240,231,216,.5);
+}
+.ph.wide{aspect-ratio:16/10;}
+.ph.sq{aspect-ratio:1/1;}
+.light .ph{
+  border-color:var(--sand-line);
+  background:radial-gradient(ellipse 60% 50% at 50% 100%, rgba(199,154,84,.22), transparent 65%),linear-gradient(155deg,#E6D9C0 0%,#DCCDB2 100%);
+}
+.light .ph span{color:rgba(36,27,16,.55);}
+.phgrid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.phgrid .ph:first-child{grid-row:span 2;aspect-ratio:auto;}
+
+/* ================= Matcha ================= */
+.matcha{
+  background:
+    radial-gradient(ellipse 55% 40% at 78% 30%, rgba(143,163,107,.16), transparent 65%),
+    linear-gradient(180deg,var(--night-2),var(--night));
+}
+.matcha .label{color:var(--matcha);}
+.matcha .lead{color:var(--cream)!important;}
+
+/* ================= Karte / Menü ================= */
+.menu{display:grid;gap:2.5rem;margin-top:3rem;}
+@media(min-width:820px){.menu{grid-template-columns:1fr 1fr;gap:2.5rem 4rem;}}
+.menu__group{display:flex;flex-direction:column;gap:1rem;}
+.menu__group > .label{margin-bottom:.2rem;}
+.item{display:grid;grid-template-columns:1fr auto;gap:.4rem 1rem;align-items:baseline;}
+.item__name{font-family:"Cormorant Garamond",serif;font-size:1.28rem;color:var(--bark);}
+.item__dots{border-bottom:1px dotted var(--sand-line);transform:translateY(-4px);}
+.item__price{font-size:.9rem;font-variant-numeric:tabular-nums;color:var(--gold-deep);letter-spacing:.04em;}
+.item__desc{grid-column:1/-1;font-size:.86rem;color:#6B5D4B;line-height:1.55;margin-top:-.25rem;}
+
+/* ================= Events ================= */
+.events{display:grid;gap:1.1rem;margin-top:3rem;}
+@media(min-width:800px){.events{grid-template-columns:repeat(3,1fr);}}
+.event{
+  border:1px solid rgba(199,154,84,.2);background:var(--ember);
+  display:flex;flex-direction:column;transition:border-color .35s,transform .35s;
+}
+.event:hover{border-color:rgba(199,154,84,.55);transform:translateY(-3px);}
+.event .ph{aspect-ratio:16/11;border:0;border-bottom:1px solid rgba(199,154,84,.18);}
+.event__body{padding:1.3rem 1.35rem 1.5rem;display:flex;flex-direction:column;gap:.55rem;}
+.event__date{display:flex;align-items:baseline;gap:.5rem;color:var(--gold);}
+.event__date b{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:1.7rem;line-height:1;}
+.event__date span{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;}
+.event h3{font-size:1.5rem;color:var(--cream);}
+.event p{font-size:.88rem;color:var(--cream-dim);}
+.event__meta{font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim);border-top:1px solid rgba(199,154,84,.15);padding-top:.7rem;margin-top:.3rem;}
+
+/* ================= Feiern ================= */
+.facts{display:grid;gap:1px;background:rgba(199,154,84,.22);border:1px solid rgba(199,154,84,.22);margin-top:2rem;}
+@media(min-width:640px){.facts{grid-template-columns:repeat(3,1fr);}}
+.fact{background:var(--night);padding:1.5rem 1.3rem;display:flex;flex-direction:column;gap:.3rem;}
+.fact b{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:2.3rem;color:var(--gold);line-height:1;}
+.fact span{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim);}
+.pills{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.4rem;}
+.pill{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;padding:.45rem .9rem;border:1px solid rgba(199,154,84,.3);color:var(--cream-dim);}
+
+/* ================= Finden ================= */
+.find{display:grid;gap:2.5rem;}
+@media(min-width:900px){.find{grid-template-columns:.85fr 1.15fr;gap:3.5rem;}}
+.info{display:flex;flex-direction:column;gap:1.6rem;}
+.info__block{display:flex;flex-direction:column;gap:.35rem;}
+.info__block strong{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:1.45rem;color:var(--cream);}
+.info__block p{color:var(--cream-dim);font-size:.94rem;}
+.hours{display:flex;flex-direction:column;gap:.15rem;}
+.hours div{display:flex;justify-content:space-between;gap:1.5rem;font-size:.92rem;color:var(--cream-dim);border-bottom:1px solid rgba(199,154,84,.12);padding:.4rem 0;}
+.hours div span:last-child{font-variant-numeric:tabular-nums;color:var(--cream);}
+.mapbox{
+  position:relative;border:1px solid rgba(199,154,84,.22);min-height:340px;
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(199,154,84,.10), transparent 70%),
+    repeating-linear-gradient(0deg,#141009 0 38px,#171209 38px 39px),
+    repeating-linear-gradient(90deg,#141009 0 46px,#171209 46px 47px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;text-align:center;padding:2rem;
+}
+.mapbox p{font-size:.86rem;color:var(--cream-dim);max-width:38ch;}
+.mapbox .label{color:var(--gold);}
+
+/* ================= Footer ================= */
+footer{background:#080806;padding:clamp(3rem,7vw,5rem) 0 2.5rem;border-top:1px solid rgba(199,154,84,.15);}
+.foot{display:grid;gap:2.5rem;}
+@media(min-width:760px){.foot{grid-template-columns:1.2fr 1fr 1fr;}}
+.foot__brand{display:flex;flex-direction:column;gap:.9rem;align-items:flex-start;}
+.foot__brand .mark{width:64px;}
+.foot__brand .word{font-family:"Cormorant Garamond",serif;font-size:1.5rem;letter-spacing:.4em;padding-left:.4em;color:var(--cream);}
+.foot__col{display:flex;flex-direction:column;gap:.55rem;}
+.foot__col a,.foot__col p{font-size:.86rem;color:var(--cream-dim);transition:color .25s;}
+.foot__col a:hover{color:var(--gold-lit);}
+.foot__bottom{
+  margin-top:3rem;padding-top:1.5rem;border-top:1px solid rgba(199,154,84,.12);
+  display:flex;flex-wrap:wrap;gap:.75rem 2rem;justify-content:space-between;
+  font-size:.72rem;color:#6E6455;
+}
+.draft{
+  margin-top:1.25rem;padding:.85rem 1.1rem;border:1px dashed rgba(199,154,84,.3);
+  font-size:.75rem;color:var(--cream-dim);line-height:1.6;
+}
+
+/* ================= Reveal ================= */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);}
+.rv.on{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .rv{opacity:1;transform:none;transition:none;}
+  .arc__path{stroke-dashoffset:0;}
+  .arc.on .arc__path{transition:none;}
+  .btn:hover,.event:hover{transform:none;}
+  .mural{animation:none;transform:scale(1.04);}
+}
+</style>
+
+<!-- ================= NAV ================= -->
+<nav class="nav" id="nav">
+  <a class="nav__brand" href="#top" aria-label="LUMO Startseite">
+    <span class="mark" style="width:34px" data-mark></span>
+    <span class="word">LUMO</span>
+  </a>
+  <div class="nav__links">
+    <a href="#lumo">Das LUMO</a>
+    <a href="#karte">Karte</a>
+    <a href="#events">Events</a>
+    <a href="#feiern">Feiern</a>
+    <a href="#finden">Finden</a>
+  </div>
+  <a class="btn btn--sm" href="#reservieren" style="display:none" id="navcta">Reservieren</a>
+  <button class="burger" id="burger" aria-expanded="false" aria-label="Menü öffnen" aria-controls="drawer">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="drawer" id="drawer">
+  <a href="#lumo">Das LUMO</a>
+  <a href="#karte">Karte</a>
+  <a href="#events">Events</a>
+  <a href="#feiern">Feiern</a>
+  <a href="#finden">Finden</a>
+  <a href="#reservieren" class="btn" style="font-family:'Jost',sans-serif;font-size:.74rem;">Reservieren</a>
+</div>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+
+  <div class="mural-wrap">
+    <svg class="mural" viewBox="0 0 1900 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="mSky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#3B240B"/>
+          <stop offset=".36" stop-color="#8A5717"/>
+          <stop offset=".62" stop-color="#BE8A32"/>
+          <stop offset="1" stop-color="#D9A54C"/>
+        </linearGradient>
+        <radialGradient id="mSunGlow" cx=".5" cy=".5" r=".5">
+          <stop offset="0" stop-color="#F7E6BC" stop-opacity=".9"/>
+          <stop offset=".42" stop-color="#EFCB86" stop-opacity=".34"/>
+          <stop offset="1" stop-color="#EFCB86" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="mSea" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#D4A254"/>
+          <stop offset="1" stop-color="#A26D2A"/>
+        </linearGradient>
+        <linearGradient id="mSand" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#C08D45"/>
+          <stop offset="1" stop-color="#79501E"/>
+        </linearGradient>
+        <linearGradient id="mRefl" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#F7E6BC" stop-opacity=".7"/>
+          <stop offset="1" stop-color="#F7E6BC" stop-opacity="0"/>
+        </linearGradient>
+
+        <g id="frond"><path d="M0 0 C26 -24 84 -36 146 -20 C151 -18 151 -13 146 -12 C90 -4 36 12 2 5 Z"/></g>
+        <g id="palm">
+          <path d="M-8 0 C-6 -70 -4 -150 1 -232 L13 -232 C9 -150 7 -70 9 0 Z"/>
+          <g transform="translate(6,-232)">
+            <use href="#frond" transform="rotate(-174)"/>
+            <use href="#frond" transform="rotate(-150) scale(.82)"/>
+            <use href="#frond" transform="rotate(-136) scale(.96)"/>
+            <use href="#frond" transform="rotate(-106) scale(.86)"/>
+            <use href="#frond" transform="rotate(-74) scale(.86)"/>
+            <use href="#frond" transform="rotate(-44) scale(.96)"/>
+            <use href="#frond" transform="rotate(-12)"/>
+            <use href="#frond" transform="rotate(10) scale(.82)"/>
+            <use href="#frond" transform="rotate(30) scale(.9)"/>
+            <circle cx="0" cy="0" r="7"/>
+          </g>
+        </g>
+        <g id="banana"><path d="M0 0 C-15 -66 -9 -132 10 -178 C35 -130 43 -60 22 0 Z"/></g>
+        <g id="fan"><path d="M0 0 C-40 -30 -58 -76 -52 -118 C-30 -94 -12 -66 0 -34 C12 -66 30 -94 52 -118 C58 -76 40 -30 0 0 Z"/></g>
+      </defs>
+
+      <!-- Himmel -->
+      <rect width="1900" height="700" fill="url(#mSky)"/>
+      <circle cx="960" cy="298" r="310" fill="url(#mSunGlow)"/>
+      <circle cx="960" cy="298" r="96" fill="#F6E7BF"/>
+
+      <!-- Wolken -->
+      <g fill="#E7BE78" opacity=".34">
+        <ellipse cx="600" cy="148" rx="156" ry="15"/>
+        <ellipse cx="694" cy="176" rx="92" ry="9"/>
+        <ellipse cx="1288" cy="128" rx="174" ry="17"/>
+        <ellipse cx="1176" cy="160" rx="82" ry="9"/>
+        <ellipse cx="404" cy="222" rx="112" ry="10"/>
+        <ellipse cx="1470" cy="232" rx="124" ry="11"/>
+      </g>
+      <path d="M1128 206 c10 -9 19 -9 27 0 c8 -9 19 -9 27 0" fill="none" stroke="#4A2E10" stroke-width="3.5" stroke-linecap="round" opacity=".7"/>
+
+      <!-- Berge und Vulkan -->
+      <path d="M0 432 L146 348 L272 432 Z" fill="#8A5D22" opacity=".6"/>
+      <path d="M1180 432 L1302 330 L1362 372 L1452 300 L1566 432 Z" fill="#8A5D22" opacity=".62"/>
+      <path d="M1476 432 L1622 340 L1770 432 Z" fill="#7A5019" opacity=".7"/>
+      <path d="M250 432 L455 196 C465 187 480 187 490 196 L700 432 Z" fill="#77501B"/>
+      <path d="M250 432 L455 196 C462 190 470 188 474 188 L470 432 Z" fill="#684614"/>
+      <path d="M688 432 L804 364 L906 432 Z" fill="#8A5D22" opacity=".62"/>
+
+      <!-- Meer -->
+      <rect x="0" y="430" width="1900" height="140" fill="url(#mSea)"/>
+      <path d="M928 432 L992 432 L1062 566 L862 566 Z" fill="url(#mRefl)"/>
+      <g fill="none" stroke="#F0DAA6" stroke-width="4" stroke-linecap="round" opacity=".3">
+        <path d="M884 468 c30 -8 60 8 90 0 c30 -8 60 8 90 0"/>
+        <path d="M842 500 c36 -9 72 9 108 0 c36 -9 72 9 108 0"/>
+        <path d="M796 534 c42 -10 84 10 126 0 c42 -10 84 10 126 0"/>
+      </g>
+
+      <!-- Felsen im Wasser -->
+      <path d="M1176 572 C1198 502 1228 470 1258 470 C1292 470 1318 514 1332 572 Z" fill="#33210D"/>
+      <path d="M1320 572 C1332 534 1350 516 1366 516 C1384 516 1398 540 1406 572 Z" fill="#3B2610"/>
+
+      <!-- Strand -->
+      <path d="M0 700 L0 604 C258 542 560 524 862 554 C1122 580 1500 598 1900 590 L1900 700 Z" fill="url(#mSand)"/>
+      <path d="M0 604 C258 542 560 524 862 554 C1122 580 1500 598 1900 590" fill="none" stroke="#EBCE92" stroke-width="5" opacity=".4"/>
+
+      <!-- Tempeltor und Bale -->
+      <g fill="#33210D" transform="translate(238,566)">
+        <rect x="-100" y="-16" width="200" height="20"/>
+        <path d="M-92 -16 L-92 -190 L-84 -202 L-84 -226 L-76 -238 L-76 -260 L-68 -272 L-68 -292 L-58 -306 L-46 -320 L-26 -320 L-26 -16 Z"/>
+        <path transform="scale(-1,1)" d="M-92 -16 L-92 -190 L-84 -202 L-84 -226 L-76 -238 L-76 -260 L-68 -272 L-68 -292 L-58 -306 L-46 -320 L-26 -320 L-26 -16 Z"/>
+      </g>
+      <g fill="#3B2610" transform="translate(74,560)">
+        <rect x="-52" y="-8" width="104" height="12"/>
+        <rect x="-40" y="-92" width="7" height="86"/>
+        <rect x="-4" y="-92" width="7" height="86"/>
+        <rect x="33" y="-92" width="7" height="86"/>
+        <path d="M-64 -92 L0 -142 L64 -92 Z"/>
+        <path d="M-46 -136 L0 -176 L46 -136 Z"/>
+      </g>
+      <g fill="#3B2610" transform="translate(392,566)" opacity=".9">
+        <rect x="-34" y="-96" width="68" height="96"/>
+        <path d="M-46 -96 L0 -134 L46 -96 Z"/>
+        <path d="M-34 -130 L0 -162 L34 -130 Z"/>
+      </g>
+
+      <!-- Palmen -->
+      <g fill="#2B1B08">
+        <use href="#palm" transform="translate(118,646) scale(1.52)"/>
+        <use href="#palm" transform="translate(276,664) scale(1.12)"/>
+        <use href="#palm" transform="translate(598,652) scale(1.36)"/>
+        <use href="#palm" transform="translate(718,672) scale(1.04)"/>
+        <use href="#palm" transform="translate(1332,624) scale(1)"/>
+        <use href="#palm" transform="translate(1418,648) scale(.78)"/>
+      </g>
+
+      <!-- Frau im Profil -->
+      <g transform="translate(1524,116) scale(1.04)">
+        <path d="M60 300 C10 318 -30 356 -50 434 L306 434 L306 350 C276 314 208 290 150 296 Z" fill="#7E5628"/>
+        <g fill="#C9A164" opacity=".3">
+          <circle cx="30" cy="368" r="5"/><circle cx="70" cy="392" r="5"/><circle cx="112" cy="356" r="5"/>
+          <circle cx="158" cy="386" r="5"/><circle cx="204" cy="352" r="5"/><circle cx="246" cy="384" r="5"/>
+          <circle cx="-4" cy="404" r="5"/><circle cx="132" cy="414" r="5"/><circle cx="220" cy="414" r="5"/>
+        </g>
+        <path d="M98 4 C58 6 30 34 24 74 C20 100 26 112 22 122 C14 132 6 144 10 154 L2 172
+                 C8 180 18 180 24 184 C18 192 20 200 28 204 C22 212 24 218 32 222
+                 C26 234 32 246 48 254 C62 262 72 266 80 272 L80 306 L152 306 L152 44
+                 C152 16 130 4 98 4 Z" fill="#96652F"/>
+        <path d="M98 4 C58 6 30 34 24 74 C20 100 26 112 22 122 C14 132 6 144 10 154 L2 172
+                 C8 180 18 180 24 184 C18 192 20 200 28 204 C22 212 24 218 32 222
+                 C26 234 32 246 48 254" fill="none" stroke="#F2DCA8" stroke-width="3" opacity=".45" stroke-linecap="round"/>
+        <path d="M98 -6 C44 -6 14 34 22 84 C32 50 54 26 88 20 C124 14 152 32 160 64
+                 C178 60 196 74 198 96 C202 126 180 148 152 144 L152 44 C150 14 130 -6 98 -6 Z" fill="#241706"/>
+        <ellipse cx="174" cy="102" rx="32" ry="36" fill="#241706"/>
+        <g fill="none" stroke="#2A1A08" stroke-width="3" stroke-linecap="round" opacity=".45">
+          <path d="M32 92 C46 84 64 84 76 90"/>
+          <path d="M36 112 C46 106 62 108 70 116"/>
+          <path d="M26 202 C38 200 50 202 58 206"/>
+        </g>
+        <g transform="translate(120,178)" fill="none" stroke="#EBD7A8" stroke-width="4"><circle r="14"/></g>
+        <g fill="#EBD7A8">
+          <rect x="112" y="192" width="4" height="46" rx="2"/>
+          <rect x="122" y="192" width="4" height="56" rx="2"/>
+          <rect x="132" y="192" width="4" height="44" rx="2"/>
+          <circle cx="114" cy="242" r="5"/><circle cx="124" cy="252" r="5"/><circle cx="134" cy="240" r="5"/>
+        </g>
+        <g transform="translate(198,148)">
+          <g fill="#E3B25A">
+            <ellipse cx="0" cy="-24" rx="14" ry="26"/>
+            <ellipse cx="0" cy="-24" rx="14" ry="26" transform="rotate(72)"/>
+            <ellipse cx="0" cy="-24" rx="14" ry="26" transform="rotate(144)"/>
+            <ellipse cx="0" cy="-24" rx="14" ry="26" transform="rotate(216)"/>
+            <ellipse cx="0" cy="-24" rx="14" ry="26" transform="rotate(288)"/>
+          </g>
+          <circle r="8" fill="#F3DDA8"/>
+        </g>
+      </g>
+
+      <!-- Blattwerk im Vordergrund -->
+      <g fill="#1B1004">
+        <use href="#banana" transform="translate(30,716) rotate(-16) scale(1.7)"/>
+        <use href="#banana" transform="translate(150,724) rotate(12) scale(1.4)"/>
+        <use href="#fan"    transform="translate(250,720) scale(1.4)"/>
+        <use href="#banana" transform="translate(380,722) rotate(-10) scale(1.3)"/>
+        <use href="#fan"    transform="translate(520,726) rotate(9) scale(1.15)"/>
+        <use href="#banana" transform="translate(646,724) rotate(14) scale(1.2)"/>
+        <use href="#fan"    transform="translate(790,722) rotate(-8) scale(1.3)"/>
+        <use href="#banana" transform="translate(930,728) rotate(10) scale(1.05)"/>
+        <use href="#fan"    transform="translate(1070,724) scale(1.1)"/>
+        <use href="#banana" transform="translate(1200,720) rotate(-13) scale(1.35)"/>
+        <use href="#fan"    transform="translate(1340,726) rotate(10) scale(1.25)"/>
+        <use href="#banana" transform="translate(1470,718) rotate(15) scale(1.5)"/>
+        <use href="#fan"    transform="translate(1620,722) rotate(-9) scale(1.45)"/>
+        <use href="#banana" transform="translate(1780,716) rotate(11) scale(1.65)"/>
+        <use href="#banana" transform="translate(1876,724) rotate(-14) scale(1.3)"/>
+        <rect x="0" y="690" width="1900" height="20"/>
+      </g>
+    </svg>
+    <div class="mural-scrim"></div>
+    <div class="mural-grain"></div>
+  </div>
+
+  <div class="hero__inner">
+    <span class="mark" data-mark></span>
+    <h1 class="hero__word">LUMO</h1>
+    <div class="hero__tag">Brunch &nbsp;·&nbsp; Coffee &nbsp;·&nbsp; Drinks &nbsp;·&nbsp; Events</div>
+    <div class="hero__rule"></div>
+    <div class="hero__place">Krefelder Straße 219 &nbsp;·&nbsp; Mönchengladbach</div>
+
+    <div class="opening" id="opening">
+      <div class="opening__head" id="openhead">Neueröffnung am 1. September 2026</div>
+      <div class="opening__count" id="count"></div>
+    </div>
+
+    <div class="hero__cta">
+      <a class="btn" href="#reservieren">Tisch reservieren</a>
+      <a class="btn btn--ghost" href="#karte">Zur Karte</a>
+    </div>
+  </div>
+  <div class="scrollhint" aria-hidden="true"><i></i>Scrollen</div>
+</header>
+
+<!-- ================= TAGESVERLAUF ================= -->
+<section class="dark day" id="tag">
+  <div class="wrap">
+    <div class="head center rv">
+      <span class="label">Von morgens bis spät</span>
+      <h2>Ein Ort, der den ganzen Tag trägt</h2>
+      <p>Bei LUMO endet der Tag nicht nach dem Frühstück. Vom ersten Kaffee bis zum letzten Cocktail — ein Bogen, der sich über den ganzen Tag spannt.</p>
+    </div>
+
+    <div class="arc rv" id="arc">
+      <div class="arc__inner">
+        <svg viewBox="0 0 900 290" preserveAspectRatio="none" aria-hidden="true">
+          <path class="arc__path" d="M 110 258 C 250 40, 650 40, 790 258"></path>
+        </svg>
+        <div class="stop" style="left:12.2%;top:87%"><i></i><b>Brunch</b><span>ab 9 Uhr</span></div>
+        <div class="stop" style="left:24.6%;top:52%"><i></i><b>Lunch</b><span>Mittagsangebote</span></div>
+        <div class="stop" style="left:41.1%;top:34%"><i></i><b>Coffee &amp; Kuchen</b><span>Speciality</span></div>
+        <div class="stop" style="left:58.9%;top:34%"><i></i><b>Matcha</b><span>den ganzen Tag</span></div>
+        <div class="stop" style="left:75.4%;top:52%"><i></i><b>Dinner</b><span>abends</span></div>
+        <div class="stop" style="left:87.8%;top:87%"><i></i><b>Signature Drinks</b><span>late night</span></div>
+      </div>
+    </div>
+    <p class="arc__note">Zeiten als Platzhalter — kommen aus euren echten Öffnungszeiten</p>
+  </div>
+</section>
+
+<!-- ================= DAS LUMO ================= -->
+<section class="light" id="lumo">
+  <div class="wrap split wide-left">
+    <div class="copy rv">
+      <span class="label">Das LUMO</span>
+      <h2>Modern Boho in Mönchengladbach</h2>
+      <p class="lead">Warme Töne. Natürliche Texturen. Guter Kaffee.</p>
+      <p>Drapierte Stoffbahnen unter der Decke, Leuchten aus Rattan und Makramee, Olivenbäume in schweren Tontöpfen, weiche Bouclé-Sofas an dunklen Holztischen. Handgeschnitzte Paneele an der Wand, Kerzenlicht auf jedem Tisch — und hinter der Bar ein Wandbild, das den Raum nach Bali öffnet.</p>
+      <p>Auf dem Tisch trifft türkisches Frühstück auf moderne Brunch-Klassiker: Simit und Menemen neben Pancakes und Eggs Benedict, dazu Speciality Coffee, eine eigene Matcha-Karte, hausgemachte Kuchen und Torten. Abends übernehmen Dinner und Signature Cocktails.</p>
+      <div class="pills">
+        <span class="pill" style="border-color:var(--sand-line);color:#6B5D4B">Türkisches Frühstück</span>
+        <span class="pill" style="border-color:var(--sand-line);color:#6B5D4B">Speciality Coffee</span>
+        <span class="pill" style="border-color:var(--sand-line);color:#6B5D4B">Matcha</span>
+        <span class="pill" style="border-color:var(--sand-line);color:#6B5D4B">Kuchen &amp; Torten</span>
+        <span class="pill" style="border-color:var(--sand-line);color:#6B5D4B">Signature Cocktails</span>
+      </div>
+    </div>
+    <div class="phgrid rv">
+      <div class="ph"><span>Foto — Innenraum, Bouclé &amp; Stoffdecke</span></div>
+      <div class="ph sq"><span>Foto — Bar mit Wandbild</span></div>
+      <div class="ph sq"><span>Foto — Brunch-Tafel</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MATCHA ================= -->
+<section class="dark matcha" id="matcha">
+  <div class="wrap split">
+    <div class="ph wide rv"><span>Foto — Matcha Latte, Bowls &amp; Cake</span></div>
+    <div class="copy rv">
+      <span class="label">Matcha at LUMO</span>
+      <h2>Mehr als ein Trend</h2>
+      <p class="lead">Ein Ritual. Ein Moment. Ein Lebensgefühl.</p>
+      <p>Eine eigene Auswahl an Matcha-Kreationen — als Drink, als Bowl, als Kuchen. Mit hochwertigen Zutaten und viel Liebe zubereitet, von der klassischen Zeremonie bis zum Iced Matcha für den Nachmittag.</p>
+      <a class="btn btn--ghost" href="#karte" style="align-self:flex-start">Matcha-Karte ansehen</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= KARTE ================= -->
+<section class="light" id="karte">
+  <div class="wrap">
+    <div class="head center rv">
+      <span class="label">Küche &amp; Bar</span>
+      <h2>Ein Auszug aus der Karte</h2>
+      <p>Die vollständige Karte pflegt das LUMO selbst — Preise und Gerichte lassen sich jederzeit ändern, ohne dass jemand am Code arbeitet.</p>
+    </div>
+
+    <div class="menu rv">
+      <div class="menu__group">
+        <span class="label">Brunch</span>
+        <div class="item">
+          <span class="item__name">Türkisches Frühstück</span><span class="item__dots"></span><span class="item__price">28,00 €</span>
+          <span class="item__desc">Für zwei Personen. Käse, Oliven, Menemen, Sucuk, Honig mit Kaymak, Simit und Çay ohne Ende.</span>
+        </div>
+        <div class="item">
+          <span class="item__name">Eggs Benedict</span><span class="item__dots"></span><span class="item__price">14,50 €</span>
+          <span class="item__desc">Pochierte Eier, Sauerteig, Hollandaise, Avocado.</span>
+        </div>
+        <div class="item">
+          <span class="item__name">Pancake Stack</span><span class="item__dots"></span><span class="item__price">12,00 €</span>
+          <span class="item__desc">Beeren, Ahornsirup, geröstete Nüsse.</span>
+        </div>
+      </div>
+
+      <div class="menu__group">
+        <span class="label">Coffee &amp; Matcha</span>
+        <div class="item">
+          <span class="item__name">Flat White</span><span class="item__dots"></span><span class="item__price">4,20 €</span>
+        </div>
+        <div class="item">
+          <span class="item__name">Ceremonial Matcha Latte</span><span class="item__dots"></span><span class="item__price">5,80 €</span>
+          <span class="item__desc">Wahlweise mit Hafer-, Mandel- oder Vollmilch.</span>
+        </div>
+        <div class="item">
+          <span class="item__name">Matcha Cake</span><span class="item__dots"></span><span class="item__price">6,50 €</span>
+        </div>
+      </div>
+
+      <div class="menu__group">
+        <span class="label">Dinner</span>
+        <div class="item">
+          <span class="item__name">Mezze-Platte</span><span class="item__dots"></span><span class="item__price">19,00 €</span>
+          <span class="item__desc">Sechs Sorten, warmes Fladenbrot.</span>
+        </div>
+        <div class="item">
+          <span class="item__name">Lammkotelett vom Grill</span><span class="item__dots"></span><span class="item__price">29,00 €</span>
+        </div>
+        <div class="item">
+          <span class="item__name">Ofengemüse &amp; Bulgur</span><span class="item__dots"></span><span class="item__price">17,50 €</span>
+          <span class="item__desc">Vegan.</span>
+        </div>
+      </div>
+
+      <div class="menu__group">
+        <span class="label">Signature Drinks</span>
+        <div class="item">
+          <span class="item__name">LUMO Sunrise</span><span class="item__dots"></span><span class="item__price">13,50 €</span>
+          <span class="item__desc">Das Hausgetränk — Zitrus, Granatapfel, Rosmarin.</span>
+        </div>
+        <div class="item">
+          <span class="item__name">Bali Spritz</span><span class="item__dots"></span><span class="item__price">12,00 €</span>
+        </div>
+        <div class="item">
+          <span class="item__name">Alkoholfrei: Matcha Tonic</span><span class="item__dots"></span><span class="item__price">8,50 €</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:center;margin-top:3rem" class="rv">
+      <a class="btn btn--dark" href="#karte">Vollständige Karte</a>
+    </div>
+    <p style="text-align:center;margin-top:1.25rem;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:#8A7C68" class="rv">Gerichte und Preise sind Beispielinhalte für den Entwurf</p>
+  </div>
+</section>
+
+<!-- ================= EVENTS ================= -->
+<section class="dark deep" id="events">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="label">Events</span>
+      <h2>Was als Nächstes läuft</h2>
+      <p>Live-Musik, DJ-Abende, Themenbrunches und private Feiern — das LUMO pflegt seinen Kalender selbst, jeder Termin bekommt eine eigene teilbare Seite.</p>
+    </div>
+
+    <div class="events">
+      <article class="event rv">
+        <div class="ph"><span>Event-Bild</span></div>
+        <div class="event__body">
+          <div class="event__date"><b>05</b><span>September</span></div>
+          <h3>Opening Weekend</h3>
+          <p>Drei Tage Eröffnung mit DJ, Welcome-Drink und Live-Percussion auf der Terrasse.</p>
+          <div class="event__meta">Einlass 19:00 &nbsp;·&nbsp; Eintritt frei</div>
+        </div>
+      </article>
+      <article class="event rv">
+        <div class="ph"><span>Event-Bild</span></div>
+        <div class="event__body">
+          <div class="event__date"><b>19</b><span>September</span></div>
+          <h3>Oriental Night</h3>
+          <p>Orientalische Klänge, Shisha auf der Terrasse und eine Sonderkarte an der Bar.</p>
+          <div class="event__meta">Einlass 20:00 &nbsp;·&nbsp; Reservierung empfohlen</div>
+        </div>
+      </article>
+      <article class="event rv">
+        <div class="ph"><span>Event-Bild</span></div>
+        <div class="event__body">
+          <div class="event__date"><b>04</b><span>Oktober</span></div>
+          <h3>Sunday Brunch &amp; Vinyl</h3>
+          <p>Langer Brunch bis 16 Uhr, dazu Platten von der Anlage — jeden ersten Sonntag.</p>
+          <div class="event__meta">11:00 – 16:00 &nbsp;·&nbsp; Tisch reservieren</div>
+        </div>
+      </article>
+    </div>
+
+    <div style="display:flex;justify-content:center;margin-top:2.5rem" class="rv">
+      <a class="btn btn--ghost" href="#events">Alle Events</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEIERN ================= -->
+<section class="dark" id="feiern">
+  <div class="wrap split">
+    <div class="copy rv">
+      <span class="label">Feiern &amp; Mieten</span>
+      <h2>Eure Feier im LUMO</h2>
+      <p>Geburtstag, Verlobung, Firmenfeier oder Taufe — der Raum lässt sich teilen, komplett buchen oder um die Terrasse erweitern. Eigene Menüs, eigene Getränkepauschalen, eigene Musik.</p>
+      <div class="facts">
+        <div class="fact"><b>120</b><span>Gäste sitzend</span></div>
+        <div class="fact"><b>180</b><span>Gäste stehend</span></div>
+        <div class="fact"><b>2</b><span>Bereiche teilbar</span></div>
+      </div>
+      <div class="pills">
+        <span class="pill">Geburtstag</span>
+        <span class="pill">Firmenfeier</span>
+        <span class="pill">Verlobung</span>
+        <span class="pill">Taufe</span>
+        <span class="pill">Babyshower</span>
+      </div>
+      <a class="btn" href="#reservieren" style="align-self:flex-start;margin-top:.5rem">Unverbindlich anfragen</a>
+      <p style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#6E6455">Kapazitäten sind Platzhalter</p>
+    </div>
+    <div class="ph rv" style="aspect-ratio:3/4"><span>Foto — Lounge-Bereich am Abend</span></div>
+  </div>
+</section>
+
+<!-- ================= RESERVIEREN ================= -->
+<section class="light" id="reservieren">
+  <div class="wrap">
+    <div class="head center rv">
+      <span class="label">Reservierung</span>
+      <h2>Tisch reservieren</h2>
+      <p>Datum wählen, Personenzahl angeben, freie Uhrzeit aussuchen — bis sechs Personen kommt die Bestätigung sofort, größere Runden bestätigt das LUMO persönlich.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;margin-top:2.5rem" class="rv">
+      <a class="btn btn--dark" href="#reservieren">Zur Reservierung</a>
+      <p style="font-size:.86rem;color:#6B5D4B">Lieber telefonisch? &nbsp;<strong style="color:var(--gold-deep)">Telefonnummer folgt</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINDEN ================= -->
+<section class="dark deep" id="finden">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="label">Finden</span>
+      <h2>Krefelder Straße 219</h2>
+    </div>
+    <div class="find" style="margin-top:2.5rem">
+      <div class="info rv">
+        <div class="info__block">
+          <strong>Adresse</strong>
+          <p>Krefelder Straße 219<br>41065 Mönchengladbach</p>
+        </div>
+        <div class="info__block">
+          <strong>Parken</strong>
+          <p>Eigene Parkplätze direkt vor dem Haus.</p>
+        </div>
+        <div class="info__block">
+          <strong>Öffnungszeiten</strong>
+          <div class="hours">
+            <div><span>Montag</span><span>Ruhetag</span></div>
+            <div><span>Dienstag – Donnerstag</span><span>09:00 – 23:00</span></div>
+            <div><span>Freitag &amp; Samstag</span><span>09:00 – 01:00</span></div>
+            <div><span>Sonntag</span><span>09:00 – 22:00</span></div>
+          </div>
+          <p style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#6E6455;margin-top:.5rem">Platzhalter</p>
+        </div>
+        <div class="info__block">
+          <strong>Folgen</strong>
+          <p>Instagram &nbsp;·&nbsp; @lumo.mg</p>
+        </div>
+      </div>
+
+      <div class="mapbox rv">
+        <span class="label">Karte</span>
+        <p>Die Karte wird erst geladen, wenn du sie anforderst. Dabei baut dein Browser eine Verbindung zu Google auf und überträgt deine IP-Adresse.</p>
+        <button class="btn btn--ghost btn--sm" type="button" onclick="this.parentElement.querySelector('p').textContent='So sieht der Zwei-Klick-Schutz in der fertigen Seite aus — hier im Entwurf ohne echte Karte.'">Karte laden</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FRIES ================= -->
+<div class="frieze" aria-hidden="true">
+  <svg viewBox="0 0 1900 190" preserveAspectRatio="xMidYMax slice">
+    <circle cx="960" cy="196" r="160" fill="url(#mSunGlow)"/>
+    <circle cx="960" cy="196" r="52" fill="#C79A54" opacity=".28"/>
+    <g fill="#181004">
+      <use href="#palm" transform="translate(196,206) scale(.72)"/>
+      <use href="#palm" transform="translate(304,212) scale(.5)"/>
+      <use href="#palm" transform="translate(1608,206) scale(.66)"/>
+      <use href="#palm" transform="translate(1512,212) scale(.46)"/>
+      <g transform="translate(700,196) scale(.34)">
+        <path d="M-92 -16 L-92 -190 L-84 -202 L-84 -226 L-76 -238 L-76 -260 L-68 -272 L-68 -292 L-58 -306 L-46 -320 L-26 -320 L-26 -16 Z"/>
+        <path transform="scale(-1,1)" d="M-92 -16 L-92 -190 L-84 -202 L-84 -226 L-76 -238 L-76 -260 L-68 -272 L-68 -292 L-58 -306 L-46 -320 L-26 -320 L-26 -16 Z"/>
+      </g>
+      <use href="#banana" transform="translate(60,208) rotate(-14) scale(.95)"/>
+      <use href="#fan"    transform="translate(420,206) scale(.8)"/>
+      <use href="#banana" transform="translate(560,210) rotate(11) scale(.8)"/>
+      <use href="#fan"    transform="translate(880,208) rotate(-7) scale(.7)"/>
+      <use href="#banana" transform="translate(1040,206) rotate(12) scale(.85)"/>
+      <use href="#fan"    transform="translate(1220,210) scale(.78)"/>
+      <use href="#banana" transform="translate(1380,206) rotate(-12) scale(.9)"/>
+      <use href="#fan"    transform="translate(1740,208) rotate(8) scale(.86)"/>
+      <use href="#banana" transform="translate(1866,206) rotate(-10) scale(1)"/>
+      <rect x="0" y="180" width="1900" height="14"/>
+    </g>
+  </svg>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div class="foot__brand">
+        <span class="mark" data-mark></span>
+        <span class="word">LUMO</span>
+        <p style="font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold)">Brunch · Coffee · Drinks · Events</p>
+      </div>
+      <div class="foot__col">
+        <span class="label dim" style="margin-bottom:.3rem">Besuchen</span>
+        <p>Krefelder Straße 219<br>41065 Mönchengladbach</p>
+        <a href="#finden">Anfahrt &amp; Parken</a>
+        <a href="#reservieren">Tisch reservieren</a>
+      </div>
+      <div class="foot__col">
+        <span class="label dim" style="margin-bottom:.3rem">Mehr</span>
+        <a href="#karte">Speisekarte</a>
+        <a href="#events">Events</a>
+        <a href="#feiern">Feiern &amp; Mieten</a>
+        <a href="#top">Impressum</a>
+        <a href="#top">Datenschutz</a>
+      </div>
+    </div>
+    <div class="draft">
+      <strong style="color:var(--gold);font-weight:400">Gestaltungsentwurf — Variante „Sunset".</strong>
+      Das Wandbild ist als SVG nachgebaut und dem Motiv hinter eurer Bar nachempfunden: Tempeltor, Vulkan, Sonne über dem Meer, Palmen und die Frau im Profil. In der fertigen Seite kann es durch eine Reinzeichnung oder ein Foto der echten Wand ersetzt werden. Bildflächen, Preise, Öffnungszeiten, Events und Kapazitäten sind Platzhalter.
+    </div>
+    <div class="foot__bottom">
+      <span>© 2026 LUMO Mönchengladbach</span>
+      <span>Entwurf · Variante Sunset · 24. August 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---- Sonnen-Ornament aus der Wortmarke ---- */
+  var NS="http://www.w3.org/2000/svg";
+  function buildMark(el){
+    var svg=document.createElementNS(NS,"svg");
+    svg.setAttribute("viewBox","0 0 200 118");
+    svg.setAttribute("aria-hidden","true");
+    svg.style.width="100%";svg.style.height="auto";svg.style.display="block";
+    svg.setAttribute("fill","none");
+    svg.setAttribute("stroke","currentColor");
+    svg.setAttribute("stroke-width","1.1");
+    svg.setAttribute("stroke-linecap","round");
+
+    var cx=100, cy=100, r=30;
+
+    // Horizontlinie
+    var base=document.createElementNS(NS,"path");
+    base.setAttribute("d","M 18 100 H 182");
+    base.setAttribute("stroke-width","1");
+    svg.appendChild(base);
+
+    // Halbkreis
+    var arc=document.createElementNS(NS,"path");
+    arc.setAttribute("d","M "+(cx-r)+" "+cy+" A "+r+" "+r+" 0 0 1 "+(cx+r)+" "+cy);
+    arc.setAttribute("stroke-width","1.3");
+    svg.appendChild(arc);
+
+    // Strahlen
+    var n=23;
+    for(var i=0;i<n;i++){
+      var t=i/(n-1);
+      var a=Math.PI*t;                       // 0 .. PI
+      var len=13+34*Math.pow(Math.sin(a),1.35);
+      var r1=r+7, r2=r1+len;
+      var ln=document.createElementNS(NS,"line");
+      ln.setAttribute("x1",(cx-r1*Math.cos(a)).toFixed(2));
+      ln.setAttribute("y1",(cy-r1*Math.sin(a)).toFixed(2));
+      ln.setAttribute("x2",(cx-r2*Math.cos(a)).toFixed(2));
+      ln.setAttribute("y2",(cy-r2*Math.sin(a)).toFixed(2));
+      ln.setAttribute("stroke-width", (i===0||i===n-1) ? "0.9" : "1.05");
+      svg.appendChild(ln);
+    }
+    el.appendChild(svg);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("[data-mark]"),buildMark);
+
+  /* ---- Countdown bzw. Öffnungsstatus ---- */
+  var opening=new Date(2026,8,1,9,0,0); // 1. September 2026
+  var box=document.getElementById("count");
+  var head=document.getElementById("openhead");
+  function pad(n){return n<10?"0"+n:""+n;}
+  function tick(){
+    var diff=opening-new Date();
+    if(diff<=0){
+      head.textContent="Jetzt geöffnet";
+      box.innerHTML='<div><b>09:00</b><span>bis 23:00 Uhr</span></div>';
+      return;
+    }
+    var d=Math.floor(diff/864e5),
+        h=Math.floor(diff/36e5)%24,
+        m=Math.floor(diff/6e4)%60,
+        s=Math.floor(diff/1e3)%60;
+    box.innerHTML=
+      '<div><b>'+d+'</b><span>Tage</span></div>'+
+      '<div><b>'+pad(h)+'</b><span>Std</span></div>'+
+      '<div><b>'+pad(m)+'</b><span>Min</span></div>'+
+      '<div><b>'+pad(s)+'</b><span>Sek</span></div>';
+  }
+  tick(); setInterval(tick,1000);
+
+  /* ---- Navigation ---- */
+  var nav=document.getElementById("nav"), navcta=document.getElementById("navcta");
+  function onScroll(){
+    var s=window.scrollY>window.innerHeight*.75;
+    nav.classList.toggle("solid",window.scrollY>60);
+    if(window.innerWidth>=940) navcta.style.display=s?"inline-flex":"none";
+  }
+  window.addEventListener("scroll",onScroll,{passive:true});
+  window.addEventListener("resize",onScroll);
+  onScroll();
+
+  var burger=document.getElementById("burger"), drawer=document.getElementById("drawer");
+  burger.addEventListener("click",function(){
+    var open=drawer.classList.toggle("open");
+    burger.setAttribute("aria-expanded",open?"true":"false");
+    document.body.style.overflow=open?"hidden":"";
+  });
+  Array.prototype.forEach.call(drawer.querySelectorAll("a"),function(a){
+    a.addEventListener("click",function(){
+      drawer.classList.remove("open");
+      burger.setAttribute("aria-expanded","false");
+      document.body.style.overflow="";
+    });
+  });
+
+  /* ---- Reveal ---- */
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add("on");io.unobserve(e.target);}
+    });
+  },{threshold:.12,rootMargin:"0px 0px -40px 0px"});
+  Array.prototype.forEach.call(document.querySelectorAll(".rv"),function(el){io.observe(el);});
+
+  var arcIo=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){e.target.classList.add("on");arcIo.unobserve(e.target);} });
+  },{threshold:.3});
+  arcIo.observe(document.getElementById("arc"));
+})();
+</script>
