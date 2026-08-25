@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Sunmark from '../components/Sunmark.astro';
+---
+
+<Base title="Seite nicht gefunden" description="Diese Seite gibt es nicht." path="/404">
+  <Fragment slot="head">
+    <meta name="robots" content="noindex" />
+  </Fragment>
+
+  <Section veil="dense">
+    <div class="notfound">
+      <Sunmark size="5rem" />
+      <p class="label">Fehler 404</p>
+      <h1>Diese Seite gibt es nicht.</h1>
+      <p>
+        Vielleicht hat sich ein Tippfehler eingeschlichen, oder wir haben etwas verschoben. Hier
+        geht es weiter:
+      </p>
+      <nav class="notfound__links" aria-label="Weiterführende Links">
+        <a class="btn btn--ink" href="/">Startseite</a>
+        <a class="btn btn--ghost" href="/speisekarte">Speisekarte</a>
+        <a class="btn btn--ghost" href="/events">Events</a>
+        <a class="btn btn--ghost" href="/reservieren">Reservieren</a>
+      </nav>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .notfound {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-s);
+    max-width: 48ch;
+    margin-inline: auto;
+    padding-block: var(--space-xl);
+    text-align: center;
+  }
+
+  .notfound h1 {
+    font-size: var(--step-4);
+  }
+
+  .notfound p {
+    color: var(--ink-soft);
+  }
+
+  .notfound__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    justify-content: center;
+    margin-top: var(--space-s);
+  }
+</style>

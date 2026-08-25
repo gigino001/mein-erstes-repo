@@ -84,6 +84,37 @@ Dark-first, einthemig — die Marke ist außen schwarz/gold, innen creme/warm.
   hoster-neutral bauen, alles über `.env`, Deployment per Docker Compose
 - **Material:** Logo/CI und professionelle Fotos vorhanden, Texte fehlen noch
 
+## Projektstruktur (Stufe 1)
+```
+src/data/site.ts      Stammdaten + alle Platzhalter (TODO-Konstante)
+src/data/menu.ts      Speisekarte, menuIsPlaceholder-Schalter
+src/content/events/   Events als Markdown, je Datei eine Seite
+src/styles/           tokens.css (Design-System), base.css
+src/components/       Nav, Footer, Section, Sunmark, DayArc,
+                      EventCard, MenuList, FormShell, MapConsent,
+                      Note, PageHeader, RestaurantSchema
+src/layouts/Base.astro   Wandbild-Ebene, Head, Reveal-Skript
+public/formular.php   Formularempfang fuer Stufe 1 (laeuft auf jedem
+                      Webspace); Zugangsdaten in formular.config.php
+                      aus der .example-Datei anlegen, nicht im Repo
+```
+
+## Befehle
+- `npm run dev` — Entwicklungsserver auf Port 4321
+- `npm run build` — statischer Build nach `dist/`
+- `npm run check` — Typpruefung (muss 0 Fehler zeigen)
+- `npm run check:todo` — listet auf, was vor dem Livegang fehlt;
+  Exit-Code 1 solange Blockierendes offen ist
+
+## Regeln fuer die Umsetzung
+- Sektionen liegen ueber dem Wandbild: `<Section veil="open|medium|dense|band">`
+  — erzaehlende Abschnitte offen, Textabschnitte dicht
+- Platzhalter nie direkt in eine Seite schreiben, immer ueber
+  `src/data/site.ts` mit der TODO-Konstante, damit check:todo sie findet
+- Strukturierte Daten geben Oeffnungszeiten und Telefon nur aus, wenn
+  sie echt sind — falsche Zeiten bei Google sind schlimmer als keine
+- Kein Drittanbieter laedt automatisch. Google Maps erst nach Klick
+
 ## Offen / noch zu klären
 Zwingend vor dem Livegang am 01.09.:
 - [ ] Impressumsdaten (Firmierung, Inhaber, HR, USt-IdNr.)

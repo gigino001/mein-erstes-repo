@@ -1,9 +1,26 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Section from '../components/Section.astro';
 import Sunmark from '../components/Sunmark.astro';
 import DayArc from '../components/DayArc.astro';
-import { site } from '../data/site';
+import EventCard from '../components/EventCard.astro';
+import MenuList from '../components/MenuList.astro';
+import Note from '../components/Note.astro';
+import RestaurantSchema from '../components/RestaurantSchema.astro';
+import { site, venue, TODO } from '../data/site';
+import { menu, menuIsPlaceholder } from '../data/menu';
+
+const now = new Date();
+const all = (await getCollection('events', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.date.getTime() - b.data.date.getTime(),
+);
+const upcoming = all.filter((e) => e.data.date >= now).slice(0, 3);
+
+// Auszug für die Startseite: Brunch und Bar zeigen die Spannweite des Hauses.
+const teaserSections = menu.filter((s) => s.id === 'brunch' || s.id === 'drinks');
+
+const hasCapacity = venue.partySeated !== TODO;
 ---
 
 <Base title={site.name} path="/">
@@ -80,6 +97,145 @@ import { site } from '../data/site';
       </div>
     </div>
   </Section>
+
+  {/* ---------------- Matcha ---------------- */}
+  <Section veil="open" id="matcha" class="matcha" labelledby="matcha-titel">
+    <div class="split split--reverse">
+      <div class="figure figure--wide reveal"><span>Foto — Matcha Latte, Bowls &amp; Cake</span></div>
+
+      <div class="copy reveal">
+        <span class="label label--matcha">Matcha at LUMO</span>
+        <h2 id="matcha-titel">Mehr als ein Trend</h2>
+        <p class="lead">Ein Ritual. Ein Moment. Ein Lebensgefühl.</p>
+        <p>
+          Eine eigene Auswahl an Matcha-Kreationen — als Drink, als Bowl, als Kuchen. Mit
+          hochwertigen Zutaten zubereitet, von der klassischen Zeremonie bis zum Iced Matcha für
+          den Nachmittag.
+        </p>
+        <a class="btn btn--ghost self-start" href="/speisekarte#coffee">Matcha-Karte ansehen</a>
+      </div>
+    </div>
+  </Section>
+
+  {/* ---------------- Auszug aus der Karte ---------------- */}
+  <Section veil="dense" id="karte" labelledby="karte-titel">
+    <div class="head reveal">
+      <span class="label">Küche &amp; Bar</span>
+      <h2 id="karte-titel">Ein Auszug aus der Karte</h2>
+      <p>Von türkischem Frühstück am Morgen bis zum Signature Cocktail am Abend.</p>
+    </div>
+
+    <div class="menu-grid reveal">
+      {teaserSections.map((section) => <MenuList section={section} showIntro={false} />)}
+    </div>
+
+    <div class="center-cta reveal">
+      <a class="btn btn--ink" href="/speisekarte">Vollständige Karte</a>
+    </div>
+
+    {menuIsPlaceholder && <Note>Gerichte und Preise sind Beispielinhalte und noch nicht die echte Karte.</Note>}
+  </Section>
+
+  {/* ---------------- Events ---------------- */}
+  <Section veil="medium" id="events" labelledby="events-titel">
+    <div class="head head--left reveal">
+      <span class="label">Events</span>
+      <h2 id="events-titel">Was als Nächstes läuft</h2>
+      <p>
+        Live-Musik, DJ-Abende, Themenbrunches und private Feiern — jeder Termin bekommt eine eigene
+        Seite, die sich teilen lässt.
+      </p>
+    </div>
+
+    {
+      upcoming.length > 0 ? (
+        <div class="events-grid">
+          {upcoming.map((event) => (
+            <EventCard event={event} />
+          ))}
+        </div>
+      ) : (
+        <p class="empty reveal">
+          Zurzeit sind keine Termine eingetragen. Was geplant ist, erfahrt ihr zuerst auf Instagram.
+        </p>
+      )
+    }
+
+    <div class="center-cta reveal">
+      <a class="btn btn--ghost" href="/events">Alle Events</a>
+    </div>
+  </Section>
+
+  {/* ---------------- Feiern ---------------- */}
+  <Section veil="open" id="feiern" labelledby="feiern-titel">
+    <div class="split">
+      <div class="copy reveal">
+        <span class="label">Feiern &amp; Mieten</span>
+        <h2 id="feiern-titel">Eure Feier im LUMO</h2>
+        <p>
+          Geburtstag, Verlobung, Firmenfeier oder Taufe — der Raum lässt sich teilen, komplett
+          buchen oder um die Terrasse erweitern. Eigene Menüs, eigene Getränkepauschalen, eigene
+          Musik.
+        </p>
+
+        {
+          hasCapacity ? (
+            <dl class="facts">
+              <div>
+                <dt>Gäste sitzend</dt>
+                <dd>{venue.partySeated}</dd>
+              </div>
+              <div>
+                <dt>Gäste stehend</dt>
+                <dd>{venue.partyStanding}</dd>
+              </div>
+            </dl>
+          ) : (
+            <Note>Die Kapazitäten stehen noch nicht fest und werden ergänzt.</Note>
+          )
+        }
+
+        <ul class="pills">
+          <li>Geburtstag</li>
+          <li>Firmenfeier</li>
+          <li>Verlobung</li>
+          <li>Taufe</li>
+          <li>Babyshower</li>
+        </ul>
+
+        <a class="btn self-start" href="/feiern">Unverbindlich anfragen</a>
+      </div>
+
+      <div class="figure figure--portrait reveal"><span>Foto — Lounge-Bereich am Abend</span></div>
+    </div>
+  </Section>
+
+  {/* ---------------- Finden ---------------- */}
+  <Section veil="band" id="finden" labelledby="finden-titel">
+    <div class="split">
+      <div class="copy reveal">
+        <span class="label">Finden</span>
+        <h2 id="finden-titel">{site.address.street}</h2>
+        <p>
+          {site.address.postalCode} {site.address.city} — {site.parking.toLowerCase()}.
+        </p>
+        <p>
+          Wir öffnen am <strong>1. September 2026</strong>. Bis dahin halten wir euch auf Instagram
+          auf dem Laufenden.
+        </p>
+        <div class="row">
+          <a class="btn btn--ink" href="/kontakt">Anfahrt &amp; Kontakt</a>
+          <a class="btn btn--ghost" href={site.instagram.url} rel="noopener noreferrer" target="_blank">
+            {site.instagram.handle}
+          </a>
+        </div>
+      </div>
+
+      <div class="figure figure--wide reveal"><span>Foto — Fassade bei Abendlicht</span></div>
+    </div>
+  </Section>
+
+  <RestaurantSchema slot="head" />
 </Base>
 
 <style>
@@ -291,5 +447,117 @@ import { site } from '../data/site';
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: rgb(43 33 23 / 50%);
+  }
+  /* ---------------- Ergaenzende Layoutklassen ---------------- */
+  .head--left {
+    margin-inline: 0;
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .split--reverse > :first-child {
+    order: 2;
+  }
+
+  @media (max-width: 879px) {
+    .split--reverse > :first-child {
+      order: 0;
+    }
+  }
+
+  .self-start {
+    align-self: flex-start;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-2xs);
+  }
+
+  .center-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-l);
+  }
+
+  .figure--wide {
+    aspect-ratio: 16 / 10;
+  }
+
+  .figure--portrait {
+    aspect-ratio: 3 / 4;
+  }
+
+  .menu-grid {
+    display: grid;
+    gap: var(--space-l) var(--space-xl);
+    margin-top: var(--space-l);
+  }
+
+  @media (min-width: 820px) {
+    .menu-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .events-grid {
+    display: grid;
+    gap: var(--space-s);
+    margin-top: var(--space-l);
+  }
+
+  @media (min-width: 800px) {
+    .events-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .empty {
+    margin-top: var(--space-l);
+    color: var(--ink-soft);
+  }
+
+  /* Matcha ist der einzige Ort, an dem der Gruenton auftaucht */
+  .matcha {
+    background-image: radial-gradient(
+      ellipse 55% 40% at 78% 30%,
+      rgb(90 108 54 / 12%),
+      transparent 64%
+    );
+  }
+
+  .label--matcha {
+    color: var(--matcha);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    margin: var(--space-xs) 0 0;
+    border: 1px solid var(--line);
+    background: var(--line);
+  }
+
+  .facts > div {
+    padding: var(--space-s);
+    background: rgb(253 249 240 / 90%);
+  }
+
+  .facts dt {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .facts dd {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1;
+    color: var(--gold-light);
   }
 </style>

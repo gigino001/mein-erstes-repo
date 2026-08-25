@@ -1,0 +1,122 @@
+---
+import { formatPrice, type MenuSection } from '../data/menu';
+
+interface Props {
+  section: MenuSection;
+  showIntro?: boolean;
+}
+
+const { section, showIntro = true } = Astro.props;
+
+const tagLabel: Record<string, string> = {
+  vegetarisch: 'V',
+  vegan: 'VG',
+  scharf: '🌶',
+  glutenfrei: 'GF',
+};
+---
+
+<div class="menu-section">
+  <h3 class="menu-section__title" id={section.id}>{section.title}</h3>
+  {showIntro && section.intro && <p class="menu-section__intro">{section.intro}</p>}
+
+  <dl class="items">
+    {
+      section.items.map((item) => (
+        <div class="item">
+          <dt class="item__name">
+            {item.name}
+            {item.tags?.map((tag) => (
+              <abbr class="item__tag" title={tag}>
+                {tagLabel[tag] ?? tag}
+              </abbr>
+            ))}
+          </dt>
+          <dd class="item__price">
+            {formatPrice(item.price)}
+            {item.note && <small>{item.note}</small>}
+          </dd>
+          {item.description && <p class="item__desc">{item.description}</p>}
+        </div>
+      ))
+    }
+  </dl>
+</div>
+
+<style>
+  .menu-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    break-inside: avoid;
+  }
+
+  .menu-section__title {
+    font-size: var(--step-2);
+    color: var(--ink);
+  }
+
+  .menu-section__intro {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    max-width: 44ch;
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    margin: var(--space-xs) 0 0;
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.15rem var(--space-s);
+    align-items: baseline;
+  }
+
+  .item__name {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--ink);
+  }
+
+  .item__tag {
+    margin-left: 0.4em;
+    padding: 0.1em 0.35em;
+    border: 1px solid var(--line-strong);
+    font-family: var(--font-ui);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    color: var(--gold);
+    vertical-align: 0.15em;
+  }
+
+  .item__price {
+    margin: 0;
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    color: var(--gold);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .item__price small {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .item__desc {
+    grid-column: 1 / -1;
+    max-width: 52ch;
+    font-size: var(--step--1);
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+</style>

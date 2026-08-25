@@ -1,0 +1,203 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import PageHeader from '../components/PageHeader.astro';
+import FormShell from '../components/FormShell.astro';
+import Note from '../components/Note.astro';
+import { contact, site, TODO } from '../data/site';
+
+const hasPhone = contact.phone !== TODO;
+
+// Frühestens morgen, längstens in 90 Tagen
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+const max = new Date();
+max.setDate(max.getDate() + 90);
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<Base
+  title="Tisch reservieren"
+  description="Reserviert euren Tisch im LUMO Mönchengladbach — Datum, Uhrzeit und Personenzahl angeben, wir bestätigen persönlich."
+  path="/reservieren"
+>
+  <PageHeader
+    eyebrow="Reservierung"
+    title="Tisch reservieren"
+    lead="Sagt uns, wann ihr kommen möchtet. Wir melden uns mit einer Bestätigung — meist noch am selben Tag."
+  />
+
+  <Section veil="dense">
+    <div class="layout">
+      <div>
+        <FormShell type="reservierung" submitLabel="Anfrage senden">
+          <div class="form__row form__row--3">
+            <div class="field">
+              <label for="datum">Datum <span class="req">*</span></label>
+              <input
+                type="date"
+                id="datum"
+                name="datum"
+                required
+                min={iso(tomorrow)}
+                max={iso(max)}
+              />
+            </div>
+
+            <div class="field">
+              <label for="uhrzeit">Uhrzeit <span class="req">*</span></label>
+              <input type="time" id="uhrzeit" name="uhrzeit" required step="1800" />
+            </div>
+
+            <div class="field">
+              <label for="personen">Personen <span class="req">*</span></label>
+              <select id="personen" name="personen" required>
+                {
+                  Array.from({ length: 12 }, (_, i) => i + 1).map((n) => (
+                    <option value={String(n)}>{n}</option>
+                  ))
+                }
+                <option value="mehr als 12">mehr als 12</option>
+              </select>
+            </div>
+          </div>
+
+          <p class="field__hint">
+            Ab 13 Personen ist es eine Feier — nutzt dafür bitte
+            <a href="/feiern">Feiern &amp; Mieten</a>, dort fragen wir die richtigen Angaben ab.
+          </p>
+
+          <div class="form__row form__row--2">
+            <div class="field">
+              <label for="name">Name <span class="req">*</span></label>
+              <input type="text" id="name" name="name" required autocomplete="name" />
+            </div>
+
+            <div class="field">
+              <label for="email">E-Mail <span class="req">*</span></label>
+              <input type="email" id="email" name="email" required autocomplete="email" />
+            </div>
+          </div>
+
+          <div class="form__row form__row--2">
+            <div class="field">
+              <label for="telefon">Telefon</label>
+              <input type="tel" id="telefon" name="telefon" autocomplete="tel" />
+              <span class="field__hint">Damit wir euch kurzfristig erreichen können.</span>
+            </div>
+
+            <div class="field">
+              <label for="anlass">Anlass</label>
+              <input type="text" id="anlass" name="anlass" placeholder="Geburtstag, Jahrestag …" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="nachricht">Anmerkungen</label>
+            <textarea
+              id="nachricht"
+              name="nachricht"
+              placeholder="Kinderstuhl, Allergien, Wunsch nach einem Platz auf der Terrasse …"></textarea>
+          </div>
+        </FormShell>
+      </div>
+
+      <aside class="aside">
+        <div class="aside__block">
+          <h2>So läuft es ab</h2>
+          <ol>
+            <li>Ihr schickt die Anfrage ab.</li>
+            <li>Wir prüfen, ob wir den Tisch freihalten können.</li>
+            <li>Ihr bekommt eine Bestätigung per E-Mail oder einen kurzen Anruf.</li>
+          </ol>
+          <p class="aside__hint">
+            Die automatische E-Mail direkt nach dem Absenden ist eine Eingangsbestätigung — noch
+            keine verbindliche Zusage.
+          </p>
+        </div>
+
+        <div class="aside__block">
+          <h2>Lieber telefonisch?</h2>
+          {
+            hasPhone ? (
+              <a class="aside__phone" href={`tel:${contact.phone.replace(/\s/g, '')}`}>
+                {contact.phone}
+              </a>
+            ) : (
+              <Note>Die Telefonnummer wird ergänzt, sobald sie feststeht.</Note>
+            )
+          }
+          <p class="aside__hint">
+            {site.address.street}, {site.address.postalCode} {site.address.city} —
+            {' '}{site.parking.toLowerCase()}.
+          </p>
+        </div>
+
+        <Note variant="info">
+          Bis zur Eröffnung am 1. September 2026 nehmen wir Anfragen entgegen und bestätigen sie
+          gesammelt.
+        </Note>
+      </aside>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .layout {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  @media (min-width: 960px) {
+    .layout {
+      grid-template-columns: 1.4fr 0.9fr;
+    }
+  }
+
+  .aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+    padding: var(--space-m);
+    border: 1px solid var(--line);
+    background: rgb(234 221 194 / 55%);
+  }
+
+  .aside__block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .aside h2 {
+    font-size: var(--step-1);
+  }
+
+  .aside ol {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    margin: 0;
+    padding-left: 1.2em;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .aside__hint {
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+
+  .aside__phone {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    color: var(--gold);
+  }
+
+  .field__hint a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>

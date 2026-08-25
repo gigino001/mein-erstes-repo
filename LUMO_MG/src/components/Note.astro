@@ -1,0 +1,30 @@
+---
+/*
+  Hinweis auf Platzhalterinhalte. Bewusst sichtbar und nicht dekorativ —
+  solange diese Kästen auf der Seite stehen, darf sie nicht live gehen.
+*/
+interface Props {
+  variant?: 'placeholder' | 'info';
+}
+
+const { variant = 'placeholder' } = Astro.props;
+---
+
+<p class={`note note--${variant}`}>
+  <slot />
+</p>
+
+<style>
+  .note {
+    margin-top: var(--space-m);
+    padding: 0.7rem 1rem;
+    border-left: 2px solid var(--gold);
+    background: rgb(126 87 24 / 8%);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .note--placeholder {
+    border-left-style: dashed;
+  }
+</style>

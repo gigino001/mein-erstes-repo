@@ -1,0 +1,188 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Section from '../../components/Section.astro';
+import Note from '../../components/Note.astro';
+import { site } from '../../data/site';
+
+export const getStaticPaths = (async () => {
+  const events = await getCollection('events', ({ data }) => !data.draft);
+  return events.map((event) => ({ params: { id: event.id }, props: { event } }));
+}) satisfies GetStaticPaths;
+
+const { event } = Astro.props;
+const { title, date, doors, until, category, teaser, ticketUrl, placeholder } = event.data;
+const { Content } = await render(event);
+
+const isPast = date < new Date();
+
+const dateLong = date.toLocaleDateString('de-DE', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+const timeStart = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+
+// Event-Schema für Google. Ohne Preisangabe, solange kein Ticketverkauf läuft.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: title,
+  startDate: date.toISOString(),
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  description: teaser,
+  location: {
+    '@type': 'Place',
+    name: site.fullName,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: site.address.street,
+      postalCode: site.address.postalCode,
+      addressLocality: site.address.city,
+      addressCountry: site.address.country,
+    },
+  },
+  organizer: { '@type': 'Organization', name: site.fullName, url: site.url },
+  ...(ticketUrl ? { offers: { '@type': 'Offer', url: ticketUrl } } : {}),
+};
+---
+
+<Base title={title} description={teaser} path={`/events/${event.id}`}>
+  <Fragment slot="head">
+    <meta property="og:type" content="article" />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+  </Fragment>
+
+  <article>
+    <header class="event-header">
+      <div class="container">
+        <a class="back" href="/events">← Alle Events</a>
+        <span class="label">{category}</span>
+        <h1>{title}</h1>
+
+        <dl class="when">
+          <div>
+            <dt>Wann</dt>
+            <dd><time datetime={date.toISOString()}>{dateLong}</time></dd>
+          </div>
+          <div>
+            <dt>{until ? 'Uhrzeit' : 'Einlass'}</dt>
+            <dd>{until ? `${timeStart} – ${until}` : (doors ?? timeStart)}</dd>
+          </div>
+          <div>
+            <dt>Wo</dt>
+            <dd>{site.address.street}, {site.address.city}</dd>
+          </div>
+        </dl>
+
+        {isPast && <Note variant="info">Dieser Termin liegt in der Vergangenheit.</Note>}
+        {placeholder && <Note>Beispieltermin für den Entwurf.</Note>}
+      </div>
+    </header>
+
+    <Section veil="dense">
+      <div class="prose">
+        <Content />
+      </div>
+
+      <div class="event-cta">
+        {ticketUrl && (
+          <a class="btn" href={ticketUrl} rel="noopener noreferrer" target="_blank">
+            Tickets sichern
+          </a>
+        )}
+        {!isPast && <a class="btn btn--ink" href="/reservieren">Tisch reservieren</a>}
+        <a class="btn btn--ghost" href="/events">Weitere Events</a>
+      </div>
+    </Section>
+  </article>
+</Base>
+
+<style>
+  .event-header {
+    padding: clamp(7rem, 14vw, 10rem) 0 clamp(2rem, 5vw, 3rem);
+    background: linear-gradient(
+      180deg,
+      rgb(253 249 240 / 30%) 0%,
+      rgb(253 249 240 / 60%) 60%,
+      rgb(253 249 240 / 90%) 100%
+    );
+  }
+
+  .event-header .container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-s);
+  }
+
+  .event-header h1 {
+    font-size: var(--step-5);
+    max-width: 18ch;
+  }
+
+  .back {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .back:hover {
+    color: var(--gold-dark);
+  }
+
+  .when {
+    display: grid;
+    gap: var(--space-s) var(--space-l);
+    margin: var(--space-xs) 0 0;
+  }
+
+  @media (min-width: 640px) {
+    .when {
+      grid-template-columns: repeat(3, auto);
+    }
+  }
+
+  .when dt {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .when dd {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--ink);
+  }
+
+  .prose {
+    max-width: 62ch;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    color: var(--ink-soft);
+  }
+
+  .prose :global(p) {
+    margin: 0;
+  }
+
+  .prose :global(h2) {
+    margin-top: var(--space-m);
+    font-size: var(--step-2);
+    color: var(--ink);
+  }
+
+  .event-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-l);
+  }
+</style>

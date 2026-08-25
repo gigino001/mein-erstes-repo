@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Sunmark from '../components/Sunmark.astro';
+import { contact, TODO } from '../data/site';
+
+const hasPhone = contact.phone !== TODO;
+---
+
+<Base title="Danke" description="Wir haben deine Anfrage erhalten." path="/danke">
+  <Fragment slot="head">
+    <meta name="robots" content="noindex" />
+  </Fragment>
+
+  <Section veil="dense">
+    <div class="thanks">
+      <Sunmark size="6rem" />
+      <h1>Danke — wir haben deine Anfrage.</h1>
+      <p>
+        Eine Eingangsbestätigung ist gerade an deine E-Mail-Adresse unterwegs. Wir melden uns mit
+        einer verbindlichen Antwort, meist noch am selben Tag.
+      </p>
+      <p class="thanks__hint">
+        Nichts angekommen? Schau bitte kurz im Spam-Ordner nach{
+          hasPhone ? ' — oder ruf uns einfach an.' : '.'
+        }
+      </p>
+
+      <div class="thanks__actions">
+        <a class="btn btn--ink" href="/">Zur Startseite</a>
+        {hasPhone && (
+          <a class="btn btn--ghost" href={`tel:${contact.phone.replace(/\s/g, '')}`}>
+            {contact.phone}
+          </a>
+        )}
+      </div>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .thanks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-s);
+    max-width: 46ch;
+    margin-inline: auto;
+    padding-block: var(--space-xl);
+    text-align: center;
+  }
+
+  .thanks h1 {
+    font-size: var(--step-4);
+  }
+
+  .thanks p {
+    color: var(--ink-soft);
+  }
+
+  .thanks__hint {
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .thanks__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    justify-content: center;
+    margin-top: var(--space-s);
+  }
+</style>

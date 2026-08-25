@@ -1,4 +1,5 @@
 import { defineConfig, fontProviders } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // Stufe 1: rein statischer Build. Läuft damit auf jedem Webspace.
 // Für Stufe 2 wird hier auf output: 'server' plus Node-Adapter umgestellt.
@@ -12,6 +13,13 @@ export default defineConfig({
     format: 'directory',
   },
   compressHTML: true,
+
+  integrations: [
+    sitemap({
+      // Danke-Seite und 404 gehoeren nicht in den Index
+      filter: (page) => !page.includes('/danke') && !page.includes('/404'),
+    }),
+  ],
 
   // Astro lädt die Schriften beim Build herunter und liefert sie aus dem
   // eigenen Verzeichnis aus. Zur Laufzeit geht keine Verbindung zu Google —

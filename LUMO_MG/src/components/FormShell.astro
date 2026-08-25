@@ -1,0 +1,69 @@
+---
+/*
+  Gemeinsames Gerüst aller Formulare.
+
+  Enthält die drei Spam-Maßnahmen, die Google reCAPTCHA ersetzen:
+  - Honeypot: ein Feld, das nur Bots ausfüllen
+  - Zeitfalle: zu schnell abgeschickt = kein Mensch
+  - Ratenbegrenzung: passiert serverseitig in formular.php
+
+  Kein Captcha bedeutet: keine Datenübermittlung in die USA und damit
+  keine Zustimmungsabfrage.
+*/
+interface Props {
+  /** reservierung | kontakt | feiern — steuert Betreff und Pflichtfelder */
+  type: 'reservierung' | 'kontakt' | 'feiern';
+  submitLabel: string;
+}
+
+const { type, submitLabel } = Astro.props;
+---
+
+<form class="form" method="post" action="/formular.php">
+  <input type="hidden" name="formular" value={type} />
+
+  {/* Honeypot */}
+  <div class="field field--trap" aria-hidden="true">
+    <label for="website">Website (bitte frei lassen)</label>
+    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+  </div>
+
+  {/* Zeitfalle — wird per Skript gesetzt, damit gecachte Seiten nicht stören */}
+  <input type="hidden" name="gestartet" value="0" data-started />
+
+  <slot />
+
+  <div class="field consent">
+    <input type="checkbox" id="datenschutz" name="datenschutz" value="ja" required />
+    <label for="datenschutz">
+      Ich habe die <a href="/datenschutz">Datenschutzhinweise</a> gelesen und bin damit einverstanden,
+      dass meine Angaben zur Bearbeitung meiner Anfrage gespeichert werden.
+      <span class="req">*</span>
+    </label>
+  </div>
+
+  <div>
+    <button class="btn" type="submit">{submitLabel}</button>
+  </div>
+
+  <p class="form__note">
+    <span class="req">*</span> Pflichtfeld. Wir verwenden deine Angaben ausschließlich, um deine
+    Anfrage zu beantworten, und geben sie nicht weiter.
+  </p>
+</form>
+
+<script>
+  // Zeitstempel erst im Browser setzen: so funktioniert die Zeitfalle auch,
+  // wenn die Seite aus einem Cache kommt.
+  document.querySelectorAll<HTMLInputElement>('input[data-started]').forEach((input) => {
+    input.value = String(Math.floor(Date.now() / 1000));
+  });
+</script>
+
+<style>
+  .form__note {
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    max-width: 46ch;
+  }
+</style>

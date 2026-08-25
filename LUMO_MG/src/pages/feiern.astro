@@ -1,0 +1,241 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import PageHeader from '../components/PageHeader.astro';
+import FormShell from '../components/FormShell.astro';
+import Note from '../components/Note.astro';
+import { venue, TODO } from '../data/site';
+
+const hasCapacity = venue.partySeated !== TODO;
+
+const occasions = [
+  { title: 'Geburtstag', text: 'Vom kleinen Tisch bis zum ganzen Raum, mit eigener Musik.' },
+  { title: 'Firmenfeier', text: 'Weihnachtsfeier, Jubiläum oder Teamabend mit fester Menüauswahl.' },
+  { title: 'Verlobung & Hochzeit', text: 'Standesamtliche Feier, Polterabend oder der Tag danach.' },
+  { title: 'Taufe & Babyshower', text: 'Tagsüber, mit Brunch-Buffet und Platz für Kinderwagen.' },
+  { title: 'Trauerfeier', text: 'Ruhiger Rahmen, abgetrennter Bereich, Kaffee und Kuchen.' },
+  { title: 'Private Buchung', text: 'Das ganze Haus für euch, inklusive Terrasse.' },
+];
+
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+---
+
+<Base
+  title="Feiern & Mieten"
+  description="Geburtstag, Firmenfeier oder Hochzeit im LUMO Mönchengladbach — Räume, Kapazitäten und unverbindliche Anfrage."
+  path="/feiern"
+>
+  <PageHeader
+    eyebrow="Feiern & Mieten"
+    title="Eure Feier im LUMO"
+    lead="Der Raum lässt sich teilen, komplett buchen oder um die Terrasse erweitern. Eigene Menüs, eigene Getränkepauschalen, eigene Musik."
+  />
+
+  <Section veil="open">
+    {
+      hasCapacity ? (
+        <dl class="facts">
+          <div>
+            <dt>Sitzend</dt>
+            <dd>{venue.partySeated}</dd>
+          </div>
+          <div>
+            <dt>Stehend</dt>
+            <dd>{venue.partyStanding}</dd>
+          </div>
+          <div>
+            <dt>Innen</dt>
+            <dd>{venue.seatsIndoor}</dd>
+          </div>
+          <div>
+            <dt>Terrasse</dt>
+            <dd>{venue.seatsOutdoor}</dd>
+          </div>
+        </dl>
+      ) : (
+        <Note>
+          Die genauen Kapazitäten für Innenraum, Terrasse und Feiern stehen noch nicht fest und
+          werden hier ergänzt.
+        </Note>
+      )
+    }
+
+    <div class="occasions">
+      {
+        occasions.map((item) => (
+          <article class="occasion reveal">
+            <h2>{item.title}</h2>
+            <p>{item.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section veil="dense" labelledby="anfrage">
+    <div class="ask">
+      <div class="ask__intro">
+        <span class="label">Anfrage</span>
+        <h2 id="anfrage">Unverbindlich anfragen</h2>
+        <p>
+          Je mehr wir vorab wissen, desto konkreter können wir antworten. Wir melden uns mit einem
+          Vorschlag und den passenden Möglichkeiten.
+        </p>
+        <Note variant="info">
+          Pakete und Preise für Feiern stehen noch nicht fest. Bis dahin erstellen wir jedes
+          Angebot individuell.
+        </Note>
+      </div>
+
+      <FormShell type="feiern" submitLabel="Anfrage senden">
+        <div class="form__row form__row--2">
+          <div class="field">
+            <label for="anlass">Anlass <span class="req">*</span></label>
+            <input
+              type="text"
+              id="anlass"
+              name="anlass"
+              required
+              placeholder="Geburtstag, Firmenfeier …"
+            />
+          </div>
+          <div class="field">
+            <label for="personen">Personen <span class="req">*</span></label>
+            <input type="number" id="personen" name="personen" required min="10" max="300" />
+          </div>
+        </div>
+
+        <div class="form__row form__row--2">
+          <div class="field">
+            <label for="datum">Wunschtermin</label>
+            <input type="date" id="datum" name="datum" min={tomorrow.toISOString().slice(0, 10)} />
+            <span class="field__hint">Auch ein grober Zeitraum hilft uns weiter.</span>
+          </div>
+          <div class="field">
+            <label for="uhrzeit">Ab wann</label>
+            <input type="time" id="uhrzeit" name="uhrzeit" step="1800" />
+          </div>
+        </div>
+
+        <div class="form__row form__row--2">
+          <div class="field">
+            <label for="name">Name <span class="req">*</span></label>
+            <input type="text" id="name" name="name" required autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="email">E-Mail <span class="req">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="telefon">Telefon</label>
+          <input type="tel" id="telefon" name="telefon" autocomplete="tel" />
+        </div>
+
+        <div class="field">
+          <label for="nachricht">Was habt ihr vor?</label>
+          <textarea
+            id="nachricht"
+            name="nachricht"
+            placeholder="Essen, Getränke, Musik, Deko, Zeitrahmen — erzählt uns einfach, was ihr euch vorstellt."
+          ></textarea>
+        </div>
+      </FormShell>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    margin: 0 0 var(--space-l);
+    border: 1px solid var(--line);
+    background: var(--line);
+  }
+
+  @media (min-width: 720px) {
+    .facts {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .facts > div {
+    padding: var(--space-m) var(--space-s);
+    background: rgb(253 249 240 / 90%);
+  }
+
+  .facts dt {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .facts dd {
+    margin: 0.25rem 0 0;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1;
+    color: var(--gold-light);
+  }
+
+  .occasions {
+    display: grid;
+    gap: var(--space-s);
+    margin-top: var(--space-l);
+  }
+
+  @media (min-width: 700px) {
+    .occasions {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .occasion {
+    padding: var(--space-m);
+    border: 1px solid var(--line);
+    background: rgb(253 249 240 / 82%);
+  }
+
+  .occasion h2 {
+    font-size: var(--step-1);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .occasion p {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .ask {
+    display: grid;
+    gap: var(--space-l);
+  }
+
+  @media (min-width: 960px) {
+    .ask {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: var(--space-xl);
+      align-items: start;
+    }
+  }
+
+  .ask__intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .ask__intro h2 {
+    font-size: var(--step-3);
+  }
+
+  .ask__intro p {
+    color: var(--ink-soft);
+    max-width: 38ch;
+  }
+</style>

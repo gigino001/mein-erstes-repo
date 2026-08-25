@@ -1,0 +1,126 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import PageHeader from '../components/PageHeader.astro';
+import MenuList from '../components/MenuList.astro';
+import Note from '../components/Note.astro';
+import { menu, menuIsPlaceholder } from '../data/menu';
+---
+
+<Base
+  title="Speisekarte"
+  description="Türkisches Frühstück, Brunch-Klassiker, Speciality Coffee, Matcha, Dinner und Signature Cocktails — die Karte des LUMO in Mönchengladbach."
+  path="/speisekarte"
+>
+  <PageHeader
+    eyebrow="Küche & Bar"
+    title="Speisekarte"
+    lead="Vom türkischen Frühstück am Morgen bis zum Signature Cocktail am Abend. Alles frisch, vieles hausgemacht."
+  >
+    <nav class="jump" aria-label="Zu einem Abschnitt springen">
+      {menu.map((section) => <a href={`#${section.id}`}>{section.title}</a>)}
+    </nav>
+  </PageHeader>
+
+  <Section veil="dense">
+    {menuIsPlaceholder && (
+      <Note>
+        Die hier gezeigten Gerichte und Preise sind Beispielinhalte für den Entwurf. Die echte Karte
+        wird vor der Eröffnung eingepflegt.
+      </Note>
+    )}
+
+    <div class="menu-columns">
+      {menu.map((section) => <MenuList section={section} />)}
+    </div>
+
+    <div class="legend">
+      <h2>Kennzeichnung</h2>
+      <ul>
+        <li><abbr title="vegetarisch">V</abbr> vegetarisch</li>
+        <li><abbr title="vegan">VG</abbr> vegan</li>
+        <li><abbr title="scharf">🌶</abbr> scharf</li>
+      </ul>
+      <p>
+        Bei Allergien und Unverträglichkeiten sprecht uns bitte an — unser Team gibt euch gerne
+        Auskunft über die verwendeten Zutaten.
+      </p>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin-top: var(--space-2xs);
+  }
+
+  .jump a {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--line);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    transition:
+      border-color 0.25s var(--ease),
+      color 0.25s var(--ease);
+  }
+
+  .jump a:hover {
+    border-color: var(--gold);
+    color: var(--gold-dark);
+  }
+
+  .menu-columns {
+    display: grid;
+    gap: var(--space-xl) var(--space-xl);
+    margin-top: var(--space-l);
+  }
+
+  @media (min-width: 860px) {
+    .menu-columns {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .legend {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    max-width: 58ch;
+    margin-top: var(--space-xl);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--line);
+  }
+
+  .legend h2 {
+    font-size: var(--step-1);
+  }
+
+  .legend ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    padding: 0;
+    list-style: none;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .legend abbr {
+    margin-right: 0.3em;
+    padding: 0.1em 0.35em;
+    border: 1px solid var(--line-strong);
+    font-size: 0.6rem;
+    text-decoration: none;
+    color: var(--gold);
+  }
+
+  .legend p {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+</style>

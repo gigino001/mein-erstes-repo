@@ -1,0 +1,184 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Note from '../components/Note.astro';
+import { site, contact, imprint, TODO } from '../data/site';
+
+const responsible = imprint.company === TODO ? null : imprint.company;
+const hasEmail = contact.email !== TODO;
+---
+
+<Base
+  title="Datenschutzerklärung"
+  description="Wie das LUMO Mönchengladbach mit personenbezogenen Daten umgeht."
+  path="/datenschutz"
+>
+  <PageHeader eyebrow="Rechtliches" title="Datenschutzerklärung" />
+
+  <Section veil="dense">
+    <div class="legal">
+      <Note>
+        <strong>Entwurf.</strong> Diese Erklärung beschreibt die Verarbeitung so, wie die Seite
+        technisch gebaut ist. Vor dem Livegang sollte sie jemand mit juristischem Hintergrund
+        prüfen — besonders die Abschnitte zu Anfragen und Aufbewahrung.
+      </Note>
+
+      <h2>1. Verantwortlich</h2>
+      <p>
+        {responsible ?? <mark>Firmierung ergänzen</mark>}<br />
+        {site.address.street}, {site.address.postalCode} {site.address.city}<br />
+        {hasEmail ? <a href={`mailto:${contact.email}`}>{contact.email}</a> : <mark>E-Mail ergänzen</mark>}
+      </p>
+
+      <h2>2. Grundsatz</h2>
+      <p>
+        Wir verarbeiten personenbezogene Daten nur, soweit das für den Betrieb dieser Website und
+        die Bearbeitung eurer Anfragen erforderlich ist. Diese Website setzt <strong>keine
+        Cookies</strong> zu Analyse- oder Werbezwecken. Es findet keine Reichweitenmessung, kein
+        Tracking und keine Weitergabe an Werbenetzwerke statt.
+      </p>
+
+      <h2>3. Aufruf der Website (Server-Logfiles)</h2>
+      <p>
+        Beim Aufruf unserer Seiten erhebt unser Hoster automatisch Daten, die euer Browser
+        übermittelt: aufgerufene Seite, Datum und Uhrzeit, übertragene Datenmenge, Referrer,
+        Browsertyp und -version, Betriebssystem und die IP-Adresse. Diese Daten dienen ausschließlich
+        dem sicheren und störungsfreien Betrieb. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO
+        (berechtigtes Interesse an technisch fehlerfreier Darstellung). Die Logfiles werden nach
+        spätestens sieben Tagen gelöscht.
+      </p>
+
+      <h2>4. Schriftarten</h2>
+      <p>
+        Diese Website verwendet die Schriften „Cormorant Garamond" und „Jost". Sie werden
+        <strong>ausschließlich von unserem eigenen Server</strong> geladen. Es besteht zu keinem
+        Zeitpunkt eine Verbindung zu Servern von Google oder anderen Anbietern, und es werden keine
+        Daten dorthin übertragen.
+      </p>
+
+      <h2>5. Reservierungs-, Kontakt- und Feieranfragen</h2>
+      <p>
+        Wenn ihr eines unserer Formulare absendet, verarbeiten wir die dort angegebenen Daten: Name,
+        E-Mail-Adresse, optional Telefonnummer sowie die Angaben zu Datum, Uhrzeit, Personenzahl,
+        Anlass und eure Nachricht.
+      </p>
+      <p>
+        <strong>Zweck:</strong> Bearbeitung und Beantwortung eurer Anfrage sowie die Vorbereitung
+        eines Besuchs oder einer Veranstaltung.<br />
+        <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen)
+        beziehungsweise Art. 6 Abs. 1 lit. a DSGVO (Einwilligung), die ihr beim Absenden erteilt.
+        Die Einwilligung könnt ihr jederzeit für die Zukunft widerrufen.<br />
+        <strong>Empfänger:</strong> Die Anfrage wird als E-Mail an unser Postfach zugestellt und dort
+        von unserem Team bearbeitet. Eine Weitergabe an Dritte findet nicht statt.<br />
+        <strong>Speicherdauer:</strong> Reservierungsanfragen werden 90 Tage nach dem angefragten
+        Termin gelöscht. Allgemeine Kontakt- und Feieranfragen werden spätestens sechs Monate nach
+        abgeschlossener Bearbeitung gelöscht, sofern keine gesetzlichen Aufbewahrungspflichten
+        entgegenstehen.
+      </p>
+      <p>
+        Zusätzlich erhaltet ihr eine automatische Eingangsbestätigung an die angegebene
+        E-Mail-Adresse.
+      </p>
+
+      <h2>6. Schutz vor automatisierten Anfragen</h2>
+      <p>
+        Zum Schutz vor Spam nutzen wir <strong>kein Captcha eines Drittanbieters</strong>. Stattdessen
+        setzen wir ein für Menschen unsichtbares Zusatzfeld ein, prüfen die Zeit zwischen Aufruf und
+        Absenden des Formulars und begrenzen die Zahl der Anfragen pro Stunde. Für die
+        Ratenbegrenzung speichern wir kurzzeitig einen nicht rückrechenbaren Prüfwert eurer
+        IP-Adresse, jedoch nicht die IP-Adresse selbst. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f
+        DSGVO (berechtigtes Interesse an der Abwehr von Missbrauch).
+      </p>
+
+      <h2>7. Kartendarstellung (Google Maps)</h2>
+      <p>
+        Auf der Seite „Kontakt &amp; Anfahrt" bieten wir eine Karte an. Diese wird
+        <strong>nicht automatisch geladen</strong>. Erst wenn ihr die Karte durch einen Klick aktiv
+        anfordert, wird eine Verbindung zu Google aufgebaut und dabei eure IP-Adresse an Google
+        übertragen. Anbieter ist Google Ireland Limited, Gordon House, Barrow Street, Dublin 4,
+        Irland. Rechtsgrundlage ist eure Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO, die ihr durch
+        das Anfordern der Karte erteilt. Ohne diesen Klick werden keine Daten an Google übermittelt.
+        Näheres in der Datenschutzerklärung von Google:
+        <a href="https://policies.google.com/privacy" rel="noopener noreferrer" target="_blank">
+          policies.google.com/privacy</a
+        >.
+      </p>
+
+      <h2>8. Verlinkung zu Instagram</h2>
+      <p>
+        Wir verlinken auf unser Instagram-Profil. Es handelt sich um einen einfachen Link, keine
+        Einbindung von Inhalten. Erst wenn ihr den Link anklickt, verlasst ihr diese Website und es
+        gelten die Datenschutzbestimmungen von Meta.
+      </p>
+
+      <h2>9. Hosting</h2>
+      <p>
+        Diese Website wird bei einem Dienstleister in Deutschland gehostet. Mit dem Anbieter besteht
+        ein Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO.
+      </p>
+
+      <h2>10. Eure Rechte</h2>
+      <p>Ihr habt jederzeit das Recht auf</p>
+      <ul>
+        <li>Auskunft über die zu eurer Person gespeicherten Daten (Art. 15 DSGVO)</li>
+        <li>Berichtigung unrichtiger Daten (Art. 16 DSGVO)</li>
+        <li>Löschung (Art. 17 DSGVO)</li>
+        <li>Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+        <li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
+        <li>Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)</li>
+        <li>Widerruf einer erteilten Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO)</li>
+      </ul>
+      <p>
+        Wendet euch dafür formlos an die oben genannte Adresse. Außerdem steht euch ein
+        Beschwerderecht bei einer Datenschutz-Aufsichtsbehörde zu; zuständig ist die Landesbeauftragte
+        für Datenschutz und Informationsfreiheit Nordrhein-Westfalen.
+      </p>
+
+      <h2>11. Änderungen</h2>
+      <p>
+        Wir passen diese Erklärung an, wenn sich die Website oder die Rechtslage ändert. Es gilt
+        jeweils die hier veröffentlichte Fassung.
+      </p>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .legal {
+    max-width: 68ch;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .legal h2 {
+    margin-top: var(--space-m);
+    font-size: var(--step-1);
+  }
+
+  .legal p,
+  .legal li {
+    color: var(--ink-soft);
+    line-height: 1.75;
+  }
+
+  .legal ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .legal a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .legal mark {
+    background: rgb(152 57 43 / 12%);
+    color: #98392b;
+    padding: 0.05em 0.35em;
+    font-size: 0.9em;
+  }
+</style>

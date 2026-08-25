@@ -1,0 +1,133 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Note from '../components/Note.astro';
+import { site, contact, imprint, TODO } from '../data/site';
+
+const missing = Object.entries(imprint)
+  .filter(([, value]) => value === TODO)
+  .map(([key]) => key);
+const contactMissing = contact.phone === TODO || contact.email === TODO;
+const incomplete = missing.length > 0 || contactMissing;
+---
+
+<Base
+  title="Impressum"
+  description="Impressum und Anbieterkennzeichnung des LUMO Mönchengladbach."
+  path="/impressum"
+>
+  <Fragment slot="head">
+    {incomplete && <meta name="robots" content="noindex" />}
+  </Fragment>
+
+  <PageHeader eyebrow="Rechtliches" title="Impressum" />
+
+  <Section veil="dense">
+    <div class="legal">
+      {
+        incomplete && (
+          <Note>
+            <strong>Dieses Impressum ist unvollständig.</strong> Solange hier Angaben fehlen, darf
+            die Seite nicht öffentlich erreichbar sein — ein unvollständiges Impressum ist
+            abmahnfähig. Fehlend: {[...missing, contactMissing ? 'Telefon/E-Mail' : ''].filter(Boolean).join(', ')}.
+          </Note>
+        )
+      }
+
+      <h2>Angaben gemäß §5 DDG</h2>
+      <p>
+        {imprint.company === TODO ? <mark>Firmierung ergänzen</mark> : imprint.company}<br />
+        {site.address.street}<br />
+        {site.address.postalCode} {site.address.city}
+      </p>
+
+      <h2>Vertreten durch</h2>
+      <p>
+        {imprint.represented === TODO ? <mark>Vertretungsberechtigte Person ergänzen</mark> : imprint.represented}
+      </p>
+
+      <h2>Kontakt</h2>
+      <p>
+        Telefon: {contact.phone === TODO ? <mark>ergänzen</mark> : contact.phone}<br />
+        E-Mail: {contact.email === TODO ? <mark>ergänzen</mark> : <a href={`mailto:${contact.email}`}>{contact.email}</a>}
+      </p>
+
+      <h2>Registereintrag</h2>
+      <p>{imprint.register === TODO ? <mark>Handelsregister und Registernummer ergänzen</mark> : imprint.register}</p>
+
+      <h2>Umsatzsteuer-Identifikationsnummer</h2>
+      <p>
+        Umsatzsteuer-Identifikationsnummer gemäß §27a Umsatzsteuergesetz:<br />
+        {imprint.vatId === TODO ? <mark>ergänzen</mark> : imprint.vatId}
+      </p>
+
+      <h2>Verantwortlich für den Inhalt</h2>
+      <p>
+        {imprint.responsible === TODO ? <mark>Verantwortliche Person ergänzen</mark> : imprint.responsible}<br />
+        Anschrift wie oben.
+      </p>
+
+      <h2>Streitschlichtung</h2>
+      <p>
+        Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer
+        Verbraucherschlichtungsstelle teilzunehmen.
+      </p>
+
+      <h2>Haftung für Inhalte</h2>
+      <p>
+        Als Diensteanbieter sind wir für eigene Inhalte auf diesen Seiten nach den allgemeinen
+        Gesetzen verantwortlich. Wir sind jedoch nicht verpflichtet, übermittelte oder gespeicherte
+        fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine
+        rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung
+        von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt.
+      </p>
+
+      <h2>Haftung für Links</h2>
+      <p>
+        Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen
+        Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder
+        Betreiber verantwortlich. Bei Bekanntwerden von Rechtsverletzungen entfernen wir
+        entsprechende Links umgehend.
+      </p>
+
+      <h2>Urheberrecht</h2>
+      <p>
+        Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem
+        deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet.
+      </p>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .legal {
+    max-width: 68ch;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .legal h2 {
+    margin-top: var(--space-m);
+    font-size: var(--step-1);
+  }
+
+  .legal p {
+    color: var(--ink-soft);
+    line-height: 1.75;
+  }
+
+  .legal a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .legal mark {
+    background: rgb(152 57 43 / 12%);
+    color: #98392b;
+    padding: 0.05em 0.35em;
+    font-size: 0.9em;
+  }
+</style>

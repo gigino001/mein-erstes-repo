@@ -227,3 +227,116 @@ video {
     transform: none;
   }
 }
+
+/* ---------- Formulare ---------- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  max-width: 46rem;
+}
+
+.form__row {
+  display: grid;
+  gap: var(--space-s);
+}
+
+@media (min-width: 620px) {
+  .form__row--2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form__row--3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.field > label {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.field .req {
+  color: var(--gold);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  background: rgb(253 249 240 / 85%);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--step-0);
+  font-weight: 300;
+  transition:
+    border-color 0.25s var(--ease),
+    background 0.25s var(--ease);
+}
+
+.field textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: var(--gold);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: 2px solid var(--gold-dark);
+  outline-offset: 2px;
+  background: var(--surface);
+}
+
+.field__hint {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+}
+
+/* Honeypot — für Menschen unsichtbar, für Bots verlockend */
+.field--trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.consent input {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.2rem;
+  accent-color: var(--gold);
+}
+
+.consent a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}

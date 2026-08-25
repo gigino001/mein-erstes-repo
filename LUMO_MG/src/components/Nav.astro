@@ -190,17 +190,20 @@ import { nav, site } from '../data/site';
   }
 
   if (burger && drawer) {
+    let isOpen = false;
+
     const setOpen = (open: boolean) => {
+      isOpen = open;
       drawer.hidden = !open;
       burger.setAttribute('aria-expanded', String(open));
       burger.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
       document.body.style.overflow = open ? 'hidden' : '';
     };
 
-    burger.addEventListener('click', () => setOpen(drawer.hidden));
+    burger.addEventListener('click', () => setOpen(!isOpen));
     drawer.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !drawer.hidden) {
+      if (e.key === 'Escape' && isOpen) {
         setOpen(false);
         burger.focus();
       }

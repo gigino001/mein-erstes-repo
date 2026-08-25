@@ -7,3 +7,7 @@ dist/
 .astro/
 .env
 .env.production
+
+# Zugangsdaten des Formularskripts
+public/formular.config.php
+.formular-rate/

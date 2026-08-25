@@ -1,0 +1,137 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  event: CollectionEntry<'events'>;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { event, headingLevel = 'h3' } = Astro.props;
+const { title, date, doors, until, category, teaser, placeholder } = event.data;
+
+const Heading = headingLevel;
+
+const day = date.toLocaleDateString('de-DE', { day: '2-digit' });
+const month = date.toLocaleDateString('de-DE', { month: 'long' });
+const weekday = date.toLocaleDateString('de-DE', { weekday: 'long' });
+const isoDate = date.toISOString();
+
+const time = until
+  ? `${date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} – ${until}`
+  : doors
+    ? `Einlass ${doors}`
+    : date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+---
+
+<article class="event reveal">
+  <a class="event__link" href={`/events/${event.id}`}>
+    <div class="event__figure"><span>Event-Bild</span></div>
+
+    <div class="event__body">
+      <p class="event__date">
+        <time datetime={isoDate}>
+          <b>{day}</b>
+          <span>{month}</span>
+        </time>
+      </p>
+      <Heading class="event__title">{title}</Heading>
+      <p class="event__teaser">{teaser}</p>
+      <p class="event__meta">
+        {weekday} · {time} · {category}
+        {placeholder && <em> · Beispiel</em>}
+      </p>
+    </div>
+  </a>
+</article>
+
+<style>
+  .event {
+    border: 1px solid var(--line);
+    background: rgb(253 249 240 / 88%);
+    transition:
+      border-color 0.35s var(--ease),
+      transform 0.35s var(--ease);
+  }
+
+  .event:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-3px);
+  }
+
+  .event__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .event__figure {
+    display: flex;
+    align-items: flex-end;
+    aspect-ratio: 16 / 11;
+    border-bottom: 1px solid var(--line);
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgb(199 154 84 / 30%), transparent 66%),
+      linear-gradient(155deg, #f0e2c7 0%, #e4d3b1 60%, #dac7a0 100%);
+  }
+
+  .event__figure span {
+    padding: var(--space-s);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(43 33 23 / 50%);
+  }
+
+  .event__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    padding: 1.3rem 1.35rem 1.5rem;
+  }
+
+  .event__date time {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2xs);
+    color: var(--gold);
+  }
+
+  .event__date b {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--step-3);
+    line-height: 1;
+  }
+
+  .event__date span {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .event__title {
+    font-size: var(--step-2);
+    color: var(--ink);
+  }
+
+  .event__teaser {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .event__meta {
+    margin-top: var(--space-2xs);
+    padding-top: var(--space-xs);
+    border-top: 1px solid var(--line-faint);
+    font-size: 0.63rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .event:hover {
+      transform: none;
+    }
+  }
+</style>

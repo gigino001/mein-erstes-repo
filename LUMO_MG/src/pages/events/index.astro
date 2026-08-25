@@ -1,0 +1,142 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Section from '../../components/Section.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import EventCard from '../../components/EventCard.astro';
+import Note from '../../components/Note.astro';
+import { site } from '../../data/site';
+
+const now = new Date();
+const all = (await getCollection('events', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.date.getTime() - b.data.date.getTime(),
+);
+
+const upcoming = all.filter((e) => e.data.date >= now);
+const past = all.filter((e) => e.data.date < now).reverse();
+const anyPlaceholder = all.some((e) => e.data.placeholder);
+---
+
+<Base
+  title="Events"
+  description="Live-Musik, DJ-Abende, Themenbrunches und Specials im LUMO Mönchengladbach."
+  path="/events"
+>
+  <PageHeader
+    eyebrow="Veranstaltungen"
+    title="Events im LUMO"
+    lead="Live-Musik, DJ-Abende, Themenbrunches und Specials. Jeder Termin hat eine eigene Seite, die sich teilen lässt."
+  />
+
+  <Section veil="medium">
+    {
+      upcoming.length > 0 ? (
+        <>
+          <h2 class="section-title">Kommende Termine</h2>
+          <div class="events-grid">
+            {upcoming.map((event) => (
+              <EventCard event={event} headingLevel="h3" />
+            ))}
+          </div>
+        </>
+      ) : (
+        <div class="empty">
+          <h2 class="section-title">Zurzeit keine Termine</h2>
+          <p>
+            Es ist gerade nichts angekündigt. Was als Nächstes geplant ist, erfahrt ihr zuerst auf
+            Instagram.
+          </p>
+          <a class="btn btn--ghost" href={site.instagram.url} rel="noopener noreferrer" target="_blank">
+            {site.instagram.handle} folgen
+          </a>
+        </div>
+      )
+    }
+
+    {anyPlaceholder && <Note>Die gezeigten Termine sind Beispiele für den Entwurf.</Note>}
+
+    {
+      past.length > 0 && (
+        <div class="past">
+          <h2 class="section-title">Vorbei</h2>
+          <ul class="past__list">
+            {past.map((event) => (
+              <li>
+                <a href={`/events/${event.id}`}>
+                  <time datetime={event.data.date.toISOString()}>
+                    {event.data.date.toLocaleDateString('de-DE', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })}
+                  </time>
+                  <span>{event.data.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </Section>
+</Base>
+
+<style>
+  .section-title {
+    font-size: var(--step-3);
+    margin-bottom: var(--space-m);
+  }
+
+  .events-grid {
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  @media (min-width: 800px) {
+    .events-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-s);
+    max-width: 52ch;
+  }
+
+  .empty p {
+    color: var(--ink-soft);
+  }
+
+  .past {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--line);
+  }
+
+  .past__list {
+    padding: 0;
+    list-style: none;
+  }
+
+  .past__list a {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    padding: var(--space-xs) 0;
+    border-bottom: 1px solid var(--line-faint);
+    color: var(--ink-soft);
+    transition: color 0.25s var(--ease);
+  }
+
+  .past__list a:hover {
+    color: var(--gold-dark);
+  }
+
+  .past__list time {
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-faint);
+  }
+</style>

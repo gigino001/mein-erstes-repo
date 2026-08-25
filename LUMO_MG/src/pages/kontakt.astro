@@ -1,0 +1,228 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import PageHeader from '../components/PageHeader.astro';
+import FormShell from '../components/FormShell.astro';
+import MapConsent from '../components/MapConsent.astro';
+import Note from '../components/Note.astro';
+import { site, contact, openingHours, hoursArePlaceholder, TODO } from '../data/site';
+
+const hasPhone = contact.phone !== TODO;
+const hasEmail = contact.email !== TODO;
+---
+
+<Base
+  title="Kontakt & Anfahrt"
+  description="So findet ihr das LUMO: Krefelder Straße 219 in Mönchengladbach, mit eigenen Parkplätzen direkt vor dem Haus."
+  path="/kontakt"
+>
+  <PageHeader
+    eyebrow="Finden"
+    title="Kontakt & Anfahrt"
+    lead={`${site.address.street}, ${site.address.postalCode} ${site.address.city}. ${site.parking}.`}
+  />
+
+  <Section veil="dense">
+    <div class="grid">
+      <div class="info">
+        <div class="info__block">
+          <h2>Adresse</h2>
+          <address>
+            {site.address.street}<br />
+            {site.address.postalCode} {site.address.city}
+          </address>
+        </div>
+
+        <div class="info__block">
+          <h2>Parken</h2>
+          <p>{site.parking}. Die Anfahrt erfolgt direkt über die Krefelder Straße.</p>
+        </div>
+
+        <div class="info__block">
+          <h2>Erreichbar</h2>
+          {hasPhone ? (
+            <a class="big" href={`tel:${contact.phone.replace(/\s/g, '')}`}>{contact.phone}</a>
+          ) : (
+            <Note>Telefonnummer folgt.</Note>
+          )}
+          {hasEmail ? (
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          ) : (
+            <Note>E-Mail-Adresse folgt, sobald die Domain eingerichtet ist.</Note>
+          )}
+          <a href={site.instagram.url} rel="noopener noreferrer" target="_blank">
+            Instagram {site.instagram.handle}
+          </a>
+        </div>
+
+        <div class="info__block">
+          <h2>Öffnungszeiten</h2>
+          <dl class="hours">
+            {
+              openingHours.map((day) => (
+                <div class:list={['hours__row', { 'hours__row--closed': !day.from }]}>
+                  <dt>{day.day}</dt>
+                  <dd>{day.from ? `${day.from} – ${day.to}` : 'Ruhetag'}</dd>
+                </div>
+              ))
+            }
+          </dl>
+          {hoursArePlaceholder && <Note>Die Zeiten sind Platzhalter und stehen noch nicht fest.</Note>}
+        </div>
+      </div>
+
+      <div class="map-wrap">
+        <MapConsent />
+      </div>
+    </div>
+  </Section>
+
+  <Section veil="band" labelledby="schreiben">
+    <div class="write">
+      <div class="write__intro">
+        <span class="label">Schreiben</span>
+        <h2 id="schreiben">Eine Frage an uns?</h2>
+        <p>
+          Für Tischreservierungen nutzt bitte das <a href="/reservieren">Reservierungsformular</a>,
+          für Feiern die Seite <a href="/feiern">Feiern &amp; Mieten</a> — dort fragen wir gleich
+          die richtigen Angaben ab.
+        </p>
+      </div>
+
+      <FormShell type="kontakt" submitLabel="Nachricht senden">
+        <div class="form__row form__row--2">
+          <div class="field">
+            <label for="name">Name <span class="req">*</span></label>
+            <input type="text" id="name" name="name" required autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="email">E-Mail <span class="req">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="nachricht">Nachricht <span class="req">*</span></label>
+          <textarea id="nachricht" name="nachricht" required></textarea>
+        </div>
+      </FormShell>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .grid {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .grid {
+      grid-template-columns: 0.85fr 1.15fr;
+    }
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+  }
+
+  .info__block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    align-items: flex-start;
+  }
+
+  .info h2 {
+    font-size: var(--step-1);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .info address {
+    font-style: normal;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .info p {
+    color: var(--ink-soft);
+    max-width: 40ch;
+  }
+
+  .info a {
+    color: var(--ink-soft);
+    transition: color 0.25s var(--ease);
+  }
+
+  .info a:hover {
+    color: var(--gold-dark);
+  }
+
+  .info .big {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    color: var(--gold);
+  }
+
+  .hours {
+    width: 100%;
+    max-width: 24rem;
+    margin: 0;
+  }
+
+  .hours__row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-s);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--line-faint);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .hours__row dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+
+  .hours__row--closed dd {
+    color: var(--ink-faint);
+  }
+
+  .write {
+    display: grid;
+    gap: var(--space-l);
+  }
+
+  @media (min-width: 900px) {
+    .write {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: var(--space-xl);
+    }
+  }
+
+  .write__intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .write__intro h2 {
+    font-size: var(--step-3);
+  }
+
+  .write__intro p {
+    color: var(--ink-soft);
+    max-width: 38ch;
+  }
+
+  .write__intro a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>

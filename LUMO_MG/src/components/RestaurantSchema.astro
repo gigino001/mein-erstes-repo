@@ -1,0 +1,64 @@
+---
+import { site, contact, openingHours, hoursArePlaceholder, TODO } from '../data/site';
+
+/*
+  Strukturierte Daten für Google.
+
+  Bewusst zurückhaltend: Öffnungszeiten und Telefonnummer werden nur
+  ausgegeben, wenn sie echt sind. Platzhalter hier zu veröffentlichen
+  wäre schlimmer als sie wegzulassen — Google zeigt sie im Profil an,
+  und Gäste stehen dann vor verschlossener Tür.
+*/
+
+const dayMap: Record<string, string> = {
+  Montag: 'Monday',
+  Dienstag: 'Tuesday',
+  Mittwoch: 'Wednesday',
+  Donnerstag: 'Thursday',
+  Freitag: 'Friday',
+  Samstag: 'Saturday',
+  Sonntag: 'Sunday',
+};
+
+const schema: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'Restaurant',
+  name: site.fullName,
+  alternateName: site.name,
+  description: site.description,
+  url: site.url,
+  image: new URL('/favicon.svg', site.url).href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    postalCode: site.address.postalCode,
+    addressLocality: site.address.city,
+    addressCountry: site.address.country,
+  },
+  servesCuisine: ['Türkisch', 'Brunch', 'International'],
+  sameAs: [site.instagram.url],
+  publicAccess: true,
+  smokingAllowed: false,
+  amenityFeature: {
+    '@type': 'LocationFeatureSpecification',
+    name: 'Kostenlose Parkplätze',
+    value: true,
+  },
+};
+
+if (contact.phone !== TODO) schema.telephone = contact.phone;
+if (contact.email !== TODO) schema.email = contact.email;
+
+if (!hoursArePlaceholder) {
+  schema.openingHoursSpecification = openingHours
+    .filter((d) => d.from && d.to)
+    .map((d) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: `https://schema.org/${dayMap[d.day]}`,
+      opens: d.from,
+      closes: d.to,
+    }));
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
