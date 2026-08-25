@@ -1,0 +1,114 @@
+# LUMO Mönchengladbach — Homepage
+
+## Projekt
+Neue Homepage für das LUMO in Mönchengladbach — "Modern Boho brunch &
+dinner spot": Brunch, Speciality Coffee, Matcha, Dinner, Signature
+Cocktails, Events. Projekt startet bei null (noch kein Code).
+
+- Detailkonzept: https://claude.ai/code/artifact/3865dd84-8d20-45a3-a542-c639ba2bef61
+- Hosting-Setup (fuer den Betreiber): https://claude.ai/code/artifact/1204cadc-5830-4d1f-b47b-82aa33865265
+- Entwurf dunkel: https://claude.ai/code/artifact/47093235-d4e6-4ab0-bd17-79827e7f5857
+- Entwurf Sunset: https://claude.ai/code/artifact/fb3580c5-ac02-4d37-b689-c3f9d1277380
+- **Entwurf Daylight (gewaehlt)**: https://claude.ai/code/artifact/1ce703e9-f60e-46b8-8309-910c2b833739
+
+## Harte Fakten (aus Instagram @lumo.mg)
+- **Neueröffnung: 01.09.2026** — sehr knapper Zeitrahmen
+- Adresse: Krefelder Straße 219, 41065 Mönchengladbach
+- Eigene Parkplätze direkt vor dem Haus
+- Claim/Tagline im Logo: BRUNCH · COFFEE · DRINKS · EVENTS
+- Küche: türkisches Frühstück trifft moderne Brunch-Klassiker;
+  Lunchangebote, Kuchen & Torten, Matcha-Welt, Signature Cocktails
+- Positionierung: "Warm tones. Natural textures. Good coffee."
+- Kontakt aus Stellenanzeige: bentos-mg@gmx.de
+- Instagram-Bilder sind teils KI-Renderings (als "KI-Inhalte" markiert) —
+  für die Website echte Fotos der fertigen Räume besorgen
+
+## Design-System (aus Logo, Fassade, Innenraum abgeleitet)
+Dark-first, einthemig — die Marke ist außen schwarz/gold, innen creme/warm.
+- Nacht `#0C0B09`, tiefer `#131009`, Karten `#1E180F`
+- Gold `#C79A54`, Lichtgold `#E9C88C`, dunkles Gold (auf hell) `#8A6425`
+- Creme `#F0E7D8`, gedimmt `#B6A992`, Sand-Sektionen `#EDE2CE`
+- Olive `#6E7A55`, Matcha `#8FA36B` (sparsam)
+- Display: **Cormorant Garamond** (300/400, weit gesperrte Versalien)
+- UI/Body/Labels: **Jost** (300/400/500, uppercase + letterspacing)
+- Leitmotiv: der **Sonnenbogen aus dem Logo** wird zum Strukturelement —
+  Tagesverlauf von Brunch bis Late Night
+
+## Gestaltung (entschieden)
+- Variante **Daylight**: helle Sand-/Cremeflaechen, das Original-Wandbild
+  (`assets/wandbild.jpg`, 1835x857) liegt als feste Ebene hinter der
+  gesamten Seite, Sektionen darueber unterschiedlich deckend
+- Himmelfarbe des Bildes exakt `#F2C88C` -> nahtlose Flaechenverlaengerung
+- Bildausrichtung Desktop `88% 50%` cover, Mobil `auto 62vh` unten rechts
+- Akzentfarbe auf hell: `#7E5718` (Gold heller waere zu kontrastarm)
+
+## Hosting (empfohlen, Betreiber bestellt)
+- **Jetzt:** ALL-INKL.COM Tarif "Privat", 4,95 EUR/Monat -> Domain
+  (lumo-mg.de), unbegrenzt Mailadressen, SSL, Webspace fuer Stufe 1.
+  Erster Monat gratis, keine Mindestlaufzeit.
+- **Nach Eroeffnung:** Hetzner Cloud CX22, ca. 4,50 EUR/Monat + Backups,
+  Standort Nuernberg/Falkenstein -> Node fuer Stufe 2.
+- Domain + Mail bleiben dauerhaft bei ALL-INKL (SPF/DKIM automatisch)
+- Mailadressen: info@, reservierung@, events@, jobs@
+- AVV bei beiden Anbietern abschliessen; Vertragsinhaber = Unternehmen
+
+## Zweistufige Umsetzung (entschieden)
+- **Stufe 1 — bis 01.09.2026:** vollständige statische Astro-Seite
+  (Start, Speisekarte, Events, Feiern, Kontakt, Impressum, Datenschutz),
+  Reservierung als Anfrageformular per Mail. Läuft auf jedem Webspace,
+  damit die offene Hoster-Frage die Eröffnung nicht blockiert.
+- **Stufe 2 — nach der Eröffnung:** Umstellung auf SSR, Datenbank, Login,
+  echtes Buchungssystem, Admin-Bereich. Ersetzt das Anfrageformular.
+
+## Entschieden
+- **Tech-Stack:** Astro — Stufe 1 statisch, Stufe 2 SSR mit Node-Adapter
+- **Struktur:** Hybrid — erzählende Startseite + Unterseiten
+  (`/speisekarte`, `/events`, `/events/[slug]`, `/reservieren`, `/feiern`,
+  `/kontakt`, `/impressum`, `/datenschutz`, `/admin`)
+- **Reservierung:** eigenes Buchungssystem, hybride Bestätigung
+  (bis 6 Personen automatisch, ab 7 Personen manuelle Freigabe im Admin)
+- **Kapazität:** Platzkontingent pro 30-Minuten-Zeitfenster, kein Tischplan
+- **Datenbank:** SQLite als Datei, hinter einer dünnen Zugriffsschicht
+  (Wechsel auf PostgreSQL später möglich)
+- **Pflege:** Admin-Bereich auf der Seite für Events, Speisekarte,
+  Öffnungszeiten, Reservierungen
+- **Betrieb:** deutscher Hoster, Auswahl trifft der spätere Betreiber →
+  hoster-neutral bauen, alles über `.env`, Deployment per Docker Compose
+- **Material:** Logo/CI und professionelle Fotos vorhanden, Texte fehlen noch
+
+## Offen / noch zu klären
+Zwingend vor dem Livegang am 01.09.:
+- [ ] Impressumsdaten (Firmierung, Inhaber, HR, USt-IdNr.)
+- [ ] Telefonnummer + offizielle E-Mail auf eigener Domain
+- [ ] Öffnungs- und Küchenzeiten, Ruhetag
+- [ ] Speise- und Getränkekarte (Preise im Entwurf sind erfunden)
+
+Nachlieferbar:
+- [ ] Logo als Vektordatei (Sonnen-Ornament ist bisher nachgebaut)
+- [ ] Echte Fotos der fertigen Räume
+- [ ] Sitzplätze innen/außen, Feier-Kapazität sitzend/stehend
+- [ ] Feiern & Mieten: Pakete, Preise öffentlich?
+- [ ] Erste Events, insbesondere Opening-Event
+
+Für Stufe 2:
+- [ ] Hoster (Node-fähig!) und Domain — klärt der Betreiber
+- [ ] Reservierungsregeln (Schwelle manuell, Verweildauer, Zusage)
+- [ ] Google-Business-Profil anlegen
+- [ ] Technisches Niveau des künftigen Betreibers (Tiefe der Doku)
+
+## Rahmenbedingungen (gesetzt)
+- Sprache der Seite: Deutsch
+- Mobile first — Gastro-/Local-Business-Traffic ist überwiegend mobil
+- Pflichtseiten nach dt. Recht: Impressum (§5 DDG) und Datenschutzerklärung
+- Keine externen Ressourcen ohne Consent (Google Fonts lokal einbinden,
+  Maps/Instagram-Embeds erst nach Zustimmung nachladen)
+- Kein Google reCAPTCHA — Spam-Schutz über Honeypot, Zeitfalle, Rate-Limit
+- Ziel: ohne Cookie-Banner auskommen (nur technisch notwendige Admin-Session)
+- Löschkonzept: Reservierungen 90 Tage nach Termin anonymisieren,
+  Anfragen nach 6 Monaten löschen
+- LocalBusiness-/Restaurant-Schema (JSON-LD) + Event-Schema je Veranstaltung
+- Hosting-Voraussetzung: Node-fähiger Server (VPS), kein PHP-Shared-Hosting
+
+## Konventionen
+- Kommunikation mit dem User auf Deutsch
+- Assets unter `assets/`, Seiten im Projektwurzelverzeichnis
