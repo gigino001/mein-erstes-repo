@@ -39,7 +39,9 @@ Dark-first, einthemig — die Marke ist außen schwarz/gold, innen creme/warm.
 - Gold `#C79A54`, Lichtgold `#E9C88C`, dunkles Gold (auf hell) `#8A6425`
 - Creme `#F0E7D8`, gedimmt `#B6A992`, Sand-Sektionen `#EDE2CE`
 - Olive `#6E7A55`, Matcha `#8FA36B` (sparsam)
-- Display: **Cormorant Garamond** (300/400, weit gesperrte Versalien)
+- Display: **EB Garamond** (400/500/600, weit gesperrte Versalien)
+  Cormorant Garamond wurde ersetzt — zu sehr nach Standardvorschlag.
+  Sektionstitel (h2) laufen einen Schnitt kraeftiger als der Rest.
 - UI/Body/Labels: **Jost** (300/400/500, uppercase + letterspacing)
 - Leitmotiv: der **Sonnenbogen aus dem Logo** wird zum Strukturelement —
   Tagesverlauf von Brunch bis Late Night

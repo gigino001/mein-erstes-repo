@@ -72,6 +72,7 @@ import { nav, site } from '../data/site';
 
   .nav__word {
     font-family: var(--font-display);
+    font-weight: 400;
     font-size: 1.15rem;
     letter-spacing: 0.42em;
     /* gleicht den Leerraum aus, den das Letterspacing rechts erzeugt */
@@ -89,9 +90,6 @@ import { nav, site } from '../data/site';
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--ink-soft);
-  }
-
-  .nav__links a {
     transition: color 0.25s var(--ease-color);
   }
 
@@ -148,6 +146,12 @@ import { nav, site } from '../data/site';
     }
   }
 
+  /*
+    Das Menue schaltet nicht hart um, sondern blendet ein. Auf dem Handy
+    ist es die einzige Navigation — es soll erkennbar hereinkommen, nicht
+    aus dem Nichts erscheinen. visibility haelt es aus dem
+    Zugaenglichkeitsbaum heraus, solange es geschlossen ist.
+  */
   .drawer {
     position: fixed;
     inset: 0;
@@ -156,15 +160,6 @@ import { nav, site } from '../data/site';
     align-items: center;
     justify-content: center;
     background: rgb(250 244 232 / 98%);
-  }
-
-  /*
-    Frueher schaltete das Menue ueber das hidden-Attribut hart um. Auf dem
-    Handy ist es die einzige Navigation — es soll erkennbar von oben
-    hereinkommen, nicht aus dem Nichts erscheinen. visibility haelt es
-    dabei aus dem Zugaenglichkeitsbaum heraus, solange es zu ist.
-  */
-  .drawer {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -200,6 +195,7 @@ import { nav, site } from '../data/site';
 
   .drawer a {
     font-family: var(--font-display);
+    font-weight: 400;
     font-size: var(--step-3);
     color: var(--ink);
   }

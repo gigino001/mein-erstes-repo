@@ -26,10 +26,18 @@ export default defineConfig({
   // das ist die Voraussetzung dafür, ohne Cookie-Banner auszukommen.
   fonts: [
     {
-      name: 'Cormorant Garamond',
+      /*
+        Vorher Cormorant Garamond. Die wirkt an dieser Stelle zu sehr nach
+        Standardvorschlag — sie gehört zu den meistverwendeten Schriften in
+        maschinell erzeugten Layouts. EB Garamond ist dieselbe Familie,
+        aber kräftiger gezeichnet und wärmer: gedruckt statt digital.
+
+        Kein Schnitt 300 vorhanden, deshalb liegt die Grundstärke bei 400.
+      */
+      name: 'EB Garamond',
       cssVariable: '--font-display',
       provider: fontProviders.google(),
-      weights: [300, 400, 500],
+      weights: [400, 500, 600],
       styles: ['normal', 'italic'],
       // latin-ext wird für türkische Zeichen gebraucht (Çay, Simit, Börek).
       subsets: ['latin', 'latin-ext'],

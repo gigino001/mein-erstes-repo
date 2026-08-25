@@ -31,10 +31,22 @@ h3,
 h4 {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 300;
+  /* EB Garamond beginnt bei 400 — 300 gibt es nicht und wuerde vom
+     Browser nur kuenstlich verduennt. */
+  font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.005em;
   text-wrap: balance;
+}
+
+/*
+  Die Hauptueberschrift einer Sektion traegt einen Schnitt mehr als der
+  Rest. Genug, damit sie sich beim Ueberfliegen abhebt — zu wenig, um den
+  ruhigen Charakter der Schrift zu stoeren.
+*/
+h2,
+.menu-section__title {
+  font-weight: 500;
 }
 
 p {
@@ -124,6 +136,7 @@ video {
 
 .lead {
   font-family: var(--font-display);
+  font-weight: 400;
   font-size: var(--step-1);
   font-style: italic;
   line-height: 1.45;
