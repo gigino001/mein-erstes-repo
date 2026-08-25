@@ -11,3 +11,10 @@ dist/
 # Zugangsdaten des Formularskripts
 public/formular.config.php
 .formular-rate/
+
+# Fremde Agent-Skills (per `npx skills add` installiert) und deren
+# Symlinks. Gehoeren zur Werkzeugumgebung des Entwicklers, nicht zur
+# Website — sie wuerden den PR sonst um 13 fremde Ordner aufblaehen.
+.agents/
+.claude/skills/
+skills-lock.json
