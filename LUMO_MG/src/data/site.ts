@@ -21,8 +21,8 @@ export const site = {
   url: 'https://lumo-mg.de',
   opening: '2026-09-03',
   address: {
-    street: 'Krefelder Straße 219',
-    postalCode: '41065',
+    street: 'Krefelder Straße 221',
+    postalCode: '41066',
     city: 'Mönchengladbach',
     country: 'DE',
   },
@@ -117,6 +117,11 @@ export const serviceTimes: ReadonlyArray<{
     slots: [{ days: 'Dienstag – Freitag', from: '12:00', to: '14:00' }],
   },
   {
+    title: 'Café & Bar',
+    note: 'Nachmittags ohne warme Küche — Kaffee, Kuchen, Matcha und Drinks.',
+    slots: [{ days: 'Dienstag – Sonntag', from: '14:00', to: '17:00' }],
+  },
+  {
     title: 'Dinner',
     slots: [
       { days: 'Dienstag – Donnerstag & Sonntag', from: '17:00', to: '22:00' },
@@ -124,6 +129,9 @@ export const serviceTimes: ReadonlyArray<{
     ],
   },
 ];
+
+/** Das Haus schließt zwischen den Küchenzeiten nicht. */
+export const openContinuously = true;
 
 /** Der Tagesbogen aus dem Logo — Leitmotiv der Startseite */
 export const dayArc = [

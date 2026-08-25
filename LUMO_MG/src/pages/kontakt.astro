@@ -5,7 +5,15 @@ import PageHeader from '../components/PageHeader.astro';
 import FormShell from '../components/FormShell.astro';
 import MapConsent from '../components/MapConsent.astro';
 import Note from '../components/Note.astro';
-import { site, contact, openingHours, hoursArePlaceholder, serviceTimes, TODO } from '../data/site';
+import {
+  site,
+  contact,
+  openingHours,
+  hoursArePlaceholder,
+  serviceTimes,
+  openContinuously,
+  TODO,
+} from '../data/site';
 
 const hasPhone = contact.phone !== TODO;
 const hasEmail = contact.email !== TODO;
@@ -13,7 +21,7 @@ const hasEmail = contact.email !== TODO;
 
 <Base
   title="Kontakt & Anfahrt"
-  description="So findet ihr das LUMO: Krefelder Straße 219 in Mönchengladbach, mit eigenen Parkplätzen direkt vor dem Haus."
+  description="So findet ihr das LUMO: Krefelder Straße 221 in Mönchengladbach, mit eigenen Parkplätzen direkt vor dem Haus."
   path="/kontakt"
 >
   <PageHeader
@@ -68,6 +76,7 @@ const hasEmail = contact.email !== TODO;
             }
           </dl>
           {hoursArePlaceholder && <Note>Die Zeiten sind Platzhalter und stehen noch nicht fest.</Note>}
+          {openContinuously && <p class="hours__hint">Durchgehend geöffnet — auch zwischen den Küchenzeiten.</p>}
         </div>
 
         <div class="info__block">
@@ -78,6 +87,7 @@ const hasEmail = contact.email !== TODO;
                 <div class="service__item">
                   <dt>{s.title}</dt>
                   <dd>
+                    {s.note && <em class="service__note">{s.note}</em>}
                     {s.slots.map((slot) => (
                       <span>
                         {slot.days}
@@ -245,6 +255,19 @@ const hasEmail = contact.email !== TODO;
     gap: var(--space-s);
     font-size: var(--step--1);
     color: var(--ink-soft);
+  }
+
+  .service__note {
+    font-style: normal;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    margin-bottom: 0.2rem;
+  }
+
+  .hours__hint {
+    margin-top: var(--space-2xs);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
   }
 
   .service__item dd b {

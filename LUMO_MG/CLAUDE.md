@@ -21,7 +21,8 @@ Projektfassung referenziert es ueber `../assets/wandbild.jpg`.
 
 ## Harte Fakten (aus Instagram @lumo.mg)
 - **Neueröffnung: 03.09.2026** — sehr knapper Zeitrahmen
-- Adresse: Krefelder Straße 219, 41065 Mönchengladbach
+- Adresse: Krefelder Straße 221, 41066 Mönchengladbach
+  (Instagram nennt 219/41065 — vom Betreiber als falsch bestaetigt)
 - Eigene Parkplätze direkt vor dem Haus
 - Tagline auf der Seite: BRUNCH · CAFÉ · BAR · EVENTS
   (am Gebaeude steht noch BRUNCH · COFFEE · DRINKS · EVENTS)
