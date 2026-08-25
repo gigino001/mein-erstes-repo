@@ -20,6 +20,8 @@ export const site = {
     'Modern Boho Brunch- und Dinner-Spot in Mönchengladbach. Türkisches Frühstück trifft moderne Brunch-Klassiker, dazu Speciality Coffee, Matcha, Signature Cocktails und Events.',
   url: 'https://lumo-mg.de',
   opening: '2026-09-03',
+  /** Uhrzeit der Eroeffnung — Ziel des Countdowns */
+  openingTime: '08:00',
   address: {
     street: 'Krefelder Straße 221',
     postalCode: '41066',
@@ -37,7 +39,7 @@ export const site = {
  * Eröffnungsdatum in den Schreibweisen, die auf der Seite vorkommen.
  * Wird überall daraus abgeleitet — das Datum steht nur einmal im Code.
  */
-export const openingDate = new Date(site.opening + 'T00:00:00+02:00');
+export const openingDate = new Date(`${site.opening}T${site.openingTime}:00+02:00`);
 
 export const openingLong = openingDate.toLocaleDateString('de-DE', {
   day: 'numeric',
@@ -175,12 +177,15 @@ interface Imprint {
 
 export const imprint: Imprint = {
   company: 'LUMO Gastro und Event GmbH',
-  /** TODO: Schreibweise des Geschäftsführernamens bestätigen */
-  represented: TODO,
+  represented: 'Cem Akay',
   /** TODO: Amtsgericht und HRB-Nummer */
   register: TODO,
   /** TODO: USt-IdNr. */
   vatId: TODO,
-  /** TODO: inhaltlich Verantwortliche(r) — meist der Geschäftsführer */
-  responsible: TODO,
+  /**
+   * Uebernommen vom Geschaeftsfuehrer, wie es bei einem Betrieb dieser
+   * Groesse ueblich ist. Falls jemand anderes fuer die Inhalte
+   * verantwortlich zeichnen soll, hier aendern.
+   */
+  responsible: 'Cem Akay',
 };

@@ -9,6 +9,8 @@ import MenuList from '../components/MenuList.astro';
 import Note from '../components/Note.astro';
 import RestaurantSchema from '../components/RestaurantSchema.astro';
 import Figure from '../components/Figure.astro';
+import Countdown from '../components/Countdown.astro';
+import MapConsent from '../components/MapConsent.astro';
 import { site, venue, openingLong, TODO } from '../data/site';
 import { menu, menuIsPlaceholder } from '../data/menu';
 import { images } from '../data/demo';
@@ -37,10 +39,7 @@ const hasCapacity = venue.partySeated !== TODO;
         {site.address.street} · {site.address.city}
       </p>
 
-      <p class="hero__opening">
-        <span class="label">Neueröffnung</span>
-        <span class="hero__date">{openingLong}</span>
-      </p>
+      <Countdown />
 
       <div class="hero__cta">
         <a class="btn" href="/reservieren">Tisch reservieren</a>
@@ -249,12 +248,9 @@ const hasCapacity = venue.partySeated !== TODO;
         </div>
       </div>
 
-      <Figure
-        class="reveal"
-        src={images.fassade.src}
-        alt={images.fassade.alt}
-        ratio="16 / 10"
-      />
+      <div class="reveal">
+        <MapConsent />
+      </div>
     </div>
   </Section>
 
@@ -326,23 +322,6 @@ const hasCapacity = venue.partySeated !== TODO;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--ink-soft);
-  }
-
-  .hero__opening {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-2xs);
-    padding: 1.1rem 1.8rem;
-    border: 1px solid var(--line-strong);
-    background: rgb(253 249 240 / 66%);
-    backdrop-filter: blur(3px);
-  }
-
-  .hero__date {
-    font-family: var(--font-display);
-    font-size: var(--step-2);
-    color: var(--ink);
   }
 
   .hero__cta {

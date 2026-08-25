@@ -1,0 +1,216 @@
+---
+import { site, openingDate, openingWithWeekday, openingHours } from '../data/site';
+
+/*
+  Countdown bis zur Eröffnung.
+
+  Serverseitig steht hier das Datum — die Seite ist statisch, ein
+  Countdown kann nur im Browser laufen. Ohne JavaScript bleibt also die
+  Datumsangabe stehen, was inhaltlich immer noch stimmt.
+
+  Nach der Eröffnung schaltet die Anzeige von selbst auf den
+  Öffnungsstatus um: "Jetzt geöffnet bis 22 Uhr" oder "Heute Ruhetag".
+  Danach muss niemand hier etwas ändern.
+
+  Die tickenden Ziffern sind für Screenreader ausgeblendet — eine
+  Ansage im Sekundentakt wäre unbrauchbar. Stattdessen steht daneben
+  eine ruhige Textfassung.
+*/
+---
+
+<div
+  class="countdown"
+  data-countdown
+  data-target={openingDate.toISOString()}
+  data-hours={JSON.stringify(openingHours.map((d) => ({ from: d.from, to: d.to })))}
+>
+  <p class="countdown__head" data-head>Neueröffnung</p>
+
+  {/* Vor dem Start des Skripts und ohne JavaScript sichtbar */}
+  <p class="countdown__fallback" data-fallback>{openingWithWeekday}</p>
+
+  <div class="countdown__grid" data-grid hidden aria-hidden="true">
+    <div><b data-days>–</b><span>Tage</span></div>
+    <div><b data-hrs>–</b><span>Std</span></div>
+    <div><b data-min>–</b><span>Min</span></div>
+    <div><b data-sec>–</b><span>Sek</span></div>
+  </div>
+
+  {/* Ruhige Fassung für Screenreader, wird vom Skript gepflegt */}
+  <p class="visually-hidden" data-sr aria-live="polite">{openingWithWeekday}</p>
+</div>
+
+<style>
+  .countdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: 1.1rem 1.9rem;
+    border: 1px solid var(--line-strong);
+    background: rgb(253 249 240 / 66%);
+    backdrop-filter: blur(3px);
+  }
+
+  .countdown__head {
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .countdown__fallback {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    color: var(--ink);
+  }
+
+  .countdown__fallback[hidden] {
+    display: none;
+  }
+
+  .countdown__grid {
+    display: flex;
+    gap: 1.4rem;
+    margin-top: 0.2rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .countdown__grid[hidden] {
+    display: none;
+  }
+
+  .countdown__grid > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    min-width: 2.6rem;
+  }
+
+  .countdown__grid b {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--step-3);
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .countdown__grid span {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+</style>
+
+<script>
+  interface DayHours {
+    from: string | null;
+    to: string | null;
+  }
+
+  const box = document.querySelector<HTMLElement>('[data-countdown]');
+
+  if (box) {
+    const target = new Date(box.dataset.target ?? '');
+    const hours: DayHours[] = JSON.parse(box.dataset.hours ?? '[]');
+
+    const head = box.querySelector<HTMLElement>('[data-head]')!;
+    const fallback = box.querySelector<HTMLElement>('[data-fallback]')!;
+    const grid = box.querySelector<HTMLElement>('[data-grid]')!;
+    const sr = box.querySelector<HTMLElement>('[data-sr]')!;
+    const out = {
+      days: box.querySelector<HTMLElement>('[data-days]')!,
+      hrs: box.querySelector<HTMLElement>('[data-hrs]')!,
+      min: box.querySelector<HTMLElement>('[data-min]')!,
+      sec: box.querySelector<HTMLElement>('[data-sec]')!,
+    };
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+
+    /*
+      Immer in deutscher Zeit rechnen, nicht in der des Besuchers.
+      Sonst zeigt ein Gast aus einer anderen Zeitzone „geöffnet", während
+      hier längst abgeschlossen ist.
+    */
+    const berlinNow = () => {
+      const parts = new Intl.DateTimeFormat('de-DE', {
+        timeZone: 'Europe/Berlin',
+        weekday: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      }).formatToParts(new Date());
+      const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';
+      const wd = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'].indexOf(get('weekday').slice(0, 2));
+      return {
+        // openingHours beginnt mit Montag, Date.getDay() mit Sonntag
+        index: (wd + 6) % 7,
+        minutes: Number(get('hour')) * 60 + Number(get('minute')),
+      };
+    };
+
+    const toMinutes = (t: string) => {
+      const [h, m] = t.split(':').map(Number);
+      return h * 60 + m;
+    };
+
+    const showStatus = () => {
+      const { index, minutes } = berlinNow();
+      const today = hours[index];
+      let text: string;
+
+      if (!today?.from || !today.to) {
+        text = 'Heute Ruhetag';
+      } else if (minutes < toMinutes(today.from)) {
+        text = `Heute ab ${today.from} Uhr`;
+      } else if (minutes < toMinutes(today.to)) {
+        text = `Jetzt geöffnet bis ${today.to} Uhr`;
+      } else {
+        text = 'Für heute geschlossen';
+      }
+
+      head.textContent = 'Willkommen';
+      fallback.textContent = text;
+      fallback.hidden = false;
+      grid.hidden = true;
+      sr.textContent = text;
+    };
+
+    const tick = () => {
+      const diff = target.getTime() - Date.now();
+
+      if (diff <= 0) {
+        showStatus();
+        return false;
+      }
+
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor(diff / 3600000) % 24;
+      const m = Math.floor(diff / 60000) % 60;
+      const s = Math.floor(diff / 1000) % 60;
+
+      out.days.textContent = String(d);
+      out.hrs.textContent = pad(h);
+      out.min.textContent = pad(m);
+      out.sec.textContent = pad(s);
+
+      fallback.hidden = true;
+      grid.hidden = false;
+
+      // Screenreader nur minutengenau, nicht sekündlich
+      const srText = `Noch ${d} Tage und ${h} Stunden bis zur Eröffnung`;
+      if (sr.textContent !== srText) sr.textContent = srText;
+
+      return true;
+    };
+
+    if (tick()) {
+      const id = setInterval(() => {
+        if (!tick()) clearInterval(id);
+      }, 1000);
+    }
+  }
+</script>

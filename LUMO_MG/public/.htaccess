@@ -1,0 +1,107 @@
+# LUMO — Serverkonfiguration für Apache (ALL-INKL und die meisten anderen
+# Webspace-Anbieter).
+#
+# Diese Datei wird beim Build unverändert nach dist/ kopiert und gehört
+# zusammen mit dem restlichen Inhalt von dist/ in das Webverzeichnis.
+
+# ---------------------------------------------------------------------
+# HTTPS erzwingen
+# ---------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Nur umleiten, wenn nicht bereits verschlüsselt. Die zweite Bedingung
+  # greift bei Hostern, die HTTPS vor dem Webserver terminieren.
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+</IfModule>
+
+# ---------------------------------------------------------------------
+# Eigene Fehlerseite
+# ---------------------------------------------------------------------
+ErrorDocument 404 /404.html
+
+# ---------------------------------------------------------------------
+# Zwischenspeicherung
+#
+# Alles unter /_astro/ trägt einen Inhalts-Hash im Dateinamen. Ändert
+# sich der Inhalt, ändert sich der Name — solche Dateien dürfen deshalb
+# sehr lange gespeichert werden. HTML dagegen nie, sonst sehen Gäste
+# nach einer Änderung noch tagelang die alte Seite.
+# ---------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 hour"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/avif "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(webp|avif|jpg|jpeg|png|svg|woff2|css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # -------------------------------------------------------------------
+  # Sicherheits-Header
+  # -------------------------------------------------------------------
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+
+  # Die Seite braucht weder Kamera noch Mikrofon noch Standort.
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), interest-cohort=()"
+
+  # Der Formularempfang setzt keine Cookies, deshalb ist hier nichts zu
+  # lockern. google.com steht nur in frame-src, weil die Karte erst nach
+  # einem Klick geladen wird — ohne Klick wird die Erlaubnis nie genutzt.
+  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data: https://maps.gstatic.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; form-action 'self'; frame-src https://www.google.com; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+</IfModule>
+
+# ---------------------------------------------------------------------
+# Komprimierung
+# ---------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------------------
+# Schutz
+# ---------------------------------------------------------------------
+
+# Keine Verzeichnisauflistung
+Options -Indexes
+
+# Die Konfigurationsdatei des Formulars enthält Zugangsdaten und darf
+# niemals ausgeliefert werden.
+<Files "formular.config.php">
+  Require all denied
+</Files>
+
+# Punktdateien und Sicherungen ebenfalls nicht
+<FilesMatch "^\.|~$|\.bak$|\.orig$">
+  Require all denied
+</FilesMatch>
+
+# Die Vorlage hat im Webverzeichnis nichts zu suchen
+<Files "formular.config.example.php">
+  Require all denied
+</Files>
+
+# Verzeichnis der Ratenbegrenzung
+<IfModule mod_rewrite.c>
+  RewriteRule ^\.formular-rate/ - [F,L]
+</IfModule>

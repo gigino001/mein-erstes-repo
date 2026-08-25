@@ -52,10 +52,12 @@ Dark-first, einthemig — die Marke ist außen schwarz/gold, innen creme/warm.
 - Bildausrichtung Desktop `88% 50%` cover, Mobil `auto 62vh` unten rechts
 - Akzentfarbe auf hell: `#7E5718` (Gold heller waere zu kontrastarm)
 
-## Hosting (empfohlen, Betreiber bestellt)
-- **Jetzt:** ALL-INKL.COM Tarif "Privat", 4,95 EUR/Monat -> Domain
-  (lumo-mg.de), unbegrenzt Mailadressen, SSL, Webspace fuer Stufe 1.
-  Erster Monat gratis, keine Mindestlaufzeit.
+## Hosting
+- **Gebucht:** ALL-INKL.COM Webspace. `public/.htaccess` ist darauf
+  ausgelegt (HTTPS-Zwang, eigene 404, Cache-Header, CSP, Schutz der
+  Formular-Zugangsdaten).
+- Deployment Stufe 1: Inhalt von `dist/` per FTP ins Webverzeichnis,
+  dazu einmalig `formular.config.php` aus der `.example`-Datei anlegen.
 - **Nach Eroeffnung:** Hetzner Cloud CX22, ca. 4,50 EUR/Monat + Backups,
   Standort Nuernberg/Falkenstein -> Node fuer Stufe 2.
 - Domain + Mail bleiben dauerhaft bei ALL-INKL (SPF/DKIM automatisch)
@@ -116,6 +118,14 @@ public/formular.php   Formularempfang fuer Stufe 1 (laeuft auf jedem
 - Strukturierte Daten geben Oeffnungszeiten und Telefon nur aus, wenn
   sie echt sind — falsche Zeiten bei Google sind schlimmer als keine
 - Kein Drittanbieter laedt automatisch. Google Maps erst nach Klick
+
+## Betriebsdaten (bestaetigt)
+- Firma: LUMO Gastro und Event GmbH, Geschaeftsfuehrer Cem Akay
+- Telefon 0160 91797206, info@lumo-mg.de
+- Oeffnung: Mo Ruhetag, Di-Do 8-22, Fr 8-23, Sa 9:30-23, So 9:30-22
+- Durchgehend geoeffnet; 14-17 Uhr Cafe/Bar ohne warme Kueche
+- Brunch Di-Fr 8-13, Sa/So 9:30-14 | Mittag Di-Fr 12-14
+- Dinner Di-Do+So 17-22, Fr/Sa 17-23
 
 ## Offen / noch zu klären
 Zwingend vor dem Livegang am 03.09.:
