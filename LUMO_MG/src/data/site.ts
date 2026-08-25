@@ -68,11 +68,11 @@ export const contact: Contact = {
   phoneE164: '+4916091797206',
   email: 'info@lumo-mg.de',
   /**
-   * TODO: eigene Adresse fuer Reservierungen anlegen. Bis dahin laufen
-   * die Formulare ueber info@ — das funktioniert, vermischt aber
-   * Reservierungen mit allem anderen im selben Postfach.
+   * Reservierungen laufen bewusst ueber dieselbe Adresse. Eine eigene
+   * reservierung@ liesse sich bei ALL-INKL jederzeit kostenlos anlegen —
+   * dann genuegt hier eine Zeile.
    */
-  emailReservation: TODO,
+  emailReservation: 'info@lumo-mg.de',
 };
 
 /**

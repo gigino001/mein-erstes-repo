@@ -7,6 +7,7 @@ import Note from '../components/Note.astro';
 import { contact, site, openingLong, TODO } from '../data/site';
 
 const hasPhone = contact.phone !== TODO;
+const hasMail = contact.emailReservation !== TODO;
 
 // Frühestens morgen, längstens in 90 Tagen
 const tomorrow = new Date();
@@ -117,7 +118,7 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
         </div>
 
         <div class="aside__block">
-          <h2>Lieber telefonisch?</h2>
+          <h2>Lieber direkt?</h2>
           {
             hasPhone ? (
               <a class="aside__phone" href={`tel:${contact.phoneE164}`}>
@@ -127,6 +128,11 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
               <Note>Die Telefonnummer wird ergänzt, sobald sie feststeht.</Note>
             )
           }
+          {hasMail && (
+            <a class="aside__mail" href={`mailto:${contact.emailReservation}?subject=Reservierungsanfrage`}>
+              {contact.emailReservation}
+            </a>
+          )}
           <p class="aside__hint">
             {site.address.street}, {site.address.postalCode} {site.address.city} —
             {' '}{site.parking.toLowerCase()}.
@@ -193,6 +199,14 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
     font-family: var(--font-display);
     font-size: var(--step-2);
     color: var(--gold);
+  }
+
+  .aside__mail {
+    font-size: var(--step--1);
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    overflow-wrap: anywhere;
   }
 
   .field__hint a {

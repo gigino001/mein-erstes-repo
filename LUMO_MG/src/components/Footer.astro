@@ -4,6 +4,7 @@ import { site, contact, openingLong, TODO } from '../data/site';
 
 const year = new Date().getFullYear();
 const hasPhone = contact.phone !== TODO;
+const hasEmail = contact.email !== TODO;
 ---
 
 <footer class="footer">
@@ -21,6 +22,7 @@ const hasPhone = contact.phone !== TODO;
         {site.address.postalCode}&nbsp;{site.address.city}
       </address>
       {hasPhone && <a href={`tel:${contact.phoneE164}`}>{contact.phone}</a>}
+      {hasEmail && <a href={`mailto:${contact.email}`}>{contact.email}</a>}
       <a href="/kontakt">Anfahrt &amp; Parken</a>
       <a href="/reservieren">Tisch reservieren</a>
     </div>
