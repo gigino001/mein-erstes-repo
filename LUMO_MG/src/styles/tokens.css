@@ -1,0 +1,78 @@
+/*
+  LUMO — Design-Tokens
+  Abgeleitet aus Logo, Fassade und Innenraum. Einthemig hell (Variante
+  "Daylight"). Kein Dark Mode: die Marke ist außen schwarz-gold, innen
+  creme-warm — die Seite bildet den Innenraum ab.
+
+  Die Schriftvariablen --font-display und --font-ui setzt Astro selbst,
+  siehe astro.config.mjs.
+*/
+
+:root {
+  /* ---------- Flächen ---------- */
+  --ground: #fbf6ec; /* Grundfläche hinter allem, hinter dem Wandbild */
+  --sky: #f2c88c; /* exakte Himmelfarbe des Wandbilds — verlängert es nahtlos */
+  --surface: #fdf9f0; /* dichte Flächen für Fließtext */
+  --surface-warm: #f7f0e2; /* Footer, Karten */
+  --surface-band: #eaddc2; /* Sandbänder als Kontrast */
+
+  /* Deckkraft der Sektionen über dem Wandbild.
+     Textlastige Sektionen dicht, erzählende Sektionen offen. */
+  --veil-dense: 0.9;
+  --veil-medium: 0.74;
+  --veil-open: 0.4;
+
+  /* ---------- Schrift ---------- */
+  --ink: #2b2117;
+  --ink-soft: #6a5b47;
+  --ink-faint: #8a7a63;
+
+  /* ---------- Akzent ---------- */
+  /* Das Gold der Leuchtbuchstaben ist auf Sand zu kontrastarm für kleine
+     Schrift. --gold ist deshalb abgedunkelt (6:1 auf --surface) und gilt
+     für alles Lesbare; --gold-light nur für große, dekorative Elemente. */
+  --gold: #7e5718;
+  --gold-dark: #5c3e0d;
+  --gold-light: #9a6f22;
+  --matcha: #5a6c36; /* Nebenakzent, sehr sparsam */
+
+  /* ---------- Linien ---------- */
+  --line: rgb(122 86 22 / 22%);
+  --line-strong: rgb(122 86 22 / 45%);
+  --line-faint: rgb(122 86 22 / 12%);
+
+  /* ---------- Typografie ---------- */
+  --step--1: clamp(0.82rem, 0.79rem + 0.14vw, 0.89rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.09rem);
+  --step-1: clamp(1.2rem, 1.13rem + 0.36vw, 1.42rem);
+  --step-2: clamp(1.44rem, 1.32rem + 0.6vw, 1.85rem);
+  --step-3: clamp(1.73rem, 1.54rem + 0.95vw, 2.4rem);
+  --step-4: clamp(2.07rem, 1.78rem + 1.46vw, 3.11rem);
+  --step-5: clamp(2.49rem, 2.04rem + 2.23vw, 4.05rem);
+  --step-6: clamp(2.99rem, 2.31rem + 3.36vw, 5.26rem);
+
+  /* Gesperrte Versalien — aus der Logo-Tagline abgeleitet */
+  --tracking-wide: 0.24em;
+  --tracking-wider: 0.34em;
+  --tracking-brand: 0.2em;
+
+  /* ---------- Raster ---------- */
+  --container: 1180px;
+  --container-narrow: 780px;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+  --section-y: clamp(4.5rem, 11vw, 8rem);
+
+  --space-2xs: 0.35rem;
+  --space-xs: 0.6rem;
+  --space-s: 1rem;
+  --space-m: 1.6rem;
+  --space-l: 2.5rem;
+  --space-xl: 4rem;
+
+  /* ---------- Sonstiges ---------- */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-soft: 0 1px 2px rgb(43 33 23 / 6%), 0 12px 32px -18px rgb(43 33 23 / 25%);
+
+  /* Feines Korn, gibt den Flächen Papieranmutung */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}

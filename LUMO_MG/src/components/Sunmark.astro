@@ -1,0 +1,58 @@
+---
+/*
+  Sonnen-Ornament aus der Wortmarke.
+
+  ACHTUNG: nachgebaut, nicht das Original. Sobald das Logo als Vektordatei
+  vorliegt, wird diese Komponente durch die echte Zeichnung ersetzt.
+  Siehe CLAUDE.md, offene Punkte.
+*/
+interface Props {
+  size?: string;
+  class?: string;
+}
+
+const { size = '7.5rem', class: className = '' } = Astro.props;
+
+// Strahlenkranz: 23 Linien über 180°, in der Mitte am längsten.
+const CX = 100;
+const CY = 100;
+const R = 30;
+const COUNT = 23;
+
+const rays = Array.from({ length: COUNT }, (_, i) => {
+  const t = i / (COUNT - 1);
+  const a = Math.PI * t;
+  const len = 13 + 34 * Math.sin(a) ** 1.35;
+  const r1 = R + 7;
+  const r2 = r1 + len;
+  return {
+    x1: (CX - r1 * Math.cos(a)).toFixed(2),
+    y1: (CY - r1 * Math.sin(a)).toFixed(2),
+    x2: (CX - r2 * Math.cos(a)).toFixed(2),
+    y2: (CY - r2 * Math.sin(a)).toFixed(2),
+    w: i === 0 || i === COUNT - 1 ? 0.9 : 1.05,
+  };
+});
+---
+
+<svg
+  class={`sunmark ${className}`}
+  viewBox="0 0 200 118"
+  fill="none"
+  stroke="currentColor"
+  stroke-linecap="round"
+  aria-hidden="true"
+  style={`width:${size}`}
+>
+  <path d="M18 100 H182" stroke-width="1"></path>
+  <path d={`M ${CX - R} ${CY} A ${R} ${R} 0 0 1 ${CX + R} ${CY}`} stroke-width="1.3"></path>
+  {rays.map((r) => <line x1={r.x1} y1={r.y1} x2={r.x2} y2={r.y2} stroke-width={r.w} />)}
+</svg>
+
+<style>
+  .sunmark {
+    display: block;
+    height: auto;
+    color: var(--gold);
+  }
+</style>

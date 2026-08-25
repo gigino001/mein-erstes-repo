@@ -1,0 +1,295 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Sunmark from '../components/Sunmark.astro';
+import DayArc from '../components/DayArc.astro';
+import { site } from '../data/site';
+---
+
+<Base title={site.name} path="/">
+  {/* ---------------- Hero ---------------- */}
+  <header class="hero">
+    <div class="hero__inner">
+      <Sunmark size="clamp(96px, 17vw, 150px)" />
+      <h1 class="hero__word">{site.name}</h1>
+      <p class="hero__tagline">{site.tagline.join(' · ')}</p>
+      <span class="hero__rule" aria-hidden="true"></span>
+      <p class="hero__place">
+        {site.address.street} · {site.address.city}
+      </p>
+
+      <p class="hero__opening">
+        <span class="label">Neueröffnung</span>
+        <span class="hero__date">1. September 2026</span>
+      </p>
+
+      <div class="hero__cta">
+        <a class="btn" href="/reservieren">Tisch reservieren</a>
+        <a class="btn btn--ghost" href="/speisekarte">Zur Karte</a>
+      </div>
+    </div>
+
+    <p class="hero__scroll" aria-hidden="true"><span></span>Scrollen</p>
+  </header>
+
+  {/* ---------------- Tagesverlauf ---------------- */}
+  <Section veil="open" id="tag" labelledby="tag-titel">
+    <div class="head reveal">
+      <span class="label">Von morgens bis spät</span>
+      <h2 id="tag-titel">Ein Ort, der den ganzen Tag trägt</h2>
+      <p>
+        Bei LUMO endet der Tag nicht nach dem Frühstück. Vom ersten Kaffee bis zum letzten
+        Cocktail — ein Bogen, der sich über den ganzen Tag spannt.
+      </p>
+    </div>
+
+    <DayArc />
+  </Section>
+
+  {/* ---------------- Das LUMO ---------------- */}
+  <Section veil="band" id="lumo" labelledby="lumo-titel">
+    <div class="split">
+      <div class="copy reveal">
+        <span class="label">Das LUMO</span>
+        <h2 id="lumo-titel">Modern Boho in Mönchengladbach</h2>
+        <p class="lead">{site.claim}</p>
+        <p>
+          Drapierte Stoffbahnen unter der Decke, Leuchten aus Rattan und Makramee, Olivenbäume in
+          schweren Tontöpfen, weiche Bouclé-Sofas an dunklen Holztischen. Handgeschnitzte Paneele an
+          der Wand, Kerzenlicht auf jedem Tisch — und hinter der Bar ein Wandbild, das den Raum nach
+          Bali öffnet.
+        </p>
+        <p>
+          Auf dem Tisch trifft türkisches Frühstück auf moderne Brunch-Klassiker: Simit und Menemen
+          neben Pancakes und Eggs Benedict, dazu Speciality Coffee, eine eigene Matcha-Karte,
+          hausgemachte Kuchen und Torten. Abends übernehmen Dinner und Signature Cocktails.
+        </p>
+        <ul class="pills">
+          <li>Türkisches Frühstück</li>
+          <li>Speciality Coffee</li>
+          <li>Matcha</li>
+          <li>Kuchen &amp; Torten</li>
+          <li>Signature Cocktails</li>
+        </ul>
+      </div>
+
+      <div class="figures reveal">
+        <div class="figure figure--tall"><span>Foto — Innenraum, Bouclé &amp; Stoffdecke</span></div>
+        <div class="figure"><span>Foto — Bar mit Wandbild</span></div>
+        <div class="figure"><span>Foto — Brunch-Tafel</span></div>
+      </div>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  /* ---------------- Hero ---------------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 7rem var(--gutter) 4rem;
+  }
+
+  /* Weicher Lichthof hinter der Wortmarke, damit sie auf dem Wandbild steht */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 58% 46% at 50% 46%,
+      rgb(253 249 240 / 62%),
+      rgb(253 249 240 / 0%) 72%
+    );
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-m);
+  }
+
+  .hero__word {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: var(--step-6);
+    line-height: 0.9;
+    letter-spacing: var(--tracking-brand);
+    padding-left: var(--tracking-brand);
+    color: var(--ink);
+  }
+
+  .hero__tagline {
+    font-size: clamp(0.6rem, 2vw, 0.78rem);
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .hero__rule {
+    display: block;
+    width: 64px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .hero__place {
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hero__opening {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: 1.1rem 1.8rem;
+    border: 1px solid var(--line-strong);
+    background: rgb(253 249 240 / 66%);
+    backdrop-filter: blur(3px);
+  }
+
+  .hero__date {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    color: var(--ink);
+  }
+
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xs);
+  }
+
+  .hero__scroll {
+    position: absolute;
+    bottom: 1.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.6rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hero__scroll span {
+    display: block;
+    width: 1px;
+    height: 34px;
+    background: linear-gradient(180deg, var(--gold), transparent);
+  }
+
+  /* ---------------- Kopfblock einer Sektion ---------------- */
+  .head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    max-width: 46ch;
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+
+  .head h2 {
+    font-size: var(--step-4);
+  }
+
+  .head p {
+    color: var(--ink-soft);
+  }
+
+  /* ---------------- Zweispalter ---------------- */
+  .split {
+    display: grid;
+    gap: var(--space-l);
+    align-items: center;
+  }
+
+  @media (min-width: 880px) {
+    .split {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-xl);
+    }
+  }
+
+  .copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    max-width: 56ch;
+  }
+
+  .copy h2 {
+    font-size: var(--step-4);
+  }
+
+  .copy p:not(.lead) {
+    color: var(--ink-soft);
+  }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin-top: var(--space-2xs);
+    padding: 0;
+    list-style: none;
+  }
+
+  .pills li {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--line-strong);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ---------------- Bildplatzhalter ---------------- */
+  .figures {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);
+  }
+
+  .figure {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgb(199 154 84 / 30%), transparent 66%),
+      linear-gradient(155deg, #f0e2c7 0%, #e4d3b1 60%, #dac7a0 100%);
+  }
+
+  .figure--tall {
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+
+  .figure span {
+    padding: var(--space-s);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(43 33 23 / 50%);
+  }
+</style>

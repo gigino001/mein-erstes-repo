@@ -1,0 +1,188 @@
+---
+import { Font } from 'astro:assets';
+import { getImage } from 'astro:assets';
+import wandbildSrc from '../assets/wandbild.jpg';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+import '../styles/tokens.css';
+import '../styles/base.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Ohne führenden Slash-Zwang — wird gegen site.url aufgelöst */
+  path?: string;
+  /** Sektionen liegen unterschiedlich dicht über dem Wandbild */
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description = site.description,
+  path = Astro.url.pathname,
+  bodyClass = '',
+} = Astro.props;
+
+const canonical = new URL(path, site.url).href;
+const fullTitle =
+  title === site.name ? `${site.name} — ${site.address.city}` : `${title} · ${site.name}`;
+
+// Wandbild einmal optimiert erzeugen; es liegt als feste Ebene hinter der
+// gesamten Seite und ist mit Abstand das größte Asset.
+const mural = await getImage({
+  src: wandbildSrc,
+  format: 'webp',
+  quality: 78,
+  width: 1835,
+});
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#f2c88c" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content={site.fullName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <Font cssVariable="--font-display" preload />
+    <Font cssVariable="--font-ui" preload />
+
+    {/* Markiert, dass JavaScript läuft. Nur dann werden Inhalte für das
+       Einblenden zunächst versteckt — ohne JS ist alles sofort sichtbar. */}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    <slot name="head" />
+  </head>
+
+  <body class={bodyClass}>
+    <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+
+    {/* Das Wandbild liegt fest hinter der gesamten Seite. Die Sektionen
+        gleiten darüber hinweg und sind unterschiedlich deckend. */}
+    <div class="canvas" aria-hidden="true">
+      <div class="canvas__scene"></div>
+      <div class="canvas__veil"></div>
+      <div class="canvas__grain"></div>
+    </div>
+
+    <Nav />
+
+    <main id="inhalt">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <style define:vars={{ muralUrl: `url("${mural.src}")` }}>
+      .canvas {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        overflow: hidden;
+        background: var(--sky);
+        pointer-events: none;
+      }
+
+      .canvas__scene {
+        position: absolute;
+        inset: -3%;
+        background-image: var(--muralUrl);
+        background-repeat: no-repeat;
+        background-size: cover;
+        /* 88 % hält die Frau im Wandbild auf jedem Bildschirm im Bild;
+           angeschnitten wird links der Pavillon. */
+        background-position: 88% 50%;
+        transform-origin: 82% 50%;
+        animation: drift 78s ease-in-out infinite alternate;
+      }
+
+      .canvas__veil {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgb(253 249 240 / 62%) 0%,
+          rgb(253 249 240 / 16%) 34%,
+          rgb(253 249 240 / 22%) 66%,
+          rgb(253 249 240 / 50%) 100%
+        );
+      }
+
+      .canvas__grain {
+        position: absolute;
+        inset: 0;
+        background-image: var(--grain);
+        opacity: 0.16;
+        mix-blend-mode: multiply;
+      }
+
+      @keyframes drift {
+        from {
+          transform: scale(1.02);
+        }
+        to {
+          transform: scale(1.09) translate3d(-1.2%, -1%, 0);
+        }
+      }
+
+      /* Schmale Bildschirme: das Motiv als Band unten, darüber setzt sich
+         die Himmelfarbe nahtlos fort. Die obere Kante blendet weich aus,
+         damit die angeschnittenen Palmwedel nicht abgehackt wirken. */
+      @media (max-width: 900px) {
+        .canvas__scene {
+          inset: 0;
+          background-size: auto 62vh;
+          background-position: 100% 100%;
+          mask-image: linear-gradient(180deg, transparent 0, #000 34%);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .canvas__scene {
+          animation: none;
+          transform: scale(1.03);
+        }
+      }
+    </style>
+
+    <script>
+      // Sanftes Einblenden. Ohne JavaScript ist alles trotzdem sichtbar –
+      // .reveal wird nur dann versteckt, wenn das Skript läuft.
+      const items = document.querySelectorAll<HTMLElement>('.reveal');
+      if (items.length && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
+        );
+        items.forEach((el) => io.observe(el));
+      } else {
+        items.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

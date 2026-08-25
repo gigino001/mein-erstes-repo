@@ -1,0 +1,129 @@
+---
+import Sunmark from './Sunmark.astro';
+import { site, contact, TODO } from '../data/site';
+
+const year = new Date().getFullYear();
+const hasPhone = contact.phone !== TODO;
+---
+
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <Sunmark size="4rem" />
+      <span class="footer__word">{site.name}</span>
+      <p class="footer__tagline">{site.tagline.join(' · ')}</p>
+    </div>
+
+    <div class="footer__col">
+      <span class="label">Besuchen</span>
+      <address>
+        {site.address.street}<br />
+        {site.address.postalCode}&nbsp;{site.address.city}
+      </address>
+      {hasPhone && <a href={`tel:${contact.phone.replace(/\s/g, '')}`}>{contact.phone}</a>}
+      <a href="/kontakt">Anfahrt &amp; Parken</a>
+      <a href="/reservieren">Tisch reservieren</a>
+    </div>
+
+    <div class="footer__col">
+      <span class="label">Mehr</span>
+      <a href="/speisekarte">Speisekarte</a>
+      <a href="/events">Events</a>
+      <a href="/feiern">Feiern &amp; Mieten</a>
+      <a href={site.instagram.url} rel="noopener noreferrer" target="_blank">
+        Instagram {site.instagram.handle}
+      </a>
+    </div>
+
+    <div class="footer__col">
+      <span class="label">Rechtliches</span>
+      <a href="/impressum">Impressum</a>
+      <a href="/datenschutz">Datenschutz</a>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <span>© {year} {site.fullName}</span>
+    <span>Neueröffnung 1. September 2026</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    background: rgb(247 240 225 / 92%);
+    border-top: 1px solid var(--line);
+    padding: clamp(3rem, 7vw, 5rem) 0 2.5rem;
+  }
+
+  .footer__grid {
+    display: grid;
+    gap: var(--space-l);
+  }
+
+  @media (min-width: 760px) {
+    .footer__grid {
+      grid-template-columns: 1.3fr repeat(3, 1fr);
+    }
+  }
+
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  .footer__word {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    letter-spacing: 0.4em;
+    padding-left: 0.4em;
+    color: var(--ink);
+  }
+
+  .footer__tagline {
+    font-size: 0.7rem;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    font-size: var(--step--1);
+  }
+
+  .footer__col .label {
+    margin-bottom: var(--space-2xs);
+  }
+
+  .footer__col address {
+    font-style: normal;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .footer__col a {
+    color: var(--ink-soft);
+    transition: color 0.25s var(--ease);
+  }
+
+  .footer__col a:hover {
+    color: var(--gold-dark);
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-xs) var(--space-m);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--line-faint);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+  }
+</style>

@@ -1,0 +1,152 @@
+---
+import { dayArc, hoursArePlaceholder } from '../data/site';
+
+/*
+  Der Sonnenbogen aus der Wortmarke wird zum Strukturelement: eine Kurve
+  über den Tagesverlauf, von Brunch bis Late Night. Die Stationen sitzen
+  auf berechneten Punkten der Bézier-Kurve.
+*/
+
+// Kurve: M 110 258 C 250 40, 650 40, 790 258 im viewBox 0 0 900 295
+const P0 = { x: 110, y: 258 };
+const C1 = { x: 250, y: 40 };
+const C2 = { x: 650, y: 40 };
+const P3 = { x: 790, y: 258 };
+const VB = { w: 900, h: 295 };
+
+const at = (t: number) => {
+  const u = 1 - t;
+  return {
+    x: u ** 3 * P0.x + 3 * u ** 2 * t * C1.x + 3 * u * t ** 2 * C2.x + t ** 3 * P3.x,
+    y: u ** 3 * P0.y + 3 * u ** 2 * t * C1.y + 3 * u * t ** 2 * C2.y + t ** 3 * P3.y,
+  };
+};
+
+const stops = dayArc.map((stop, i) => {
+  const t = i / (dayArc.length - 1);
+  const { x, y } = at(t);
+  return { ...stop, left: (x / VB.w) * 100, top: (y / VB.h) * 100 };
+});
+---
+
+<div class="arc reveal">
+  <div class="arc__inner">
+    <svg viewBox={`0 0 ${VB.w} ${VB.h}`} preserveAspectRatio="none" aria-hidden="true">
+      <path
+        class="arc__path"
+        d={`M ${P0.x} ${P0.y} C ${C1.x} ${C1.y}, ${C2.x} ${C2.y}, ${P3.x} ${P3.y}`}
+      ></path>
+    </svg>
+
+    <ol class="arc__stops">
+      {
+        stops.map((stop) => (
+          <li class="arc__stop" style={`left:${stop.left}%;top:${stop.top}%`}>
+            <span class="arc__dot" aria-hidden="true" />
+            <b>{stop.title}</b>
+            <span class="arc__note">{stop.note}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</div>
+
+{
+  hoursArePlaceholder && (
+    <p class="arc__disclaimer">Zeiten als Platzhalter — kommen aus den echten Öffnungszeiten</p>
+  )
+}
+
+<style>
+  .arc {
+    margin-top: var(--space-l);
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: var(--space-2xs);
+  }
+
+  .arc__inner {
+    position: relative;
+    min-width: 820px;
+    max-width: 980px;
+    height: 295px;
+    margin-inline: auto;
+  }
+
+  .arc svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .arc__path {
+    fill: none;
+    stroke: var(--line-strong);
+    stroke-width: 1;
+    stroke-dasharray: 1400;
+    stroke-dashoffset: 1400;
+    transition: stroke-dashoffset 2.2s var(--ease);
+  }
+
+  .arc.is-visible .arc__path {
+    stroke-dashoffset: 0;
+  }
+
+  .arc__stops {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .arc__stop {
+    position: absolute;
+    width: 9rem;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .arc__dot {
+    display: block;
+    width: 7px;
+    height: 7px;
+    margin: 0 auto var(--space-xs);
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 4px rgb(138 98 32 / 15%);
+  }
+
+  .arc__stop b {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--step-1);
+    color: var(--ink);
+  }
+
+  .arc__note {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.63rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .arc__disclaimer {
+    margin-top: var(--space-xs);
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arc__path {
+      stroke-dashoffset: 0;
+      transition: none;
+    }
+  }
+</style>

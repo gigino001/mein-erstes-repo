@@ -1,0 +1,209 @@
+---
+import Sunmark from './Sunmark.astro';
+import { nav, site } from '../data/site';
+---
+
+<header class="nav" id="nav">
+  <a class="nav__brand" href="/" aria-label={`${site.fullName} — Startseite`}>
+    <Sunmark size="2rem" />
+    <span class="nav__word">{site.name}</span>
+  </a>
+
+  <nav class="nav__links" aria-label="Hauptnavigation">
+    {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+
+  <a class="btn btn--sm nav__cta" href="/reservieren">Reservieren</a>
+
+  <button
+    class="nav__burger"
+    id="nav-burger"
+    type="button"
+    aria-expanded="false"
+    aria-controls="nav-drawer"
+    aria-label="Menü öffnen"
+  >
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="drawer" id="nav-drawer" hidden>
+  <nav aria-label="Hauptnavigation, mobil">
+    {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    <a class="btn drawer__cta" href="/reservieren">Reservieren</a>
+  </nav>
+</div>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    padding: 1rem var(--gutter);
+    background: rgb(253 249 240 / 0%);
+    border-bottom: 1px solid transparent;
+    transition:
+      background 0.4s var(--ease),
+      border-color 0.4s var(--ease),
+      padding 0.4s var(--ease);
+  }
+
+  .nav.is-solid {
+    background: rgb(253 249 240 / 93%);
+    border-bottom-color: var(--line);
+    padding-block: 0.7rem;
+    backdrop-filter: blur(6px);
+  }
+
+  .nav__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .nav__word {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    letter-spacing: 0.42em;
+    /* gleicht den Leerraum aus, den das Letterspacing rechts erzeugt */
+    padding-left: 0.42em;
+    color: var(--ink);
+  }
+
+  .nav__links {
+    display: none;
+    gap: var(--space-m);
+  }
+
+  .nav__links a {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    transition: color 0.25s var(--ease);
+  }
+
+  .nav__links a:hover {
+    color: var(--gold-dark);
+  }
+
+  .nav__cta {
+    display: none;
+  }
+
+  @media (min-width: 940px) {
+    .nav__links,
+    .nav__cta {
+      display: inline-flex;
+    }
+  }
+
+  .nav__burger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 0.5rem;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .nav__burger span {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: var(--ink);
+    transition:
+      transform 0.3s var(--ease),
+      opacity 0.2s;
+  }
+
+  .nav__burger[aria-expanded='true'] span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .nav__burger[aria-expanded='true'] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav__burger[aria-expanded='true'] span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  @media (min-width: 940px) {
+    .nav__burger {
+      display: none;
+    }
+  }
+
+  .drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(250 244 232 / 98%);
+  }
+
+  .drawer[hidden] {
+    display: none;
+  }
+
+  .drawer nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-m);
+  }
+
+  .drawer a {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    color: var(--ink);
+  }
+
+  .drawer a:hover {
+    color: var(--gold-dark);
+  }
+
+  .drawer__cta {
+    font-family: var(--font-ui);
+    font-size: 0.74rem;
+    margin-top: var(--space-s);
+  }
+</style>
+
+<script>
+  const nav = document.getElementById('nav');
+  const burger = document.getElementById('nav-burger');
+  const drawer = document.getElementById('nav-drawer');
+
+  if (nav) {
+    const onScroll = () => nav.classList.toggle('is-solid', window.scrollY > 60);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  if (burger && drawer) {
+    const setOpen = (open: boolean) => {
+      drawer.hidden = !open;
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+
+    burger.addEventListener('click', () => setOpen(drawer.hidden));
+    drawer.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !drawer.hidden) {
+        setOpen(false);
+        burger.focus();
+      }
+    });
+  }
+</script>

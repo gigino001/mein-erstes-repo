@@ -1,0 +1,48 @@
+---
+/*
+  Sektion über dem Wandbild.
+
+  `veil` steuert, wie dicht die Fläche über dem Motiv liegt:
+  - open   → das Wandbild ist deutlich sichtbar, für erzählende Abschnitte
+  - medium → Zwischenstufe
+  - dense  → für Fließtext und Tabellen, damit Lesen nicht anstrengt
+  - band   → Sandband als Kontrast, deckend
+*/
+interface Props {
+  veil?: 'open' | 'medium' | 'dense' | 'band';
+  id?: string;
+  class?: string;
+  labelledby?: string;
+}
+
+const { veil = 'dense', id, class: className = '', labelledby } = Astro.props;
+---
+
+<section class={`section section--${veil} ${className}`} id={id} aria-labelledby={labelledby}>
+  <div class="container">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    position: relative;
+    padding-block: var(--section-y);
+  }
+
+  .section--open {
+    background: rgb(253 249 240 / 40%);
+  }
+
+  .section--medium {
+    background: rgb(253 249 240 / 74%);
+  }
+
+  .section--dense {
+    background: rgb(253 249 240 / 90%);
+  }
+
+  .section--band {
+    background: rgb(234 221 194 / 88%);
+  }
+</style>
