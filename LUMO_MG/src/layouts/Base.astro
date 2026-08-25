@@ -152,6 +152,13 @@ const mural = await getImage({
           background-size: auto 62vh;
           background-position: 100% 100%;
           mask-image: linear-gradient(180deg, transparent 0, #000 34%);
+          /*
+            Hier ist das Motiv nur ein Band am unteren Rand. Eine
+            78-Sekunden-Skalierung ist dort nicht wahrnehmbar, haelt aber
+            dauerhaft eine Compositing-Ebene wach — Akkukosten ohne
+            sichtbaren Gegenwert.
+          */
+          animation: none;
         }
       }
 

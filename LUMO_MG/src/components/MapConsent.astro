@@ -48,7 +48,18 @@ const routeUrl = `https://www.google.com/maps/dir/?api=1&destination=${query}`;
       frame.referrerPolicy = 'no-referrer-when-downgrade';
       frame.allowFullscreen = true;
       frame.className = 'map__frame';
-      container.replaceChildren(frame);
+
+      /*
+        Frueher tauschte replaceChildren die Flaeche von einem Bild zum
+        naechsten aus. Jetzt verblasst der Platzhalter und die Karte kommt
+        darunter hervor — dieselbe Flaeche wird erkennbar zu etwas
+        anderem, statt zu springen.
+      */
+      container.classList.add('is-loading');
+      window.setTimeout(() => {
+        container.replaceChildren(frame);
+        requestAnimationFrame(() => container.classList.add('is-loaded'));
+      }, 200);
     });
   });
 </script>
@@ -95,10 +106,31 @@ const routeUrl = `https://www.google.com/maps/dir/?api=1&destination=${query}`;
     justify-content: center;
   }
 
+  .map__placeholder {
+    transition: opacity 0.2s var(--ease-out);
+  }
+
+  .map.is-loading .map__placeholder {
+    opacity: 0;
+  }
+
   .map :global(.map__frame) {
     display: block;
     width: 100%;
     height: 26rem;
     border: 0;
+    opacity: 0;
+    transition: opacity 0.3s var(--ease-out);
+  }
+
+  .map.is-loaded :global(.map__frame) {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .map__placeholder,
+    .map :global(.map__frame) {
+      transition: none;
+    }
   }
 </style>

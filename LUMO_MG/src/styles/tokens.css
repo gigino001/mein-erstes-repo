@@ -70,7 +70,18 @@
   --space-xl: 4rem;
 
   /* ---------- Sonstiges ---------- */
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /*
+    Eine Kurve je Zweck statt einer fuer alles.
+    Eingaenge starten schnell und kommen weich zur Ruhe; Bewegung quer
+    ueber den Schirm braucht beide Enden weich; Farbwechsel beim Hover
+    vertragen kein dramatisches Ausschwingen.
+  */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-color: ease;
+
+  /* Bestandsname, zeigt auf die Eingangskurve */
+  --ease: var(--ease-out);
   --shadow-soft: 0 1px 2px rgb(43 33 23 / 6%), 0 12px 32px -18px rgb(43 33 23 / 25%);
 
   /* Feines Korn, gibt den Flächen Papieranmutung */

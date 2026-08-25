@@ -27,7 +27,7 @@ import { nav, site } from '../data/site';
   </button>
 </header>
 
-<div class="drawer" id="nav-drawer" hidden>
+<div class="drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Menü">
   <nav aria-label="Hauptnavigation, mobil">
     {nav.map((item) => <a href={item.href}>{item.label}</a>)}
     <a class="btn drawer__cta" href="/reservieren">Reservieren</a>
@@ -43,19 +43,24 @@ import { nav, site } from '../data/site';
     align-items: center;
     justify-content: space-between;
     gap: var(--space-s);
-    padding: 1rem var(--gutter);
+    /*
+      Feste Hoehe. Frueher wechselte das Padding beim Scrollen und lag
+      zugleich in der Uebergangsliste — Padding loest Layout aus, die
+      Leiste liess also mitten in der Scrollbewegung die ganze Seite neu
+      rechnen. Jetzt wechseln nur noch Farbe und Rand, beides auf der
+      Grafikkarte.
+    */
+    padding: 0.85rem var(--gutter);
     background: rgb(253 249 240 / 0%);
     border-bottom: 1px solid transparent;
     transition:
-      background 0.4s var(--ease),
-      border-color 0.4s var(--ease),
-      padding 0.4s var(--ease);
+      background 0.4s var(--ease-color),
+      border-color 0.4s var(--ease-color);
   }
 
   .nav.is-solid {
     background: rgb(253 249 240 / 93%);
     border-bottom-color: var(--line);
-    padding-block: 0.7rem;
     backdrop-filter: blur(6px);
   }
 
@@ -84,7 +89,10 @@ import { nav, site } from '../data/site';
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--ink-soft);
-    transition: color 0.25s var(--ease);
+  }
+
+  .nav__links a {
+    transition: color 0.25s var(--ease-color);
   }
 
   .nav__links a:hover {
@@ -118,8 +126,8 @@ import { nav, site } from '../data/site';
     height: 1px;
     background: var(--ink);
     transition:
-      transform 0.3s var(--ease),
-      opacity 0.2s;
+      transform 0.3s var(--ease-out),
+      opacity 0.2s var(--ease-out);
   }
 
   .nav__burger[aria-expanded='true'] span:nth-child(1) {
@@ -150,8 +158,37 @@ import { nav, site } from '../data/site';
     background: rgb(250 244 232 / 98%);
   }
 
-  .drawer[hidden] {
-    display: none;
+  /*
+    Frueher schaltete das Menue ueber das hidden-Attribut hart um. Auf dem
+    Handy ist es die einzige Navigation — es soll erkennbar von oben
+    hereinkommen, nicht aus dem Nichts erscheinen. visibility haelt es
+    dabei aus dem Zugaenglichkeitsbaum heraus, solange es zu ist.
+  */
+  .drawer {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.25s var(--ease-out),
+      visibility 0s linear 0.25s;
+  }
+
+  .drawer.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      opacity 0.25s var(--ease-out),
+      visibility 0s;
+  }
+
+  .drawer nav > * {
+    transform: translateY(-10px);
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .drawer.is-open nav > * {
+    transform: none;
   }
 
   .drawer nav {
@@ -194,7 +231,9 @@ import { nav, site } from '../data/site';
 
     const setOpen = (open: boolean) => {
       isOpen = open;
-      drawer.hidden = !open;
+      // Sichtbarkeit steuert CSS über die Klasse — nur so kann der
+      // Übergang laufen. Das hidden-Attribut würde ihn überspringen.
+      drawer.classList.toggle('is-open', open);
       burger.setAttribute('aria-expanded', String(open));
       burger.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
       document.body.style.overflow = open ? 'hidden' : '';

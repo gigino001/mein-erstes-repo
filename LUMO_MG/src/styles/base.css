@@ -131,12 +131,16 @@ video {
 }
 
 /* Sanftes Einblenden beim Scrollen */
+/*
+  Frueher 900 ms. Bei achtzehn Bloecken hinkte der Inhalt dem Daumen
+  sichtbar hinterher. 550 ms bleibt ruhig, kommt aber mit.
+*/
 .js .reveal {
   opacity: 0;
   transform: translateY(22px);
   transition:
-    opacity 0.9s var(--ease),
-    transform 0.9s var(--ease);
+    opacity 0.55s var(--ease-out),
+    transform 0.55s var(--ease-out);
 }
 
 .js .reveal.is-visible {
@@ -182,16 +186,27 @@ video {
   text-transform: uppercase;
   cursor: pointer;
   transition:
-    background 0.3s var(--ease),
-    border-color 0.3s var(--ease),
-    color 0.3s var(--ease),
-    transform 0.3s var(--ease);
+    background 0.3s var(--ease-color),
+    border-color 0.3s var(--ease-color),
+    color 0.3s var(--ease-color),
+    transform 0.16s var(--ease-out);
 }
 
 .btn:hover {
   background: var(--gold-dark);
   border-color: var(--gold-dark);
-  transform: translateY(-1px);
+}
+
+/*
+  Bewegung beim Hover nur dort, wo es einen echten Zeiger gibt. Auf einem
+  Touchgeraet loest jeder Tipp einen falschen Hover aus — der Knopf sprang
+  bisher hoch und blieb dort haengen, bis woanders hingetippt wurde.
+  Der Farbwechsel bleibt ueberall, er ist nuetzliche Rueckmeldung.
+*/
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    transform: translateY(-1px);
+  }
 }
 
 .btn--ghost {

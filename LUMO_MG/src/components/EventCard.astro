@@ -58,13 +58,20 @@ const time = until
     border: 1px solid var(--line);
     background: rgb(253 249 240 / 88%);
     transition:
-      border-color 0.35s var(--ease),
-      transform 0.35s var(--ease);
+      border-color 0.35s var(--ease-color),
+      transform 0.35s var(--ease-out);
   }
 
   .event:hover {
     border-color: var(--line-strong);
-    transform: translateY(-3px);
+  }
+
+  /* Nur mit echtem Zeiger — auf dem Handy blieb die Karte nach einem
+     Tipp angehoben stehen. */
+  @media (hover: hover) and (pointer: fine) {
+    .event:hover {
+      transform: translateY(-3px);
+    }
   }
 
   .event__link {
