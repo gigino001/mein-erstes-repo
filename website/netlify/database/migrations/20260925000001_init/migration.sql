@@ -2,6 +2,12 @@
 -- sync manually since Netlify DB migrations run independently of Prisma's
 -- own migration tracking; Prisma Client only needs the resulting schema to
 -- match, not the _prisma_migrations bookkeeping).
+--
+-- Drop-before-create: an earlier deploy attempt applied this schema by
+-- running `prisma migrate deploy` directly (before this file existed),
+-- so Netlify's own migration tracking doesn't yet know these tables
+-- exist. Dropping first makes this migration safe to (re-)apply.
+DROP TABLE IF EXISTS "Appointment", "AvailabilityException", "Availability", "Service", "Staff" CASCADE;
 
 -- CreateTable
 CREATE TABLE "Staff" (
