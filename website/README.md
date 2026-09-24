@@ -66,3 +66,19 @@ Kundin, Bestätigung → Kundin mit `.ics`-Kalenderdatei, Absage → Kundin).
 Läuft durchgehend gegen MySQL/MariaDB (lokal per Docker Compose).
 
 Offen: echte Fotos, Galerie-Inhalte, Deploy-Setup für ALL-INKL.
+
+## Netlify-Preview (Postgres statt MySQL)
+
+Für eine Vorschau auf Netlify läuft die App aktuell gegen **Postgres** statt
+MySQL/MariaDB — `prisma/schema.prisma` ist eine einzige, geteilte Datei, ein
+Provider-Wechsel betrifft also auch die lokale Entwicklung (`docker-compose.yml`
+startet entsprechend Postgres, nicht mehr MariaDB; `.env.example` ist
+angepasst). Auf Netlify stellt Netlify DB die Datenbank beim Deploy
+automatisch bereit (`@netlify/database`, Umgebungsvariable `NETLIFY_DB_URL`),
+`netlify.toml` im Repo-Root führt dabei `prisma migrate deploy` und den Seed
+aus.
+
+Für die geplante ALL-INKL-Produktion (nur MySQL/MariaDB verfügbar) muss vor
+dem echten Go-live entweder der Provider wieder auf `mysql` zurückgestellt
+werden (inkl. neuer Migration) oder ALL-INKL gegen einen externen
+Postgres-Host getauscht werden — das ist noch offen.

@@ -1,16 +1,15 @@
 services:
   db:
-    image: mariadb:11
+    image: postgres:16
     restart: unless-stopped
     environment:
-      MARIADB_DATABASE: cocolashes
-      MARIADB_USER: cocolashes
-      MARIADB_PASSWORD: cocolashes_dev_pw
-      MARIADB_RANDOM_ROOT_PASSWORD: "yes"
+      POSTGRES_DB: cocolashes
+      POSTGRES_USER: cocolashes
+      POSTGRES_PASSWORD: cocolashes_dev_pw
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - coco_mysql_data:/var/lib/mysql
+      - coco_postgres_data:/var/lib/postgresql/data
 
 volumes:
-  coco_mysql_data:
+  coco_postgres_data:

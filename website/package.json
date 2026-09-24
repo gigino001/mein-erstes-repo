@@ -13,6 +13,7 @@
     "admin:hash-password": "tsx scripts/hash-password.ts"
   },
   "dependencies": {
+    "@netlify/database": "^2.0.1",
     "@prisma/client": "^6.12.0",
     "bcryptjs": "^3.0.3",
     "framer-motion": "^13.4.3",

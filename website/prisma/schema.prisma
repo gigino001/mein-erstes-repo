@@ -1,11 +1,13 @@
 // coco lashes — Datenmodell
-// Läuft gegen MySQL/MariaDB — lokal per Docker/lokalem Server (siehe README),
-// auf ALL-INKL gegen die dort bereitgestellte MariaDB-Datenbank.
+// Produktionsplan: MySQL/MariaDB (lokal per Docker, auf ALL-INKL gegen die
+// dort bereitgestellte MariaDB). Für den Netlify-Preview läuft dieselbe
+// Datenbank stattdessen gegen Postgres (automatisch von Netlify DB
+// bereitgestellt, siehe src/lib/prisma.ts) — daher hier "postgresql".
 //
-// Hinweis: MySQL/MariaDB kennen zwar native Enums, wir führen "category" und
-// "status" trotzdem bewusst als String mit dokumentierten, festen Werten —
-// das hält das Schema portabel und Änderungen an den Werten brauchen keine
-// Migration.
+// Hinweis: MySQL/MariaDB und Postgres kennen zwar native Enums, wir führen
+// "category" und "status" trotzdem bewusst als String mit dokumentierten,
+// festen Werten — das hält das Schema portabel und Änderungen an den Werten
+// brauchen keine Migration.
 
 generator client {
   provider = "prisma-client"
@@ -13,7 +15,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
