@@ -1,0 +1,16 @@
+services:
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: cocolashes
+      MARIADB_USER: cocolashes
+      MARIADB_PASSWORD: cocolashes_dev_pw
+      MARIADB_RANDOM_ROOT_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+    volumes:
+      - coco_mysql_data:/var/lib/mysql
+
+volumes:
+  coco_mysql_data:

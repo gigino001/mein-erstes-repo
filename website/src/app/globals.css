@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --color-white: #ffffff;
+  --color-sky-mist: #eaf4f8;
+  --color-coral: #ff9398;
+  --color-coral-soft: #ffdcdd;
+  --color-ocean: #2779a7;
+  --color-ink: #16232b;
+  --color-ink-soft: #4b5a63;
+  --color-ink-muted: #6b7e87;
+}
+
+@theme inline {
+  --color-white: var(--color-white);
+  --color-sky-mist: var(--color-sky-mist);
+  --color-coral: var(--color-coral);
+  --color-coral-soft: var(--color-coral-soft);
+  --color-ocean: var(--color-ocean);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-ink-muted: var(--color-ink-muted);
+
+  --font-poster: var(--font-anton), sans-serif;
+  --font-display: var(--font-fraunces), serif;
+  --font-sans: var(--font-work-sans), sans-serif;
+}
+
+body {
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
