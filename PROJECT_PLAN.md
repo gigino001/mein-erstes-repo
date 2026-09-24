@@ -127,13 +127,44 @@ Optional: dezenter Verweis/Link auf die bestehende Lash-Preview-App als Bonus-Fe
 
 ## 7. Bauphasen
 
-1. **Setup:** Next.js-Projekt in `website/`, Prisma-Schema, Grundkomponenten (Farben/Typo aus Moodboard), Deploy-Pipeline
-2. **Marketing-Seiten:** Start, Über mich, Leistungen, Kontakt, Impressum/Datenschutz — mit den echten Inhalten oben, Platzhaltern für Fotos
+1. **Setup:** Next.js-Projekt in `website/`, Prisma-Schema, Grundkomponenten (Farben/Typo aus Moodboard), Deploy-Pipeline, SEO-Grundgerüst (sitemap.xml, robots.txt inkl. KI-Crawler, Meta-Framework, Schema.org-Basis)
+2. **Marketing-Seiten:** Start, Über mich, Leistungen, Kontakt, FAQ, Impressum/Datenschutz — mit den echten Inhalten oben, Platzhaltern für Fotos, je Seite eigene Meta-Daten + strukturierte Daten
 3. **Buchungssystem:** öffentlicher Buchungsflow + einfaches Admin-Dashboard für Claudia
-4. **Feinschliff:** Responsive/Mobile-Test, SEO, Performance, Deploy auf ALL-INKL, Launch
+4. **Feinschliff:** Responsive/Mobile-Test, Performance/Core-Web-Vitals, SEO-Audit, Deploy auf ALL-INKL, Launch
 
-## 8. Offene Punkte
+## 8. SEO &amp; KI-Auffindbarkeit (von Anfang an mitgedacht, nicht nachträglich)
+
+Ziel: bei Google gut ranken **und** von Chat-KIs (ChatGPT, Claude, Perplexity, Gemini &amp; Co.) als Antwort/Empfehlung genannt werden, wenn jemand z. B. "Wimpernstudio Bielefeld" fragt.
+
+**Technisches SEO (Next.js macht das meiste automatisch möglich, aber es muss aktiv genutzt werden):**
+- Server-seitig gerenderte/statische Seiten (SSG/ISR), kein Content, der nur per Client-JS nachlädt — sowohl klassische Crawler als auch die meisten KI-Crawler führen kein JavaScript aus
+- Saubere semantische HTML-Struktur (eine `h1` pro Seite, sinnvolle Überschriften-Hierarchie, `nav`/`main`/`footer`)
+- Individuelle Meta-Title/-Description pro Seite, Open-Graph- &amp; Twitter-Card-Tags fürs Teilen
+- `sitemap.xml` und `robots.txt` (Google, Bing **und** KI-Crawler wie `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended` bewusst zulassen statt blocken — sonst kann keine KI die Seite zitieren)
+- Optional ein `llms.txt` im Root, das Studio, Leistungen und Kontakt in einfacher Textform für KI-Systeme zusammenfasst (neue, sich etablierende Konvention)
+- Aussagekräftige Alt-Texte für alle Bilder, gute Core-Web-Vitals (schnelle Ladezeit, auch mobil)
+
+**Strukturierte Daten (Schema.org) — zentral für lokale Auffindbarkeit:**
+- `LocalBusiness`/`BeautySalon`-Markup mit Name, Adresse, Telefon, Öffnungszeiten, Geo-Koordinaten, Preisklasse
+- `Service`-Markup je Leistung (Name, Dauer, Preis)
+- `FAQPage`-Markup für eine echte FAQ-Sektion
+
+**Content, den KIs gerne zitieren (Antwort-Engine-Optimierung):**
+- Eine FAQ-Sektion/-Seite mit natürlich formulierten Fragen &amp; klaren Antworten, z. B. "Was kostet eine Wimpernverlängerung in Bielefeld?", "Wie lange hält eine Wimpernverlängerung?", "Was ist der Unterschied zwischen Classic, Light und Mega Volumen?", "Muss ich vor dem Termin etwas beachten?" — genau dieses Frage-Antwort-Format wird von Chat-KIs bevorzugt extrahiert und zitiert
+- Klare, faktenbasierte Texte statt reiner Marketing-Floskeln (Claudias Erfahrung, Ausbildung/Zertifikate falls vorhanden, seit wann sie das macht) — stärkt Glaubwürdigkeit, die auch KIs für Empfehlungen gewichten
+- Konsistente NAP-Daten (Name, Adresse, Telefon) exakt gleich auf Website, Google Business Profil und Instagram — Unstimmigkeiten schaden sowohl Google-Ranking als auch KI-Vertrauen
+
+**Off-Page (nicht Teil des Website-Baus, aber wichtig — als Empfehlung an die Kundin):**
+- Google Business Profil anlegen/pflegen (falls noch nicht vorhanden) mit identischen Daten
+- Google-Bewertungen sammeln — Bewertungen fließen sowohl ins klassische Local-SEO als auch zunehmend in KI-Empfehlungen ein
+- Eintrag in gängigen Branchenverzeichnissen mit identischen NAP-Daten
+
+→ Das fließt von Phase 1 an in Setup (Sitemap/robots.txt/Schema-Grundgerüst) und Phase 2 (Seiteninhalte inkl. FAQ-Sektion) ein, nicht erst als Nachgedanke in Phase 4.
+
+## 9. Offene Punkte
 
 - ALL-INKL-Paket (Privat/PrivatPlus/Business/Premium) — nötig vor Deploy, nicht vor Entwicklungsstart
 - Echte Fotos (Studio, Claudia, Vorher/Nachher) — Platzhalter bis dahin
 - Ob ein dezenter Link zur bestehenden Lash-Preview-App gewünscht ist
+- Inhalte für die FAQ-Sektion final abstimmen (Vorschläge kommen von mir, Claudia kann ergänzen/ändern)
+- Ob ein Google Business Profil bereits existiert oder neu angelegt werden muss
