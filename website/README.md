@@ -84,3 +84,33 @@ Für die geplante ALL-INKL-Produktion (nur MySQL/MariaDB verfügbar) muss vor
 dem echten Go-live entweder der Provider wieder auf `mysql` zurückgestellt
 werden (inkl. neuer Migration) oder ALL-INKL gegen einen externen
 Postgres-Host getauscht werden — das ist noch offen.
+
+### Bekanntes Problem: Netlify liefert noch keine Server-Functions aus
+
+Der Deploy per Netlify-CLI/-MCP (Zip-Upload, kein Git-Link) baut erfolgreich
+und die Datenbank funktioniert, aber Next.js' dynamische Routen (Admin,
+`/api/availability`, serverseitig gerenderte Seiten) werden nicht
+ausgeliefert — jede URL liefert 404, weil keine Netlify Functions gebaut
+werden:
+
+- **Ohne** `[[plugins]] package = "@netlify/plugin-nextjs"` in
+  `netlify.toml`: Build läuft durch, DB funktioniert, aber 0 Functions
+  gebaut (`plugin_state: "none"`) → alles 404.
+- **Mit** explizitem Plugin-Eintrag: Build bricht mit Exit-Code 2 ab, ohne
+  nutzbares Log; dabei wird auch keine Datenbank mehr bereitgestellt.
+
+Vermutung: Das Netlify-Next.js-Runtime-Plugin (aktuell 5.16.0) ist noch
+nicht mit Next.js 16 kompatibel (siehe `AGENTS.md`: "This is NOT the
+Next.js you know — breaking changes"). Turbopack-Builds wurden bereits als
+Teilursache ausgeschlossen (deshalb erzwingt `package.json`s `build`-Skript
+`--webpack`).
+
+Nächste sinnvolle Schritte, sobald wer Zeit dafür hat:
+1. Die Website stattdessen per **GitHub-Verbindung** (Continuous Deployment)
+   statt per Zip-Upload deployen — Netlifys Standard-Build-Pipeline
+   behandelt Framework- und Extension-Erkennung ggf. zuverlässiger.
+2. Falls das Problem bestehen bleibt: bei Netlify/`@netlify/plugin-nextjs`
+   nach offiziellem Next.js-16-Support fragen, oder testweise auf eine
+   Next.js-15-Version zurückgehen.
+3. `netlify.toml` aktuell bewusst **ohne** explizites Plugin belassen
+   (Build funktioniert, DB funktioniert) statt im kaputten Zustand.

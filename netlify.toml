@@ -1,12 +1,8 @@
 [build]
   base = "website"
-  # Zero-config alone never bundled server functions on this API/CLI-upload
-  # deploy path (plugin_state stayed "none", 0 functions, every route
-  # 404ed) even once the build succeeded and the database was already
-  # provisioned — so the Next.js Runtime plugin needs to be declared
-  # explicitly here. The webpack-vs-Turbopack fix (needed so the Runtime's
-  # "Collecting build traces" step runs) lives in package.json's "build"
-  # script.
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+  # See README.md "Netlify-Preview" for the current, unresolved blocker:
+  # declaring `[[plugins]] package = "@netlify/plugin-nextjs"` here makes
+  # every build fail (exit code 2, no database provisioned either);
+  # without it the build succeeds and the database works, but no server
+  # functions get bundled, so every route 404s. Left at the safer
+  # (build-succeeds) state for now.
