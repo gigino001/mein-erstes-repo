@@ -74,9 +74,11 @@ MySQL/MariaDB — `prisma/schema.prisma` ist eine einzige, geteilte Datei, ein
 Provider-Wechsel betrifft also auch die lokale Entwicklung (`docker-compose.yml`
 startet entsprechend Postgres, nicht mehr MariaDB; `.env.example` ist
 angepasst). Auf Netlify stellt Netlify DB die Datenbank beim Deploy
-automatisch bereit (`@netlify/database`, Umgebungsvariable `NETLIFY_DB_URL`),
-`netlify.toml` im Repo-Root führt dabei `prisma migrate deploy` und den Seed
-aus.
+automatisch bereit (`@netlify/database`, Umgebungsvariable `NETLIFY_DB_URL`).
+Schema und Grunddaten liegen dafür zusätzlich als reines SQL unter
+`netlify/database/migrations/`, das Netlify vor jedem Build automatisch
+anwendet (unabhängig von Prisma's eigenem Migrationssystem in
+`prisma/migrations/`, das weiter für den lokalen Stack gilt).
 
 Für die geplante ALL-INKL-Produktion (nur MySQL/MariaDB verfügbar) muss vor
 dem echten Go-live entweder der Provider wieder auf `mysql` zurückgestellt
