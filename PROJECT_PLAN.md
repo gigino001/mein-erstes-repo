@@ -38,6 +38,12 @@ Stand: 24.09.2026 · Inhaberin: Claudia Gajda · Studio: Gerichtstraße 13, 3360
 - Direkter, warmer Text-Ton — nicht brav-verkäuferisch
 - Fotoplatzhalter dort, wo später echte Fotos (Studio, Vorher/Nachher, Claudia) reinkommen
 
+**Bewegung im Design:**
+- **Vorher/Nachher-Galerie** als horizontaler Slider (swipebar auf Mobile, Pfeile auf Desktop) statt statischem Grid
+- **Kundinnenstimmen** als eigener Zitat-Slider (neue Sektion, passt zur Vertrauens-/Psychologin-Story)
+- Dezente Scroll-Reveal-Animationen (sanftes Einblenden beim Scrollen) auf den restlichen Sektionen
+- Technisch: **Embla Carousel** (leichtgewichtig, gute Touch-Unterstützung, barrierefrei) für die Slider; CSS-/Framer-Motion-Transitions fürs Scroll-Reveal; alles respektiert `prefers-reduced-motion`
+
 → Referenz-Moodboard: siehe Artifact (im Chat verlinkt), Farben/Typo dort final abgenickt.
 
 ## 4. Content (bereits gesammelt)
@@ -118,10 +124,11 @@ Für die neue Seite ausgebaut um die "Psychologin"-Geschichte und den Individual
 1. **Start** — Hero (große Plakat-Headline + Foto-Platzhalter), Kurzvorstellung, Highlights (individuelle Beratung, Wohlfühlmoment), CTA "Termin buchen"
 2. **Über mich** — Claudias Geschichte, Philosophie, "wie eine Psychologin"-Erzählung, Individualitäts-Versprechen
 3. **Leistungen & Preise** — vollständige Liste (siehe oben)
-4. **Galerie** — Vorher/Nachher, Studio-Impressionen (Platzhalter bis echte Fotos da sind)
-5. **Termin buchen** — eigenes Echtzeit-Buchungssystem
-6. **Kontakt** — Karte, Kontaktdaten, Öffnungszeiten, Social Links
-7. **Impressum / Datenschutz** — Footer-Links
+4. **Galerie** — Vorher/Nachher als Slider, Studio-Impressionen (Platzhalter bis echte Fotos da sind)
+5. **Kundinnenstimmen** — Zitat-Slider (Testimonials)
+6. **Termin buchen** — eigenes Echtzeit-Buchungssystem
+7. **Kontakt** — Karte, Kontaktdaten, Öffnungszeiten, Social Links
+8. **Impressum / Datenschutz** — Footer-Links
 
 Optional: dezenter Verweis/Link auf die bestehende Lash-Preview-App als Bonus-Feature ("Neugierig? Probier unsere Wimpern-Vorschau aus") — nur falls gewünscht, keine technische Integration.
 
