@@ -38,11 +38,11 @@ Stand: 24.09.2026 · Inhaberin: Claudia Gajda · Studio: Gerichtstraße 13, 3360
 - Direkter, warmer Text-Ton — nicht brav-verkäuferisch
 - Fotoplatzhalter dort, wo später echte Fotos (Studio, Vorher/Nachher, Claudia) reinkommen
 
-**Bewegung im Design:**
-- **Vorher/Nachher-Galerie** als horizontaler Slider (swipebar auf Mobile, Pfeile auf Desktop) statt statischem Grid
-- **Kundinnenstimmen** als eigener Zitat-Slider (neue Sektion, passt zur Vertrauens-/Psychologin-Story)
-- Dezente Scroll-Reveal-Animationen (sanftes Einblenden beim Scrollen) auf den restlichen Sektionen
-- Technisch: **Embla Carousel** (leichtgewichtig, gute Touch-Unterstützung, barrierefrei) für die Slider; CSS-/Framer-Motion-Transitions fürs Scroll-Reveal; alles respektiert `prefers-reduced-motion`
+**Bewegung im Design — scroll-gesteuert, kein Klick-Slider:**
+- **Vorher/Nachher-Galerie:** horizontaler Bilderstreifen, der sich **an die Scroll-Position gekoppelt** seitlich bewegt (man scrollt normal runter, die Bilder wandern dabei horizontal durch) — kein Klicken/Swipen nötig
+- **Kundinnenstimmen:** Zitate blenden sanft ein/gleiten hoch, sobald sie beim Scrollen in den Sichtbereich kommen (kein Pfeil-Slider)
+- Dezenter Parallax-Effekt auf Hero-/Sektionsfotos (bewegen sich leicht langsamer/schneller als der Rest beim Scrollen)
+- Technisch: **Framer Motion** (`useScroll`/`useTransform`) bzw. native CSS-Scroll-Animationen für die scroll-gekoppelten Transformationen — kein Embla/Klick-Carousel; alles respektiert `prefers-reduced-motion` (Bewegung wird dann deaktiviert/reduziert)
 
 → Referenz-Moodboard: siehe Artifact (im Chat verlinkt), Farben/Typo dort final abgenickt.
 
