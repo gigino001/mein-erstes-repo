@@ -4,6 +4,8 @@ import { formatPrice, formatDuration } from "@/lib/format";
 import { business } from "@/lib/business";
 import { ScrollFadeIn } from "@/components/motion/ScrollFadeIn";
 import { ScrollPanRow } from "@/components/motion/ScrollPanRow";
+import { EyeIllustration } from "@/components/art/EyeIllustration";
+import { Monogram } from "@/components/art/Monogram";
 
 export default async function HomePage() {
   const featuredServices = await prisma.service.findMany({
@@ -43,8 +45,9 @@ export default async function HomePage() {
             </Link>
           </div>
         </ScrollFadeIn>
-        <div className="aspect-[4/5] rounded-3xl bg-sky-mist flex items-center justify-center text-center p-6 text-sm text-ink-muted">
-          [Foto-Platzhalter: Claudia im Studio]
+        <div className="aspect-[4/5] rounded-3xl bg-sky-mist flex flex-col items-center justify-center gap-4 p-10">
+          <EyeIllustration dense className="w-full max-w-[280px]" />
+          <span className="text-xs text-ink-muted">Platzhalter-Illustration — echtes Foto folgt</span>
         </div>
       </section>
 
@@ -123,8 +126,9 @@ export default async function HomePage() {
 
       {/* ÜBER MICH TEASER */}
       <section className="px-6 md:px-18 py-24 grid md:grid-cols-[1fr_1.2fr] gap-14 items-center">
-        <div className="aspect-[4/5] rounded-3xl bg-coral-soft flex items-center justify-center text-center p-6 text-sm text-[#8A5F5D]">
-          [Foto-Platzhalter: Claudia Portrait]
+        <div className="aspect-[4/5] rounded-3xl bg-coral-soft flex flex-col items-center justify-center gap-4 p-10">
+          <Monogram className="w-full max-w-[180px]" />
+          <span className="text-xs text-[#8A5F5D]">Platzhalter — echtes Porträt folgt</span>
         </div>
         <ScrollFadeIn className="flex flex-col gap-6">
           <span className="text-[13px] font-semibold tracking-[0.14em] uppercase text-ocean">Über mich</span>
@@ -152,9 +156,17 @@ export default async function HomePage() {
           {[1, 2, 3, 4].map((n) => (
             <div
               key={n}
-              className="shrink-0 w-[300px] md:w-[340px] aspect-square rounded-2xl bg-[#2C3B44] flex items-center justify-center text-center p-5 text-sm text-[#9FB0B8]"
+              className="shrink-0 w-[300px] md:w-[340px] aspect-square rounded-2xl bg-[#2C3B44] flex flex-col items-center justify-center gap-3 p-8"
             >
-              [Foto: Vorher/Nachher {n}]
+              <EyeIllustration
+                dense={n % 2 === 0}
+                stroke="#EAF4F8"
+                accent="#FF9398"
+                className="w-full max-w-[220px]"
+              />
+              <span className="text-xs text-[#9FB0B8]">
+                {n % 2 === 0 ? "Nachher" : "Vorher"} · Illustration
+              </span>
             </div>
           ))}
         </ScrollPanRow>

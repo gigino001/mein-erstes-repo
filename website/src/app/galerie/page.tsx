@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
+import { EyeIllustration } from "@/components/art/EyeIllustration";
 
 export const metadata: Metadata = {
   title: "Galerie",
   description: "Vorher/Nachher-Fotos und Studio-Impressionen von coco lashes in Bielefeld.",
 };
 
-const PLACEHOLDERS = Array.from({ length: 6 }, (_, i) => i + 1);
+const TILES = [
+  { bg: "bg-sky-mist", stroke: "#16232B", dense: false },
+  { bg: "bg-coral-soft", stroke: "#16232B", dense: true },
+  { bg: "bg-ink", stroke: "#EAF4F8", dense: false },
+  { bg: "bg-ink", stroke: "#EAF4F8", dense: true },
+  { bg: "bg-coral-soft", stroke: "#16232B", dense: false },
+  { bg: "bg-sky-mist", stroke: "#16232B", dense: true },
+];
 
 export default function GaleriePage() {
   return (
@@ -16,16 +24,17 @@ export default function GaleriePage() {
         </span>
         <h1 className="font-poster uppercase text-5xl md:text-6xl">Galerie</h1>
         <p className="text-ink-soft">
-          Hier entstehen bald echte Vorher/Nachher-Fotos und Eindrücke aus dem Studio.
+          Hier entstehen bald echte Vorher/Nachher-Fotos und Eindrücke aus dem Studio — bis
+          dahin ein paar Illustrationen als Platzhalter.
         </p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-        {PLACEHOLDERS.map((n) => (
+        {TILES.map((tile, i) => (
           <div
-            key={n}
-            className="aspect-square rounded-2xl bg-sky-mist flex items-center justify-center text-center p-5 text-sm text-ink-muted"
+            key={i}
+            className={`aspect-square rounded-2xl ${tile.bg} flex items-center justify-center p-8`}
           >
-            [Foto-Platzhalter {n}]
+            <EyeIllustration dense={tile.dense} stroke={tile.stroke} className="w-full" />
           </div>
         ))}
       </div>
