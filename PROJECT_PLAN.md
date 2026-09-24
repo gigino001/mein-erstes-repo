@@ -168,7 +168,25 @@ Ziel: bei Google gut ranken **und** von Chat-KIs (ChatGPT, Claude, Perplexity, G
 
 → Das fließt von Phase 1 an in Setup (Sitemap/robots.txt/Schema-Grundgerüst) und Phase 2 (Seiteninhalte inkl. FAQ-Sektion) ein, nicht erst als Nachgedanke in Phase 4.
 
-## 9. Offene Punkte
+## 9. Baustand
+
+Umgesetzt in `website/` (lokal, noch nicht deployed): Next.js-Setup mit dem
+Design-System (Farben/Typo aus dem Moodboard), Startseite inkl.
+scroll-gekoppelter Galerie und Scroll-Fade-Sektionen, Leistungen (aus der
+Datenbank), Über mich, Kontakt (mit Kartenausschnitt), FAQ (mit
+FAQPage-Schema), Impressum/Datenschutz (Entwürfe, siehe Hinweise in den
+Dateien), SEO-Grundgerüst (Sitemap, robots.txt inkl. KI-Crawler,
+LocalBusiness-Schema), sowie ein funktionierendes Buchungssystem
+(Verfügbarkeits-Berechnung gegen Arbeitszeiten + bestehende Termine,
+Terminanfrage-Formular, ohne Online-Zahlung). Lokal getestet: Build, Lint
+und der komplette Buchungsablauf laufen fehlerfrei durch.
+
+Noch offen: Admin-Oberfläche für Claudia (Termine bestätigen/ablehnen,
+Zeiten blocken), echte Fotos statt Platzhalter, Galerie-Inhalte,
+E-Mail-Benachrichtigung bei neuen Anfragen, Umstellung auf MySQL/MariaDB
+und Deploy auf ALL-INKL.
+
+## 10. Offene Punkte
 
 - ALL-INKL-Paket (Privat/PrivatPlus/Business/Premium) — nötig vor Deploy, nicht vor Entwicklungsstart
 - Echte Fotos (Studio, Claudia, Vorher/Nachher) — Platzhalter bis dahin

@@ -1,0 +1,97 @@
+// coco lashes — Datenmodell
+// Lokale Entwicklung läuft gegen SQLite (siehe .env). Vor dem Deploy auf
+// ALL-INKL wird der "provider" unten auf "mysql" umgestellt (Prisma-Schema
+// bleibt sonst unverändert, siehe PROJECT_PLAN.md, Abschnitt 5).
+//
+// Hinweis: SQLite kennt keine nativen Enums, deshalb werden "category" und
+// "status" als String mit dokumentierten, festen Werten geführt — das
+// funktioniert unverändert nach dem Umstieg auf MySQL.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Staff {
+  id        String   @id @default(cuid())
+  name      String
+  active    Boolean  @default(true)
+  avatarUrl String?
+  createdAt DateTime @default(now())
+
+  availabilities Availability[]
+  exceptions     AvailabilityException[]
+  appointments   Appointment[]
+}
+
+model Service {
+  id              String   @id @default(cuid())
+  name            String
+  /// "neumodellage" | "auffuellen" | "sonstiges"
+  category        String
+  durationMinutes Int
+  priceCents      Int
+  description     String?
+  active          Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  appointments Appointment[]
+}
+
+/// Wiederkehrende Arbeitszeiten je Mitarbeiterin und Wochentag.
+model Availability {
+  id           String @id @default(cuid())
+  staffId      String
+  /// 0 = Sonntag … 6 = Samstag
+  weekday      Int
+  /// Minuten seit Mitternacht, z. B. 10:00 Uhr = 600
+  startMinute  Int
+  endMinute    Int
+
+  staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@index([staffId, weekday])
+}
+
+/// Ausnahmen von den regulären Arbeitszeiten: Urlaub, Feiertage, spontane
+/// Blocker oder erweiterte Zeiten an einem bestimmten Datum.
+model AvailabilityException {
+  id          String   @id @default(cuid())
+  staffId     String
+  date        DateTime
+  /// true = der ganze Tag ist blockiert (z. B. Urlaub)
+  allDay      Boolean  @default(true)
+  startMinute Int?
+  endMinute   Int?
+  reason      String?
+
+  staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@index([staffId, date])
+}
+
+model Appointment {
+  id            String   @id @default(cuid())
+  customerName  String
+  customerEmail String
+  customerPhone String?
+  serviceId     String
+  staffId       String
+  startAt       DateTime
+  endAt         DateTime
+  /// "requested" | "confirmed" | "cancelled"
+  status        String   @default("requested")
+  note          String?
+  createdAt     DateTime @default(now())
+
+  service Service @relation(fields: [serviceId], references: [id])
+  staff   Staff   @relation(fields: [staffId], references: [id])
+
+  @@index([staffId, startAt])
+}
