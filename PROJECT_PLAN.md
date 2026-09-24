@@ -181,8 +181,14 @@ LocalBusiness-Schema), sowie ein funktionierendes Buchungssystem
 Terminanfrage-Formular, ohne Online-Zahlung). Lokal getestet: Build, Lint
 und der komplette Buchungsablauf laufen fehlerfrei durch.
 
-Noch offen: Admin-Oberfläche für Claudia (Termine bestätigen/ablehnen,
-Zeiten blocken), echte Fotos statt Platzhalter, Galerie-Inhalte,
+Seitdem ergänzt: passwortgeschützter Admin-Bereich (`/admin`) — Claudia
+kann Terminanfragen bestätigen/absagen und Zeiten (Urlaub, Feiertage)
+blockieren, die dann automatisch nicht mehr buchbar sind. Login per
+bcrypt-gehashtem Passwort + signierter Session (JWT/Cookie), Schutz per
+Next.js Proxy (optimistischer Redirect) und serverseitiger Prüfung in
+jeder Aktion.
+
+Noch offen: echte Fotos statt Platzhalter, Galerie-Inhalte,
 E-Mail-Benachrichtigung bei neuen Anfragen, Umstellung auf MySQL/MariaDB
 und Deploy auf ALL-INKL.
 

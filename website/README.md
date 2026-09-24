@@ -11,10 +11,15 @@ npm install
 cp .env.example .env
 npm run db:migrate   # legt die lokale SQLite-Datenbank an
 npm run db:seed      # befüllt sie mit Claudia + den echten Leistungen/Preisen
+npm run admin:hash-password -- "DeinAdminPasswort"   # Ausgabe in .env als ADMIN_PASSWORD_HASH eintragen
 npm run dev
 ```
 
-Die Seite läuft dann unter http://localhost:3000.
+Für `SESSION_SECRET` in der `.env` reicht ein beliebiger langer Zufallsstring
+(z. B. `openssl rand -base64 32`).
+
+Die Seite läuft dann unter http://localhost:3000, der Admin-Bereich unter
+http://localhost:3000/admin.
 
 ## Stack
 
@@ -40,10 +45,11 @@ Die Seite läuft dann unter http://localhost:3000.
 Fertig: Design-System (Farben/Typo), Startseite, Leistungen, Über mich,
 Kontakt, FAQ (mit FAQPage-Schema), Impressum/Datenschutz (Entwürfe, siehe
 Hinweise in den jeweiligen Dateien), SEO-Grundgerüst (Sitemap, robots.txt
-inkl. KI-Crawler, LocalBusiness-Schema), sowie ein funktionierendes
+inkl. KI-Crawler, LocalBusiness-Schema), ein funktionierendes
 Buchungssystem (Verfügbarkeits-Berechnung + Terminanfrage, ohne
-Online-Zahlung).
+Online-Zahlung) sowie ein Admin-Bereich (`/admin`, passwortgeschützt):
+Anfragen bestätigen/absagen, Zeiten für Urlaub o. Ä. blockieren.
 
-Offen: echte Fotos, Admin-Oberfläche für Claudia (Termine bestätigen,
-Zeiten blocken), Galerie-Inhalte, E-Mail-Benachrichtigung bei neuen
-Terminanfragen, Deploy-Setup für ALL-INKL.
+Offen: echte Fotos, Galerie-Inhalte, E-Mail-Benachrichtigung bei neuen
+Terminanfragen (aktuell nur im Admin-Bereich sichtbar), Deploy-Setup für
+ALL-INKL.

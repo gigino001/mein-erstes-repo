@@ -6,7 +6,7 @@ import { business } from "@/lib/business";
 // Chat-KI die Seite als Quelle zitieren/empfehlen.
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [{ userAgent: "*", allow: "/" }],
+    rules: [{ userAgent: "*", allow: "/", disallow: "/admin" }],
     sitemap: `${business.url}/sitemap.xml`,
   };
 }
