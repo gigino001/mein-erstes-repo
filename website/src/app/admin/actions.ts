@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createAdminSession, deleteAdminSession } from "@/lib/session";
 import { verifyAdminSession } from "@/lib/dal";
+import { sendAppointmentConfirmedToCustomer, sendAppointmentCancelledToCustomer } from "@/lib/mail";
 
 export type LoginResult = { ok: false; error: string } | never;
 
@@ -35,12 +36,36 @@ export async function logout() {
 
 export async function confirmAppointment(id: string) {
   await verifyAdminSession();
-  await prisma.appointment.update({ where: { id }, data: { status: "confirmed" } });
+  const appointment = await prisma.appointment.update({
+    where: { id },
+    data: { status: "confirmed" },
+    include: { service: true },
+  });
+  await sendAppointmentConfirmedToCustomer({
+    id: appointment.id,
+    customerName: appointment.customerName,
+    customerEmail: appointment.customerEmail,
+    serviceName: appointment.service.name,
+    startAt: appointment.startAt,
+    endAt: appointment.endAt,
+  });
 }
 
 export async function cancelAppointment(id: string) {
   await verifyAdminSession();
-  await prisma.appointment.update({ where: { id }, data: { status: "cancelled" } });
+  const appointment = await prisma.appointment.update({
+    where: { id },
+    data: { status: "cancelled" },
+    include: { service: true },
+  });
+  await sendAppointmentCancelledToCustomer({
+    id: appointment.id,
+    customerName: appointment.customerName,
+    customerEmail: appointment.customerEmail,
+    serviceName: appointment.service.name,
+    startAt: appointment.startAt,
+    endAt: appointment.endAt,
+  });
 }
 
 export async function createBlock(input: {

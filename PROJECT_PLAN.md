@@ -188,9 +188,19 @@ bcrypt-gehashtem Passwort + signierter Session (JWT/Cookie), Schutz per
 Next.js Proxy (optimistischer Redirect) und serverseitiger Prüfung in
 jeder Aktion.
 
-Noch offen: echte Fotos statt Platzhalter, Galerie-Inhalte,
-E-Mail-Benachrichtigung bei neuen Anfragen, Umstellung auf MySQL/MariaDB
-und Deploy auf ALL-INKL.
+Seitdem ergänzt: E-Mail-Benachrichtigungen bei jedem Schritt der Buchung
+(SMTP via Nodemailer — Claudia + Kundin bei neuer Anfrage, Kundin bei
+Bestätigung/Absage), inklusive `.ics`-Kalenderdatei im Anhang der
+Bestätigungsmail, die sich direkt in Apple Kalender, Google Kalender,
+Outlook & Co. importieren lässt. Dabei einen Zeitzonen-Bug behoben: alle
+Termin-Berechnungen liefen zuvor in der Server-Zeitzone statt fest in
+Europe/Berlin (per `instrumentation.ts` gesetzt) — sonst hätte z. B. ein
+auf UTC eingestellter Hosting-Server Termine 1–2 Stunden falsch
+angezeigt.
+
+Noch offen: echte Fotos statt Platzhalter, Galerie-Inhalte, Umstellung auf
+MySQL/MariaDB und Deploy auf ALL-INKL (dort dann echte SMTP-Zugangsdaten
+hinterlegen).
 
 ## 10. Offene Punkte
 

@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { getAvailableSlots, slotToRange } from "@/lib/availability";
+import { sendNewRequestToOwner, sendRequestReceivedToCustomer } from "@/lib/mail";
 
 export type BookingInput = {
   serviceId: string;
@@ -55,8 +56,15 @@ export async function requestAppointment(input: BookingInput): Promise<BookingRe
     },
   });
 
-  // TODO: Sobald ein Mailversand eingerichtet ist (z. B. über ALL-INKL-SMTP),
-  // hier eine Bestätigungs-/Benachrichtigungsmail an Claudia + Kundin auslösen.
+  const mailData = {
+    id: appointment.id,
+    customerName: appointment.customerName,
+    customerEmail: appointment.customerEmail,
+    serviceName: service.name,
+    startAt: appointment.startAt,
+    endAt: appointment.endAt,
+  };
+  await Promise.all([sendNewRequestToOwner(mailData), sendRequestReceivedToCustomer(mailData)]);
 
   return { ok: true, appointmentId: appointment.id };
 }

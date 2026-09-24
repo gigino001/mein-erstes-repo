@@ -21,6 +21,11 @@ Für `SESSION_SECRET` in der `.env` reicht ein beliebiger langer Zufallsstring
 Die Seite läuft dann unter http://localhost:3000, der Admin-Bereich unter
 http://localhost:3000/admin.
 
+**E-Mail-Versand:** Ohne `SMTP_*`-Werte in der `.env` werden Mails nur in
+die Konsole geloggt (praktisch zum Testen). Für echten Versand die
+SMTP-Zugangsdaten des E-Mail-Postfachs eintragen (bei ALL-INKL im KAS unter
+"E-Mail-Konten" zu finden) — siehe Kommentare in `.env.example`.
+
 ## Stack
 
 - **Next.js** (App Router) + TypeScript + Tailwind CSS v4
@@ -28,6 +33,9 @@ http://localhost:3000/admin.
   der Provider in `prisma/schema.prisma` auf `mysql` umgestellt
 - **Framer Motion** für die scroll-gekoppelten Effekte (Galerie-Filmstreifen,
   Einblenden beim Scrollen)
+- **Nodemailer** (SMTP) für Terminanfrage-/Bestätigungsmails, inkl.
+  `.ics`-Kalenderanhang (Apple Kalender, Google Kalender, Outlook, …) bei
+  bestätigten Terminen (Paket `ics`)
 
 ## Nützliche Skripte
 
@@ -47,9 +55,10 @@ Kontakt, FAQ (mit FAQPage-Schema), Impressum/Datenschutz (Entwürfe, siehe
 Hinweise in den jeweiligen Dateien), SEO-Grundgerüst (Sitemap, robots.txt
 inkl. KI-Crawler, LocalBusiness-Schema), ein funktionierendes
 Buchungssystem (Verfügbarkeits-Berechnung + Terminanfrage, ohne
-Online-Zahlung) sowie ein Admin-Bereich (`/admin`, passwortgeschützt):
-Anfragen bestätigen/absagen, Zeiten für Urlaub o. Ä. blockieren.
+Online-Zahlung), ein Admin-Bereich (`/admin`, passwortgeschützt): Anfragen
+bestätigen/absagen, Zeiten für Urlaub o. Ä. blockieren, sowie
+E-Mail-Benachrichtigungen bei jedem Schritt (neue Anfrage → Claudia +
+Kundin, Bestätigung → Kundin mit `.ics`-Kalenderdatei, Absage → Kundin).
 
-Offen: echte Fotos, Galerie-Inhalte, E-Mail-Benachrichtigung bei neuen
-Terminanfragen (aktuell nur im Admin-Bereich sichtbar), Deploy-Setup für
-ALL-INKL.
+Offen: echte Fotos, Galerie-Inhalte, Umstellung auf MySQL/MariaDB und
+Deploy-Setup für ALL-INKL.
