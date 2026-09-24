@@ -9,11 +9,15 @@ steht in [`../PROJECT_PLAN.md`](../PROJECT_PLAN.md).
 ```bash
 npm install
 cp .env.example .env
-npm run db:migrate   # legt die lokale SQLite-Datenbank an
-npm run db:seed      # befüllt sie mit Claudia + den echten Leistungen/Preisen
+docker compose up -d   # startet eine lokale MariaDB (siehe docker-compose.yml)
+npm run db:migrate     # legt die Tabellen an
+npm run db:seed        # befüllt sie mit Claudia + den echten Leistungen/Preisen
 npm run admin:hash-password -- "DeinAdminPasswort"   # Ausgabe in .env als ADMIN_PASSWORD_HASH eintragen
 npm run dev
 ```
+
+Kein Docker zur Hand? Dann tut's auch eine lokal installierte MySQL/MariaDB —
+einfach `DATABASE_URL` in der `.env` entsprechend anpassen.
 
 Für `SESSION_SECRET` in der `.env` reicht ein beliebiger langer Zufallsstring
 (z. B. `openssl rand -base64 32`).
@@ -29,8 +33,8 @@ SMTP-Zugangsdaten des E-Mail-Postfachs eintragen (bei ALL-INKL im KAS unter
 ## Stack
 
 - **Next.js** (App Router) + TypeScript + Tailwind CSS v4
-- **Prisma** als ORM — lokal gegen SQLite, vor dem Deploy auf ALL-INKL wird
-  der Provider in `prisma/schema.prisma` auf `mysql` umgestellt
+- **Prisma** als ORM gegen **MySQL/MariaDB** (lokal via Docker Compose, auf
+  ALL-INKL gegen die dort bereitgestellte MariaDB)
 - **Framer Motion** für die scroll-gekoppelten Effekte (Galerie-Filmstreifen,
   Einblenden beim Scrollen)
 - **Nodemailer** (SMTP) für Terminanfrage-/Bestätigungsmails, inkl.
@@ -59,6 +63,6 @@ Online-Zahlung), ein Admin-Bereich (`/admin`, passwortgeschützt): Anfragen
 bestätigen/absagen, Zeiten für Urlaub o. Ä. blockieren, sowie
 E-Mail-Benachrichtigungen bei jedem Schritt (neue Anfrage → Claudia +
 Kundin, Bestätigung → Kundin mit `.ics`-Kalenderdatei, Absage → Kundin).
+Läuft durchgehend gegen MySQL/MariaDB (lokal per Docker Compose).
 
-Offen: echte Fotos, Galerie-Inhalte, Umstellung auf MySQL/MariaDB und
-Deploy-Setup für ALL-INKL.
+Offen: echte Fotos, Galerie-Inhalte, Deploy-Setup für ALL-INKL.

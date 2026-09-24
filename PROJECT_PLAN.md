@@ -106,7 +106,7 @@ Für die neue Seite ausgebaut um die "Psychologin"-Geschichte und den Individual
 ## 5. Technik-Setup
 
 - **Framework:** Next.js (React) für Frontend + Backend zusammen
-- **Datenbank:** MariaDB/MySQL via Prisma ORM (statt Postgres — Anpassung an ALL-INKL, das standardmäßig MySQL/MariaDB mitliefert; Prisma abstrahiert das, kaum Codeänderung nötig)
+- **Datenbank:** MariaDB/MySQL via Prisma ORM — passend zu dem, was ALL-INKL standardmäßig mitliefert; lokal per Docker Compose (siehe `website/docker-compose.yml`)
 - **Hosting:** ALL-INKL.COM — **offen:** welches Paket (Privat/PrivatPlus/Business/Premium)? Node.js-Hosting per Passenger gibt es bei ALL-INKL erst ab Business/Premium. Das brauchen wir spätestens vor dem Deploy (Phase 4), nicht für die lokale Entwicklung.
 - **Buchungssystem:** eigenes Echtzeit-System (ersetzt SimplyBook), unverbindliche Terminbuchung ohne Online-Zahlung
 - **Sprache:** Deutsch (Annahme — lokales Studio in Bielefeld; sag Bescheid falls doch zweisprachig DE/EN gewünscht, wie bei der bestehenden Preview-App)
@@ -198,9 +198,20 @@ Europe/Berlin (per `instrumentation.ts` gesetzt) — sonst hätte z. B. ein
 auf UTC eingestellter Hosting-Server Termine 1–2 Stunden falsch
 angezeigt.
 
-Noch offen: echte Fotos statt Platzhalter, Galerie-Inhalte, Umstellung auf
-MySQL/MariaDB und Deploy auf ALL-INKL (dort dann echte SMTP-Zugangsdaten
-hinterlegen).
+Seitdem ergänzt: Foto-Platzhalter durch markenkonforme SVG-Illustrationen
+ersetzt (Augen/Wimpern-Motiv, Monogramm "CG"), jeweils klar als
+Platzhalter beschriftet — bis Claudia eigene/Canva-Fotos liefert.
+
+Seitdem ergänzt: Umstellung von SQLite auf **MySQL/MariaDB** — lokal per
+Docker Compose (`docker-compose.yml`, MariaDB 11, entspricht der
+Version, die ALL-INKL einsetzt), Migration neu aufgesetzt, alle
+Freitext-Felder auf `@db.Text` umgestellt. Kompletter Ablauf (Build,
+Lint, Buchung, Admin-Bestätigung inkl. Kalenderdatei) end-to-end gegen
+die echte MySQL-Datenbank getestet.
+
+Noch offen: echte Fotos/Canva-Bilder (Connector muss in einer neuen
+Session aktiviert werden), Galerie-Inhalte, Deploy auf ALL-INKL (dort
+echte MySQL- und SMTP-Zugangsdaten hinterlegen).
 
 ## 10. Offene Punkte
 

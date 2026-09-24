@@ -1,11 +1,11 @@
 // coco lashes — Datenmodell
-// Lokale Entwicklung läuft gegen SQLite (siehe .env). Vor dem Deploy auf
-// ALL-INKL wird der "provider" unten auf "mysql" umgestellt (Prisma-Schema
-// bleibt sonst unverändert, siehe PROJECT_PLAN.md, Abschnitt 5).
+// Läuft gegen MySQL/MariaDB — lokal per Docker/lokalem Server (siehe README),
+// auf ALL-INKL gegen die dort bereitgestellte MariaDB-Datenbank.
 //
-// Hinweis: SQLite kennt keine nativen Enums, deshalb werden "category" und
-// "status" als String mit dokumentierten, festen Werten geführt — das
-// funktioniert unverändert nach dem Umstieg auf MySQL.
+// Hinweis: MySQL/MariaDB kennen zwar native Enums, wir führen "category" und
+// "status" trotzdem bewusst als String mit dokumentierten, festen Werten —
+// das hält das Schema portabel und Änderungen an den Werten brauchen keine
+// Migration.
 
 generator client {
   provider = "prisma-client"
@@ -13,7 +13,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -36,7 +36,7 @@ model Service {
   category        String
   durationMinutes Int
   priceCents      Int
-  description     String?
+  description     String?  @db.Text
   active          Boolean  @default(true)
   sortOrder       Int      @default(0)
   createdAt       DateTime @default(now())
@@ -69,7 +69,7 @@ model AvailabilityException {
   allDay      Boolean  @default(true)
   startMinute Int?
   endMinute   Int?
-  reason      String?
+  reason      String?  @db.Text
 
   staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
 
@@ -87,7 +87,7 @@ model Appointment {
   endAt         DateTime
   /// "requested" | "confirmed" | "cancelled"
   status        String   @default("requested")
-  note          String?
+  note          String?  @db.Text
   createdAt     DateTime @default(now())
 
   service Service @relation(fields: [serviceId], references: [id])
