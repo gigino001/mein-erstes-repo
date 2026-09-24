@@ -1,5 +1,9 @@
 [build]
   base = "website"
+  # Turbopack builds (this project's default) skip the "Collecting build
+  # traces" step that @netlify/plugin-nextjs needs to bundle server
+  # functions, so force the webpack builder here.
+  command = "npm run build -- --webpack"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
