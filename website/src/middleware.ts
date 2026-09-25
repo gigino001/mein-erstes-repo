@@ -3,10 +3,10 @@ import type { NextRequest } from "next/server";
 import { decryptSession } from "@/lib/session";
 import { SESSION_COOKIE_NAME } from "@/lib/session";
 
-// Optimistischer Check (nur Cookie, keine DB-Abfrage) — siehe Next.js-Doku
-// "Optimistic checks with Proxy". Die eigentliche, sichere Prüfung passiert
-// zusätzlich in jeder Admin-Seite/Server Action über verifyAdminSession().
-export async function proxy(request: NextRequest) {
+// Optimistischer Check (nur Cookie, keine DB-Abfrage) — die eigentliche,
+// sichere Prüfung passiert zusätzlich in jeder Admin-Seite/Server Action
+// über verifyAdminSession().
+export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isLoginRoute = path === "/admin/login";
 

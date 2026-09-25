@@ -43,7 +43,7 @@ export function BookingForm({ services, staffId }: { services: Service[]; staffI
 
   useEffect(() => {
     if (!serviceId || !date) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- gewünschtes Verhalten: Auswahl zurücksetzen, sobald Leistung/Datum wechseln
+    // Gewünschtes Verhalten: Auswahl zurücksetzen, sobald Leistung/Datum wechseln.
     setSlot(null);
     setLoadingSlots(true);
     const params = new URLSearchParams({ serviceId, staffId, date });

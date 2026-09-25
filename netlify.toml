@@ -1,8 +1,5 @@
 [build]
   base = "website"
-  # See README.md "Netlify-Preview" for the current, unresolved blocker:
-  # declaring `[[plugins]] package = "@netlify/plugin-nextjs"` here makes
-  # every build fail (exit code 2, no database provisioned either);
-  # without it the build succeeds and the database works, but no server
-  # functions get bundled, so every route 404s. Left at the safer
-  # (build-succeeds) state for now.
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

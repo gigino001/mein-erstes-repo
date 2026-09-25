@@ -85,32 +85,22 @@ dem echten Go-live entweder der Provider wieder auf `mysql` zurückgestellt
 werden (inkl. neuer Migration) oder ALL-INKL gegen einen externen
 Postgres-Host getauscht werden — das ist noch offen.
 
-### Bekanntes Problem: Netlify liefert noch keine Server-Functions aus
+### Next.js-Version: 15.x statt 16.x
 
-Der Deploy per Netlify-CLI/-MCP (Zip-Upload, kein Git-Link) baut erfolgreich
-und die Datenbank funktioniert, aber Next.js' dynamische Routen (Admin,
-`/api/availability`, serverseitig gerenderte Seiten) werden nicht
-ausgeliefert — jede URL liefert 404, weil keine Netlify Functions gebaut
-werden:
+Das Projekt lief zwischenzeitlich auf Next.js 16.3.6, das zu diesem
+Zeitpunkt noch nicht von Netlifys Next.js-Runtime-Plugin unterstützt wurde
+(jeder Deploy mit explizitem `[[plugins]] package = "@netlify/plugin-nextjs"`
+brach mit Exit-Code 2 ab, ohne das Plugin wurden gar keine Server-Functions
+gebaut → jede URL 404). Deshalb wieder auf die aktuelle Next.js-15-Version
+zurückgestellt (kompatibel mit dem Netlify-Runtime-Plugin). Dabei angepasst:
+- `src/proxy.ts` → `src/middleware.ts` (Next 16 nannte die Datei/Funktion
+  `proxy`, Next 15 nutzt noch `middleware`).
+- `eslint.config.mjs` auf das in Next 15 übliche `FlatCompat`-Format
+  umgestellt.
+- `prisma.config.ts`: `earlyAccess` entfernt (nicht mehr im aktuellen
+  Prisma-Config-Typ vorhanden).
+- Ein `eslint-disable`-Kommentar in `BookingForm.tsx` entfernt, der eine
+  Regel referenzierte, die in dieser Next/eslint-Kombination nicht
+  existiert.
 
-- **Ohne** `[[plugins]] package = "@netlify/plugin-nextjs"` in
-  `netlify.toml`: Build läuft durch, DB funktioniert, aber 0 Functions
-  gebaut (`plugin_state: "none"`) → alles 404.
-- **Mit** explizitem Plugin-Eintrag: Build bricht mit Exit-Code 2 ab, ohne
-  nutzbares Log; dabei wird auch keine Datenbank mehr bereitgestellt.
-
-Vermutung: Das Netlify-Next.js-Runtime-Plugin (aktuell 5.16.0) ist noch
-nicht mit Next.js 16 kompatibel (siehe `AGENTS.md`: "This is NOT the
-Next.js you know — breaking changes"). Turbopack-Builds wurden bereits als
-Teilursache ausgeschlossen (deshalb erzwingt `package.json`s `build`-Skript
-`--webpack`).
-
-Nächste sinnvolle Schritte, sobald wer Zeit dafür hat:
-1. Die Website stattdessen per **GitHub-Verbindung** (Continuous Deployment)
-   statt per Zip-Upload deployen — Netlifys Standard-Build-Pipeline
-   behandelt Framework- und Extension-Erkennung ggf. zuverlässiger.
-2. Falls das Problem bestehen bleibt: bei Netlify/`@netlify/plugin-nextjs`
-   nach offiziellem Next.js-16-Support fragen, oder testweise auf eine
-   Next.js-15-Version zurückgehen.
-3. `netlify.toml` aktuell bewusst **ohne** explizites Plugin belassen
-   (Build funktioniert, DB funktioniert) statt im kaputten Zustand.
+`netlify.toml` deklariert das Plugin jetzt wieder explizit.
