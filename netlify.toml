@@ -1,2 +1,5 @@
 [build]
   base = "website"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
