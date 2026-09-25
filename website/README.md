@@ -96,7 +96,10 @@ Kommentar). Build, Lint und `next start` laufen sauber.
 ### Admin-Login auf Netlify
 
 `ADMIN_PASSWORD_HASH` und `SESSION_SECRET` sind als Netlify-Umgebungsvariablen
-gesetzt (nicht im Repo, siehe `.env.example` für lokale Entwicklung). Das
+gesetzt (nicht im Repo, siehe `.env.example` für lokale Entwicklung; wichtig:
+`envVarIsSecret`/"Secret"-Markierung führte beim Setzen über die Netlify-API
+zu einem stillen No-Op — die Variablen landeten nirgendwo, ohne Fehlermeldung.
+Ohne diese Markierung wurden sie korrekt übernommen). Das
 Admin-Passwort selbst steht nirgendwo im Code — nur der/die Website-Betreiber:in
 kennt es. Nach dem Setzen/Ändern dieser Variablen ist ein neuer Deploy nötig,
 damit die Netlify Function sie übernimmt (Umgebungsvariablen wirken erst ab
