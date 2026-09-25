@@ -45,16 +45,18 @@ export default async function HomePage() {
             </Link>
           </div>
         </ScrollFadeIn>
-        <div className="aspect-[4/5] rounded-3xl bg-sky-mist flex flex-col items-center justify-center gap-4 p-10">
+        <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-sky-mist">
           <Image
-            src="/images/lashes/eye-4-sky-dense.jpg"
-            alt="Illustration: Mega-Volumen-Wimpernset"
-            width={800}
-            height={800}
-            className="w-full max-w-[280px] h-auto"
+            src="/images/lashes-photo/photo-4-sky-dense.jpg"
+            alt="Nahaufnahme: Mega-Volumen-Wimpernset"
+            fill
+            sizes="(min-width: 768px) 45vw, 100vw"
+            className="object-cover"
             priority
           />
-          <span className="text-xs text-ink-muted">Platzhalter-Illustration — echtes Foto folgt</span>
+          <span className="absolute bottom-4 left-4 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
+            Beispielbild — echtes Foto folgt
+          </span>
         </div>
       </section>
 
@@ -163,17 +165,17 @@ export default async function HomePage() {
           {[1, 2, 3, 4].map((n) => (
             <div
               key={n}
-              className="shrink-0 w-[300px] md:w-[340px] aspect-square rounded-2xl bg-[#2C3B44] flex flex-col items-center justify-center gap-3 p-8"
+              className="relative shrink-0 w-[300px] md:w-[340px] aspect-square rounded-2xl overflow-hidden bg-[#2C3B44]"
             >
               <Image
-                src={n % 2 === 0 ? "/images/lashes/eye-6-dark-dense.jpg" : "/images/lashes/eye-3-dark-natural.jpg"}
-                alt={n % 2 === 0 ? "Illustration: volles Wimpernset" : "Illustration: natürliches Wimpernset"}
-                width={800}
-                height={800}
-                className="w-full max-w-[220px] h-auto"
+                src={n % 2 === 0 ? "/images/lashes-photo/photo-6-dark-dense.jpg" : "/images/lashes-photo/photo-3-dark-natural.jpg"}
+                alt={n % 2 === 0 ? "Nahaufnahme: volles Wimpernset" : "Nahaufnahme: natürliches Wimpernset"}
+                fill
+                sizes="340px"
+                className="object-cover"
               />
-              <span className="text-xs text-[#9FB0B8]">
-                {n % 2 === 0 ? "Nachher" : "Vorher"} · Illustration
+              <span className="absolute bottom-3 left-3 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                {n % 2 === 0 ? "Nachher" : "Vorher"} · Beispielbild
               </span>
             </div>
           ))}
