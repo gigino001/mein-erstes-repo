@@ -9,13 +9,17 @@
 // festen Werten — das hält das Schema portabel und Änderungen an den Werten
 // brauchen keine Migration.
 
+// Driver Adapters (queryCompiler + "pg") statt der nativen Query-Engine-Binary:
+// Netlify Functions laufen auf einer anderen Plattform als der Netlify-Build-
+// Container (Debian vs. RHEL), was mit der nativen Engine trotz binaryTargets
+// zuverlässig zu "Query Engine not found"-Fehlern zur Laufzeit führte. Der
+// Driver Adapter spricht stattdessen direkt über den "pg"-Treiber mit
+// Postgres, keine plattformspezifische Binary nötig.
 generator client {
-  provider      = "prisma-client"
-  output        = "../src/generated/prisma"
-  // "native" für lokale Entwicklung/Builds (Debian hier); "rhel-openssl-3.0.x"
-  // zusätzlich, weil Netlify Functions (Next.js Runtime) auf einer anderen
-  // Plattform laufen als der Netlify-Build-Container selbst.
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat = "esm"
+  engineType = "client"
 }
 
 datasource db {

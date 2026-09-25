@@ -1,6 +1,6 @@
 [build]
   base = "website"
-  command = "npm run build && mkdir -p .next/server/chunks && cp src/generated/prisma/libquery_engine-*.so.node .next/server/chunks/"
+  command = "npm run build"
   publish = ".next"
 
 [[plugins]]

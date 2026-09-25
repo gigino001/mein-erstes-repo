@@ -117,3 +117,24 @@ nicht der Zip-Upload-Weg):
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 ```
+
+### Prisma auf Netlify: Driver Adapter statt native Query-Engine
+
+Erste Version nach dem Deploy-Fix: Seiten liefen, aber jede Anfrage, die
+zur Laufzeit (nicht beim Build) auf die DB zugriff — allen voran
+`/api/availability`, wodurch die Terminbuchung immer "keine Termine frei"
+zeigte — lieferte einen leeren 500er. Ursache (gefunden über einen
+temporären Debug-Passthrough in der Route, der den echten Fehler statt
+eines leeren 500ers zurückgab): Prismas native Query-Engine wird beim
+Netlify-Build für Debian gebaut, die tatsächliche Netlify-Function-Laufzeit
+ist aber RHEL-basiert. Weder `binaryTargets = ["native", "rhel-openssl-3.0.x"]`
+noch `outputFileTracingIncludes` noch ein manueller Copy-Schritt ins
+Function-Bundle haben zuverlässig funktioniert (die RHEL-Engine landete
+nie an einem der von Prisma zur Laufzeit abgesuchten Pfade).
+
+Die robuste Lösung: `generator client` nutzt jetzt `engineType = "client"`
+(Query Compiler statt nativer Engine) zusammen mit einem Driver Adapter
+(`@prisma/adapter-pg`, direkt über den `pg`-Treiber) — dadurch wird gar
+keine plattformspezifische Binary mehr gebraucht. `src/lib/prisma.ts` und
+`prisma/seed.ts` erzeugen den `PrismaClient` entsprechend mit
+`new PrismaPg({ connectionString })` statt über `datasources`.

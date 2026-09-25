@@ -1,4 +1,5 @@
 import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { getConnectionString } from "@netlify/database";
 
 // Verhindert im Next.js-Dev-Modus (Hot Reload) mehrfache PrismaClient-Instanzen.
@@ -12,7 +13,8 @@ const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 // Import abstürzen zu lassen.
 function createPrismaClient() {
   const connectionString = process.env.DATABASE_URL ?? getConnectionString();
-  return new PrismaClient({ datasources: { db: { url: connectionString } } });
+  const adapter = new PrismaPg({ connectionString });
+  return new PrismaClient({ adapter });
 }
 
 function getPrisma() {
