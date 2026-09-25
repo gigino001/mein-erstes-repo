@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Monogram } from "@/components/art/Monogram";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Über mich",
@@ -17,9 +17,17 @@ export default function UeberMichPage() {
         <h1 className="font-display italic font-medium text-4xl md:text-5xl">Hi, ich bin Claudia.</h1>
       </div>
 
-      <div className="aspect-video rounded-3xl bg-coral-soft flex flex-col items-center justify-center gap-4 p-8">
-        <Monogram className="h-full max-h-[160px]" />
-        <span className="text-xs text-[#8A5F5D]">Platzhalter — echtes Foto folgt</span>
+      <div className="relative aspect-video rounded-3xl overflow-hidden bg-coral-soft">
+        <Image
+          src="/images/portrait/demo-portrait.jpg"
+          alt="Beispielporträt (Platzhalter)"
+          fill
+          sizes="768px"
+          className="object-cover object-[center_25%]"
+        />
+        <span className="absolute bottom-4 left-4 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
+          Demobild — echtes Foto folgt
+        </span>
       </div>
 
       <div className="flex flex-col gap-6 text-lg leading-relaxed text-ink-soft">

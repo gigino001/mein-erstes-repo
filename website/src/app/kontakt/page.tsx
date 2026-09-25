@@ -18,7 +18,7 @@ export default function KontaktPage() {
         <h1 className="font-poster uppercase text-5xl md:text-6xl">Kontakt</h1>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-12">
+      <div className="grid md:grid-cols-2 gap-12 items-stretch">
         <div className="flex flex-col gap-6">
           <div>
             <h2 className="font-poster uppercase text-2xl mb-3">Öffnungszeiten</h2>
@@ -59,7 +59,7 @@ export default function KontaktPage() {
           </div>
         </div>
 
-        <div className="rounded-3xl overflow-hidden aspect-square md:aspect-auto min-h-[320px] bg-sky-mist">
+        <div className="rounded-3xl overflow-hidden aspect-square md:aspect-auto min-h-[320px] md:min-h-0 bg-sky-mist">
           <iframe
             title="Standort coco lashes"
             src={`https://www.google.com/maps?q=${mapsQuery}&output=embed`}

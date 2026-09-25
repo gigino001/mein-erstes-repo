@@ -5,7 +5,6 @@ import { formatPrice, formatDuration } from "@/lib/format";
 import { business } from "@/lib/business";
 import { ScrollFadeIn } from "@/components/motion/ScrollFadeIn";
 import { ScrollPanRow } from "@/components/motion/ScrollPanRow";
-import { Monogram } from "@/components/art/Monogram";
 
 export default async function HomePage() {
   const featuredServices = await prisma.service.findMany({
@@ -135,9 +134,17 @@ export default async function HomePage() {
 
       {/* ÜBER MICH TEASER */}
       <section className="px-6 md:px-18 py-24 grid md:grid-cols-[1fr_1.2fr] gap-14 items-center">
-        <div className="aspect-[4/5] rounded-3xl bg-coral-soft flex flex-col items-center justify-center gap-4 p-10">
-          <Monogram className="w-full max-w-[180px]" />
-          <span className="text-xs text-[#8A5F5D]">Platzhalter — echtes Porträt folgt</span>
+        <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-coral-soft">
+          <Image
+            src="/images/portrait/demo-portrait.jpg"
+            alt="Beispielporträt (Platzhalter)"
+            fill
+            sizes="(min-width: 768px) 40vw, 100vw"
+            className="object-cover"
+          />
+          <span className="absolute bottom-4 left-4 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
+            Demobild — echtes Porträt folgt
+          </span>
         </div>
         <ScrollFadeIn className="flex flex-col gap-6">
           <span className="text-[13px] font-semibold tracking-[0.14em] uppercase text-ocean">Über mich</span>
