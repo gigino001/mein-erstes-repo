@@ -93,6 +93,15 @@ nötigen Anpassungen: `src/proxy.ts` → `src/middleware.ts`,
 `eslint.config.mjs`, `prisma.config.ts`, ein veralteter `eslint-disable`-
 Kommentar). Build, Lint und `next start` laufen sauber.
 
+### Admin-Login auf Netlify
+
+`ADMIN_PASSWORD_HASH` und `SESSION_SECRET` sind als Netlify-Umgebungsvariablen
+gesetzt (nicht im Repo, siehe `.env.example` für lokale Entwicklung). Das
+Admin-Passwort selbst steht nirgendwo im Code — nur der/die Website-Betreiber:in
+kennt es. Nach dem Setzen/Ändern dieser Variablen ist ein neuer Deploy nötig,
+damit die Netlify Function sie übernimmt (Umgebungsvariablen wirken erst ab
+dem nächsten Build, nicht sofort auf bereits laufende Functions).
+
 ### Netlify-Deploy: gelöst
 
 Nach einigem Herumraten (Next.js-Version, Turbopack/Webpack, Zip-Upload
