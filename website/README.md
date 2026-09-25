@@ -87,20 +87,42 @@ Postgres-Host getauscht werden — das ist noch offen.
 
 ### Next.js-Version: 15.x statt 16.x
 
-Das Projekt lief zwischenzeitlich auf Next.js 16.3.6, das zu diesem
-Zeitpunkt noch nicht von Netlifys Next.js-Runtime-Plugin unterstützt wurde
-(jeder Deploy mit explizitem `[[plugins]] package = "@netlify/plugin-nextjs"`
-brach mit Exit-Code 2 ab, ohne das Plugin wurden gar keine Server-Functions
-gebaut → jede URL 404). Deshalb wieder auf die aktuelle Next.js-15-Version
-zurückgestellt (kompatibel mit dem Netlify-Runtime-Plugin). Dabei angepasst:
-- `src/proxy.ts` → `src/middleware.ts` (Next 16 nannte die Datei/Funktion
-  `proxy`, Next 15 nutzt noch `middleware`).
-- `eslint.config.mjs` auf das in Next 15 übliche `FlatCompat`-Format
-  umgestellt.
-- `prisma.config.ts`: `earlyAccess` entfernt (nicht mehr im aktuellen
-  Prisma-Config-Typ vorhanden).
-- Ein `eslint-disable`-Kommentar in `BookingForm.tsx` entfernt, der eine
-  Regel referenzierte, die in dieser Next/eslint-Kombination nicht
-  existiert.
+Das Projekt lief zwischenzeitlich auf Next.js 16.3.6, deshalb wieder auf
+die aktuelle Next.js-15-Version zurückgestellt (siehe Git-Historie für die
+nötigen Anpassungen: `src/proxy.ts` → `src/middleware.ts`,
+`eslint.config.mjs`, `prisma.config.ts`, ein veralteter `eslint-disable`-
+Kommentar). Build, Lint und `next start` laufen sauber.
+
+### Bekanntes Problem: Zip-Upload-Deploy liefert keine Server-Functions
+
+Wichtig, damit das nicht nochmal von vorne untersucht wird: Das
+Next.js-16-Problem war **nicht** die Ursache für die 404s beim Deploy —
+das gleiche Verhalten tritt identisch mit Next.js 15 auf. Getestet mit
+Next 15.5.26:
+
+- **Ohne** `[[plugins]] package = "@netlify/plugin-nextjs"`: Build läuft
+  durch, Datenbank wird provisioniert, aber 0 Functions gebaut
+  (`plugin_state: "none"`) → jede URL 404.
+- **Mit** explizitem Plugin-Eintrag: Build bricht mit Exit-Code 2 ab
+  (kein einsehbares Log über die verfügbaren Netlify-MCP-Tools), dabei
+  wird auch keine Datenbank mehr bereitgestellt.
+
+Das Muster ist beim Deploy per **Zip-Upload über die Netlify-Builds-API**
+(`@netlify/mcp`/CLI, `deploy_source: "api"`) reproduzierbar über zwei
+Next.js-Hauptversionen hinweg identisch — das Next.js-Runtime-Plugin wird
+auf diesem Weg strukturell nicht korrekt eingebunden, unabhängig von
+Next.js-Version oder Turbopack/Webpack. Das ist vermutlich eine
+Einschränkung dieses speziellen Deploy-Wegs, kein App- oder
+Next.js-Versionsproblem.
+
+**Nächster Schritt:** Die Website stattdessen per **GitHub-Verbindung**
+(Continuous Deployment) in Netlify deployen — Site configuration → Build
+& deploy → Repository verknüpfen, Branch `claude/lash-extension-preview-ln6mwh`
+(oder den jeweils aktuellen Branch). Das läuft über Netlifys reguläre
+CI-Build-Pipeline statt der Zip-Upload-API und sollte Framework- und
+Extension-Erkennung zuverlässig durchführen. `netlify.toml` ist bereits
+korrekt vorbereitet (`base = "website"`); ob das Plugin dort explizit
+deklariert werden muss oder Zero-Config reicht, lässt sich erst nach dem
+ersten Git-getriggerten Build sagen.
 
 `netlify.toml` deklariert das Plugin jetzt wieder explizit.
