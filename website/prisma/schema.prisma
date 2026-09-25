@@ -10,8 +10,12 @@
 // brauchen keine Migration.
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client"
+  output        = "../src/generated/prisma"
+  // "native" für lokale Entwicklung/Builds (Debian hier); "rhel-openssl-3.0.x"
+  // zusätzlich, weil Netlify Functions (Next.js Runtime) auf einer anderen
+  // Plattform laufen als der Netlify-Build-Container selbst.
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
