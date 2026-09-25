@@ -93,36 +93,27 @@ nötigen Anpassungen: `src/proxy.ts` → `src/middleware.ts`,
 `eslint.config.mjs`, `prisma.config.ts`, ein veralteter `eslint-disable`-
 Kommentar). Build, Lint und `next start` laufen sauber.
 
-### Bekanntes Problem: Zip-Upload-Deploy liefert keine Server-Functions
+### Netlify-Deploy: gelöst
 
-Wichtig, damit das nicht nochmal von vorne untersucht wird: Das
-Next.js-16-Problem war **nicht** die Ursache für die 404s beim Deploy —
-das gleiche Verhalten tritt identisch mit Next.js 15 auf. Getestet mit
-Next 15.5.26:
+Nach einigem Herumraten (Next.js-Version, Turbopack/Webpack, Zip-Upload
+vs. Git-Deploy — alles Sackgassen) war die eigentliche Ursache simpel: In
+`netlify.toml` fehlte zeitweise der `command`, wodurch `next build` nie
+lief und `.next` nie entstand — das `@netlify/plugin-nextjs`-Plugin brach
+deshalb mit "publish directory was not found" ab (nur im Netlify-eigenen
+Deploy-Log sichtbar, nicht über die verfügbaren Netlify-MCP-Tools). Davor
+gab es zusätzlich einen Konflikt, weil `publish` implizit auf denselben
+Pfad wie `base` zeigte (Altlast aus der ursprünglichen Einrichtung für
+die alte statische PWA).
 
-- **Ohne** `[[plugins]] package = "@netlify/plugin-nextjs"`: Build läuft
-  durch, Datenbank wird provisioniert, aber 0 Functions gebaut
-  (`plugin_state: "none"`) → jede URL 404.
-- **Mit** explizitem Plugin-Eintrag: Build bricht mit Exit-Code 2 ab
-  (kein einsehbares Log über die verfügbaren Netlify-MCP-Tools), dabei
-  wird auch keine Datenbank mehr bereitgestellt.
+Die jetzige, funktionierende Konfiguration (Git-Verbindung zu GitHub,
+nicht der Zip-Upload-Weg):
 
-Das Muster ist beim Deploy per **Zip-Upload über die Netlify-Builds-API**
-(`@netlify/mcp`/CLI, `deploy_source: "api"`) reproduzierbar über zwei
-Next.js-Hauptversionen hinweg identisch — das Next.js-Runtime-Plugin wird
-auf diesem Weg strukturell nicht korrekt eingebunden, unabhängig von
-Next.js-Version oder Turbopack/Webpack. Das ist vermutlich eine
-Einschränkung dieses speziellen Deploy-Wegs, kein App- oder
-Next.js-Versionsproblem.
+```toml
+[build]
+  base = "website"
+  command = "npm run build"
+  publish = ".next"
 
-**Nächster Schritt:** Die Website stattdessen per **GitHub-Verbindung**
-(Continuous Deployment) in Netlify deployen — Site configuration → Build
-& deploy → Repository verknüpfen, Branch `claude/lash-extension-preview-ln6mwh`
-(oder den jeweils aktuellen Branch). Das läuft über Netlifys reguläre
-CI-Build-Pipeline statt der Zip-Upload-API und sollte Framework- und
-Extension-Erkennung zuverlässig durchführen. `netlify.toml` ist bereits
-korrekt vorbereitet (`base = "website"`); ob das Plugin dort explizit
-deklariert werden muss oder Zero-Config reicht, lässt sich erst nach dem
-ersten Git-getriggerten Build sagen.
-
-`netlify.toml` deklariert das Plugin jetzt wieder explizit.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+```
