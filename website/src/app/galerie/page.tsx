@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EyeIllustration } from "@/components/art/EyeIllustration";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Galerie",
@@ -7,12 +7,12 @@ export const metadata: Metadata = {
 };
 
 const TILES = [
-  { bg: "bg-sky-mist", stroke: "#16232B", dense: false },
-  { bg: "bg-coral-soft", stroke: "#16232B", dense: true },
-  { bg: "bg-ink", stroke: "#EAF4F8", dense: false },
-  { bg: "bg-ink", stroke: "#EAF4F8", dense: true },
-  { bg: "bg-coral-soft", stroke: "#16232B", dense: false },
-  { bg: "bg-sky-mist", stroke: "#16232B", dense: true },
+  { bg: "bg-sky-mist", src: "/images/lashes/eye-1-sky-natural.jpg", alt: "Illustration: dezentes Wimpernset" },
+  { bg: "bg-coral-soft", src: "/images/lashes/eye-2-coral-dramatic.jpg", alt: "Illustration: dramatisches Wimpernset" },
+  { bg: "bg-ink", src: "/images/lashes/eye-3-dark-natural.jpg", alt: "Illustration: natürliches Wimpernset" },
+  { bg: "bg-ink", src: "/images/lashes/eye-6-dark-dense.jpg", alt: "Illustration: volles Wimpernset" },
+  { bg: "bg-coral-soft", src: "/images/lashes/eye-5-coral-natural.jpg", alt: "Illustration: klassisches Wimpernset" },
+  { bg: "bg-sky-mist", src: "/images/lashes/eye-4-sky-dense.jpg", alt: "Illustration: Mega-Volumen-Wimpernset" },
 ];
 
 export default function GaleriePage() {
@@ -34,7 +34,13 @@ export default function GaleriePage() {
             key={i}
             className={`aspect-square rounded-2xl ${tile.bg} flex items-center justify-center p-8`}
           >
-            <EyeIllustration dense={tile.dense} stroke={tile.stroke} className="w-full" />
+            <Image
+              src={tile.src}
+              alt={tile.alt}
+              width={800}
+              height={800}
+              className="w-full h-auto"
+            />
           </div>
         ))}
       </div>

@@ -1,10 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { formatPrice, formatDuration } from "@/lib/format";
 import { business } from "@/lib/business";
 import { ScrollFadeIn } from "@/components/motion/ScrollFadeIn";
 import { ScrollPanRow } from "@/components/motion/ScrollPanRow";
-import { EyeIllustration } from "@/components/art/EyeIllustration";
 import { Monogram } from "@/components/art/Monogram";
 
 export default async function HomePage() {
@@ -46,7 +46,14 @@ export default async function HomePage() {
           </div>
         </ScrollFadeIn>
         <div className="aspect-[4/5] rounded-3xl bg-sky-mist flex flex-col items-center justify-center gap-4 p-10">
-          <EyeIllustration dense className="w-full max-w-[280px]" />
+          <Image
+            src="/images/lashes/eye-4-sky-dense.jpg"
+            alt="Illustration: Mega-Volumen-Wimpernset"
+            width={800}
+            height={800}
+            className="w-full max-w-[280px] h-auto"
+            priority
+          />
           <span className="text-xs text-ink-muted">Platzhalter-Illustration — echtes Foto folgt</span>
         </div>
       </section>
@@ -158,11 +165,12 @@ export default async function HomePage() {
               key={n}
               className="shrink-0 w-[300px] md:w-[340px] aspect-square rounded-2xl bg-[#2C3B44] flex flex-col items-center justify-center gap-3 p-8"
             >
-              <EyeIllustration
-                dense={n % 2 === 0}
-                stroke="#EAF4F8"
-                accent="#FF9398"
-                className="w-full max-w-[220px]"
+              <Image
+                src={n % 2 === 0 ? "/images/lashes/eye-6-dark-dense.jpg" : "/images/lashes/eye-3-dark-natural.jpg"}
+                alt={n % 2 === 0 ? "Illustration: volles Wimpernset" : "Illustration: natürliches Wimpernset"}
+                width={800}
+                height={800}
+                className="w-full max-w-[220px] h-auto"
               />
               <span className="text-xs text-[#9FB0B8]">
                 {n % 2 === 0 ? "Nachher" : "Vorher"} · Illustration
