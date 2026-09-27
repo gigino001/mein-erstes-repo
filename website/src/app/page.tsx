@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { formatPrice, formatDuration } from "@/lib/format";
 import { business } from "@/lib/business";
 import { ScrollFadeIn } from "@/components/motion/ScrollFadeIn";
-import { ScrollPanRow } from "@/components/motion/ScrollPanRow";
+import { ScrollPanColumn } from "@/components/motion/ScrollPanColumn";
 
 export default async function HomePage() {
   const featuredServices = await prisma.service.findMany({
@@ -165,20 +165,20 @@ export default async function HomePage() {
         <div className="px-6 md:px-18 flex flex-col gap-2">
           <h2 className="font-poster uppercase text-4xl md:text-5xl text-white">Vorher × Nachher</h2>
           <span className="text-xs text-[#6E828B]">
-            ↳ Bewegt sich beim Scrollen von rechts nach links
+            ↳ Bewegt sich beim Scrollen nach oben durch
           </span>
         </div>
-        <ScrollPanRow>
+        <ScrollPanColumn>
           {[1, 2, 3, 4].map((n) => (
             <div
               key={n}
-              className="relative shrink-0 w-[300px] md:w-[340px] aspect-square rounded-2xl overflow-hidden bg-[#2C3B44]"
+              className="relative shrink-0 w-full max-w-md mx-auto aspect-[4/3] rounded-2xl overflow-hidden bg-[#2C3B44]"
             >
               <Image
                 src={n % 2 === 0 ? "/images/lashes-photo/photo-6-dark-dense.jpg" : "/images/lashes-photo/photo-3-dark-natural.jpg"}
                 alt={n % 2 === 0 ? "Nahaufnahme: volles Wimpernset" : "Nahaufnahme: natürliches Wimpernset"}
                 fill
-                sizes="340px"
+                sizes="(min-width: 768px) 448px, 90vw"
                 className="object-cover"
               />
               <span className="absolute bottom-3 left-3 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
@@ -186,7 +186,7 @@ export default async function HomePage() {
               </span>
             </div>
           ))}
-        </ScrollPanRow>
+        </ScrollPanColumn>
       </section>
 
       {/* KUNDINNENSTIMMEN */}

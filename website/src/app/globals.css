@@ -2,10 +2,18 @@
 
 :root {
   --color-white: #ffffff;
-  --color-sky-mist: #eaf4f8;
+  /* Seitenhintergrund (war reines Weiß) — warmes, gedecktes Creme. */
+  --color-canvas: #f7f1ee;
+  /* Kartenflächen/Kacheln (war ein bläuliches Hellblau) — Name "sky-mist"
+     blieb aus Kompatibilität zu den Utility-Klassen (bg-sky-mist etc.),
+     die Farbe selbst ist jetzt ein warmer Rosé-Ton. */
+  --color-sky-mist: #f3e3e0;
   --color-coral: #ff9398;
   --color-coral-soft: #ffdcdd;
-  --color-ocean: #2779a7;
+  /* Akzentfarbe (war Ocean-Blau #2779a7) — Name blieb aus Kompatibilität
+     zu den Utility-Klassen (bg-ocean, text-ocean etc.), Farbe ist jetzt
+     ein warmes Beere-Rot. */
+  --color-ocean: #a8475a;
   --color-ink: #16232b;
   --color-ink-soft: #4b5a63;
   --color-ink-muted: #6b7e87;
@@ -13,6 +21,7 @@
 
 @theme inline {
   --color-white: var(--color-white);
+  --color-canvas: var(--color-canvas);
   --color-sky-mist: var(--color-sky-mist);
   --color-coral: var(--color-coral);
   --color-coral-soft: var(--color-coral-soft);
@@ -27,7 +36,7 @@
 }
 
 body {
-  background: var(--color-white);
+  background: var(--color-canvas);
   color: var(--color-ink);
   font-family: var(--font-sans);
 }
