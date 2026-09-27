@@ -78,7 +78,7 @@ export function ServiceSelect({
             if (items.length === 0) return null;
             return (
               <div key={category}>
-                <p className="px-4 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-muted">
+                <p className="px-4 pt-3 pb-1.5 text-sm font-bold uppercase tracking-[0.06em] text-ocean">
                   {CATEGORY_LABELS[category]}
                 </p>
                 {items.map((s) => (

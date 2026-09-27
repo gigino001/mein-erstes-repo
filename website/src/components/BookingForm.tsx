@@ -45,7 +45,8 @@ export function BookingForm({
   const [slots, setSlots] = useState<string[]>([]);
   const [slot, setSlot] = useState<string | null>(null);
   const [loadingSlots, setLoadingSlots] = useState(false);
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [instagram, setInstagram] = useState("");
@@ -82,7 +83,7 @@ export function BookingForm({
       staffId,
       date,
       slot,
-      customerName: name,
+      customerName: `${firstName.trim()} ${lastName.trim()}`.trim(),
       customerEmail: email,
       customerPhone: phone,
       customerInstagram: instagram,
@@ -154,17 +155,32 @@ export function BookingForm({
 
       <div className="grid md:grid-cols-2 gap-5">
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold" htmlFor="name">
-            Name
+          <label className="text-sm font-semibold" htmlFor="firstName">
+            Vorname
           </label>
           <input
-            id="name"
+            id="firstName"
             required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             className={fieldClass}
           />
         </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-semibold" htmlFor="lastName">
+            Nachname
+          </label>
+          <input
+            id="lastName"
+            required
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className={fieldClass}
+          />
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-5">
         <div className="flex flex-col gap-2">
           <label className="text-sm font-semibold" htmlFor="phone">
             Telefon
@@ -178,20 +194,19 @@ export function BookingForm({
             className={fieldClass}
           />
         </div>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold" htmlFor="email">
-          E-Mail
-        </label>
-        <input
-          id="email"
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className={fieldClass}
-        />
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-semibold" htmlFor="email">
+            E-Mail
+          </label>
+          <input
+            id="email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={fieldClass}
+          />
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
