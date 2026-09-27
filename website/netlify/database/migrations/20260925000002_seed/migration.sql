@@ -1,4 +1,9 @@
--- Grunddaten für den Netlify-Preview, entspricht prisma/seed.ts.
+-- Grunddaten für den Netlify-Preview.
+-- WICHTIG: Diese Migration wurde bereits auf der Live-DB angewendet — Netlify
+-- prüft den Inhalt bereits angewendeter Migrationen per Checksum und lehnt
+-- den Deploy ab, wenn sich diese Datei ändert. Änderungen an bestehenden
+-- Daten gehören daher in eine NEUE Migration (siehe z. B.
+-- 20260927000001_service_descriptions), niemals in diese Datei.
 
 INSERT INTO "Staff" ("id", "name", "active") VALUES
     ('staff-claudia', 'Claudia Gajda', true)
@@ -13,18 +18,18 @@ INSERT INTO "Availability" ("id", "staffId", "weekday", "startMinute", "endMinut
 ON CONFLICT ("id") DO NOTHING;
 
 INSERT INTO "Service" ("id", "category", "name", "description", "durationMinutes", "priceCents", "sortOrder") VALUES
-    ('service-1', 'neumodellage', 'Neumodellage 1:1 (Classic)', 'Wimper-für-Wimper-Technik für ein natürliches, dezentes Ergebnis, das deine eigenen Wimpern betont.', 90, 8000, 1),
-    ('service-2', 'neumodellage', 'Neumodellage Light Volumen', 'Feine Volumenfächer für ein weiches, leicht verdichtetes Wimpernbild — mehr Fülle, ohne aufzutragen.', 90, 9000, 2),
-    ('service-3', 'neumodellage', 'Neumodellage Mega Volumen', 'Dichte Volumenfächer für einen intensiven, ausdrucksstarken Blick mit maximaler Fülle.', 90, 10000, 3),
+    ('service-1', 'neumodellage', 'Neumodellage 1:1 (Classic)', NULL, 90, 8000, 1),
+    ('service-2', 'neumodellage', 'Neumodellage Light Volumen', NULL, 90, 9000, 2),
+    ('service-3', 'neumodellage', 'Neumodellage Mega Volumen', NULL, 90, 10000, 3),
     ('service-4', 'neumodellage', 'Bloom Eyes Neumodellage', 'Wispy, Wet mit Farbe deiner Wahl. Für den extravaganten natürlichen Look.', 120, 9500, 4),
-    ('service-10', 'auffuellen', 'Auffülltermin 1:1 (2-3 Wochen)', 'Auffrischung deines 1:1-Sets nach 2 bis 3 Wochen, damit dein Look gepflegt und voll bleibt.', 60, 4000, 10),
-    ('service-11', 'auffuellen', 'Auffülltermin 1:1 (3-4 Wochen)', 'Auffrischung deines 1:1-Sets nach 3 bis 4 Wochen.', 60, 5000, 11),
-    ('service-12', 'auffuellen', 'Auffülltermin Light Volumen (2-3 Wochen)', 'Auffrischung deines Light-Volumen-Sets nach 2 bis 3 Wochen.', 60, 5000, 12),
-    ('service-13', 'auffuellen', 'Auffülltermin Light Volumen (3-4 Wochen)', 'Auffrischung deines Light-Volumen-Sets nach 3 bis 4 Wochen.', 60, 6000, 13),
-    ('service-14', 'auffuellen', 'Auffülltermin Mega Volumen (2-3 Wochen)', 'Auffrischung deines Mega-Volumen-Sets nach 2 bis 3 Wochen.', 60, 6000, 14),
-    ('service-15', 'auffuellen', 'Auffülltermin Mega Volumen (3-4 Wochen)', 'Auffrischung deines Mega-Volumen-Sets nach 3 bis 4 Wochen.', 60, 7000, 15),
-    ('service-16', 'auffuellen', 'Bloom Eyes Auffüllen (2-3 Wochen)', 'Auffrischung deines Bloom-Eyes-Sets nach 2 bis 3 Wochen.', 60, 5500, 16),
-    ('service-17', 'auffuellen', 'Bloom Eyes Auffüllen (3-4 Wochen)', 'Auffrischung deines Bloom-Eyes-Sets nach 3 bis 4 Wochen.', 60, 6500, 17),
-    ('service-20', 'sonstiges', 'Wimpern entfernen', 'Schonendes und rückstandsfreies Entfernen deiner Wimpernverlängerung.', 30, 1000, 20),
+    ('service-10', 'auffuellen', 'Auffülltermin 1:1 (2-3 Wochen)', NULL, 60, 4000, 10),
+    ('service-11', 'auffuellen', 'Auffülltermin 1:1 (3-4 Wochen)', NULL, 60, 5000, 11),
+    ('service-12', 'auffuellen', 'Auffülltermin Light Volumen (2-3 Wochen)', NULL, 60, 5000, 12),
+    ('service-13', 'auffuellen', 'Auffülltermin Light Volumen (3-4 Wochen)', NULL, 60, 6000, 13),
+    ('service-14', 'auffuellen', 'Auffülltermin Mega Volumen (2-3 Wochen)', NULL, 60, 6000, 14),
+    ('service-15', 'auffuellen', 'Auffülltermin Mega Volumen (3-4 Wochen)', NULL, 60, 7000, 15),
+    ('service-16', 'auffuellen', 'Bloom Eyes Auffüllen (2-3 Wochen)', NULL, 60, 5500, 16),
+    ('service-17', 'auffuellen', 'Bloom Eyes Auffüllen (3-4 Wochen)', NULL, 60, 6500, 17),
+    ('service-20', 'sonstiges', 'Wimpern entfernen', NULL, 30, 1000, 20),
     ('service-21', 'sonstiges', 'Modellarbeit', 'Du hast eine Anzeige gesehen, dass Models gesucht werden? Buch dich gerne dafür ein.', 120, 5000, 21)
 ON CONFLICT ("id") DO NOTHING;
