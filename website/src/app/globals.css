@@ -14,6 +14,8 @@
      zu den Utility-Klassen (bg-ocean, text-ocean etc.), Farbe ist jetzt
      ein warmes Beere-Rot. */
   --color-ocean: #a8475a;
+  /* Dritter Sektions-Ton (Leistungen-Seite) — helles, gedecktes Pflaume/Beere. */
+  --color-berry-soft: #eddce2;
   --color-ink: #16232b;
   --color-ink-soft: #4b5a63;
   --color-ink-muted: #6b7e87;
@@ -26,6 +28,7 @@
   --color-coral: var(--color-coral);
   --color-coral-soft: var(--color-coral-soft);
   --color-ocean: var(--color-ocean);
+  --color-berry-soft: var(--color-berry-soft);
   --color-ink: var(--color-ink);
   --color-ink-soft: var(--color-ink-soft);
   --color-ink-muted: var(--color-ink-muted);

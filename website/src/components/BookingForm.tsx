@@ -1,8 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { formatDuration, formatPrice, CATEGORY_LABELS } from "@/lib/format";
 import { requestAppointment } from "@/app/termin/actions";
+
+const fieldClass =
+  "border-2 border-ink/20 rounded-xl px-4 py-3 bg-white focus:border-ocean focus:outline-none transition-colors";
 
 type Service = {
   id: string;
@@ -32,6 +36,7 @@ export function BookingForm({ services, staffId }: { services: Service[]; staffI
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [note, setNote] = useState("");
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [status, setStatus] = useState<
     { type: "idle" } | { type: "submitting" } | { type: "success" } | { type: "error"; message: string }
   >({ type: "idle" });
@@ -56,7 +61,7 @@ export function BookingForm({ services, staffId }: { services: Service[]; staffI
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!slot || !selectedService) return;
+    if (!slot || !selectedService || !privacyAccepted) return;
     setStatus({ type: "submitting" });
     const result = await requestAppointment({
       serviceId,
@@ -93,26 +98,36 @@ export function BookingForm({ services, staffId }: { services: Service[]; staffI
         <label className="text-sm font-semibold" htmlFor="service">
           Leistung
         </label>
-        <select
-          id="service"
-          value={serviceId}
-          onChange={(e) => setServiceId(e.target.value)}
-          className="border border-sky-mist rounded-xl px-4 py-3 bg-white"
-        >
-          {["neumodellage", "auffuellen", "sonstiges"].map((category) => {
-            const items = services.filter((s) => s.category === category);
-            if (items.length === 0) return null;
-            return (
-              <optgroup key={category} label={CATEGORY_LABELS[category]}>
-                {items.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name} — {formatDuration(s.durationMinutes)} — {formatPrice(s.priceCents)}
-                  </option>
-                ))}
-              </optgroup>
-            );
-          })}
-        </select>
+        <div className="relative">
+          <select
+            id="service"
+            value={serviceId}
+            onChange={(e) => setServiceId(e.target.value)}
+            className={`${fieldClass} w-full appearance-none pr-11`}
+          >
+            {["neumodellage", "auffuellen", "sonstiges"].map((category) => {
+              const items = services.filter((s) => s.category === category);
+              if (items.length === 0) return null;
+              return (
+                <optgroup key={category} label={CATEGORY_LABELS[category]}>
+                  {items.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name} — {formatDuration(s.durationMinutes)} — {formatPrice(s.priceCents)}
+                    </option>
+                  ))}
+                </optgroup>
+              );
+            })}
+          </select>
+          <svg
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
+            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ocean"
+          >
+            <path d="M5 7.5l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -126,7 +141,7 @@ export function BookingForm({ services, staffId }: { services: Service[]; staffI
           min={todayStr()}
           max={maxDateStr()}
           onChange={(e) => setDate(e.target.value)}
-          className="border border-sky-mist rounded-xl px-4 py-3 bg-white"
+          className={fieldClass}
         />
       </div>
 
@@ -142,10 +157,10 @@ export function BookingForm({ services, staffId }: { services: Service[]; staffI
               type="button"
               key={s}
               onClick={() => setSlot(s)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold border ${
+              className={`px-4 py-2 rounded-full text-sm font-semibold border-2 ${
                 slot === s
                   ? "bg-ocean text-white border-ocean"
-                  : "bg-white text-ink border-sky-mist hover:border-ocean"
+                  : "bg-white text-ink border-ink/20 hover:border-ocean"
               }`}
             >
               {s}
@@ -164,7 +179,7 @@ export function BookingForm({ services, staffId }: { services: Service[]; staffI
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="border border-sky-mist rounded-xl px-4 py-3"
+            className={fieldClass}
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -177,7 +192,7 @@ export function BookingForm({ services, staffId }: { services: Service[]; staffI
             required
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="border border-sky-mist rounded-xl px-4 py-3"
+            className={fieldClass}
           />
         </div>
       </div>
@@ -192,7 +207,7 @@ export function BookingForm({ services, staffId }: { services: Service[]; staffI
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border border-sky-mist rounded-xl px-4 py-3"
+          className={fieldClass}
         />
       </div>
 
@@ -205,15 +220,33 @@ export function BookingForm({ services, staffId }: { services: Service[]; staffI
           value={note}
           onChange={(e) => setNote(e.target.value)}
           rows={3}
-          className="border border-sky-mist rounded-xl px-4 py-3"
+          className={fieldClass}
         />
       </div>
+
+      <label htmlFor="privacy" className="flex items-start gap-3 text-sm cursor-pointer">
+        <input
+          id="privacy"
+          type="checkbox"
+          required
+          checked={privacyAccepted}
+          onChange={(e) => setPrivacyAccepted(e.target.checked)}
+          className="mt-0.5 w-5 h-5 shrink-0 rounded border-2 border-ink/30 accent-ocean cursor-pointer"
+        />
+        <span className="text-ink-soft">
+          Ich habe die{" "}
+          <Link href="/datenschutz" target="_blank" className="font-semibold text-ocean underline">
+            Datenschutzerklärung
+          </Link>{" "}
+          gelesen und bin mit der Verarbeitung meiner Daten zur Terminanfrage einverstanden. *
+        </span>
+      </label>
 
       {status.type === "error" && <p className="text-sm text-coral font-semibold">{status.message}</p>}
 
       <button
         type="submit"
-        disabled={!slot || status.type === "submitting"}
+        disabled={!slot || !privacyAccepted || status.type === "submitting"}
         className="font-poster uppercase text-lg text-white bg-ocean rounded-full px-8 py-4 disabled:opacity-40 transition"
       >
         {status.type === "submitting" ? "Wird gesendet…" : "Termin anfragen"}

@@ -5,6 +5,7 @@ import { formatPrice, formatDuration } from "@/lib/format";
 import { business } from "@/lib/business";
 import { ScrollFadeIn } from "@/components/motion/ScrollFadeIn";
 import { ScrollPanColumn } from "@/components/motion/ScrollPanColumn";
+import { InstagramIcon } from "@/components/art/InstagramIcon";
 
 export default async function HomePage() {
   const featuredServices = await prisma.service.findMany({
@@ -169,21 +170,28 @@ export default async function HomePage() {
           </span>
         </div>
         <ScrollPanColumn>
-          {[1, 2, 3, 4].map((n) => (
-            <div
-              key={n}
-              className="relative shrink-0 w-full max-w-md mx-auto aspect-[4/3] rounded-2xl overflow-hidden bg-[#2C3B44]"
-            >
-              <Image
-                src={n % 2 === 0 ? "/images/lashes-photo/photo-6-dark-dense.jpg" : "/images/lashes-photo/photo-3-dark-natural.jpg"}
-                alt={n % 2 === 0 ? "Nahaufnahme: volles Wimpernset" : "Nahaufnahme: natürliches Wimpernset"}
-                fill
-                sizes="(min-width: 768px) 448px, 90vw"
-                className="object-cover"
-              />
-              <span className="absolute bottom-3 left-3 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                {n % 2 === 0 ? "Nachher" : "Vorher"} · Beispielbild
-              </span>
+          {[
+            { vorher: "/images/lashes-photo/photo-3-dark-natural.jpg", nachher: "/images/lashes-photo/photo-6-dark-dense.jpg" },
+            { vorher: "/images/lashes-photo/photo-1-sky-natural.jpg", nachher: "/images/lashes-photo/photo-4-sky-dense.jpg" },
+          ].map((pair, i) => (
+            <div key={i} className="w-full max-w-2xl mx-auto flex gap-4">
+              {(["vorher", "nachher"] as const).map((key) => (
+                <div
+                  key={key}
+                  className="relative flex-1 aspect-[3/4] rounded-2xl overflow-hidden bg-[#2C3B44]"
+                >
+                  <Image
+                    src={pair[key]}
+                    alt={key === "vorher" ? "Nahaufnahme: natürliches Wimpernset" : "Nahaufnahme: volles Wimpernset"}
+                    fill
+                    sizes="(min-width: 768px) 320px, 45vw"
+                    className="object-cover"
+                  />
+                  <span className="absolute bottom-3 left-3 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full capitalize">
+                    {key} · Beispielbild
+                  </span>
+                </div>
+              ))}
             </div>
           ))}
         </ScrollPanColumn>
@@ -227,7 +235,8 @@ export default async function HomePage() {
             <span>{business.address.street}, {business.address.postalCode} {business.address.city}</span>
             <span>{business.phoneDisplay}</span>
             <span>{business.email}</span>
-            <a href={business.instagramUrl} className="font-semibold text-ocean">
+            <a href={business.instagramUrl} className="inline-flex items-center gap-1.5 font-semibold text-ocean w-fit">
+              <InstagramIcon className="w-4 h-4" />
               @{business.instagram}
             </a>
           </div>

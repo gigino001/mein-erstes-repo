@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { business, fullAddress } from "@/lib/business";
+import { InstagramIcon } from "@/components/art/InstagramIcon";
 
 export const metadata: Metadata = {
   title: "Kontakt",
@@ -50,8 +51,9 @@ export default function KontaktPage() {
                 href={business.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-ocean"
+                className="inline-flex items-center gap-1.5 font-semibold text-ocean w-fit"
               >
+                <InstagramIcon className="w-4 h-4" />
                 @{business.instagram}
               </a>
               <span>{fullAddress}</span>
@@ -64,6 +66,10 @@ export default function KontaktPage() {
             title="Standort coco lashes"
             src={`https://www.google.com/maps?q=${mapsQuery}&output=embed`}
             className="w-full h-full border-0"
+            style={{
+              filter:
+                "grayscale(0.3) sepia(0.6) hue-rotate(300deg) saturate(1.4) brightness(0.98) contrast(0.92)",
+            }}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
