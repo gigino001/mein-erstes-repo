@@ -26,8 +26,20 @@ function maxDateStr() {
   return d.toISOString().slice(0, 10);
 }
 
-export function BookingForm({ services, staffId }: { services: Service[]; staffId: string }) {
-  const [serviceId, setServiceId] = useState(services[0]?.id ?? "");
+export function BookingForm({
+  services,
+  staffId,
+  initialServiceId,
+}: {
+  services: Service[];
+  staffId: string;
+  initialServiceId?: string;
+}) {
+  const [serviceId, setServiceId] = useState(
+    (initialServiceId && services.some((s) => s.id === initialServiceId)
+      ? initialServiceId
+      : services[0]?.id) ?? "",
+  );
   const [date, setDate] = useState(todayStr());
   const [slots, setSlots] = useState<string[]>([]);
   const [slot, setSlot] = useState<string | null>(null);
@@ -128,6 +140,11 @@ export function BookingForm({ services, staffId }: { services: Service[]; staffI
             <path d="M5 7.5l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
+        {initialServiceId && initialServiceId === serviceId && (
+          <span className="text-xs font-semibold text-ocean">
+            ✓ Deine Auswahl von der Leistungen-Seite wurde übernommen
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col gap-2">

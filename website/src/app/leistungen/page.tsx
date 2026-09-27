@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { prisma } from "@/lib/prisma";
-import { formatPrice, formatDuration, CATEGORY_LABELS } from "@/lib/format";
+import { CATEGORY_LABELS } from "@/lib/format";
+import { LeistungenGrid } from "@/components/LeistungenGrid";
 
 export const metadata: Metadata = {
   title: "Leistungen & Preise",
@@ -39,7 +39,23 @@ export default async function LeistungenPage() {
     orderBy: { sortOrder: "asc" },
   });
 
-  const categories = ["neumodellage", "auffuellen", "sonstiges"] as const;
+  const categoryKeys = ["neumodellage", "auffuellen", "sonstiges"] as const;
+
+  const categories = categoryKeys
+    .map((category) => {
+      const items = services.filter((s) => s.category === category);
+      const style = CATEGORY_STYLE[category];
+      return {
+        key: category,
+        label: CATEGORY_LABELS[category],
+        frame: style.frame,
+        items: items.map((service, i) => ({
+          ...service,
+          image: style.images[i % style.images.length],
+        })),
+      };
+    })
+    .filter((category) => category.items.length > 0);
 
   return (
     <div className="px-6 md:px-18 py-20 flex flex-col gap-16 max-w-4xl mx-auto">
@@ -50,49 +66,12 @@ export default async function LeistungenPage() {
         <h1 className="font-poster uppercase text-5xl md:text-6xl">Leistungen</h1>
         <p className="text-ink-soft max-w-lg leading-relaxed">
           Jedes Set wird individuell auf dich abgestimmt. Die Preise unten sind Richtwerte —
-          im persönlichen Gespräch besprechen wir, was zu dir passt.
+          im persönlichen Gespräch besprechen wir, was zu dir passt. Tippe auf eine Leistung für
+          mehr Details.
         </p>
       </div>
 
-      {categories.map((category) => {
-        const items = services.filter((s) => s.category === category);
-        if (items.length === 0) return null;
-        const style = CATEGORY_STYLE[category];
-        return (
-          <div key={category} className={`rounded-3xl p-6 md:p-10 flex flex-col gap-7 ${style.frame}`}>
-            <h2 className="font-poster uppercase text-2xl md:text-3xl text-ocean">
-              {CATEGORY_LABELS[category]}
-            </h2>
-            <div className="flex flex-col divide-y divide-white/60">
-              {items.map((service, i) => (
-                <div key={service.id} className="flex items-center gap-5 py-5">
-                  <div className="relative shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden bg-white/50">
-                    <Image
-                      src={style.images[i % style.images.length]}
-                      alt=""
-                      fill
-                      sizes="96px"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 flex items-start justify-between gap-6">
-                    <div>
-                      <p className="font-semibold">{service.name}</p>
-                      {service.description && (
-                        <p className="text-sm text-ink-muted mt-1 max-w-md">{service.description}</p>
-                      )}
-                      <p className="text-xs text-ink-muted mt-1">{formatDuration(service.durationMinutes)}</p>
-                    </div>
-                    <span className="font-poster text-xl text-ocean whitespace-nowrap">
-                      {formatPrice(service.priceCents)}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
+      <LeistungenGrid categories={categories} />
     </div>
   );
 }
