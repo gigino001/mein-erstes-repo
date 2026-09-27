@@ -11,7 +11,7 @@ export default function KontaktPage() {
   const mapsQuery = encodeURIComponent(fullAddress);
 
   return (
-    <div className="px-6 md:px-18 py-20 flex flex-col gap-16 max-w-4xl mx-auto">
+    <div className="px-6 md:px-18 py-20 flex flex-col gap-16 max-w-6xl mx-auto">
       <div className="flex flex-col gap-4">
         <span className="text-[13px] font-semibold tracking-[0.14em] uppercase text-ocean">
           Kontakt
@@ -19,7 +19,7 @@ export default function KontaktPage() {
         <h1 className="font-poster uppercase text-5xl md:text-6xl">Kontakt</h1>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-12 items-stretch">
+      <div className="grid md:grid-cols-[1fr_2fr] gap-12 items-stretch">
         <div className="flex flex-col gap-6">
           <div>
             <h2 className="font-poster uppercase text-2xl mb-3">Öffnungszeiten</h2>

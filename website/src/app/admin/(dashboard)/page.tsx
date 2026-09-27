@@ -56,6 +56,7 @@ export default async function AdminDashboardPage() {
                 </p>
                 <p className="text-xs text-ink-muted mt-1">
                   {a.customerPhone} · {a.customerEmail}
+                  {a.customerInstagram && ` · ${a.customerInstagram}`}
                   {a.note && ` · „${a.note}“`}
                 </p>
               </div>

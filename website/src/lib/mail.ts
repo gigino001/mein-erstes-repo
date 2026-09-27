@@ -65,6 +65,7 @@ type AppointmentMailData = {
   id: string;
   customerName: string;
   customerEmail: string;
+  customerInstagram?: string | null;
   serviceName: string;
   startAt: Date;
   endAt: Date;
@@ -76,7 +77,7 @@ export async function sendNewRequestToOwner(data: AppointmentMailData) {
     subject: `Neue Terminanfrage: ${data.customerName}`,
     text: `Neue Terminanfrage über die Website:
 
-Kundin: ${data.customerName} (${data.customerEmail})
+Kundin: ${data.customerName} (${data.customerEmail})${data.customerInstagram ? `\nInstagram: ${data.customerInstagram}` : ""}
 Leistung: ${data.serviceName}
 Wunschtermin: ${formatDateTime(data.startAt)}
 

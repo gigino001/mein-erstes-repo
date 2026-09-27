@@ -48,6 +48,7 @@ export function BookingForm({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [instagram, setInstagram] = useState("");
   const [note, setNote] = useState("");
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [status, setStatus] = useState<
@@ -84,6 +85,7 @@ export function BookingForm({
       customerName: name,
       customerEmail: email,
       customerPhone: phone,
+      customerInstagram: instagram,
       note,
     });
     if (result.ok) {
@@ -188,6 +190,19 @@ export function BookingForm({
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className={fieldClass}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-semibold" htmlFor="instagram">
+          Instagram (optional)
+        </label>
+        <input
+          id="instagram"
+          placeholder="@dein.handle"
+          value={instagram}
+          onChange={(e) => setInstagram(e.target.value)}
           className={fieldClass}
         />
       </div>

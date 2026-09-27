@@ -12,6 +12,7 @@ export type BookingInput = {
   customerName: string;
   customerEmail: string;
   customerPhone: string;
+  customerInstagram?: string;
   note?: string;
 };
 
@@ -20,7 +21,8 @@ export type BookingResult =
   | { ok: false; error: string };
 
 export async function requestAppointment(input: BookingInput): Promise<BookingResult> {
-  const { serviceId, staffId, date, slot, customerName, customerEmail, customerPhone, note } = input;
+  const { serviceId, staffId, date, slot, customerName, customerEmail, customerPhone, customerInstagram, note } =
+    input;
 
   if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim()) {
     return { ok: false, error: "Bitte fülle Name, E-Mail und Telefonnummer aus." };
@@ -51,6 +53,7 @@ export async function requestAppointment(input: BookingInput): Promise<BookingRe
       customerName: customerName.trim(),
       customerEmail: customerEmail.trim(),
       customerPhone: customerPhone.trim(),
+      customerInstagram: customerInstagram?.trim() || null,
       note: note?.trim() || null,
       status: "requested",
     },
@@ -60,6 +63,7 @@ export async function requestAppointment(input: BookingInput): Promise<BookingRe
     id: appointment.id,
     customerName: appointment.customerName,
     customerEmail: appointment.customerEmail,
+    customerInstagram: appointment.customerInstagram,
     serviceName: service.name,
     startAt: appointment.startAt,
     endAt: appointment.endAt,
