@@ -34,7 +34,9 @@ export default function DatenschutzPage() {
           Instagram-Profil, gewünschte Leistung, Termin, ggf. Anmerkungen) ausschließlich zur
           Bearbeitung und Bestätigung deines Termins (Art. 6 Abs. 1 lit. b DSGVO). Die
           Bestätigung erfolgt per E-Mail; dazu geben wir deine Daten an unseren
-          E-Mail-Versanddienstleister weiter (siehe Ziffer 6). Die Daten werden gelöscht, sobald
+          E-Mail-Versanddienstleister weiter (siehe Ziffer 7). Für bestimmte Leistungen ist bei
+          Buchung eine Anzahlung fällig, die über unseren Zahlungsdienstleister Stripe abgewickelt
+          wird (siehe Ziffer 6). Die Daten werden gelöscht, sobald
           sie für diesen Zweck nicht mehr erforderlich sind, soweit keine gesetzlichen
           Aufbewahrungspflichten entgegenstehen.
         </p>
@@ -97,7 +99,28 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="font-semibold text-ink mb-2">6. E-Mail-Versand</h2>
+        <h2 className="font-semibold text-ink mb-2">6. Zahlungsabwicklung (Stripe)</h2>
+        <p>
+          Für bestimmte Leistungen ist bei der Buchung eine Anzahlung fällig. Diese wickeln wir
+          über den Zahlungsdienstleister Stripe Payments Europe, Ltd. ab. Dabei werden deine
+          Zahlungsdaten (z. B. Kartendaten) sowie Name und E-Mail-Adresse direkt an Stripe
+          übermittelt und dort verarbeitet — wir selbst erhalten und speichern keine
+          Kartendaten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Erfüllung des
+          Buchungsvertrags). Weitere Informationen:{" "}
+          <a
+            href="https://stripe.com/de/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-ocean"
+          >
+            stripe.com/de/privacy
+          </a>
+          .
+        </p>
+      </section>
+
+      <section>
+        <h2 className="font-semibold text-ink mb-2">7. E-Mail-Versand</h2>
         <p>
           Terminanfragen und -bestätigungen versenden wir per E-Mail über einen SMTP-Anbieter.
           Dabei werden Name, E-Mail-Adresse und die zur Terminabwicklung nötigen Angaben an
@@ -107,7 +130,7 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="font-semibold text-ink mb-2">7. Deine Rechte</h2>
+        <h2 className="font-semibold text-ink mb-2">8. Deine Rechte</h2>
         <p>
           Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung,
           Datenübertragbarkeit sowie Widerspruch gegen die Verarbeitung deiner personenbezogenen
@@ -117,7 +140,7 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="font-semibold text-ink mb-2">8. Kontaktaufnahme</h2>
+        <h2 className="font-semibold text-ink mb-2">9. Kontaktaufnahme</h2>
         <p>
           Wenn du uns per E-Mail, Telefon, Instagram oder WhatsApp kontaktierst, verarbeiten wir
           die dabei übermittelten Daten zur Bearbeitung deiner Anfrage (Art. 6 Abs. 1 lit. b bzw.
@@ -126,7 +149,7 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="font-semibold text-ink mb-2">9. Änderungen dieser Datenschutzerklärung</h2>
+        <h2 className="font-semibold text-ink mb-2">10. Änderungen dieser Datenschutzerklärung</h2>
         <p>
           Wir passen diese Datenschutzerklärung an, sobald sich die von uns eingesetzten Dienste
           oder rechtliche Vorgaben ändern. Es gilt jeweils die aktuell auf dieser Seite

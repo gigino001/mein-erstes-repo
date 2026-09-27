@@ -53,6 +53,12 @@ export default async function AdminDashboardPage() {
                 <p className="text-sm text-ink-soft">
                   {formatDateTime(a.startAt)} · {formatDuration(a.service.durationMinutes)} ·{" "}
                   {formatPrice(a.service.priceCents)}
+                  {a.depositAmountCents > 0 && (
+                    <span className="text-ocean font-semibold">
+                      {" "}
+                      · {formatPrice(a.depositAmountCents)} Anzahlung bezahlt
+                    </span>
+                  )}
                 </p>
                 <p className="text-xs text-ink-muted mt-1">
                   {a.customerPhone} · {a.customerEmail}

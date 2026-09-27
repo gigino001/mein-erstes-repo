@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { requestAppointment } from "@/app/termin/actions";
 import { ServiceSelect } from "@/components/ServiceSelect";
 import { DatePicker } from "@/components/DatePicker";
+import { formatPrice } from "@/lib/format";
 
 const fieldClass =
   "border-2 border-ink/20 rounded-xl px-4 py-3 bg-white focus:border-ocean focus:outline-none transition-colors";
@@ -15,6 +16,12 @@ type Service = {
   category: string;
   durationMinutes: number;
   priceCents: number;
+};
+
+// Muss mit DEPOSIT_SHARE_BY_CATEGORY in app/termin/actions.ts übereinstimmen
+// (dort serverseitig maßgeblich) — hier nur für die Anzeige im Formular.
+const DEPOSIT_SHARE_BY_CATEGORY: Record<string, number> = {
+  neumodellage: 0.5,
 };
 
 function todayStr() {
@@ -61,6 +68,12 @@ export function BookingForm({
     [services, serviceId],
   );
 
+  const depositAmountCents = useMemo(() => {
+    if (!selectedService) return 0;
+    const share = DEPOSIT_SHARE_BY_CATEGORY[selectedService.category];
+    return share ? Math.round(selectedService.priceCents * share) : 0;
+  }, [selectedService]);
+
   useEffect(() => {
     if (!serviceId || !date) return;
     // Gewünschtes Verhalten: Auswahl zurücksetzen, sobald Leistung/Datum wechseln.
@@ -88,12 +101,17 @@ export function BookingForm({
       customerPhone: phone,
       customerInstagram: instagram,
       note,
+      origin: window.location.origin,
     });
-    if (result.ok) {
-      setStatus({ type: "success" });
-    } else {
+    if (!result.ok) {
       setStatus({ type: "error", message: result.error });
+      return;
     }
+    if (result.type === "checkout") {
+      window.location.href = result.checkoutUrl;
+      return;
+    }
+    setStatus({ type: "success" });
   }
 
   if (status.type === "success") {
@@ -118,6 +136,12 @@ export function BookingForm({
         {initialServiceId && initialServiceId === serviceId && (
           <span className="text-xs font-semibold text-ocean">
             ✓ Deine Auswahl von der Leistungen-Seite wurde übernommen
+          </span>
+        )}
+        {depositAmountCents > 0 && (
+          <span className="text-xs font-semibold text-ocean">
+            Für diese Leistung ist bei Buchung eine Anzahlung von {formatPrice(depositAmountCents)} fällig
+            (50 % des Preises), online per Karte zu zahlen. Der Rest wird vor Ort beglichen.
           </span>
         )}
       </div>
@@ -249,7 +273,11 @@ export function BookingForm({
           <Link href="/datenschutz" target="_blank" className="font-semibold text-ocean underline">
             Datenschutzerklärung
           </Link>{" "}
-          gelesen und bin mit der Verarbeitung meiner Daten zur Terminanfrage einverstanden. *
+          und die{" "}
+          <Link href="/agb" target="_blank" className="font-semibold text-ocean underline">
+            AGB
+          </Link>{" "}
+          gelesen und akzeptiere sie. *
         </span>
       </label>
 
@@ -260,10 +288,16 @@ export function BookingForm({
         disabled={!slot || !privacyAccepted || status.type === "submitting"}
         className="font-poster uppercase text-lg text-white bg-ocean rounded-full px-8 py-4 disabled:opacity-40 transition"
       >
-        {status.type === "submitting" ? "Wird gesendet…" : "Termin anfragen"}
+        {status.type === "submitting"
+          ? "Wird gesendet…"
+          : depositAmountCents > 0
+            ? "Weiter zur Anzahlung"
+            : "Termin anfragen"}
       </button>
       <p className="text-xs text-ink-muted -mt-4">
-        Unverbindliche Anfrage — Claudia bestätigt deinen Termin persönlich.
+        {depositAmountCents > 0
+          ? "Nach der Anzahlung wird deine Anfrage übermittelt — Claudia bestätigt deinen Termin persönlich."
+          : "Unverbindliche Anfrage — Claudia bestätigt deinen Termin persönlich."}
       </p>
     </form>
   );
