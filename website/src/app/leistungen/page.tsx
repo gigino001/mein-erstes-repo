@@ -33,6 +33,26 @@ const CATEGORY_STYLE = {
   },
 } as const;
 
+// Zeigt pro Technik das tatsächliche Ergebnisbild (statt der generischen,
+// je Kategorie wiederverwendeten Fotos) — greift für Neumodellage- UND die
+// passenden Auffüll-Varianten derselben Technik.
+const TECHNIQUE_IMAGES: { match: string; image: string }[] = [
+  { match: "bloom eyes", image: "/images/lashes-technique/technique-bloom-eyes.jpg" },
+  { match: "1:1", image: "/images/lashes-technique/technique-1-1-classic.jpg" },
+  { match: "light volumen", image: "/images/lashes-technique/technique-light-volumen.jpg" },
+  { match: "mega volumen", image: "/images/lashes-technique/technique-mega-volumen.jpg" },
+];
+
+function getServiceImage(
+  serviceName: string,
+  fallbackImages: readonly string[],
+  fallbackIndex: number,
+): string {
+  const lowerName = serviceName.toLowerCase();
+  const technique = TECHNIQUE_IMAGES.find((t) => lowerName.includes(t.match));
+  return technique?.image ?? fallbackImages[fallbackIndex % fallbackImages.length];
+}
+
 export default async function LeistungenPage() {
   const services = await prisma.service.findMany({
     where: { active: true },
@@ -51,7 +71,7 @@ export default async function LeistungenPage() {
         frame: style.frame,
         items: items.map((service, i) => ({
           ...service,
-          image: style.images[i % style.images.length],
+          image: getServiceImage(service.name, style.images, i),
         })),
       };
     })
