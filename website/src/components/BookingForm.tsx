@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { formatDuration, formatPrice, CATEGORY_LABELS } from "@/lib/format";
 import { requestAppointment } from "@/app/termin/actions";
+import { ServiceSelect } from "@/components/ServiceSelect";
+import { DatePicker } from "@/components/DatePicker";
 
 const fieldClass =
   "border-2 border-ink/20 rounded-xl px-4 py-3 bg-white focus:border-ocean focus:outline-none transition-colors";
@@ -110,36 +111,7 @@ export function BookingForm({
         <label className="text-sm font-semibold" htmlFor="service">
           Leistung
         </label>
-        <div className="relative">
-          <select
-            id="service"
-            value={serviceId}
-            onChange={(e) => setServiceId(e.target.value)}
-            className={`${fieldClass} w-full appearance-none pr-11`}
-          >
-            {["neumodellage", "auffuellen", "sonstiges"].map((category) => {
-              const items = services.filter((s) => s.category === category);
-              if (items.length === 0) return null;
-              return (
-                <optgroup key={category} label={CATEGORY_LABELS[category]}>
-                  {items.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name} — {formatDuration(s.durationMinutes)} — {formatPrice(s.priceCents)}
-                    </option>
-                  ))}
-                </optgroup>
-              );
-            })}
-          </select>
-          <svg
-            viewBox="0 0 20 20"
-            fill="none"
-            aria-hidden="true"
-            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ocean"
-          >
-            <path d="M5 7.5l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
+        <ServiceSelect id="service" services={services} value={serviceId} onChange={setServiceId} />
         {initialServiceId && initialServiceId === serviceId && (
           <span className="text-xs font-semibold text-ocean">
             ✓ Deine Auswahl von der Leistungen-Seite wurde übernommen
@@ -151,15 +123,7 @@ export function BookingForm({
         <label className="text-sm font-semibold" htmlFor="date">
           Datum
         </label>
-        <input
-          id="date"
-          type="date"
-          value={date}
-          min={todayStr()}
-          max={maxDateStr()}
-          onChange={(e) => setDate(e.target.value)}
-          className={fieldClass}
-        />
+        <DatePicker id="date" value={date} min={todayStr()} max={maxDateStr()} onChange={setDate} />
       </div>
 
       <div className="flex flex-col gap-2">
