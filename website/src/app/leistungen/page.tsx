@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { CATEGORY_LABELS } from "@/lib/format";
 import { LeistungenGrid } from "@/components/LeistungenGrid";
+import { business } from "@/lib/business";
 
 export const metadata: Metadata = {
   title: "Leistungen & Preise",
@@ -77,8 +78,33 @@ export default async function LeistungenPage() {
     })
     .filter((category) => category.items.length > 0);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: services.map((service, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Service",
+        name: service.name,
+        description: service.description ?? undefined,
+        provider: { "@type": "BeautySalon", name: business.name },
+        areaServed: "Bielefeld",
+        offers: {
+          "@type": "Offer",
+          price: (service.priceCents / 100).toFixed(2),
+          priceCurrency: "EUR",
+        },
+      },
+    })),
+  };
+
   return (
     <div className="px-6 md:px-18 py-20 flex flex-col gap-16 max-w-4xl mx-auto">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="flex flex-col gap-4">
         <span className="text-[13px] font-semibold tracking-[0.14em] uppercase text-ocean">
           Leistungen &amp; Preise
