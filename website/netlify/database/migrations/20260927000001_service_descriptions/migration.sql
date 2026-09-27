@@ -1,5 +1,11 @@
 -- Ergänzt Beschreibungen für Leistungen, die beim ursprünglichen Seed (20260925000002)
 -- ohne Beschreibung angelegt wurden — nötig für das Leistungen-Detail-Popup.
+--
+-- WICHTIG: Bereits angewendete Migrationen (inkl. dieser, sobald sie einmal
+-- erfolgreich deployt wurde) dürfen NICHT mehr geändert werden — Netlify
+-- prüft deren Inhalt per Checksum und lehnt den Deploy sonst ab
+-- ("migration has been modified after being applied"). Weitere Datenkorrekturen
+-- immer als neue Migration mit späterem Zeitstempel anlegen.
 
 UPDATE "Service" SET "description" = 'Wimper-für-Wimper-Technik für ein natürliches, dezentes Ergebnis, das deine eigenen Wimpern betont.' WHERE "id" = 'service-1' AND "description" IS NULL;
 UPDATE "Service" SET "description" = 'Feine Volumenfächer für ein weiches, leicht verdichtetes Wimpernbild — mehr Fülle, ohne aufzutragen.' WHERE "id" = 'service-2' AND "description" IS NULL;

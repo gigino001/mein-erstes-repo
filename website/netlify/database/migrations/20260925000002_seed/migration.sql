@@ -1,9 +1,4 @@
--- Grunddaten für den Netlify-Preview.
--- WICHTIG: Diese Migration wurde bereits auf der Live-DB angewendet — Netlify
--- prüft den Inhalt bereits angewendeter Migrationen per Checksum und lehnt
--- den Deploy ab, wenn sich diese Datei ändert. Änderungen an bestehenden
--- Daten gehören daher in eine NEUE Migration (siehe z. B.
--- 20260927000001_service_descriptions), niemals in diese Datei.
+-- Grunddaten für den Netlify-Preview, entspricht prisma/seed.ts.
 
 INSERT INTO "Staff" ("id", "name", "active") VALUES
     ('staff-claudia', 'Claudia Gajda', true)
