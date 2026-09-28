@@ -1,7 +1,9 @@
 import "dotenv/config";
 import { PrismaClient } from "../src/generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-const prisma = new PrismaClient();
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter });
 
 // Minuten seit Mitternacht, siehe schema.prisma
 const OPENING_HOURS = [
@@ -14,21 +16,21 @@ const OPENING_HOURS = [
 
 const SERVICES = [
   // Neumodellage
-  { category: "neumodellage", name: "Neumodellage 1:1 (Classic)", durationMinutes: 90, priceCents: 8000, sortOrder: 1 },
-  { category: "neumodellage", name: "Neumodellage Light Volumen", durationMinutes: 90, priceCents: 9000, sortOrder: 2 },
-  { category: "neumodellage", name: "Neumodellage Mega Volumen", durationMinutes: 90, priceCents: 10000, sortOrder: 3 },
+  { category: "neumodellage", name: "Neumodellage 1:1 (Classic)", description: "Wimper-für-Wimper-Technik für ein natürliches, dezentes Ergebnis, das deine eigenen Wimpern betont.", durationMinutes: 90, priceCents: 8000, sortOrder: 1 },
+  { category: "neumodellage", name: "Neumodellage Light Volumen", description: "Feine Volumenfächer für ein weiches, leicht verdichtetes Wimpernbild — mehr Fülle, ohne aufzutragen.", durationMinutes: 90, priceCents: 9000, sortOrder: 2 },
+  { category: "neumodellage", name: "Neumodellage Mega Volumen", description: "Dichte Volumenfächer für einen intensiven, ausdrucksstarken Blick mit maximaler Fülle.", durationMinutes: 90, priceCents: 10000, sortOrder: 3 },
   { category: "neumodellage", name: "Bloom Eyes Neumodellage", description: "Wispy, Wet mit Farbe deiner Wahl. Für den extravaganten natürlichen Look.", durationMinutes: 120, priceCents: 9500, sortOrder: 4 },
   // Auffülltermine
-  { category: "auffuellen", name: "Auffülltermin 1:1 (2-3 Wochen)", durationMinutes: 60, priceCents: 4000, sortOrder: 10 },
-  { category: "auffuellen", name: "Auffülltermin 1:1 (3-4 Wochen)", durationMinutes: 60, priceCents: 5000, sortOrder: 11 },
-  { category: "auffuellen", name: "Auffülltermin Light Volumen (2-3 Wochen)", durationMinutes: 60, priceCents: 5000, sortOrder: 12 },
-  { category: "auffuellen", name: "Auffülltermin Light Volumen (3-4 Wochen)", durationMinutes: 60, priceCents: 6000, sortOrder: 13 },
-  { category: "auffuellen", name: "Auffülltermin Mega Volumen (2-3 Wochen)", durationMinutes: 60, priceCents: 6000, sortOrder: 14 },
-  { category: "auffuellen", name: "Auffülltermin Mega Volumen (3-4 Wochen)", durationMinutes: 60, priceCents: 7000, sortOrder: 15 },
-  { category: "auffuellen", name: "Bloom Eyes Auffüllen (2-3 Wochen)", durationMinutes: 60, priceCents: 5500, sortOrder: 16 },
-  { category: "auffuellen", name: "Bloom Eyes Auffüllen (3-4 Wochen)", durationMinutes: 60, priceCents: 6500, sortOrder: 17 },
+  { category: "auffuellen", name: "Auffülltermin 1:1 (2-3 Wochen)", description: "Auffrischung deines 1:1-Sets nach 2 bis 3 Wochen, damit dein Look gepflegt und voll bleibt.", durationMinutes: 60, priceCents: 4000, sortOrder: 10 },
+  { category: "auffuellen", name: "Auffülltermin 1:1 (3-4 Wochen)", description: "Auffrischung deines 1:1-Sets nach 3 bis 4 Wochen.", durationMinutes: 60, priceCents: 5000, sortOrder: 11 },
+  { category: "auffuellen", name: "Auffülltermin Light Volumen (2-3 Wochen)", description: "Auffrischung deines Light-Volumen-Sets nach 2 bis 3 Wochen.", durationMinutes: 60, priceCents: 5000, sortOrder: 12 },
+  { category: "auffuellen", name: "Auffülltermin Light Volumen (3-4 Wochen)", description: "Auffrischung deines Light-Volumen-Sets nach 3 bis 4 Wochen.", durationMinutes: 60, priceCents: 6000, sortOrder: 13 },
+  { category: "auffuellen", name: "Auffülltermin Mega Volumen (2-3 Wochen)", description: "Auffrischung deines Mega-Volumen-Sets nach 2 bis 3 Wochen.", durationMinutes: 60, priceCents: 6000, sortOrder: 14 },
+  { category: "auffuellen", name: "Auffülltermin Mega Volumen (3-4 Wochen)", description: "Auffrischung deines Mega-Volumen-Sets nach 3 bis 4 Wochen.", durationMinutes: 60, priceCents: 7000, sortOrder: 15 },
+  { category: "auffuellen", name: "Bloom Eyes Auffüllen (2-3 Wochen)", description: "Auffrischung deines Bloom-Eyes-Sets nach 2 bis 3 Wochen.", durationMinutes: 60, priceCents: 5500, sortOrder: 16 },
+  { category: "auffuellen", name: "Bloom Eyes Auffüllen (3-4 Wochen)", description: "Auffrischung deines Bloom-Eyes-Sets nach 3 bis 4 Wochen.", durationMinutes: 60, priceCents: 6500, sortOrder: 17 },
   // Sonstiges
-  { category: "sonstiges", name: "Wimpern entfernen", durationMinutes: 30, priceCents: 1000, sortOrder: 20 },
+  { category: "sonstiges", name: "Wimpern entfernen", description: "Schonendes und rückstandsfreies Entfernen deiner Wimpernverlängerung.", durationMinutes: 30, priceCents: 1000, sortOrder: 20 },
   { category: "sonstiges", name: "Modellarbeit", description: "Du hast eine Anzeige gesehen, dass Models gesucht werden? Buch dich gerne dafür ein.", durationMinutes: 120, priceCents: 5000, sortOrder: 21 },
 ];
 

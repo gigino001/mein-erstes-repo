@@ -1,19 +1,29 @@
 // coco lashes — Datenmodell
-// Läuft gegen MySQL/MariaDB — lokal per Docker/lokalem Server (siehe README),
-// auf ALL-INKL gegen die dort bereitgestellte MariaDB-Datenbank.
+// Produktionsplan: MySQL/MariaDB (lokal per Docker, auf ALL-INKL gegen die
+// dort bereitgestellte MariaDB). Für den Netlify-Preview läuft dieselbe
+// Datenbank stattdessen gegen Postgres (automatisch von Netlify DB
+// bereitgestellt, siehe src/lib/prisma.ts) — daher hier "postgresql".
 //
-// Hinweis: MySQL/MariaDB kennen zwar native Enums, wir führen "category" und
-// "status" trotzdem bewusst als String mit dokumentierten, festen Werten —
-// das hält das Schema portabel und Änderungen an den Werten brauchen keine
-// Migration.
+// Hinweis: MySQL/MariaDB und Postgres kennen zwar native Enums, wir führen
+// "category" und "status" trotzdem bewusst als String mit dokumentierten,
+// festen Werten — das hält das Schema portabel und Änderungen an den Werten
+// brauchen keine Migration.
 
+// Driver Adapters (queryCompiler + "pg") statt der nativen Query-Engine-Binary:
+// Netlify Functions laufen auf einer anderen Plattform als der Netlify-Build-
+// Container (Debian vs. RHEL), was mit der nativen Engine trotz binaryTargets
+// zuverlässig zu "Query Engine not found"-Fehlern zur Laufzeit führte. Der
+// Driver Adapter spricht stattdessen direkt über den "pg"-Treiber mit
+// Postgres, keine plattformspezifische Binary nötig.
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
+  moduleFormat = "esm"
+  engineType = "client"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -77,18 +87,23 @@ model AvailabilityException {
 }
 
 model Appointment {
-  id            String   @id @default(cuid())
-  customerName  String
-  customerEmail String
-  customerPhone String?
-  serviceId     String
-  staffId       String
-  startAt       DateTime
-  endAt         DateTime
+  id                String   @id @default(cuid())
+  customerName      String
+  customerEmail     String
+  customerPhone     String?
+  customerInstagram String?
+  serviceId         String
+  staffId           String
+  startAt           DateTime
+  endAt             DateTime
   /// "requested" | "confirmed" | "cancelled"
-  status        String   @default("requested")
-  note          String?  @db.Text
-  createdAt     DateTime @default(now())
+  status            String   @default("requested")
+  note              String?  @db.Text
+  /// Anzahlung in Cent, falls für die gebuchte Leistung fällig (0 = keine).
+  depositAmountCents Int     @default(0)
+  /// Stripe PaymentIntent-ID der Anzahlung, für Rückerstattung bei Stornierung.
+  stripePaymentIntentId String?
+  createdAt         DateTime @default(now())
 
   service Service @relation(fields: [serviceId], references: [id])
   staff   Staff   @relation(fields: [staffId], references: [id])

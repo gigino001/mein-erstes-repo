@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { createAdminSession, deleteAdminSession } from "@/lib/session";
 import { verifyAdminSession } from "@/lib/dal";
 import { sendAppointmentConfirmedToCustomer, sendAppointmentCancelledToCustomer } from "@/lib/mail";
+import { getStripe } from "@/lib/stripe";
 
 export type LoginResult = { ok: false; error: string } | never;
 
@@ -58,6 +59,21 @@ export async function cancelAppointment(id: string) {
     data: { status: "cancelled" },
     include: { service: true },
   });
+
+  // Bei Stornierung durch uns wird eine bereits bezahlte Anzahlung automatisch
+  // zurückerstattet ("best effort" — ein Refund-Fehler soll die Stornierung
+  // selbst nicht blockieren, wird aber geloggt).
+  if (appointment.depositAmountCents > 0 && appointment.stripePaymentIntentId) {
+    const stripe = getStripe();
+    if (stripe) {
+      try {
+        await stripe.refunds.create({ payment_intent: appointment.stripePaymentIntentId });
+      } catch (err) {
+        console.error("[admin] Rückerstattung der Anzahlung fehlgeschlagen:", err);
+      }
+    }
+  }
+
   await sendAppointmentCancelledToCustomer({
     id: appointment.id,
     customerName: appointment.customerName,
@@ -65,6 +81,7 @@ export async function cancelAppointment(id: string) {
     serviceName: appointment.service.name,
     startAt: appointment.startAt,
     endAt: appointment.endAt,
+    depositAmountCents: appointment.depositAmountCents,
   });
 }
 

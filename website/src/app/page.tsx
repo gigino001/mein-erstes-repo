@@ -1,11 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { formatPrice, formatDuration } from "@/lib/format";
 import { business } from "@/lib/business";
 import { ScrollFadeIn } from "@/components/motion/ScrollFadeIn";
-import { ScrollPanRow } from "@/components/motion/ScrollPanRow";
-import { EyeIllustration } from "@/components/art/EyeIllustration";
-import { Monogram } from "@/components/art/Monogram";
+import { ScrollPanColumn } from "@/components/motion/ScrollPanColumn";
+import { InstagramIcon } from "@/components/art/InstagramIcon";
 
 export default async function HomePage() {
   const featuredServices = await prisma.service.findMany({
@@ -45,9 +45,18 @@ export default async function HomePage() {
             </Link>
           </div>
         </ScrollFadeIn>
-        <div className="aspect-[4/5] rounded-3xl bg-sky-mist flex flex-col items-center justify-center gap-4 p-10">
-          <EyeIllustration dense className="w-full max-w-[280px]" />
-          <span className="text-xs text-ink-muted">Platzhalter-Illustration — echtes Foto folgt</span>
+        <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-sky-mist">
+          <Image
+            src="/images/lashes-photo/photo-4-sky-dense.jpg"
+            alt="Nahaufnahme: Mega-Volumen-Wimpernset"
+            fill
+            sizes="(min-width: 768px) 45vw, 100vw"
+            className="object-cover"
+            priority
+          />
+          <span className="absolute bottom-4 left-4 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
+            Beispielbild — echtes Foto folgt
+          </span>
         </div>
       </section>
 
@@ -126,9 +135,17 @@ export default async function HomePage() {
 
       {/* ÜBER MICH TEASER */}
       <section className="px-6 md:px-18 py-24 grid md:grid-cols-[1fr_1.2fr] gap-14 items-center">
-        <div className="aspect-[4/5] rounded-3xl bg-coral-soft flex flex-col items-center justify-center gap-4 p-10">
-          <Monogram className="w-full max-w-[180px]" />
-          <span className="text-xs text-[#8A5F5D]">Platzhalter — echtes Porträt folgt</span>
+        <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-coral-soft">
+          <Image
+            src="/images/portrait/demo-portrait.jpg"
+            alt="Beispielporträt (Platzhalter)"
+            fill
+            sizes="(min-width: 768px) 40vw, 100vw"
+            className="object-cover"
+          />
+          <span className="absolute bottom-4 left-4 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
+            Demobild — echtes Porträt folgt
+          </span>
         </div>
         <ScrollFadeIn className="flex flex-col gap-6">
           <span className="text-[13px] font-semibold tracking-[0.14em] uppercase text-ocean">Über mich</span>
@@ -149,27 +166,35 @@ export default async function HomePage() {
         <div className="px-6 md:px-18 flex flex-col gap-2">
           <h2 className="font-poster uppercase text-4xl md:text-5xl text-white">Vorher × Nachher</h2>
           <span className="text-xs text-[#6E828B]">
-            ↳ Bewegt sich beim Scrollen von rechts nach links
+            ↳ Bewegt sich beim Scrollen nach oben durch
           </span>
         </div>
-        <ScrollPanRow>
-          {[1, 2, 3, 4].map((n) => (
-            <div
-              key={n}
-              className="shrink-0 w-[300px] md:w-[340px] aspect-square rounded-2xl bg-[#2C3B44] flex flex-col items-center justify-center gap-3 p-8"
-            >
-              <EyeIllustration
-                dense={n % 2 === 0}
-                stroke="#EAF4F8"
-                accent="#FF9398"
-                className="w-full max-w-[220px]"
-              />
-              <span className="text-xs text-[#9FB0B8]">
-                {n % 2 === 0 ? "Nachher" : "Vorher"} · Illustration
-              </span>
+        <ScrollPanColumn>
+          {[
+            { vorher: "/images/lashes-photo/photo-3-dark-natural.jpg", nachher: "/images/lashes-photo/photo-6-dark-dense.jpg" },
+            { vorher: "/images/lashes-photo/photo-1-sky-natural.jpg", nachher: "/images/lashes-photo/photo-4-sky-dense.jpg" },
+          ].map((pair, i) => (
+            <div key={i} className="w-full max-w-2xl mx-auto flex gap-4">
+              {(["vorher", "nachher"] as const).map((key) => (
+                <div
+                  key={key}
+                  className="relative flex-1 aspect-[3/4] rounded-2xl overflow-hidden bg-[#2C3B44]"
+                >
+                  <Image
+                    src={pair[key]}
+                    alt={key === "vorher" ? "Nahaufnahme: natürliches Wimpernset" : "Nahaufnahme: volles Wimpernset"}
+                    fill
+                    sizes="(min-width: 768px) 320px, 45vw"
+                    className="object-cover"
+                  />
+                  <span className="absolute bottom-3 left-3 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full capitalize">
+                    {key} · Beispielbild
+                  </span>
+                </div>
+              ))}
             </div>
           ))}
-        </ScrollPanRow>
+        </ScrollPanColumn>
       </section>
 
       {/* KUNDINNENSTIMMEN */}
@@ -210,7 +235,8 @@ export default async function HomePage() {
             <span>{business.address.street}, {business.address.postalCode} {business.address.city}</span>
             <span>{business.phoneDisplay}</span>
             <span>{business.email}</span>
-            <a href={business.instagramUrl} className="font-semibold text-ocean">
+            <a href={business.instagramUrl} className="inline-flex items-center gap-1.5 font-semibold text-ocean w-fit">
+              <InstagramIcon className="w-4 h-4" />
               @{business.instagram}
             </a>
           </div>

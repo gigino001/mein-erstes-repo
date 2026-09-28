@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { business, fullAddress } from "@/lib/business";
+import { InstagramIcon } from "@/components/art/InstagramIcon";
 
 export const metadata: Metadata = {
   title: "Kontakt",
@@ -10,7 +11,7 @@ export default function KontaktPage() {
   const mapsQuery = encodeURIComponent(fullAddress);
 
   return (
-    <div className="px-6 md:px-18 py-20 flex flex-col gap-16 max-w-4xl mx-auto">
+    <div className="px-6 md:px-18 py-20 flex flex-col gap-16 max-w-6xl mx-auto">
       <div className="flex flex-col gap-4">
         <span className="text-[13px] font-semibold tracking-[0.14em] uppercase text-ocean">
           Kontakt
@@ -18,7 +19,7 @@ export default function KontaktPage() {
         <h1 className="font-poster uppercase text-5xl md:text-6xl">Kontakt</h1>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-12">
+      <div className="grid md:grid-cols-[1fr_2fr] gap-12 items-stretch">
         <div className="flex flex-col gap-6">
           <div>
             <h2 className="font-poster uppercase text-2xl mb-3">Öffnungszeiten</h2>
@@ -50,8 +51,9 @@ export default function KontaktPage() {
                 href={business.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-ocean"
+                className="inline-flex items-center gap-1.5 font-semibold text-ocean w-fit"
               >
+                <InstagramIcon className="w-4 h-4" />
                 @{business.instagram}
               </a>
               <span>{fullAddress}</span>
@@ -59,11 +61,15 @@ export default function KontaktPage() {
           </div>
         </div>
 
-        <div className="rounded-3xl overflow-hidden aspect-square md:aspect-auto min-h-[320px] bg-sky-mist">
+        <div className="rounded-3xl overflow-hidden aspect-square md:aspect-auto min-h-[320px] md:min-h-0 bg-sky-mist">
           <iframe
             title="Standort coco lashes"
             src={`https://www.google.com/maps?q=${mapsQuery}&output=embed`}
             className="w-full h-full border-0"
+            style={{
+              filter:
+                "grayscale(0.3) sepia(0.6) hue-rotate(300deg) saturate(1.4) brightness(0.98) contrast(0.92)",
+            }}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />

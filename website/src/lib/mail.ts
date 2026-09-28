@@ -65,10 +65,16 @@ type AppointmentMailData = {
   id: string;
   customerName: string;
   customerEmail: string;
+  customerInstagram?: string | null;
   serviceName: string;
   startAt: Date;
   endAt: Date;
+  depositAmountCents?: number;
 };
+
+function formatEuro(cents: number) {
+  return (cents / 100).toLocaleString("de-DE", { style: "currency", currency: "EUR" });
+}
 
 export async function sendNewRequestToOwner(data: AppointmentMailData) {
   await sendMail({
@@ -76,9 +82,9 @@ export async function sendNewRequestToOwner(data: AppointmentMailData) {
     subject: `Neue Terminanfrage: ${data.customerName}`,
     text: `Neue Terminanfrage über die Website:
 
-Kundin: ${data.customerName} (${data.customerEmail})
+Kundin: ${data.customerName} (${data.customerEmail})${data.customerInstagram ? `\nInstagram: ${data.customerInstagram}` : ""}
 Leistung: ${data.serviceName}
-Wunschtermin: ${formatDateTime(data.startAt)}
+Wunschtermin: ${formatDateTime(data.startAt)}${data.depositAmountCents ? `\nAnzahlung: ${formatEuro(data.depositAmountCents)} (bereits über Stripe bezahlt)` : ""}
 
 Bestätigen oder absagen: ${business.url}/admin`,
   });
@@ -93,7 +99,7 @@ export async function sendRequestReceivedToCustomer(data: AppointmentMailData) {
 danke für deine Terminanfrage bei ${business.name}!
 
 Leistung: ${data.serviceName}
-Wunschtermin: ${formatDateTime(data.startAt)}
+Wunschtermin: ${formatDateTime(data.startAt)}${data.depositAmountCents ? `\nAnzahlung: ${formatEuro(data.depositAmountCents)} (bereits bezahlt, wird mit dem Gesamtpreis verrechnet)` : ""}
 
 Das ist noch keine feste Zusage — ${business.owner} bestätigt deinen Termin persönlich und meldet sich zeitnah bei dir.
 
@@ -138,7 +144,7 @@ export async function sendAppointmentCancelledToCustomer(data: AppointmentMailDa
     subject: `Dein Termin bei ${business.name} wurde storniert`,
     text: `Hallo ${data.customerName},
 
-dein Termin am ${formatDateTime(data.startAt)} (${data.serviceName}) wurde leider storniert.
+dein Termin am ${formatDateTime(data.startAt)} (${data.serviceName}) wurde leider storniert.${data.depositAmountCents ? `\n\nDeine Anzahlung von ${formatEuro(data.depositAmountCents)} wurde automatisch zurückerstattet und sollte in wenigen Tagen auf deinem Konto sein.` : ""}
 
 Melde dich gerne, um einen neuen Termin zu vereinbaren:
 Telefon: ${business.phoneDisplay}

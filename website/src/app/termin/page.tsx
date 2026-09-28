@@ -7,8 +7,13 @@ export const metadata: Metadata = {
   description: "Frage jetzt unverbindlich deinen Wunschtermin bei coco lashes in Bielefeld an.",
 };
 
-export default async function TerminPage() {
-  const [services, staff] = await Promise.all([
+export default async function TerminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ service?: string }>;
+}) {
+  const [{ service: initialServiceId }, services, staff] = await Promise.all([
+    searchParams,
     prisma.service.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } }),
     prisma.staff.findFirst({ where: { active: true } }),
   ]);
@@ -33,7 +38,7 @@ export default async function TerminPage() {
           Anfrage anschließend persönlich.
         </p>
       </div>
-      <BookingForm services={services} staffId={staff.id} />
+      <BookingForm services={services} staffId={staff.id} initialServiceId={initialServiceId} />
     </div>
   );
 }

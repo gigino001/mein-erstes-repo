@@ -38,6 +38,12 @@ export const metadata: Metadata = {
     siteName: business.name,
     locale: "de_DE",
     type: "website",
+    images: [{ url: "/images/lashes-photo/photo-4-sky-dense.jpg", width: 200, height: 200 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${business.name} — Wimpernverlängerung in Bielefeld`,
+    description: business.description,
   },
 };
 
@@ -46,7 +52,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     "@context": "https://schema.org",
     "@type": "BeautySalon",
     name: business.name,
-    image: `${business.url}/og-image.jpg`,
+    image: `${business.url}/images/lashes-photo/photo-4-sky-dense.jpg`,
     url: business.url,
     telephone: business.phone,
     email: business.email,
@@ -57,6 +63,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       addressLocality: business.address.city,
       addressCountry: business.address.country,
     },
+    // Koordinaten von Gerichtstraße 13, 33602 Bielefeld (OpenStreetMap/Nominatim).
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 52.0149119,
+      longitude: 8.5337133,
+    },
+    priceRange: "€€",
+    areaServed: "Bielefeld",
     openingHoursSpecification: business.openingHours.map((h) => ({
       "@type": "OpeningHoursSpecification",
       dayOfWeek: h.days,

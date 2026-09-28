@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EyeIllustration } from "@/components/art/EyeIllustration";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Galerie",
@@ -7,12 +7,12 @@ export const metadata: Metadata = {
 };
 
 const TILES = [
-  { bg: "bg-sky-mist", stroke: "#16232B", dense: false },
-  { bg: "bg-coral-soft", stroke: "#16232B", dense: true },
-  { bg: "bg-ink", stroke: "#EAF4F8", dense: false },
-  { bg: "bg-ink", stroke: "#EAF4F8", dense: true },
-  { bg: "bg-coral-soft", stroke: "#16232B", dense: false },
-  { bg: "bg-sky-mist", stroke: "#16232B", dense: true },
+  { src: "/images/lashes-photo/photo-1-sky-natural.jpg", alt: "Nahaufnahme: dezentes Wimpernset" },
+  { src: "/images/lashes-photo/photo-2-coral-dramatic.jpg", alt: "Nahaufnahme: dramatisches Wimpernset" },
+  { src: "/images/lashes-photo/photo-3-dark-natural.jpg", alt: "Nahaufnahme: natürliches Wimpernset" },
+  { src: "/images/lashes-photo/photo-6-dark-dense.jpg", alt: "Nahaufnahme: volles Wimpernset" },
+  { src: "/images/lashes-photo/photo-5-coral-natural.jpg", alt: "Nahaufnahme: klassisches Wimpernset" },
+  { src: "/images/lashes-photo/photo-4-sky-dense.jpg", alt: "Nahaufnahme: Mega-Volumen-Wimpernset" },
 ];
 
 export default function GaleriePage() {
@@ -25,16 +25,19 @@ export default function GaleriePage() {
         <h1 className="font-poster uppercase text-5xl md:text-6xl">Galerie</h1>
         <p className="text-ink-soft">
           Hier entstehen bald echte Vorher/Nachher-Fotos und Eindrücke aus dem Studio — bis
-          dahin ein paar Illustrationen als Platzhalter.
+          dahin ein paar Beispielbilder als Platzhalter.
         </p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
         {TILES.map((tile, i) => (
-          <div
-            key={i}
-            className={`aspect-square rounded-2xl ${tile.bg} flex items-center justify-center p-8`}
-          >
-            <EyeIllustration dense={tile.dense} stroke={tile.stroke} className="w-full" />
+          <div key={i} className="relative aspect-square rounded-2xl overflow-hidden bg-sky-mist">
+            <Image
+              src={tile.src}
+              alt={tile.alt}
+              fill
+              sizes="(min-width: 768px) 33vw, 50vw"
+              className="object-cover"
+            />
           </div>
         ))}
       </div>
