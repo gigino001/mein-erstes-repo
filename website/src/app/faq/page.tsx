@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Häufige Fragen",
   description:
     "Antworten auf häufige Fragen zur Wimpernverlängerung bei coco lashes in Bielefeld: Preise, Haltbarkeit, Ablauf und Pflege.",
+  alternates: { canonical: "/faq" },
 };
 
 const FAQ = [

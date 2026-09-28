@@ -5,6 +5,7 @@ import { BookingForm } from "@/components/BookingForm";
 export const metadata: Metadata = {
   title: "Termin buchen",
   description: "Frage jetzt unverbindlich deinen Wunschtermin bei coco lashes in Bielefeld an.",
+  alternates: { canonical: "/termin" },
 };
 
 export default async function TerminPage({

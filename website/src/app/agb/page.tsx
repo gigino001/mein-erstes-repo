@@ -7,6 +7,7 @@ import { business } from "@/lib/business";
 // KI-generierten Rechtstext, um keine falschen/unpassenden Klauseln zu veröffentlichen.
 export const metadata: Metadata = {
   title: "AGB",
+  alternates: { canonical: "/agb" },
 };
 
 export default function AgbPage() {

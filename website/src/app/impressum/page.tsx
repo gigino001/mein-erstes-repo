@@ -6,6 +6,7 @@ import { business, fullAddress } from "@/lib/business";
 // und die als "[...]" markierten Platzhalter ergänzen (z. B. USt-IdNr., falls vorhanden).
 export const metadata: Metadata = {
   title: "Impressum",
+  alternates: { canonical: "/impressum" },
 };
 
 export default function ImpressumPage() {

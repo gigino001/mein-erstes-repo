@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
@@ -6,6 +7,10 @@ import { business } from "@/lib/business";
 import { ScrollFadeIn } from "@/components/motion/ScrollFadeIn";
 import { ScrollPanColumn } from "@/components/motion/ScrollPanColumn";
 import { InstagramIcon } from "@/components/art/InstagramIcon";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function HomePage() {
   const featuredServices = await prisma.service.findMany({
@@ -138,7 +143,7 @@ export default async function HomePage() {
         <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-coral-soft">
           <Image
             src="/images/portrait/demo-portrait.jpg"
-            alt="Beispielporträt (Platzhalter)"
+            alt="Claudia Gajda, Inhaberin von coco lashes Bielefeld (Platzhalterbild)"
             fill
             sizes="(min-width: 768px) 40vw, 100vw"
             className="object-cover"

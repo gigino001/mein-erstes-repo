@@ -71,6 +71,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     },
     priceRange: "€€",
     areaServed: "Bielefeld",
+    paymentAccepted: "Cash, Credit Card",
+    currenciesAccepted: "EUR",
     openingHoursSpecification: business.openingHours.map((h) => ({
       "@type": "OpeningHoursSpecification",
       dayOfWeek: h.days,

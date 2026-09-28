@@ -4,6 +4,7 @@ import Image from "next/image";
 export const metadata: Metadata = {
   title: "Galerie",
   description: "Vorher/Nachher-Fotos und Studio-Impressionen von coco lashes in Bielefeld.",
+  alternates: { canonical: "/galerie" },
 };
 
 const TILES = [

@@ -5,6 +5,7 @@ import { InstagramIcon } from "@/components/art/InstagramIcon";
 export const metadata: Metadata = {
   title: "Kontakt",
   description: `Kontaktiere coco lashes in Bielefeld: ${fullAddress}, ${business.phoneDisplay}, ${business.email}.`,
+  alternates: { canonical: "/kontakt" },
 };
 
 export default function KontaktPage() {

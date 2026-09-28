@@ -8,6 +8,7 @@ import { business, fullAddress } from "@/lib/business";
 // ändern oder neue Tools (Analyse, Werbung, Zahlungsanbieter) hinzukommen.
 export const metadata: Metadata = {
   title: "Datenschutzerklärung",
+  alternates: { canonical: "/datenschutz" },
 };
 
 export default function DatenschutzPage() {

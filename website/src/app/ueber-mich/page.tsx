@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Über mich",
   description:
     "Lerne Claudia kennen — Inhaberin von coco lashes in Bielefeld und deine Ansprechpartnerin für individuelle Wimpernverlängerungen.",
+  alternates: { canonical: "/ueber-mich" },
 };
 
 export default function UeberMichPage() {
@@ -20,7 +21,7 @@ export default function UeberMichPage() {
       <div className="relative aspect-video rounded-3xl overflow-hidden bg-coral-soft">
         <Image
           src="/images/portrait/demo-portrait.jpg"
-          alt="Beispielporträt (Platzhalter)"
+          alt="Claudia Gajda, Inhaberin von coco lashes Bielefeld (Platzhalterbild)"
           fill
           sizes="768px"
           className="object-cover object-[center_25%]"

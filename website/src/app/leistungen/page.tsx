@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Leistungen & Preise",
   description:
     "Alle Wimpernverlängerungs-Leistungen von coco lashes in Bielefeld: Neumodellage, Auffülltermine und Preise im Überblick.",
+  alternates: { canonical: "/leistungen" },
 };
 
 const CATEGORY_STYLE = {
