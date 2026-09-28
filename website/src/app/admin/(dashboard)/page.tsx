@@ -66,7 +66,7 @@ export default async function AdminDashboardPage() {
                   {a.note && ` · „${a.note}“`}
                 </p>
               </div>
-              <ConfirmCancelButtons id={a.id} showConfirm />
+              <ConfirmCancelButtons id={a.id} showConfirm hasDeposit={a.depositAmountCents > 0} />
             </div>
           ))}
         </div>
@@ -84,7 +84,7 @@ export default async function AdminDashboardPage() {
                 </p>
                 <p className="text-sm text-ink-muted">{formatDateTime(a.startAt)}</p>
               </div>
-              <ConfirmCancelButtons id={a.id} showConfirm={false} />
+              <ConfirmCancelButtons id={a.id} showConfirm={false} hasDeposit={a.depositAmountCents > 0} />
             </div>
           ))}
         </div>

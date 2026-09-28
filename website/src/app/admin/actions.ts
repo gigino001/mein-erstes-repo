@@ -52,7 +52,15 @@ export async function confirmAppointment(id: string) {
   });
 }
 
-export async function cancelAppointment(id: string) {
+/**
+ * initiatedByCustomer steuert, ob die 24h-Regel aus den AGB greift:
+ * - Sagt das Studio selbst ab (initiatedByCustomer = false), wird eine
+ *   bezahlte Anzahlung immer zurückerstattet — die Kundin trifft keine Schuld.
+ * - Storniert die Kundin (initiatedByCustomer = true), wird nur erstattet,
+ *   wenn der Termin noch mindestens 24 Stunden entfernt ist; sonst verfällt
+ *   die Anzahlung gemäß AGB § 3.
+ */
+export async function cancelAppointment(id: string, initiatedByCustomer: boolean = false) {
   await verifyAdminSession();
   const appointment = await prisma.appointment.update({
     where: { id },
@@ -60,16 +68,24 @@ export async function cancelAppointment(id: string) {
     include: { service: true },
   });
 
-  // Bei Stornierung durch uns wird eine bereits bezahlte Anzahlung automatisch
-  // zurückerstattet ("best effort" — ein Refund-Fehler soll die Stornierung
-  // selbst nicht blockieren, wird aber geloggt).
-  if (appointment.depositAmountCents > 0 && appointment.stripePaymentIntentId) {
-    const stripe = getStripe();
-    if (stripe) {
-      try {
-        await stripe.refunds.create({ payment_intent: appointment.stripePaymentIntentId });
-      } catch (err) {
-        console.error("[admin] Rückerstattung der Anzahlung fehlgeschlagen:", err);
+  let depositRefunded = false;
+  const hasDeposit = appointment.depositAmountCents > 0 && appointment.stripePaymentIntentId;
+
+  if (hasDeposit) {
+    const hoursUntilStart = (appointment.startAt.getTime() - Date.now()) / (1000 * 60 * 60);
+    const shouldRefund = !initiatedByCustomer || hoursUntilStart >= 24;
+
+    // "best effort" — ein Refund-Fehler soll die Stornierung selbst nicht
+    // blockieren, wird aber geloggt.
+    if (shouldRefund) {
+      const stripe = getStripe();
+      if (stripe) {
+        try {
+          await stripe.refunds.create({ payment_intent: appointment.stripePaymentIntentId! });
+          depositRefunded = true;
+        } catch (err) {
+          console.error("[admin] Rückerstattung der Anzahlung fehlgeschlagen:", err);
+        }
       }
     }
   }
@@ -82,6 +98,7 @@ export async function cancelAppointment(id: string) {
     startAt: appointment.startAt,
     endAt: appointment.endAt,
     depositAmountCents: appointment.depositAmountCents,
+    depositRefunded,
   });
 }
 

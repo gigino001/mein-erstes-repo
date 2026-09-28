@@ -70,6 +70,7 @@ type AppointmentMailData = {
   startAt: Date;
   endAt: Date;
   depositAmountCents?: number;
+  depositRefunded?: boolean;
 };
 
 function formatEuro(cents: number) {
@@ -144,7 +145,13 @@ export async function sendAppointmentCancelledToCustomer(data: AppointmentMailDa
     subject: `Dein Termin bei ${business.name} wurde storniert`,
     text: `Hallo ${data.customerName},
 
-dein Termin am ${formatDateTime(data.startAt)} (${data.serviceName}) wurde leider storniert.${data.depositAmountCents ? `\n\nDeine Anzahlung von ${formatEuro(data.depositAmountCents)} wurde automatisch zurückerstattet und sollte in wenigen Tagen auf deinem Konto sein.` : ""}
+dein Termin am ${formatDateTime(data.startAt)} (${data.serviceName}) wurde leider storniert.${
+      data.depositAmountCents
+        ? data.depositRefunded
+          ? `\n\nDeine Anzahlung von ${formatEuro(data.depositAmountCents)} wurde automatisch zurückerstattet und sollte in wenigen Tagen auf deinem Konto sein.`
+          : `\n\nDa die Stornierung weniger als 24 Stunden vor dem Termin erfolgt ist, verfällt deine Anzahlung von ${formatEuro(data.depositAmountCents)} gemäß unseren AGB (siehe ${business.url}/agb).`
+        : ""
+    }
 
 Melde dich gerne, um einen neuen Termin zu vereinbaren:
 Telefon: ${business.phoneDisplay}
