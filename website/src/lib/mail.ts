@@ -177,6 +177,71 @@ ${business.owner}`,
   });
 }
 
+type OrderMailData = {
+  id: string;
+  customerName: string;
+  customerEmail: string;
+  fulfillment: string;
+  shippingStreet?: string | null;
+  shippingPostalCode?: string | null;
+  shippingCity?: string | null;
+  shippingCostCents: number;
+  totalCents: number;
+  items: { productName: string; unitPriceCents: number; quantity: number }[];
+};
+
+function formatOrderItems(items: OrderMailData["items"]) {
+  return items.map((i) => `${i.quantity}× ${i.productName} — ${formatEuro(i.unitPriceCents * i.quantity)}`).join("\n");
+}
+
+function formatFulfillment(data: OrderMailData) {
+  if (data.fulfillment === "shipping") {
+    return `Versand an:\n${data.customerName}\n${data.shippingStreet}\n${data.shippingPostalCode} ${data.shippingCity}\n(Versandkosten: ${formatEuro(data.shippingCostCents)})`;
+  }
+  return "Abholung im Studio";
+}
+
+export async function sendNewOrderToOwner(data: OrderMailData) {
+  await sendMail({
+    to: business.email,
+    subject: `Neue Shop-Bestellung: ${data.customerName}`,
+    text: `Neue, bezahlte Bestellung über die Website:
+
+Kundin: ${data.customerName} (${data.customerEmail})
+
+${formatOrderItems(data.items)}
+
+Gesamt: ${formatEuro(data.totalCents)}
+
+${formatFulfillment(data)}
+
+Verwalten: ${business.url}/admin/bestellungen`,
+  });
+}
+
+export async function sendOrderConfirmedToCustomer(data: OrderMailData) {
+  await sendMail({
+    to: data.customerEmail,
+    subject: `Deine Bestellung bei ${business.name}`,
+    text: `Hallo ${data.customerName},
+
+danke für deine Bestellung bei ${business.name}! Deine Zahlung ist eingegangen.
+
+${formatOrderItems(data.items)}
+
+Gesamt: ${formatEuro(data.totalCents)}
+
+${
+  data.fulfillment === "shipping"
+    ? `Wir verschicken deine Bestellung in den nächsten Tagen an:\n${data.shippingStreet}\n${data.shippingPostalCode} ${data.shippingCity}`
+    : `Du kannst deine Bestellung bei deinem nächsten Besuch im Studio abholen (${fullAddress}).`
+}
+
+Bis bald,
+${business.owner}`,
+  });
+}
+
 export async function sendReviewToOwner(data: {
   customerName: string;
   rating: number;

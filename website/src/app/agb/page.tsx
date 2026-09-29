@@ -106,7 +106,28 @@ export default function AgbPage() {
       </section>
 
       <section>
-        <h2 className="font-semibold text-ink mb-2">9. Datenschutz</h2>
+        <h2 className="font-semibold text-ink mb-2">9. Kauf von Produkten (Shop)</h2>
+        <p>
+          Über unseren Online-Shop kannst du zusätzlich Pflegeprodukte kaufen. Dabei kommt ein
+          eigenständiger Kaufvertrag über die bestellte Ware zustande, unabhängig von einer
+          etwaigen Terminbuchung. Der Kaufpreis ist vollständig online per Karte über unseren
+          Zahlungsdienstleister Stripe fällig. Je nach Angebot im Shop wählst du zwischen Abholung
+          im Studio oder Versand; anfallende Versandkosten werden vor Abschluss der Bestellung
+          angezeigt.
+        </p>
+        <p className="mt-3">
+          Als Verbraucher*in steht dir bei im Shop bestellten Waren grundsätzlich ein gesetzliches
+          Widerrufsrecht zu — Einzelheiten findest du in unserer{" "}
+          <Link href="/widerrufsbelehrung" className="text-ocean">
+            Widerrufsbelehrung
+          </Link>
+          . Bei versiegelten Hygieneartikeln (z. B. Wimpernkleber) kann das Widerrufsrecht
+          erlöschen, sobald die Versiegelung entfernt wurde.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="font-semibold text-ink mb-2">10. Datenschutz</h2>
         <p>
           Personenbezogene Daten werden ausschließlich zur Abwicklung der Dienstleistung sowie zur
           Kundenbetreuung verarbeitet. Details zu Umfang, Zweck und den dabei eingesetzten
@@ -119,7 +140,7 @@ export default function AgbPage() {
       </section>
 
       <section>
-        <h2 className="font-semibold text-ink mb-2">10. Schlussbestimmungen</h2>
+        <h2 className="font-semibold text-ink mb-2">11. Schlussbestimmungen</h2>
         <p>
           Sollte eine Bestimmung dieser AGB unwirksam sein, bleiben die übrigen Bestimmungen
           unberührt. Änderungen oder Ergänzungen dieser AGB bedürfen der Schriftform.

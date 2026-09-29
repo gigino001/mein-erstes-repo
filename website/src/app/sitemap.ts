@@ -9,13 +9,14 @@ const MAIN_ROUTES: { path: string; priority: number; changeFrequency: MetadataRo
   { path: "", priority: 1, changeFrequency: "weekly" },
   { path: "/leistungen", priority: 0.9, changeFrequency: "weekly" },
   { path: "/termin", priority: 0.9, changeFrequency: "monthly" },
+  { path: "/shop", priority: 0.7, changeFrequency: "weekly" },
   { path: "/ueber-mich", priority: 0.7, changeFrequency: "monthly" },
   { path: "/galerie", priority: 0.6, changeFrequency: "monthly" },
   { path: "/faq", priority: 0.6, changeFrequency: "monthly" },
   { path: "/kontakt", priority: 0.6, changeFrequency: "monthly" },
 ];
 
-const LEGAL_ROUTES = ["/impressum", "/datenschutz", "/agb"];
+const LEGAL_ROUTES = ["/impressum", "/datenschutz", "/agb", "/widerrufsbelehrung"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

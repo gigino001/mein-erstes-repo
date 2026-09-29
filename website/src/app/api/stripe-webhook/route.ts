@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
 import { getAvailableSlots, slotToRange } from "@/lib/availability";
-import { sendNewRequestToOwner, sendRequestReceivedToCustomer } from "@/lib/mail";
+import {
+  sendNewRequestToOwner,
+  sendRequestReceivedToCustomer,
+  sendNewOrderToOwner,
+  sendOrderConfirmedToCustomer,
+} from "@/lib/mail";
 import { getStripe } from "@/lib/stripe";
 
 /**
@@ -34,6 +39,12 @@ export async function POST(request: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const m = session.metadata;
+
+    if (m?.type === "shop_order") {
+      await handleShopOrderCompleted(session, m);
+      return NextResponse.json({ received: true });
+    }
+
     if (!m?.serviceId) return NextResponse.json({ received: true });
 
     const service = await prisma.service.findUnique({ where: { id: m.serviceId } });
@@ -90,4 +101,70 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({ received: true });
+}
+
+async function handleShopOrderCompleted(session: Stripe.Checkout.Session, m: Stripe.Metadata) {
+  const paymentIntentId =
+    typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id;
+
+  // Stripe kann denselben Webhook-Event mehrfach zustellen — nicht doppelt anlegen.
+  if (paymentIntentId) {
+    const existing = await prisma.order.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
+    if (existing) return;
+  }
+
+  let cartItems: { id: string; n: string; p: number; q: number }[] = [];
+  try {
+    cartItems = JSON.parse(m.cartItems || "[]");
+  } catch {
+    console.error("[stripe-webhook] Konnte cartItems nicht parsen:", m.cartItems);
+    return;
+  }
+  if (!cartItems.length) return;
+
+  const shippingCostCents = Number(m.shippingCostCents) || 0;
+  const itemsTotalCents = cartItems.reduce((sum, i) => sum + i.p * i.q, 0);
+
+  const order = await prisma.order.create({
+    data: {
+      customerName: m.customerName,
+      customerEmail: m.customerEmail,
+      customerPhone: m.customerPhone || null,
+      fulfillment: m.fulfillment,
+      shippingStreet: m.shippingStreet || null,
+      shippingPostalCode: m.shippingPostalCode || null,
+      shippingCity: m.shippingCity || null,
+      shippingCostCents,
+      itemsTotalCents,
+      totalCents: itemsTotalCents + shippingCostCents,
+      stripePaymentIntentId: paymentIntentId ?? null,
+      items: {
+        create: cartItems.map((i) => ({
+          productId: i.id,
+          productName: i.n,
+          unitPriceCents: i.p,
+          quantity: i.q,
+        })),
+      },
+    },
+    include: { items: true },
+  });
+
+  const mailData = {
+    id: order.id,
+    customerName: order.customerName,
+    customerEmail: order.customerEmail,
+    fulfillment: order.fulfillment,
+    shippingStreet: order.shippingStreet,
+    shippingPostalCode: order.shippingPostalCode,
+    shippingCity: order.shippingCity,
+    shippingCostCents: order.shippingCostCents,
+    totalCents: order.totalCents,
+    items: order.items.map((i) => ({
+      productName: i.productName,
+      unitPriceCents: i.unitPriceCents,
+      quantity: i.quantity,
+    })),
+  };
+  await Promise.all([sendNewOrderToOwner(mailData), sendOrderConfirmedToCustomer(mailData)]);
 }

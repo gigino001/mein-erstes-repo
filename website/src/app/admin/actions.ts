@@ -127,3 +127,55 @@ export async function deleteBlock(id: string) {
   await verifyAdminSession();
   await prisma.availabilityException.delete({ where: { id } });
 }
+
+export type ProductInput = {
+  name: string;
+  description?: string;
+  priceCents: number;
+  imageUrl?: string;
+};
+
+export async function createProduct(input: ProductInput) {
+  await verifyAdminSession();
+  await prisma.product.create({
+    data: {
+      name: input.name.trim(),
+      description: input.description?.trim() || null,
+      priceCents: input.priceCents,
+      imageUrl: input.imageUrl?.trim() || null,
+    },
+  });
+}
+
+export async function updateProduct(id: string, input: ProductInput) {
+  await verifyAdminSession();
+  await prisma.product.update({
+    where: { id },
+    data: {
+      name: input.name.trim(),
+      description: input.description?.trim() || null,
+      priceCents: input.priceCents,
+      imageUrl: input.imageUrl?.trim() || null,
+    },
+  });
+}
+
+export async function toggleProductActive(id: string) {
+  await verifyAdminSession();
+  const product = await prisma.product.findUniqueOrThrow({ where: { id } });
+  await prisma.product.update({ where: { id }, data: { active: !product.active } });
+}
+
+export async function updateShopSettings(input: { shippingEnabled: boolean; shippingCostCents: number }) {
+  await verifyAdminSession();
+  await prisma.shopSettings.upsert({
+    where: { id: "singleton" },
+    update: input,
+    create: { id: "singleton", ...input },
+  });
+}
+
+export async function markOrderCompleted(id: string) {
+  await verifyAdminSession();
+  await prisma.order.update({ where: { id }, data: { status: "completed" } });
+}

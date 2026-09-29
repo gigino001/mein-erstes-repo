@@ -150,7 +150,19 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="font-semibold text-ink mb-2">10. Bewertungsanfragen</h2>
+        <h2 className="font-semibold text-ink mb-2">10. Shop-Bestellungen</h2>
+        <p>
+          Wenn du über unseren Online-Shop Produkte bestellst, verarbeiten wir die dabei
+          angegebenen Daten (Name, E-Mail-Adresse, optional Telefonnummer, bei Versand zusätzlich
+          deine Adresse) sowie die Angaben zu deiner Bestellung ausschließlich zur Abwicklung des
+          Kaufvertrags (Art. 6 Abs. 1 lit. b DSGVO). Die Zahlung wickeln wir über unseren
+          Zahlungsdienstleister Stripe ab (siehe Ziffer 6), die Bestellbestätigung versenden wir
+          per E-Mail (siehe Ziffer 7).
+        </p>
+      </section>
+
+      <section>
+        <h2 className="font-semibold text-ink mb-2">11. Bewertungsanfragen</h2>
         <p>
           Etwa zwei Tage nach einem bestätigten Termin senden wir dir per E-Mail einen persönlichen
           Link, über den du freiwillig eine Bewertung zu deinem Termin abgeben kannst
@@ -162,7 +174,7 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="font-semibold text-ink mb-2">11. Änderungen dieser Datenschutzerklärung</h2>
+        <h2 className="font-semibold text-ink mb-2">12. Änderungen dieser Datenschutzerklärung</h2>
         <p>
           Wir passen diese Datenschutzerklärung an, sobald sich die von uns eingesetzten Dienste
           oder rechtliche Vorgaben ändern. Es gilt jeweils die aktuell auf dieser Seite

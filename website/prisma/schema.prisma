@@ -112,3 +112,65 @@ model Appointment {
 
   @@index([staffId, startAt])
 }
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  priceCents  Int
+  imageUrl    String?
+  active      Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  orderItems OrderItem[]
+}
+
+model Order {
+  id                 String   @id @default(cuid())
+  customerName       String
+  customerEmail      String
+  customerPhone      String?
+  /// "pickup" | "shipping"
+  fulfillment        String
+  shippingStreet     String?
+  shippingPostalCode String?
+  shippingCity       String?
+  /// Versandkosten in Cent, die zum Bestellzeitpunkt galten (0 bei Abholung).
+  shippingCostCents  Int      @default(0)
+  itemsTotalCents    Int
+  totalCents         Int
+  /// "paid" | "completed"
+  status             String   @default("paid")
+  stripePaymentIntentId String?
+  createdAt          DateTime @default(now())
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id             String @id @default(cuid())
+  orderId        String
+  productId      String
+  /// Name/Preis zum Bestellzeitpunkt — bleibt erhalten, falls sich das
+  /// Produkt später ändert.
+  productName    String
+  unitPriceCents Int
+  quantity       Int
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+}
+
+/// Ein einzelner Datensatz (id = "singleton") für Shop-weite Einstellungen.
+model ShopSettings {
+  id                String  @id @default("singleton")
+  /// Versand ist bewusst standardmäßig deaktiviert — dafür sind rechtliche
+  /// Vorbereitungen nötig (Widerrufsrecht, ggf. LUCID-Registrierung). Erst
+  /// nach bewusster Aktivierung im Admin-Bereich wird Versand im Shop
+  /// angeboten.
+  shippingEnabled   Boolean @default(false)
+  shippingCostCents Int     @default(495)
+}
