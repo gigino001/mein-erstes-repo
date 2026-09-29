@@ -150,7 +150,19 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="font-semibold text-ink mb-2">10. Änderungen dieser Datenschutzerklärung</h2>
+        <h2 className="font-semibold text-ink mb-2">10. Bewertungsanfragen</h2>
+        <p>
+          Etwa zwei Tage nach einem bestätigten Termin senden wir dir per E-Mail einen persönlichen
+          Link, über den du freiwillig eine Bewertung zu deinem Termin abgeben kannst
+          (Art. 6 Abs. 1 lit. f DSGVO — berechtigtes Interesse an Kundinnen-Feedback). Gibst du
+          über diesen Link eine Bewertung ab, werden dein Name, deine Sternebewertung und dein Text
+          per E-Mail an uns übermittelt (siehe Ziffer 7). Eine Veröffentlichung auf der Website
+          erfolgt ausschließlich nach Rücksprache mit dir.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="font-semibold text-ink mb-2">11. Änderungen dieser Datenschutzerklärung</h2>
         <p>
           Wir passen diese Datenschutzerklärung an, sobald sich die von uns eingesetzten Dienste
           oder rechtliche Vorgaben ändern. Es gilt jeweils die aktuell auf dieser Seite

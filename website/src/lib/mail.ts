@@ -160,3 +160,39 @@ E-Mail: ${business.email}
 ${business.owner}`,
   });
 }
+
+export async function sendReviewRequestToCustomer(data: AppointmentMailData) {
+  await sendMail({
+    to: data.customerEmail,
+    subject: `Wie hat dir dein Termin bei ${business.name} gefallen?`,
+    text: `Hallo ${data.customerName},
+
+ich hoffe, deine Wimpern von deinem Termin am ${formatDateTime(data.startAt)} gefallen dir noch genauso gut wie am ersten Tag!
+
+Ich würde mich riesig über eine kurze Bewertung freuen — das hilft mir und anderen Kundinnen sehr:
+${business.url}/bewertung/${data.id}
+
+Vielen Dank und bis bald,
+${business.owner}`,
+  });
+}
+
+export async function sendReviewToOwner(data: {
+  customerName: string;
+  rating: number;
+  text: string;
+  appointmentId: string;
+}) {
+  await sendMail({
+    to: business.email,
+    subject: `Neue Bewertung von ${data.customerName} (${data.rating}/5 Sternen)`,
+    text: `Über die Website wurde eine neue Bewertung abgegeben:
+
+Von: ${data.customerName}
+Bewertung: ${"★".repeat(data.rating)}${"☆".repeat(5 - data.rating)} (${data.rating}/5)
+
+„${data.text}“
+
+Wenn du magst, kannst du diese Bewertung (mit Einverständnis der Kundin) auf der Homepage veröffentlichen.`,
+  });
+}
