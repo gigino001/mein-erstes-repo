@@ -20,15 +20,12 @@ export default function UeberMichPage() {
 
       <div className="relative aspect-video rounded-3xl overflow-hidden bg-coral-soft">
         <Image
-          src="/images/portrait/demo-portrait.jpg"
-          alt="Claudia Gajda, Inhaberin von coco lashes Bielefeld (Platzhalterbild)"
+          src="/images/portrait/portrait-claudia.jpg"
+          alt="Claudia Gajda, Inhaberin von coco lashes Bielefeld"
           fill
           sizes="768px"
           className="object-cover object-[center_25%]"
         />
-        <span className="absolute bottom-4 left-4 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
-          Demobild — echtes Foto folgt
-        </span>
       </div>
 
       <div className="flex flex-col gap-6 text-lg leading-relaxed text-ink-soft">
@@ -57,6 +54,30 @@ export default function UeberMichPage() {
           Deshalb wird jedes Set individuell mit dir besprochen und angefertigt — kein
           Fließband, kein Look von der Stange, sondern genau das, was zu dir passt.
         </p>
+      </div>
+
+      <div className="flex flex-col gap-6">
+        <span className="text-[13px] font-semibold tracking-[0.14em] uppercase text-ocean">
+          Einblicke ins Studio
+        </span>
+        <div className="grid grid-cols-2 gap-4">
+          {[
+            { src: "/images/studio/studio-1.jpg", alt: "Claudia bei der Wimpernbehandlung einer Kundin" },
+            { src: "/images/studio/studio-2.jpg", alt: "Claudia setzt mit der Pinzette einzelne Wimpern an" },
+            { src: "/images/studio/studio-3.jpg", alt: "Claudia konzentriert bei der Arbeit im Studio" },
+            { src: "/images/studio/studio-4.jpg", alt: "Claudia bei der Wimpernverlängerung am Fensterplatz" },
+          ].map((photo) => (
+            <div key={photo.src} className="relative aspect-[2/3] rounded-2xl overflow-hidden bg-coral-soft">
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                fill
+                sizes="(min-width: 768px) 25vw, 50vw"
+                className="object-cover"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
