@@ -15,3 +15,9 @@ export function dachflaechenText(anzahl: number): string {
   if (anzahl === 0) return "noch keine Dachfläche";
   return anzahl === 1 ? "1 Dachfläche" : `${anzahl} Dachflächen`;
 }
+
+/** Himmelsrichtung zu einem Kompasswinkel (45°-Sektoren). */
+export function himmelsrichtung(grad: number): string {
+  const namen = ["N", "NO", "O", "SO", "S", "SW", "W", "NW"];
+  return namen[Math.round((((grad % 360) + 360) % 360) / 45) % 8]!;
+}

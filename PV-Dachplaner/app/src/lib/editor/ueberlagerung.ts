@@ -1,7 +1,7 @@
 import type maplibregl from "maplibre-gl";
 import type { Point } from "@pv-dachplaner/geometry-core";
 import { lngLatToUtm, utmToLngLat } from "../coords";
-import { kantenMitte, punktInVieleck } from "./geom";
+import { ausrichtungVonKante, kantenMitte, naechsteKante, punktInVieleck } from "./geom";
 import { einrasten } from "./einrasten";
 import type { EditorZustand } from "./zustand.svelte";
 
@@ -59,9 +59,11 @@ export class Ueberlagerung {
   private quellenAnlegen() {
     const leer = { type: "FeatureCollection", features: [] } as GeoJSON.FeatureCollection;
     const m = this.map;
-    for (const id of ["daecher", "griffe", "entwurf", "einrasten"]) m.addSource(id, { type: "geojson", data: leer });
+    for (const id of ["daecher", "module", "griffe", "entwurf", "einrasten"]) m.addSource(id, { type: "geojson", data: leer });
     m.addLayer({ id: "dach-flaeche", type: "fill", source: "daecher", paint: { "fill-color": ["case", ["get", "gewaehlt"], "#00e5ff", "#ffd400"], "fill-opacity": ["case", ["get", "gewaehlt"], 0.28, 0.16] } });
     m.addLayer({ id: "dach-linie", type: "line", source: "daecher", paint: { "line-color": ["case", ["get", "gewaehlt"], "#00e5ff", "#ffd400"], "line-width": ["case", ["get", "gewaehlt"], 3, 2] } });
+    m.addLayer({ id: "module-flaeche", type: "fill", source: "module", paint: { "fill-color": "#1e6bff", "fill-opacity": 0.55 } });
+    m.addLayer({ id: "module-linie", type: "line", source: "module", paint: { "line-color": "#ffffff", "line-width": 1 } });
     m.addLayer({ id: "entwurf-linie", type: "line", source: "entwurf", filter: ["==", ["geometry-type"], "LineString"], paint: { "line-color": "#ffffff", "line-width": 2.5, "line-dasharray": [2, 1.5] } });
     m.addLayer({ id: "griff-mitte", type: "circle", source: "griffe", filter: ["==", ["get", "typ"], "mitte"], paint: { "circle-radius": 6, "circle-color": "#ffffff", "circle-opacity": 0.75, "circle-stroke-width": 1, "circle-stroke-color": "#00526b" } });
     m.addLayer({ id: "griff-punkt", type: "circle", source: "griffe", filter: ["==", ["get", "typ"], "punkt"], paint: { "circle-radius": ["case", ["get", "gewaehlt"], 12, 9], "circle-color": ["case", ["get", "gewaehlt"], "#ff9500", "#0b5fff"], "circle-stroke-width": 2.5, "circle-stroke-color": "#ffffff" } });
@@ -92,7 +94,11 @@ export class Ueberlagerung {
       z.entwurf.forEach((p, i) => entwurf.push({ type: "Feature", properties: { erster: i === 0 && z.entwurf.length >= 3 }, geometry: { type: "Point", coordinates: pt(p) } }));
     }
     const set = (id: string, features: GeoJSON.Feature[]) => (this.map.getSource(id) as maplibregl.GeoJSONSource).setData({ type: "FeatureCollection", features });
+    const module: GeoJSON.Feature[] = (z.ergebnis?.daecher ?? []).flatMap((e) =>
+      (e.layout?.modules ?? []).map((mo): GeoJSON.Feature => ({ type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [[...mo.corners.map(pt), pt(mo.corners[0]!)]] } })),
+    );
     set("daecher", daecher);
+    set("module", module);
     set("griffe", griffe);
     set("entwurf", entwurf);
     set("einrasten", z.einrastZiel ? [{ type: "Feature", properties: {}, geometry: { type: "Point", coordinates: pt(z.einrastZiel.punkt) } }] : []);
@@ -142,7 +148,7 @@ export class Ueberlagerung {
   private finde(px: { x: number; y: number }, ort: Point): Treffer | null {
     const z = this.z;
     const d = z.gewaehltesDach;
-    if (z.werkzeug !== "auswahl") return null;
+    if (z.werkzeug !== "auswahl" || z.traufeWahl) return null;
     if (d) {
       let best: { i: number; dist: number } | null = null;
       d.outline.forEach((p, i) => {
@@ -260,6 +266,14 @@ export class Ueberlagerung {
       }
       z.entwurfPunkt(this.raste(ort));
       z.einrastZiel = null;
+      return;
+    }
+    if (z.traufeWahl) {
+      const d = z.gewaehltesDach;
+      if (d) {
+        const k = naechsteKante(d.outline, ort);
+        if (k.abstand <= 36 * this.mpp()) z.setzeAusrichtung(d.id, ausrichtungVonKante(d.outline, k.index));
+      }
       return;
     }
     const t = g.treffer;

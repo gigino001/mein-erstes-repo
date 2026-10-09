@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dachflaechenText, geaendertText } from "./format";
+import { dachflaechenText, geaendertText, himmelsrichtung } from "./format";
 
 describe("Anzeigetexte", () => {
   const jetzt = new Date(2026, 9, 9, 12, 0);
@@ -13,5 +13,14 @@ describe("Anzeigetexte", () => {
     expect(dachflaechenText(0)).toBe("noch keine Dachfläche");
     expect(dachflaechenText(1)).toBe("1 Dachfläche");
     expect(dachflaechenText(3)).toBe("3 Dachflächen");
+  });
+  it("Himmelsrichtung", () => {
+    expect(himmelsrichtung(180)).toBe("S");
+    expect(himmelsrichtung(0)).toBe("N");
+    expect(himmelsrichtung(359)).toBe("N");
+    expect(himmelsrichtung(225)).toBe("SW");
+    expect(himmelsrichtung(-90)).toBe("W");
+    expect(himmelsrichtung(112)).toBe("O");
+    expect(himmelsrichtung(114)).toBe("SO");
   });
 });

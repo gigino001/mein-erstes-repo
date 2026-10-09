@@ -1,5 +1,6 @@
 import type { Point } from "@pv-dachplaner/geometry-core";
-import type { Project, RoofPlane } from "../model";
+import type { Ausrichtung, Project, RoofPlane } from "../model";
+import type { Gesamt } from "../berechnung";
 import { punktEinfuegen, punktLoeschen, verschieben } from "./geom";
 import type { EinrastErgebnis } from "./einrasten";
 import { Verlauf } from "./verlauf";
@@ -31,6 +32,10 @@ export class EditorZustand {
   einrastZiel = $state<EinrastErgebnis | null>(null);
   /** Position (Bildschirmpixel) für die Lupe, solange eine Ecke gezogen wird */
   lupe = $state<{ x: number; y: number } | null>(null);
+  /** Wartet auf das Antippen der Traufkante (setzt die Fallrichtung) */
+  traufeWahl = $state(false);
+  /** Aktuelles Rechenergebnis (wird vom Editor nach Änderungen gesetzt) */
+  ergebnis = $state<Gesamt | null>(null);
   kannZurueck = $state(false);
   kannVor = $state(false);
   private verlauf = new Verlauf<RoofPlane[]>();
@@ -77,6 +82,7 @@ export class EditorZustand {
 
   setzeWerkzeug(w: Werkzeug) {
     this.werkzeug = w;
+    this.traufeWahl = false;
     if (w === "auswahl") this.entwurf = [];
     else this.auswahl = null;
   }
@@ -166,6 +172,35 @@ export class EditorZustand {
     if (!d) return;
     this.merken();
     d.outline = verschieben($state.snapshot(d.outline) as Point[], dx, dy);
+    this.geaendert();
+  }
+
+  // ----- Eigenschaften und Einstellungen -----
+  setzeNeigung(roofId: string, grad: number | null) {
+    const d = this.dach(roofId);
+    if (!d) return;
+    const neu = grad === null || !Number.isFinite(grad) ? null : Math.min(89, Math.max(0, Math.round(grad * 10) / 10));
+    if (neu === d.slopeDeg) return;
+    this.merken();
+    d.slopeDeg = neu;
+    this.geaendert();
+  }
+  setzeAusrichtung(roofId: string, grad: number | null) {
+    const d = this.dach(roofId);
+    if (!d) return;
+    const neu = grad === null || !Number.isFinite(grad) ? null : ((Math.round(grad * 10) / 10) % 360 + 360) % 360;
+    if (neu === d.azimuthDeg) return;
+    this.merken();
+    d.azimuthDeg = neu;
+    this.traufeWahl = false;
+    this.geaendert();
+  }
+  setzeRandabstand(m: 0 | 0.1 | 0.2) {
+    this.projekt.settings.randabstandM = m;
+    this.geaendert();
+  }
+  setzeAusrichtungsModus(o: Ausrichtung) {
+    this.projekt.settings.orientation = o;
     this.geaendert();
   }
 

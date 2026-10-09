@@ -209,6 +209,25 @@ Jedes Paket endet mit einem **Test und einem lauffähigen Stand**. Dauer in Arbe
 
 **Zwischenstände zum Anschauen** (jeweils als Netlify-Vorschau zum Ausprobieren auf dem iPhone): nach Paket 2 (Karte), 5 (Zeichnen), 7 (Rechnen), 9 (Adresse), 11 (LoD2).
 
+### Fortschritt (Stand 2026-10-09)
+
+| Paket | Stand |
+|---|---|
+| 1 Projektgerüst | fertig |
+| 2 Koordinaten und Karte | fertig |
+| 3 Speicher | fertig (Sicherung, Autospeichern, 20 Tests) |
+| 4 Projektliste und Neues Projekt | fertig (Anlegen über Kartenkreuz) |
+| 5 Editor-Grundlage | fertig (Zeichnen, Ziehen, Kante teilen, Ecke/Fläche löschen, Rückgängig/Wiederholen) |
+| 6 Einrasten | fertig (Ecken und Kanten, Lupe beim Ziehen, Kantenlängen, ein/aus) |
+| 7 Eigenschaften und Berechnung | fertig (Neigung, Fallrichtung per Traufkante, Module auf der Karte, Ergebnisblatt, Randabstand, Ausrichtung) |
+| 8 Hindernisse | offen |
+| 9 Adresssuche | offen |
+| 10, 11 (LoD2) | offen |
+| 12 Politur | offen (u. a. Quellenhinweis der Karte nicht verdecken, Programmgröße) |
+| 13 Tests und Abnahme | offen |
+
+Die Tests laufen mit `npm test` (45 Unit-Tests) und `npm run e2e` (fünf Browser-Abläufe gegen die gebaute App).
+
 ## 10. Teststrategie
 
 - **Rechenkern:** besteht (59 Tests). Neu: Beispiele aus echter Bedienung (z. B. Dach mit Hindernis, Randabstand 20 cm).

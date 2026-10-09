@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { flaeche, kantenLaengen, kantenMitte, punktEinfuegen, punktInVieleck, punktLoeschen, selbstschnitt, verschieben } from "./geom";
+import { ausrichtungVonKante, naechsteKante, flaeche, kantenLaengen, kantenMitte, punktEinfuegen, punktInVieleck, punktLoeschen, selbstschnitt, verschieben } from "./geom";
 import { Verlauf } from "./verlauf";
 
 const quadrat = [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: 5 }, { x: 0, y: 5 }];
@@ -33,6 +33,31 @@ describe("Vieleck-Werkzeuge", () => {
     expect(quadrat[0]).toEqual({ x: 0, y: 0 });
     expect(kantenMitte(quadrat, 0)).toEqual({ x: 5, y: 0 });
     expect(kantenMitte(quadrat, 3)).toEqual({ x: 0, y: 2.5 });
+  });
+});
+
+describe("Fallrichtung aus der Traufkante", () => {
+  const ccw = [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: 5 }, { x: 0, y: 5 }];
+  const cw = [...ccw].reverse();
+  it("untere Kante (Süden) ergibt 180°, obere 0°, rechte 90°, linke 270° – unabhängig vom Umlaufsinn", () => {
+    for (const ring of [ccw, cw]) {
+      const idx = (a: { x: number; y: number }, b: { x: number; y: number }) => ring.findIndex((p, i) => {
+        const q = ring[(i + 1) % ring.length]!;
+        return (p.x === a.x && p.y === a.y && q.x === b.x && q.y === b.y) || (p.x === b.x && p.y === b.y && q.x === a.x && q.y === a.y);
+      });
+      expect(ausrichtungVonKante(ring, idx({ x: 0, y: 0 }, { x: 10, y: 0 }))).toBe(180);
+      expect(ausrichtungVonKante(ring, idx({ x: 0, y: 5 }, { x: 10, y: 5 }))).toBe(0);
+      expect(ausrichtungVonKante(ring, idx({ x: 10, y: 0 }, { x: 10, y: 5 }))).toBe(90);
+      expect(ausrichtungVonKante(ring, idx({ x: 0, y: 0 }, { x: 0, y: 5 }))).toBe(270);
+    }
+  });
+  it("schräge Kante: nach Südwesten geneigte Kante ergibt 225°", () => {
+    const raute = [{ x: 0, y: 0 }, { x: 4, y: -4 }, { x: 8, y: 0 }, { x: 4, y: 4 }];
+    expect(ausrichtungVonKante(raute, 0)).toBe(225);
+  });
+  it("nächste Kante", () => {
+    expect(naechsteKante(ccw, { x: 5, y: 0.3 })).toEqual({ index: 0, abstand: 0.3 });
+    expect(naechsteKante(ccw, { x: 9.8, y: 2 }).index).toBe(1);
   });
 });
 

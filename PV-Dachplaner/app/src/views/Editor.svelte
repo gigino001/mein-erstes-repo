@@ -10,6 +10,7 @@
   import { autospeicher, projekt } from "../lib/store";
   import { utmToLngLat } from "../lib/coords";
   import type { Project } from "../lib/model";
+  import { rechne } from "../lib/berechnung";
 
   let { id }: { id: string } = $props();
   let p = $state<Project | null | undefined>(undefined);
@@ -73,6 +74,15 @@
     karte = map;
     ueb = new Ueberlagerung(map, z!);
   }
+  // Ergebnis neu berechnen (entprellt), sobald sich Dachflächen, Hindernisse oder Einstellungen ändern
+  $effect(() => {
+    if (!z) return;
+    JSON.stringify([z.projekt.roofs, z.projekt.obstacles, z.projekt.settings]); // liest tief → reaktiv
+    const t = setTimeout(() => {
+      z!.ergebnis = rechne($state.snapshot(z!.projekt) as Project);
+    }, 100);
+    return () => clearTimeout(t);
+  });
   // Ebenen neu zeichnen, sobald sich der Zustand ändert (liest Zustand → reaktiv)
   $effect(() => {
     ueb?.zeichnen();

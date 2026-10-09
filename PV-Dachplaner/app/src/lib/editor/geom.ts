@@ -73,3 +73,37 @@ export function kantenMitte(ring: Point[], i: number): Point {
 export function kantenLaengen(ring: Point[]): number[] {
   return ring.map((a, i) => abstand(a, ring[(i + 1) % ring.length]!));
 }
+
+/**
+ * Fallrichtung (Kompassgrad, 0 = Nord, 90 = Ost) für die Kante `i` als Traufkante: Richtung der nach außen zeigenden Kantennormale.
+ * Das Dach fällt zur Traufe hin ab.
+ */
+export function ausrichtungVonKante(ring: Point[], i: number): number {
+  const a = ring[i]!;
+  const b = ring[(i + 1) % ring.length]!;
+  const dx = b.x - a.x, dy = b.y - a.y;
+  const l = Math.hypot(dx, dy);
+  if (l === 0) return 0;
+  const mitte = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+  const eps = Math.min(0.05, l * 0.01);
+  let nx = dy / l, ny = -dx / l;
+  if (punktInVieleck({ x: mitte.x + nx * eps, y: mitte.y + ny * eps }, ring)) {
+    nx = -nx;
+    ny = -ny;
+  }
+  return (Math.round(((Math.atan2(nx, ny) * 180) / Math.PI + 360) * 10) / 10) % 360;
+}
+
+/** Nächste Kante zu einem Punkt: Index und Abstand. */
+export function naechsteKante(ring: Point[], p: Point): { index: number; abstand: number } {
+  let best = { index: 0, abstand: Infinity };
+  ring.forEach((a, i) => {
+    const b = ring[(i + 1) % ring.length]!;
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const l2 = dx * dx + dy * dy;
+    const t = l2 === 0 ? 0 : Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / l2));
+    const d = Math.hypot(p.x - (a.x + t * dx), p.y - (a.y + t * dy));
+    if (d < best.abstand) best = { index: i, abstand: d };
+  });
+  return best;
+}
