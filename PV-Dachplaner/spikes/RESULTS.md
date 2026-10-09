@@ -109,6 +109,31 @@ Weil S2 den Weg B (Vorverarbeitung) ergeben hat, braucht die App **keine Server-
 
 **Quellen:** [Netlify Free Plan Limits 2026 (netli.fyi)](https://netli.fyi/blog/netlify-free-plan-limits-2026), [Netlify Free Tier 2026 (agentdeals.dev)](https://agentdeals.dev/vendor/netlify), [Cloudflare R2 Preise](https://developers.cloudflare.com/r2/pricing), [Supabase Free Tier Limits](https://www.itpathsolutions.com/supabase-free-tier-limits).
 
+## S8 – Adresssuche: **eigener Adressindex aus amtlichen Daten**, 2026-10-09
+
+Code: [`s8-adressen`](s8-adressen) (`build_index.py` baut den Index, `search_test.py` ist der Such-Prototyp mit Test).
+
+**Fund:** Geobasis NRW stellt die **Gebäudereferenzen** als Open Data bereit (Hauskoordinaten, ganz NRW): `https://www.opengeodata.nrw.de/produkte/geobasis/lk/akt/gebref_txt/gebref_EPSG25832_ASCII.zip`, 97 MB (685 MB entpackt), Stand 01.07.2026, Koordinaten in EPSG:25832. Jede Zeile enthält Straße, Hausnummer, Zusatz, Gemeinde, Kreis und die Koordinate des Hauses. Enthalten sind nur Hauptgebäude mit Hausnummer (Garagen u. Ä. sind herausgefiltert), aktualisiert halbjährlich (Quelle: Format- und Produktbeschreibung der Bezirksregierung Köln).
+
+| Frage | Ergebnis |
+|---|---|
+| Umfang | **4.509.543 Adressen** in NRW, davon **600.538 im Regierungsbezirk Detmold (OWL)**: Bielefeld 70.121, Gütersloh 105.889, Herford 75.716, Höxter 53.339, Lippe 107.192, Minden-Lübbecke 97.851, Paderborn 90.430 |
+| Index für OWL | 70 Gemeindedateien, zusammen **14 MB roh, 5,1 MB gzip**; größte Datei Bielefeld 603 kB, Paderborn 309 kB, Gütersloh 228 kB. Die App lädt nur die Gemeinde, die der Nutzer eintippt. |
+| Trefferquote Suchprototyp (200 zufällige OWL-Adressen aus 70 Gemeinden, je 6 Schreibweisen, Treffer = Koordinate innerhalb 15 m) | exakt 100 %, „Str.“ statt „Straße“ 100 %, ohne Umlaute/ß 100 %, klein ohne Satzzeichen 100 %, Hausnummer vor Straße 100 %, **ein Buchstabe fehlt (Tippfehler) 98 %** (3 von 196 nicht eindeutig, in der App würden dann Vorschläge erscheinen) |
+| Passt der Punkt zum Gebäude? | Die Hauskoordinate liegt bei **78 %** der Adressen **innerhalb eines LoD2-Gebäudegrundrisses** (743 bzw. 866 Adressen in zwei Kacheln). Bei den übrigen 22 % liegt der Punkt außerhalb (nächste Gebäudeecke im Median 7–8 m, 90 % 16–26 m), meist am Eingang oder auf dem Grundstück. Die Kennungen der beiden Datensätze stimmen nicht überein, die Zuordnung läuft also räumlich. |
+
+**Aussagekraft:** Der Trefferquoten-Test prüft Schreibweisen und Tippfehler an Adressen aus demselben Datenbestand. Er sagt nichts über Adressen, die in den Daten fehlen (Neubauten nach dem Stand 07/2026, Hausnummern ohne Hauptgebäude).
+
+**Nicht getestet:** Externe Dienste (Nominatim, Photon, amtliche Geokodierung). Sie sind nach diesem Fund nicht mehr nötig. Der öffentliche Nominatim-Dienst erlaubt nach meiner Erinnerung keine Suche während des Tippens **[prüfen]**.
+
+**Lizenz:** Für den Webdienst der Gebäudereferenzen ist dl-zero-de/2.0 angegeben. Für den ASCII-Download habe ich keine ausdrückliche Lizenzzeile gefunden (Zugriff ohne Beschränkung) **[prüfen auf der Datensatzseite bei open.nrw vor dem Rollout]**.
+
+**Entscheidung**
+1. **Eigener Adressindex** aus den Gebäudereferenzen, je Gemeinde eine kleine Datei (Weg wie bei den Dachflächen: vorab erzeugt, statisch bereitgestellt, 5 MB für ganz OWL, grob 35 MB für ganz NRW). Keine Abhängigkeit von externen Suchdiensten und keine Nutzungsgrenzen.
+2. **Ablauf in der App:** Adresse eintippen → Treffer mit Vorschlägen → Karte springt zum Haus → die App wählt das nächstgelegene Gebäude (Punkt im Grundriss, sonst nächstes Gebäude bis etwa 30 m) und zeigt es zur Bestätigung. Der Nutzer kann **immer** per Antippen ein anderes Gebäude wählen.
+3. **Fehlende Adressen:** Freie Eingabe „auf der Karte antippen“ bleibt als Fallback.
+4. **Aktualisierung:** halbjährlich (neue Gebäudereferenzen und LoD2-Kacheln), als wiederholbarer Aufbereitungslauf.
+
 ## S4 – Geometrie-Kern: **bestanden** (2026-10-09)
 
 Code: [`../packages/geometry-core`](../packages/geometry-core) (TypeScript, Tests mit Vitest).

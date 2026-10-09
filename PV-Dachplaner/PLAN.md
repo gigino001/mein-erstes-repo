@@ -1,6 +1,6 @@
 # PV-Dachplaner – Projektplan
 
-Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.9 (Entwurf zur Abstimmung)
+Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.10 (Entwurf zur Abstimmung)
 
 Aussagen mit **[prüfen]** stammen aus Recherche oder Erinnerung und sind noch nicht in der Praxis verifiziert. Sie werden in den Spikes (Kap. 13) geklärt, bevor etwas darauf aufgebaut wird.
 
@@ -77,7 +77,7 @@ Ein Werkzeug, das ein Dach in NRW anhand von Luftbild und Gebäudedaten vermisst
 - **Strategie:** Phase 1 funktioniert **ohne** LoD2 (Dach zeichnen, Neigung eingeben). LoD2 kommt als Vorbelegung dazu und ist nie Pflicht.
 
 ### 5.3 Adresssuche
-- Kandidaten: OpenStreetMap Nominatim (Nutzungsbedingungen beachten: wenig Anfragen, Drosselung, Attribution), amtliche Geokodierung **[prüfen]**.
+- **Entscheidung (S8):** eigener Adressindex aus den amtlichen Gebäudereferenzen (Hauskoordinaten) von Geobasis NRW, je Gemeinde eine kleine Datei (OWL 5 MB gesamt), ohne externen Suchdienst. Fallback: Gebäude auf der Karte antippen.
 
 ### 5.4 Koordinatensysteme
 - Geodaten in **EPSG:25832** (ETRS89/UTM 32N), Anzeige in Web-Mercator. Alle Flächen werden in 25832 berechnet (Meter, flächentreu genug auf Gebäudeebene), nicht in Web-Mercator.
@@ -158,6 +158,7 @@ Kamin/Schornstein, Dachfenster, Gaube, Antenne/Sat-Schüssel, Lüfter/Entlüftun
 
 **Hosting und Dienste (Stand nach S1 bis S3)**
 - **App:** rein statische PWA, keine Server-Funktion im Betrieb. Das Luftbild kommt direkt vom NRW-WMS (S1), die Dachflächen aus vorbereiteten Kachel-Dateien (S2).
+- **Adressindex:** je Gemeinde eine kleine Datei (OWL 5 MB gzip), erzeugt aus den Gebäudereferenzen, im selben statischen Hosting wie die Dachflächen-Kacheln.
 - **Dachflächen-Kacheln:** je 1 km² eine kleine komprimierte Datei (ca. 0,2 MB), erzeugt von einem Aufbereitungsprogramm aus den NRW-CityGML-Kacheln. **Zunächst auf Netlify** (eigene statische Site oder im selben Projekt), mit einem Pilotgebiet (z. B. Bielefeld und Umgebung). Umfang OWL bis ca. 1,3 GB, ganz NRW ca. 7 GB. Bei Platzproblemen später **Cloudflare R2** als Alternative.
 - **App-Hosting: Netlify** (Entscheidung des Auftraggebers). Das Gratis-Kontingent (Credits) wird mit den anderen Sites des Kontos geteilt. Gegenmaßnahmen: wenige Produktivveröffentlichungen (je 15 Credits), Vorschau-Adressen für Entwicklungsstände, Verbrauch beobachten (S3).
 - **Konten und Teilen:** **Supabase** (Anmeldung per Einladungslink, Datenbank mit Zeilenrechten), **zurückgestellt bis vor M3**, weil noch kein Konto besteht. Bis dahin liegen Projekte lokal auf dem Gerät. Gratis-Projekte pausieren nach 7 Tagen ohne Anfragen (S7 prüft Details).
@@ -223,7 +224,7 @@ Jeder Spike ist klein, hat eine Frage und ein klares Ja/Nein.
 | S5 | Läuft ein kleines ONNX-Modell auf dem iPhone in akzeptabler Zeit/Speicher? | Entscheidet Browser- vs. Server-Erkennung | Messwerte |
 | S6 | Wie gut trennt ein Vorab-Modell Hindernisse auf 10-cm-Bildern? | Aufwand der Beschriftung | Trefferquote je Klasse |
 | S7 | Konten und Teilen: Supabase vs. Netlify Blobs – Aufwand, Limits, Datenschutz | Entscheidet Backend | Gewählte Lösung |
-| S8 | Adresssuche: Nominatim ausreichend oder amtliche Geokodierung? | Nutzbarkeit/Bedingungen | Gewählte Lösung |
+| S8 | Adresssuche: Nominatim ausreichend oder amtliche Geokodierung? | Nutzbarkeit/Bedingungen | **Eigener Adressindex** aus amtlichen Hauskoordinaten, 98–100 % Trefferquote im Prototyp; siehe `spikes/RESULTS.md` |
 
 Die detaillierte Ausarbeitung der Spikes steht in [`SPIKES.md`](SPIKES.md).
 
