@@ -1,6 +1,6 @@
 # PV-Dachplaner – Projektplan
 
-Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.3 (Entwurf zur Abstimmung)
+Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.4 (Entwurf zur Abstimmung)
 
 Aussagen mit **[prüfen]** stammen aus Recherche oder Erinnerung und sind noch nicht in der Praxis verifiziert. Sie werden in den Spikes (Kap. 13) geklärt, bevor etwas darauf aufgebaut wird.
 
@@ -31,7 +31,7 @@ Ein Werkzeug, das ein Dach in NRW anhand von Luftbild und Gebäudedaten vermisst
 | Modul | 115 cm × 178 cm, **460 Wp**, bevorzugt **hochkant** (lange Kante entlang des Gefälles). Der Fugenabstand ist in den Maßen **bereits enthalten**, es gibt keine zusätzliche Fuge. |
 | Ausgabe | Fläche, Modulanzahl, Leistung (kWp), **ein PDF mit visueller Ansicht**; kein Kundenzugang, der Kunde bekommt nur das PDF |
 | Dachtypen | Geneigte Dächer. **Flachdach ist ausgeschlossen**, soll aber später optional ergänzbar sein (Architektur offen halten) |
-| Teilen | Projekte sind zwischen Kollegen teilbar (Konten nötig); **Kollegen dürfen bearbeiten**, es gibt keine reinen Leserechte |
+| Teilen | Projekte sind zwischen Kollegen teilbar (Konten nötig); **Kollegen dürfen bearbeiten**, es gibt keine reinen Leserechte; **löschen darf nur der Ersteller**; Anmeldung über **Einladungslink** (Magic Link) |
 | Projektumfang | **Ein Gebäude pro Projekt** (mit mehreren Dachflächen) |
 | PDF | Ohne Firmenbranding, ohne Modulnummerierung/Reihenplan |
 | Abnahme | Fläche ±5 %, Modulanzahl ±1 Modul je Dachfläche |
@@ -252,12 +252,11 @@ Reihenfolge-Prinzip: **früh etwas Nutzbares (M1/M2) und das riskante Automatisi
 
 ## 15. Offene Fragen
 
-Beantwortet: Modulleistung 460 Wp, Fuge in den Maßen enthalten, Flachdach ausgeschlossen, Kunde erhält nur das PDF, Randabstand 20 cm (10 cm im Notfall), Abnahmetoleranz ±5 % / ±1 Modul, Kollegen dürfen bearbeiten, kein Branding, ein Gebäude je Projekt, keine Modulnummerierung.
+Alle Fragen aus der Konzeptphase sind beantwortet. Zuletzt festgelegt: Löschen nur durch den Ersteller, Randabstand 20 cm / 10 cm gilt für alle Kanten gleich, Anmeldung über Einladungslink.
 
-Noch zu klären (klein):
-1. **Löschen:** Darf jeder Kollege mit Zugriff ein geteiltes Projekt löschen, oder nur der Ersteller? (Vorschlag: nur der Ersteller, damit nichts versehentlich verloren geht.)
-2. **Randabstand je Kante:** Gelten 20 cm / 10 cm wirklich für Traufe, First und Ortgang gleich? (Plan geht davon aus; je Kante änderbar bleibt es technisch.)
-3. **Anmeldung:** Wie sollen sich Kollegen anmelden – E-Mail mit Passwort oder Einladungslink/Magic Link? Wer legt Konten an?
+Offen für die Umsetzung (klein, werden im Spike S7 geklärt):
+1. Wer erzeugt Einladungslinks (nur Administrator oder jeder Kollege)? Läuft ein Link ab? Vorschlag: Administrator, 7 Tage gültig, einmal nutzbar.
+2. Was passiert mit Projekten, wenn der Ersteller ausscheidet (Übertragen an einen Kollegen)?
 
 ---
 
