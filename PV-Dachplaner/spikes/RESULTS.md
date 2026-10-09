@@ -134,7 +134,7 @@ Code: [`s8-adressen`](s8-adressen) (`build_index.py` baut den Index, `search_tes
 3. **Fehlende Adressen:** Freie Eingabe „auf der Karte antippen“ bleibt als Fallback.
 4. **Aktualisierung:** halbjährlich (neue Gebäudereferenzen und LoD2-Kacheln), als wiederholbarer Aufbereitungslauf.
 
-## S5 – KI-Modell im Browser: **Desktop ja, iPhone steht aus**, 2026-10-09
+## S5 – KI-Modell im Browser: **bestanden auf Desktop und iPhone** (Dauertest steht aus), 2026-10-09
 
 Code und Testseite: [`s5-iphone-test`](s5-iphone-test), Testseite <https://pv-dachplaner-ki-test.netlify.app> (eigene Netlify-Site `pv-dachplaner-ki-test`).
 
@@ -154,7 +154,20 @@ Code und Testseite: [`s5-iphone-test`](s5-iphone-test), Testseite <https://pv-da
 - Mehrere Threads brauchen **Cross-Origin-Isolation** (HTTP-Kopfzeilen `COOP: same-origin`, `COEP: require-corp`). Netlify kann das über `_headers`. Die Kopfzeilen schränken das Einbinden fremder Ressourcen ein (z. B. Kartenkacheln, Schriften); der WMS des Luftbilds bräuchte dann passende Freigaben. **Für die App-Karte ist das noch zu prüfen**, die KI-Seite kann sonst auch auf einer eigenen Unterseite laufen.
 - Einmalige Last pro Gerät: ca. 70 MB (Modelle + Runtime). Mit Service Worker nur beim ersten Mal.
 
-**Noch offen: iPhone.** Bitte <https://pv-dachplaner-ki-test.netlify.app> auf dem iPhone öffnen (am besten im WLAN, ca. 70 MB), „Modell laden“, Beispiel wählen, auf Objekte tippen, „Bericht kopieren“ und mir senden. Kriterium: Analyse höchstens 10 s, kein Absturz bei 10 Durchläufen.
+**iPhone (Messung von dir, 2026-10-09, aus dem Protokoll der Testseite):**
+
+| Messung | iPhone |
+|---|---|
+| Masken-Modell laden | 16,5 MB in 1,0 s (WLAN) |
+| Sitzungen erstellen | 2,6 s, **4 Threads** (Cross-Origin-Isolation funktioniert im Safari) |
+| Bild analysieren (einmal je Dach) | **1,35 s und 1,51 s** (Beispiel A und B) |
+| Maske je Antippen | **81 bis 98 ms** |
+| Ergebnis | Entlüftung 0,52 m² (Sicherheit 0,91) und 0,60 m² (0,89); ein Antippen knapp neben dem Objekt ohne passende Maske (wie auf dem Desktop) |
+| Fehler | keine gemeldet |
+
+Das iPhone ist damit **drei- bis viermal schneller** als meine Testumgebung (Analyse 5,5 s) und liegt weit unter dem Kriterium von 10 s. Die Erkennung im Browser ist machbar, ein Serverdienst ist nicht nötig.
+
+**Noch offen:** Dauertest (10 Durchläufe hintereinander ohne Absturz) und das genaue iPhone-Modell mit iOS-Version; beides steht nicht im Protokoll. Der Bericht (JSON) enthält Modell und Browser; bitte beim nächsten Mal mitsenden.
 
 ## S6 – Hinderniserkennung ohne Training: **Antippen funktioniert, Vollautomatik nicht**, 2026-10-09
 
