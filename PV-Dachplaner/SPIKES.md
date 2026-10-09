@@ -293,10 +293,13 @@ Die Spikes sind abgeschlossen, wenn:
 2. `PLAN.md` Kap. 8 (Architektur), 13 (Risiken) und 14 (Meilensteine) angepasst ist.
 3. Du bestätigt hast, dass M1 auf dieser Grundlage beginnen kann.
 
-## 4. Was ich von dir brauche
+## 4. Rahmenbedingungen (geklärt) und offene Eingaben
 
-1. **Testdächer:** 15 bis 20 Gebäude in NRW (Adresse oder Koordinate) mit den Referenzmaßen, die du hast (Aufmaß, Skizze, Neigung). Auch wenige Maße helfen.
-2. **Netlify:** Ein Netlify-Konto mit einer leeren Site für die Tests (oder die Erlaubnis, eine anzulegen) und der Hinweis, welches Konto das ist.
-3. **Geräte:** Welches iPhone-Modell und welche iOS-Version nutzt ihr? Windows: Edge oder Chrome?
-4. **Datenschutz:** Einverstanden, dass in den Spikes nur Testadressen vorkommen, keine echten Kunden?
-5. **Gebiet:** In welchen Städten oder Kreisen arbeitet ihr hauptsächlich? Dann wählen wir Testdächer und später die Vorverarbeitung dort.
+**Geklärt**
+- **Gebiet:** Ostwestfalen-Lippe (OWL: u. a. Bielefeld, Gütersloh, Paderborn, Herford, Minden-Lübbecke, Lippe, Höxter). Testdächer und Adresstests kommen von dort.
+- **Geräte:** iPhones mit aktueller iOS-Version; Windows-Desktop. Genaues iPhone-Modell und Windows-Browser werden bei S5 am Gerät festgestellt.
+- **Datenschutz:** In den Spikes nur Testadressen, keine echten Kunden.
+- **Netlify:** Zugriff über die verbundene Netlify-Anbindung ist vorhanden (Konto mit mehreren Sites; Tarifkennung `nf_team_dev`, Gratis-Limits werden in S3 nachgelesen). Für die Spikes legen wir eine **eigene neue Site** `pv-dachplaner-spikes` an, damit die vorhandenen Sites unberührt bleiben.
+
+**Offen**
+1. **Testdächer:** 10 bis 20 Gebäude in OWL mit Referenzwerten (siehe Kap. 2). Falls du keine Maße hast, genügt zunächst eine Liste von Adressen aus früheren Angeboten mit der damals geplanten **Modulanzahl** und, falls bekannt, der Dachneigung.
