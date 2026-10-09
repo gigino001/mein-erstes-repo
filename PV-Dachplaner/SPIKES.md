@@ -52,6 +52,27 @@ Fast alle Spikes brauchen dieselben Beispieldächer. **Das ist das Wichtigste, w
 
 Die Referenzen speichern wir als einfache Datei je Dach (`spikes/testdaecher/<id>.json`: Adresse, Koordinate, Maße, Foto-Hinweise). **Datenschutz:** Nur Dächer, deren Adresse du ins Repo schreiben darfst. Sonst nur Koordinate und Nummer ohne Adresse.
 
+### Vorläufiger Betrieb ohne Referenzdaten
+
+Die Referenzmaße liegen noch nicht vor und können **nachgeliefert** werden. Bis dahin gilt:
+
+| Spike | Ohne Referenzdaten machbar? | Hinweis |
+|---|---|---|
+| S1 Luftbild | Ja | Maßhaltigkeit wird an einem öffentlich bekannten Maß geprüft (z. B. Fußballfeld, Straßenbreite, Gebäude mit bekanntem Grundriss aus dem Kataster). |
+| S2 LoD2 | Teilweise | Technik (Format, Größe, Geschwindigkeit) geht ohne Referenz. Die **Genauigkeit** von Neigung und Umriss wird vorläufig gegen das Luftbild und eine eigene Nachzeichnung geprüft und mit „vorläufig“ gekennzeichnet. |
+| S3 Netlify | Ja | Keine Referenzdaten nötig. |
+| S4 Geometrie-Kern | Ja | Handrechnungen und Eigenschaftstests genügen; Referenzdächer folgen später als zusätzliche Tests. |
+| S5 KI auf dem iPhone | Ja | Läuft mit beliebigen Luftbildausschnitten. |
+| S6 Erkennungsqualität | Ja | Ich wähle Dächer in OWL selbst aus und beschrifte sie. Die Beschriftung braucht keine Maße, nur Bilder. |
+| S7 Konten | Ja | Keine Referenzdaten nötig. |
+| S8 Adresssuche | Ja | Öffentliche Adressen aus OWL genügen. |
+
+**Eigene Testdächer:** Ich wähle 15 bis 20 Dächer in OWL aus (Mix aus Dachformen, Stadt/Land) anhand des Luftbilds, notiere Koordinate und Dachform und zeichne Umriss und Hindernisse nach. Diese Referenz ist **nicht unabhängig** und wird als „vorläufig“ markiert.
+
+**Nachträglich anpassen:** Sobald echte Werte vorliegen (aus früheren Angeboten, einem Aufmaß, Neigungsmessung mit dem Smartphone), werden sie in `spikes/testdaecher/<id>.json` ergänzt. Die Genauigkeitsmessungen aus S2 und die Referenztests aus S4 laufen dann automatisch erneut. Entscheidungen, die auf „vorläufig“ beruhen, werden vor M1 noch einmal bestätigt.
+
+**Wenn du ohnehin vor Ort bist:** Ein Foto vom Dach, die Neigung mit der Wasserwaage-Funktion des iPhones und die geplante Modulanzahl genügen als Referenz für ein Haus.
+
 ---
 
 ## S1 – Luftbild im Browser
@@ -302,4 +323,4 @@ Die Spikes sind abgeschlossen, wenn:
 - **Netlify:** Zugriff über die verbundene Netlify-Anbindung ist vorhanden (Konto mit mehreren Sites; Tarifkennung `nf_team_dev`, Gratis-Limits werden in S3 nachgelesen). Für die Spikes legen wir eine **eigene neue Site** `pv-dachplaner-spikes` an, damit die vorhandenen Sites unberührt bleiben.
 
 **Offen**
-1. **Testdächer:** 10 bis 20 Gebäude in OWL mit Referenzwerten (siehe Kap. 2). Falls du keine Maße hast, genügt zunächst eine Liste von Adressen aus früheren Angeboten mit der damals geplanten **Modulanzahl** und, falls bekannt, der Dachneigung.
+1. **Referenzdaten für Testdächer:** liegen noch nicht vor und werden nachgeliefert (siehe „Vorläufiger Betrieb ohne Referenzdaten“ in Kap. 2). Gut geeignet: Adressen aus früheren Angeboten mit der geplanten **Modulanzahl**, falls bekannt auch Dachneigung und Maße.
