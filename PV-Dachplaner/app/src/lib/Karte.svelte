@@ -10,8 +10,10 @@
     zoom?: number;
     /** Wird nach jeder Bewegung der Karte aufgerufen (Mittelpunkt und Zoomstufe). */
     onMove?: (c: { lng: number; lat: number; zoom: number }) => void;
+    /** Wird einmal aufgerufen, sobald der Kartenstil geladen ist (Ebenen dürfen dann hinzugefügt werden). */
+    onReady?: (map: maplibregl.Map) => void;
   }
-  let { center = [8.5325, 52.0302], zoom = 17, onMove }: Props = $props();
+  let { center = [8.5325, 52.0302], zoom = 17, onMove, onReady }: Props = $props();
 
   let container: HTMLDivElement;
   let map: maplibregl.Map | undefined;
@@ -54,7 +56,10 @@
       const c = map!.getCenter();
       onMove?.({ lng: c.lng, lat: c.lat, zoom: map!.getZoom() });
     });
-    map.once("load", () => onMove?.({ lng: center[0], lat: center[1], zoom }));
+    map.once("load", () => {
+      onMove?.({ lng: center[0], lat: center[1], zoom });
+      onReady?.(map!);
+    });
     // Für Tests und spätere Bausteine erreichbar
     (window as unknown as { __karte?: maplibregl.Map }).__karte = map;
     return () => map?.remove();

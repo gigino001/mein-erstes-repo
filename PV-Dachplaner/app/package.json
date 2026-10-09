@@ -9,7 +9,7 @@
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "test": "vitest run",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "e2e": "node e2e/smoke.mjs && node e2e/projekte.mjs"
+    "e2e": "node e2e/smoke.mjs && node e2e/projekte.mjs && node e2e/zeichnen.mjs"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
