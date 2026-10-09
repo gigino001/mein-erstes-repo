@@ -1,6 +1,6 @@
 # PV-Dachplaner – Projektplan
 
-Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.1 (Entwurf zur Abstimmung)
+Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.2 (Entwurf zur Abstimmung)
 
 Aussagen mit **[prüfen]** stammen aus Recherche oder Erinnerung und sind noch nicht in der Praxis verifiziert. Sie werden in den Spikes (Kap. 13) geklärt, bevor etwas darauf aufgebaut wird.
 
@@ -28,8 +28,9 @@ Ein Werkzeug, das ein Dach in NRW anhand von Luftbild und Gebäudedaten vermisst
 | Datenquellen | NRW-Luftbild (DOP, 10 cm) und NRW-3D-Gebäudemodell (LoD2); manuelles Zeichnen als Fallback |
 | Erkennung | Automatisch, **jederzeit manuell korrigierbar**; unsichere Funde werden angezeigt |
 | Berechnung | Dachfläche minus Hindernisse; Randabstände **optional zuschaltbar** |
-| Modul | 115 cm × 178 cm, bevorzugt **hochkant** (lange Kante entlang des Gefälles) |
-| Ausgabe | Fläche, Modulanzahl, PDF, geteiltes Projekt |
+| Modul | 115 cm × 178 cm, **460 Wp**, bevorzugt **hochkant** (lange Kante entlang des Gefälles). Der Fugenabstand ist in den Maßen **bereits enthalten**, es gibt keine zusätzliche Fuge. |
+| Ausgabe | Fläche, Modulanzahl, Leistung (kWp), **ein PDF mit visueller Ansicht**; kein Kundenzugang, der Kunde bekommt nur das PDF |
+| Dachtypen | Geneigte Dächer. **Flachdach ist ausgeschlossen**, soll aber später optional ergänzbar sein (Architektur offen halten) |
 | Teilen | Projekte sind zwischen Kollegen teilbar (Konten nötig) |
 | Hosting | Netlify (wird bereits für `Routenplaner` genutzt) |
 
@@ -39,6 +40,8 @@ Ein Werkzeug, das ein Dach in NRW anhand von Luftbild und Gebäudedaten vermisst
 - Ertragsprognose, Wirtschaftlichkeit, Verschattungssimulation.
 - Deutschland außerhalb NRW.
 - Offline-Betrieb.
+- Flachdächer inkl. Aufständerung (später optional, siehe Kap. 6.5).
+- Kundenzugang zur App; der Kunde erhält ausschließlich das PDF.
 - Native Store-Apps (nur wenn die PWA an echte Grenzen stößt).
 
 ## 4. Nutzerfluss und Bildschirme
@@ -47,8 +50,8 @@ Ein Werkzeug, das ein Dach in NRW anhand von Luftbild und Gebäudedaten vermisst
 2. **Neues Projekt** – Adresse oder Kartenklick; Kundenname und Notizen.
 3. **Dach-Editor** (Kernbildschirm) – Luftbild, Dachflächen, Hindernisse, Parameter.
 4. **Ergebnis** – Belegung, Zahlen, Vergleich hochkant/quer.
-5. **Export** – PDF, Teilen-Link.
-6. **Einstellungen** – Modulmaße, Fugen, Randabstände, Konto.
+5. **Export** – PDF (einziger Kundenzugang), Projekt für Kollegen teilen.
+6. **Einstellungen** – Modulmaße und -leistung, Randabstände, Konto.
 
 **Dach-Editor, Bedienung**
 - Werkzeuge: Dachfläche zeichnen/verschieben, Hindernis zeichnen, Auswahl, Radierer, Undo/Redo.
@@ -99,7 +102,8 @@ Alle Abzüge werden als Polygon-Operationen (Verschneidung, Differenz, Innenvers
 
 ### 6.3 Modulbelegung
 - Modul: 1,15 m (Breite) × 1,78 m (Höhe), **hochkant** = 1,78 m entlang des Gefälles (Traufe zum First).
-- Fuge zwischen Modulen: einstellbar. **Startwert 0,02 m, [mit Installateur abstimmen]**.
+- Fuge zwischen Modulen: **0 m**, denn der Fugenabstand steckt bereits in den Modulmaßen 1,15 m × 1,78 m. Der Wert bleibt als Einstellung vorhanden (Startwert 0), falls sich Modul oder Montagesystem ändern.
+- Leistung: Anzahl × 460 Wp, ausgegeben in kWp (z. B. 24 Module = 11,04 kWp).
 - Koordinaten der Dachebene: `u` entlang der Traufe, `v` entlang des Gefälles. Das Raster wird in (u, v) gelegt, nicht im Bild.
 - Algorithmus (Version 1): Für Rasterverschiebungen (Schritt 5 cm in u und v) werden alle Module gezählt, die **vollständig** in der nutzbaren Fläche liegen; die Verschiebung mit dem Maximum gewinnt. Berechnet für hochkant und quer; Standardanzeige hochkant, die Differenz wird als Hinweis angezeigt.
 - Erweiterung später: Reihenweises Auffüllen mit gemischter Ausrichtung, wenn es mehr Module bringt.
@@ -111,7 +115,10 @@ Satteldach-Seite, Grundriss 10,0 m (Traufe) × 5,0 m (Tiefe), Neigung 35°, kein
 - Hochkant: 6,10 / 1,78 = 3,4 → **3 Reihen**; 10,0 / 1,15 = 8,7 → **8 Spalten** → **24 Module**
 - Modulfläche gesamt = 24 × 2,047 m² = **49,1 m²**
 
-Mit 2 cm Fuge: 8 × 1,15 + 7 × 0,02 = 9,34 m ≤ 10 m → ebenfalls 24 Module.
+Leistung: 24 × 460 Wp = **11,04 kWp**.
+
+### 6.5 Flachdach (später)
+Nicht im Umfang. Damit es später ohne Umbau ergänzt werden kann, enthält `RoofPlane` schon ein Feld `typ` (`geneigt` | `flach`), und die Belegung ist als austauschbares Modul gekapselt. Ein Flachdach bräuchte u. a. Aufständerungswinkel, Reihenabstand wegen Verschattung und Ballast, das ist dann eine eigene Belegungslogik.
 
 ## 7. Automatische Erkennung
 
@@ -168,13 +175,13 @@ Kamin/Schornstein, Dachfenster, Gaube, Antenne/Sat-Schüssel, Lüfter/Entlüftun
 Project      id, name, kunde{name, kontakt}, adresse, position(25832), notizen,
              owner, sharedWith[{user, rolle: lesen|bearbeiten}], created, updated
 Building     id, projectId, umriss, quelle{lod2|manuell}, lod2Id?
-RoofPlane    id, buildingId, umriss, neigungGrad, ausrichtungGrad,
+RoofPlane    id, buildingId, typ{geneigt|flach, vorerst nur geneigt}, umriss, neigungGrad, ausrichtungGrad,
              quelle{lod2|manuell}, randabstand{traufe, first, ortgang}|null
 Obstacle     id, roofPlaneId, klasse, umriss, puffer_m, abziehen:boolean,
              herkunft{auto|manuell}, konfidenz?, status{sicher|unsicher|bestätigt|verworfen}
-Layout       id, roofPlaneId, modulTyp, ausrichtung{hochkant|quer}, fuge_m,
+Layout       id, roofPlaneId, modulTyp, ausrichtung{hochkant|quer}, fuge_m=0,
              offset{u,v}, module[{u,v}], anzahl, ergebnisFlaeche
-ModuleType   id, name, breite_m=1.15, hoehe_m=1.78, leistungWp?
+ModuleType   id, name, breite_m=1.15, hoehe_m=1.78, leistungWp=460
 ```
 Alle Geometrien in EPSG:25832 (Meter). Versionsnummer je Projekt, damit gleichzeitiges Bearbeiten durch zwei Kollegen erkannt wird (Konfliktstrategie: zuletzt gespeichert + Warnung; echte Echtzeit-Bearbeitung ist kein Ziel).
 
@@ -183,11 +190,11 @@ Alle Geometrien in EPSG:25832 (Meter). Versionsnummer je Projekt, damit gleichze
 **PDF (client-seitig)**
 - Titelseite: Projekt, Adresse, Datum, Bearbeiter.
 - Luftbild mit eingezeichneten Dachflächen, Hindernissen und Modulen, Maßstab und Nordpfeil.
-- Tabelle je Dachfläche: Neigung, Ausrichtung, Dachfläche, Abzüge, nutzbare Fläche, Modulzahl (hochkant/quer), Gesamt.
-- Annahmenblock: Modulmaße, Fuge, Randabstände, Datenquelle und Stand der Luftbilder, Quellenhinweis.
+- Tabelle je Dachfläche: Neigung, Ausrichtung, Dachfläche, Abzüge, nutzbare Fläche, Modulzahl, Leistung in kWp, Gesamt.
+- Annahmenblock: Modulmaße und -leistung, Randabstände, Datenquelle und Stand der Luftbilder, Quellenhinweis.
 - Haftungshinweis (Kap. 11).
 
-**Weitere:** Teilen-Link (nur mit Anmeldung), CSV/JSON-Export der Maße für Installateure.
+**Weitere:** Projekte lassen sich nur für angemeldete Kollegen teilen (kein Kunden-Link). Das PDF mit der visuellen Ansicht genügt als Ausgabe für Kunden und Installateure; ein CSV/JSON-Export ist nicht vorgesehen.
 
 ## 11. Recht und Datenschutz (keine Rechtsberatung)
 
@@ -241,14 +248,14 @@ Reihenfolge-Prinzip: **früh etwas Nutzbares (M1/M2) und das riskante Automatisi
 
 ## 15. Offene Fragen
 
-1. Modulleistung (Wp) oder Modulhersteller – nur Maße oder auch Leistung/kWp im Ergebnis?
-2. Fugenabstand und Randabstände (Traufe/First/Ortgang): Startwerte von einem Installateur bestätigen lassen.
-3. Toleranz für die Abnahme (Kap. 12) bestätigen.
-4. Wer darf Projekte teilen/löschen (Rollenmodell)? Soll es eine Firmen-/Teamstruktur geben?
-5. Soll der Kunde selbst einen Lesezugriff (Link) bekommen oder nur ein PDF?
-6. Kundenbranding im PDF (Logo, Farben)?
-7. Flachdächer: Aufständerung/Neigung der Module relevant (andere Belegungslogik) oder erst später?
-8. Mehrere Gebäude pro Projekt (Haus, Garage, Scheune) von Anfang an?
+Beantwortet: Modulleistung 460 Wp, Fuge in den Maßen enthalten, Flachdach ausgeschlossen, Kunde erhält nur das PDF.
+
+1. **Randabstände** (Traufe/First/Ortgang): Gibt es Standardwerte, die dein Betrieb ansetzt? Sie bleiben optional zuschaltbar.
+2. Toleranz für die Abnahme (Kap. 12): ±5 % bei der Fläche und ±1 Modul je Dachfläche – passt das?
+3. Rollen beim Teilen: Dürfen alle Kollegen alles bearbeiten und löschen, oder gibt es Besitzer und Mitleser?
+4. Kundenbranding im PDF (Logo, Farben, Firmendaten)?
+5. Mehrere Gebäude pro Projekt (Haus, Garage, Scheune) von Anfang an?
+6. Soll das PDF die Modulbelegung mit Nummerierung/Reihen zeigen, damit Installateure es als Montageskizze nutzen können?
 
 ---
 
