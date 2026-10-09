@@ -74,6 +74,37 @@ Code: [`s2-lod2`](s2-lod2) (`parse_tile.py` liest eine Kachel, berechnet je Dach
 
 **Offen für S3:** Wo liegen die rund 1,3 GB (OWL) bzw. 7 GB (NRW) kostenlos, und wer führt die Aufbereitung aus (z. B. ein Netlify-fremder Job)? Der Plan in `PLAN.md` Kap. 8 wird entsprechend angepasst.
 
+## S3 – Netlify-Grenzen und Hosting der Dachflächen-Kacheln: **Netlify-Funktionen nicht nötig**, Hosting neu bewertet, 2026-10-09
+
+Weil S2 den Weg B (Vorverarbeitung) ergeben hat, braucht die App **keine Server-Funktion** für die Gebäudedaten. Die ursprüngliche Frage („Reichen Netlify-Funktionen?“) erübrigt sich. Offen war stattdessen: Wo liegen die Kachel-Dateien, und was heißt das für das Hosting der App?
+
+**Netlify (Recherche, überwiegend Drittquellen, Preisseite vor einer Entscheidung prüfen)**
+- Neue Konten (nach 04.09.2025; dein Konto ist vom 28.05.2026) laufen im **Credit-Modell**: Gratis-Tarif 300 Credits im Monat. Eine erfolgreiche Produktivveröffentlichung kostet 15 Credits, also etwa 20 Veröffentlichungen im Monat. Bandbreite, Funktionsrechenzeit und Anfragen zehren vom selben Kontingent. Die genannten Raten widersprechen sich zwischen Quellen (Bandbreite 10 oder 20 Credits je GB).
+- Der Gratis-Tarif ist laut Quellen eine **harte Grenze**: Sind die Credits aufgebraucht, werden **alle Sites des Kontos** bis zum nächsten Abrechnungsmonat pausiert.
+- **Risiko für dich:** Die Kontingente gelten für das ganze Konto, also auch für deine anderen Sites (z. B. `coco-lashes.de`). Ein stark genutzter Dachplaner oder viele Veröffentlichungen könnten sie mit pausieren. Die genaue Verbrauchsanzeige habe ich nicht geprüft **[prüfen auf app.netlify.com unter Nutzung]**.
+- Funktionslaufzeit und maximale Deploy-Größe habe ich nicht belegt gefunden; sie sind für Weg B nicht mehr relevant.
+
+**Cloudflare R2 für die Kachel-Dateien (Recherche, offizielle Preisseite)**
+- 10 GB Speicher im Monat gratis, 1 Mio. Schreib- und 10 Mio. Lese-Anfragen im Monat gratis, **Datenabruf (Egress) kostenlos**. Damit passen OWL (ca. 1,3 GB) und sogar ganz NRW (ca. 7 GB) in den Gratis-Rahmen.
+- Voraussetzung: ein Cloudflare-Konto von dir (Kreditkarte kann für R2 nötig sein **[prüfen]**).
+
+**Supabase für Konten und Teilen (Recherche, Drittquellen; Preisseite prüfen)**
+- Gratis: 2 aktive Projekte, 500 MB Datenbank, 1 GB Dateispeicher, 50.000 aktive Nutzer im Monat.
+- **Pausiert automatisch nach 7 Tagen ohne Datenbankanfragen**; Fortsetzen von Hand. Bei einem Team, das täglich arbeitet, kein Problem; in Urlaubswochen ja. Abhilfe: wöchentlicher Ping oder kleine Zahlung später.
+- Ob automatische Sicherungen enthalten sind, ist widersprüchlich beschrieben; Projektdaten sind deshalb als ungesichert zu betrachten **[prüfen]**.
+
+**Aufbereitung der Kacheln**
+- OWL: ca. 32 GB Download und ca. 20 Minuten Rechenzeit (S2). Das passt in einen kostenlosen Lauf, z. B. mit GitHub Actions (bei öffentlichen Repos unbegrenzt, bei privaten ein monatliches Kontingent **[prüfen]**), oder lokal auf einem Rechner mit Python.
+- Hochladen nach R2 erfordert einen Zugangsschlüssel von dir (als geheimer Wert in der Pipeline, nie im Repository).
+
+**Entscheidung**
+1. **Keine Netlify-Funktionen im Betrieb.** Die App ist rein statisch.
+2. **Kachel-Dateien auf Cloudflare R2** (Gratis, kostenloser Abruf). Alternative bei fehlendem Cloudflare-Konto: GitHub Pages (Seitengröße etwa 1 GB, nur Teilgebiet) – schlechter.
+3. **App-Hosting:** Empfohlen **Cloudflare Pages** (Gratis, unbegrenzte Bandbreite laut Anbieter **[prüfen]**), damit der Dachplaner nicht das Netlify-Kontingent deiner anderen Sites teilt. Netlify bleibt für die Spikes. Wenn du Netlify behalten willst: eigenes Konto nur für den Dachplaner oder genaue Beobachtung der Credits.
+4. **Konten und Teilen:** Supabase bleibt Favorit, Prüfung in S7.
+
+**Quellen:** [Netlify Free Plan Limits 2026 (netli.fyi)](https://netli.fyi/blog/netlify-free-plan-limits-2026), [Netlify Free Tier 2026 (agentdeals.dev)](https://agentdeals.dev/vendor/netlify), [Cloudflare R2 Preise](https://developers.cloudflare.com/r2/pricing), [Supabase Free Tier Limits](https://www.itpathsolutions.com/supabase-free-tier-limits).
+
 ## S4 – Geometrie-Kern: **bestanden** (2026-10-09)
 
 Code: [`../packages/geometry-core`](../packages/geometry-core) (TypeScript, Tests mit Vitest).

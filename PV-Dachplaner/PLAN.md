@@ -1,6 +1,6 @@
 # PV-Dachplaner – Projektplan
 
-Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.7 (Entwurf zur Abstimmung)
+Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.8 (Entwurf zur Abstimmung)
 
 Aussagen mit **[prüfen]** stammen aus Recherche oder Erinnerung und sind noch nicht in der Praxis verifiziert. Sie werden in den Spikes (Kap. 13) geklärt, bevor etwas darauf aufgebaut wird.
 
@@ -158,20 +158,17 @@ Kamin/Schornstein, Dachfenster, Gaube, Antenne/Sat-Schüssel, Lüfter/Entlüftun
 
 **Geometrie-Kern:** eigenes Paket ohne UI, vollständig unit-getestet (Kap. 12). Er ist das Herz des Tools und der erste Teil, der gebaut wird.
 
-**Netlify (Antwort auf „geht Netlify?“)**
-- **Ja für:** Hosting der PWA und für Netlify Functions (Proxy, falls CORS fehlt; LoD2-Abfrage pro Gebäude).
-- **Allein nicht ausreichend für:** Konten und geteilte Projekte; dafür braucht es zusätzlich eine Datenbank mit Anmeldung.
-- Optionen für Konten und Teilen **[prüfen, Stand und Gratis-Limits]**:
-  - **Supabase** (Anmeldung + Datenbank mit Zeilenrechten): passt gut zu „Projekte teilen“. Auf dem Gratis-Tarif können inaktive Projekte pausieren **[prüfen]**.
-  - **Netlify Blobs** plus eigene Anmeldung: weniger Dienste, aber mehr Eigenbau.
-  - Netlify Identity ist laut meiner Erinnerung eingestellt bzw. abgekündigt **[prüfen]**; deshalb nicht als Basis geplant.
-- Gratis-Limits von Netlify Functions (Laufzeit, Speicher, Aufrufe) begrenzen, wie groß die LoD2-Verarbeitung pro Aufruf sein darf **[prüfen]**.
+**Hosting und Dienste (Stand nach S1 bis S3)**
+- **App:** rein statische PWA, keine Server-Funktion im Betrieb. Das Luftbild kommt direkt vom NRW-WMS (S1), die Dachflächen aus vorbereiteten Kachel-Dateien (S2).
+- **Dachflächen-Kacheln:** je 1 km² eine kleine komprimierte Datei (ca. 0,2 MB), erzeugt von einem Aufbereitungsprogramm aus den NRW-CityGML-Kacheln. Ablage auf **Cloudflare R2** (Gratis-Rahmen, kostenloser Abruf). Umfang OWL ca. 1,3 GB, ganz NRW ca. 7 GB.
+- **App-Hosting:** Empfehlung **Cloudflare Pages**. Netlify im Gratis-Tarif teilt ein monatliches Credit-Kontingent über alle Sites des Kontos und pausiert bei Erschöpfung alle Sites (S3); der Dachplaner sollte deine anderen Sites nicht gefährden. Netlify bleibt für die Spikes.
+- **Konten und Teilen:** **Supabase** (Anmeldung per Einladungslink, Datenbank mit Zeilenrechten). Gratis-Projekte pausieren nach 7 Tagen ohne Anfragen (S7 prüft Details).
+- Netlify Identity ist laut meiner Erinnerung abgekündigt **[prüfen]** und nicht Basis.
 
-**LoD2-Verarbeitung – drei Wege, Entscheidung nach Spike**
-- **A:** Pro Anfrage die passende Kachel holen und im Function-Aufruf auswerten. Einfach, aber evtl. zu groß/langsam.
-- **B:** Daten vorab in kleine Dachflächen-Dateien umwandeln und statisch ablegen. Schnell, aber Speicher- und Aufbereitungsaufwand für ganz NRW.
-- **C:** Lazy-Cache: wie A, aber das Ergebnis je Gebäude wird gespeichert.
-- Fallback bei allen: ohne LoD2 weiterarbeiten (manuell).
+**LoD2-Verarbeitung – Entscheidung: Weg B (Vorverarbeitung)**
+- Ein Aufbereitungsprogramm (Python, `spikes/s2-lod2/parse_tile.py` als Grundlage) liest die Kacheln, berechnet je Dachfläche Neigung, Ausrichtung und Schrägfläche und schreibt je Kachel eine komprimierte JSON-Datei. Die App holt beim Antippen nur die Kachel des Standorts.
+- Fallback: Ohne Kachel oder bei veralteten Daten zeichnet der Nutzer die Dachfläche selbst.
+- Gauben, Dachfenster und Aufbauten stehen nicht im LoD2 und kommen aus Erkennung oder manueller Eingabe.
 
 ## 9. Datenmodell (Entwurf)
 
@@ -223,7 +220,7 @@ Jeder Spike ist klein, hat eine Frage und ein klares Ja/Nein.
 |---|---|---|---|
 | S1 | Lässt sich das NRW-Luftbild per WMS direkt im Browser laden (CORS)? In welcher Auflösung? | Sonst Proxy nötig | **Ja**, kein Proxy nötig (nur Safari/iPhone-Test offen), siehe `spikes/RESULTS.md` |
 | S2 | Wie sind LoD2-Daten bereitgestellt (Format, Kachelgröße, WFS?) und wie groß ist ein Gebäude-Abruf? | Entscheidet Weg A/B/C | **Weg B** (Vorverarbeitung zu kleinen Kachel-Dateien), siehe `spikes/RESULTS.md` |
-| S3 | Reicht Netlify Functions (Gratis-Limits) für die LoD2-Abfrage? | Kosten und Machbarkeit | Ja/Nein |
+| S3 | Reicht Netlify Functions (Gratis-Limits) für die LoD2-Abfrage? | Kosten und Machbarkeit | **Keine Funktionen nötig** (Weg B). Kachel-Dateien auf Cloudflare R2, App-Hosting besser nicht im geteilten Netlify-Kontingent; siehe `spikes/RESULTS.md` |
 | S4 | Geometrie-Kern: Schrägfläche, Abzüge, Belegung gegen Handrechnung | Kernlogik | **Bestanden**, 26 Tests grün, ca. 50 ms je Dach, siehe `spikes/RESULTS.md` |
 | S5 | Läuft ein kleines ONNX-Modell auf dem iPhone in akzeptabler Zeit/Speicher? | Entscheidet Browser- vs. Server-Erkennung | Messwerte |
 | S6 | Wie gut trennt ein Vorab-Modell Hindernisse auf 10-cm-Bildern? | Aufwand der Beschriftung | Trefferquote je Klasse |
