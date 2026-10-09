@@ -1,20 +1,28 @@
-// Rauchtest: lädt die gebaute App (npm run preview) in Chromium und prüft das Rechenbeispiel.
+// Rauchtest: lädt die gebaute App in Chromium, prüft Karte, Luftbild-Kacheln (HTTP 200) und Befliegungsdatum.
 import { chromium } from "playwright";
 const base = process.env.BASE ?? "http://127.0.0.1:4173";
+const lokal = base.startsWith("http://127.") || base.startsWith("http://localhost");
 const browser = await chromium.launch({
   executablePath: "/opt/pw-browsers/chromium",
-  args: ["--no-sandbox", ...(process.env.HTTPS_PROXY && !base.startsWith("http://127") ? [`--proxy-server=${process.env.HTTPS_PROXY}`] : [])],
+  args: ["--no-sandbox", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist",
+    ...(process.env.HTTPS_PROXY ? [`--proxy-server=${process.env.HTTPS_PROXY}`, "--proxy-bypass-list=127.0.0.1;localhost"] : [])],
 });
 const ctx = await browser.newContext({ ignoreHTTPSErrors: true, viewport: { width: 390, height: 844 } });
 const page = await ctx.newPage();
 const errors = [];
+const kacheln = { ok: 0, fehler: 0 };
 page.on("pageerror", (e) => errors.push(String(e)));
-page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
+page.on("console", (m) => { if (m.type() === "error") errors.push(m.text().slice(0, 200)); });
+page.on("response", (r) => {
+  if (r.url().includes("wms.nrw.de") && r.url().includes("REQUEST=GetMap")) (r.status() === 200 ? kacheln.ok++ : kacheln.fehler++);
+});
 await page.goto(base + "/");
-const flaeche = await page.getByTestId("flaeche").textContent();
-const module = await page.getByTestId("module").textContent();
-const kwp = await page.getByTestId("kwp").textContent();
-const ok = /61,04/.test(flaeche) && /24 Module/.test(module) && /11,04/.test(kwp) && errors.length === 0;
-console.log(JSON.stringify({ flaeche, module, kwp, errors, ok }));
+await page.getByTestId("karte").waitFor();
+await page.waitForFunction(() => window.__karte && window.__karte.loaded(), null, { timeout: 60000 });
+await page.getByText(/Luftbild vom/).waitFor({ timeout: 30000 });
+const info = await page.getByTestId("bildinfo").textContent();
+const ok = kacheln.ok > 0 && kacheln.fehler === 0 && /Luftbild vom \d{2}\.\d{2}\.\d{4}/.test(info) && errors.length === 0;
+console.log(JSON.stringify({ kacheln, info: info.replace(/\s+/g, " ").trim(), errors, ok }));
+await page.screenshot({ path: process.env.SHOT ?? "e2e/last.png" });
 await browser.close();
 process.exit(ok ? 0 : 1);
