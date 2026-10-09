@@ -1,6 +1,6 @@
 # PV-Dachplaner – Projektplan
 
-Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.4 (Entwurf zur Abstimmung)
+Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.5 (Entwurf zur Abstimmung)
 
 Aussagen mit **[prüfen]** stammen aus Recherche oder Erinnerung und sind noch nicht in der Praxis verifiziert. Sie werden in den Spikes (Kap. 13) geklärt, bevor etwas darauf aufgebaut wird.
 
@@ -229,6 +229,8 @@ Jeder Spike ist klein, hat eine Frage und ein klares Ja/Nein.
 | S6 | Wie gut trennt ein Vorab-Modell Hindernisse auf 10-cm-Bildern? | Aufwand der Beschriftung | Trefferquote je Klasse |
 | S7 | Konten und Teilen: Supabase vs. Netlify Blobs – Aufwand, Limits, Datenschutz | Entscheidet Backend | Gewählte Lösung |
 | S8 | Adresssuche: Nominatim ausreichend oder amtliche Geokodierung? | Nutzbarkeit/Bedingungen | Gewählte Lösung |
+
+Die detaillierte Ausarbeitung der Spikes steht in [`SPIKES.md`](SPIKES.md).
 
 **Weitere Risiken**
 - Zeichnen per Touch ist fummelig → früh mit echten Nutzern auf dem iPhone testen.
