@@ -1,0 +1,27 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #5a5a5a;
+  --line: #d0d0d0;
+  --panel: #f5f6f8;
+  --accent: #0b5fff;
+  --ok: #0a7d33;
+  --bad: #b00020;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111214;
+    --fg: #ececec;
+    --muted: #a0a0a0;
+    --line: #3a3d42;
+    --panel: #1b1d21;
+    --accent: #6aa0ff;
+    --ok: #4cd07d;
+    --bad: #ff6b81;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-text-size-adjust: 100%; }
+button { font: inherit; min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--fg); }
+button.primary { border-color: var(--accent); color: var(--accent); }
