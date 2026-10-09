@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>S1 Luftbild-Test NRW</title>
+  <link rel="stylesheet" href="vendor/maplibre-gl.css">
+  <style>
+    :root { --bg:#fff; --fg:#1a1a1a; --panel:rgba(255,255,255,.94); --line:#d0d0d0; --ok:#0a7d33; --bad:#b00020; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#111; --fg:#eee; --panel:rgba(24,24,24,.94); --line:#444; --ok:#4cd07d; --bad:#ff6b81; } }
+    html, body { margin:0; height:100%; background:var(--bg); color:var(--fg); font:14px/1.35 system-ui, sans-serif; }
+    #map { position:absolute; inset:0; }
+    #panel { position:absolute; left:8px; top:8px; right:8px; max-width:360px; background:var(--panel); border:1px solid var(--line);
+             border-radius:10px; padding:10px; max-height:calc(100% - 16px); overflow:auto; backdrop-filter:blur(6px); }
+    h1 { font-size:15px; margin:0 0 6px; }
+    .row { display:flex; flex-wrap:wrap; gap:6px; margin:6px 0; }
+    button, select { font:inherit; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:var(--bg); color:var(--fg); min-height:40px; }
+    button.on { border-color:var(--ok); }
+    pre { margin:6px 0 0; white-space:pre-wrap; font:12px/1.35 ui-monospace, monospace; }
+    .ok { color:var(--ok); } .bad { color:var(--bad); }
+    small { opacity:.75; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="panel">
+    <h1>S1 · NRW-Luftbild im Browser</h1>
+    <div class="row">
+      <select id="ort" aria-label="Testort"></select>
+      <select id="layer" aria-label="Ebene">
+        <option value="nw_dop_rgb">Farbe (RGB)</option>
+        <option value="nw_dop_cir">Farbinfrarot</option>
+        <option value="nw_dop_nir">Nahinfrarot</option>
+      </select>
+    </div>
+    <div class="row">
+      <button id="messen">Strecke messen</button>
+      <button id="info">Aufnahme-Info</button>
+    </div>
+    <pre id="stat">lädt …</pre>
+    <small>Quelle: Geobasis NRW, Digitale Orthophotos, dl-de/zero-2.0</small>
+  </div>
+  <script src="vendor/maplibre-gl.js"></script>
+  <script>
+    const WMS = 'https://www.wms.nrw.de/geobasis/wms_nw_dop';
+    const q = new URLSearchParams(location.search);
+    const TILE = Number(q.get('ts') || 512);          // 256 oder 512
+    const FMT = q.get('fmt') === 'jpeg' ? 'image/jpeg' : 'image/png';
+    const MAXZ = TILE === 512 ? 19 : 20;               // ~9,4 cm je Pixel bei 51,5° Nord
+    const ORTE = {
+      'Bielefeld · Schüco Arena': [8.5169, 52.0320, 19],
+      'Bielefeld · Wohngebiet': [8.5560, 52.0230, 19],
+      'Paderborn · Innenstadt': [8.7544, 51.7189, 19],
+      'Gütersloh · Wohngebiet': [8.3865, 51.9060, 19],
+      'Detmold · Land': [8.8800, 51.9370, 19],
+    };
+
+    const metrics = { tiles: [], errors: [], consoleErrors: [] };
+    window.__s1 = { metrics, params: { TILE, FMT, MAXZ } };
+
+    function tileUrl(layer) {
+      return `${WMS}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=${layer}&STYLES=&CRS=EPSG:3857` +
+             `&BBOX={bbox-epsg-3857}&WIDTH=${TILE}&HEIGHT=${TILE}&FORMAT=${FMT}`;
+    }
+
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: { version: 8, sources: {}, layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#222' } }] },
+      center: [8.5169, 52.0320], zoom: 19, maxZoom: 21, attributionControl: { compact: true },
+    });
+    window.__s1.map = map;
+
+    function setLayer(layer) {
+      if (map.getLayer('dop')) map.removeLayer('dop');
+      if (map.getSource('dop')) map.removeSource('dop');
+      map.addSource('dop', {
+        type: 'raster', tiles: [tileUrl(layer)], tileSize: TILE, minzoom: 10, maxzoom: MAXZ,
+        attribution: '© Geobasis NRW (dl-de/zero-2.0)',
+      });
+      map.addLayer({ id: 'dop', type: 'raster', source: 'dop' });
+    }
+    map.on('load', () => setLayer('nw_dop_rgb'));
+    map.on('error', (e) => metrics.errors.push(String(e && e.error && e.error.message || e)));
+
+    // Ladezeiten über Resource Timing
+    new PerformanceObserver((list) => {
+      for (const e of list.getEntries()) {
+        if (e.name.startsWith(WMS)) {
+          metrics.tiles.push({ ms: Math.round(e.duration), bytes: e.encodedBodySize, transfer: e.transferSize });
+        }
+      }
+      render();
+    }).observe({ type: 'resource', buffered: true });
+
+    function pct(arr, p) { if (!arr.length) return 0; const s = [...arr].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.floor(p * s.length))]; }
+    // MapLibre-Zoom bezieht sich auf 512-px-Weltkacheln
+    function mPerPx() { const z = map.getZoom(); return 78271.51696 * Math.cos(map.getCenter().lat * Math.PI / 180) / Math.pow(2, z); }
+    function render() {
+      const t = metrics.tiles, ms = t.map(x => x.ms), kb = t.map(x => x.bytes / 1024);
+      document.getElementById('stat').innerHTML =
+        `Zoom ${map.getZoom().toFixed(2)} · ${mPerPx().toFixed(3)} m je Bildschirmpixel\n` +
+        `Format ${FMT.replace('image/', '')} · Kachel ${TILE}px · max. Stufe ${MAXZ}\n` +
+        `Kacheln geladen: ${t.length}\n` +
+        `Ladezeit Median/90%: ${pct(ms, .5)} / ${pct(ms, .9)} ms\n` +
+        `Größe Median/90%: ${pct(kb, .5).toFixed(0)} / ${pct(kb, .9).toFixed(0)} kB\n` +
+        (metrics.errors.length ? `<span class="bad">Fehler: ${metrics.errors.length} – ${metrics.errors[0]}</span>` : `<span class="ok">keine Kartenfehler</span>`) +
+        (msg ? `\n${msg}` : '');
+    }
+    let msg = '';
+
+    const sel = document.getElementById('ort');
+    for (const k of Object.keys(ORTE)) sel.add(new Option(k, k));
+    sel.onchange = () => { const [lng, lat, z] = ORTE[sel.value]; map.jumpTo({ center: [lng, lat], zoom: z }); };
+    document.getElementById('layer').onchange = (e) => setLayer(e.target.value);
+    map.on('zoom', render);
+
+    // Strecke messen (zwei Klicks, Entfernung auf der Kugel; auf dieser Länge reicht das für den Maßtest)
+    let measuring = false, pts = [];
+    function hav(a, b) {
+      const R = 6371008.8, r = Math.PI / 180;
+      const dLat = (b.lat - a.lat) * r, dLng = (b.lng - a.lng) * r;
+      const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLng / 2) ** 2;
+      return 2 * R * Math.asin(Math.sqrt(h));
+    }
+    document.getElementById('messen').onclick = (e) => { measuring = !measuring; pts = []; e.target.classList.toggle('on', measuring); msg = measuring ? 'Zwei Punkte antippen' : ''; render(); };
+    document.getElementById('info').onclick = async () => {
+      const c = map.getCenter();
+      const d = 0.0001;
+      const bbox = [c.lat - d, c.lng - d, c.lat + d, c.lng + d].join(',');
+      const url = `${WMS}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS=nw_dop_utm_info&QUERY_LAYERS=nw_dop_utm_info&STYLES=&CRS=EPSG:4326&BBOX=${bbox}&WIDTH=101&HEIGHT=101&I=50&J=50&INFO_FORMAT=text/plain`;
+      try { const r = await fetch(url); const t = await r.text(); msg = 'Info: ' + t.slice(0, 600); window.__s1.info = t; }
+      catch (err) { msg = 'Info-Fehler: ' + err; }
+      render();
+    };
+    map.on('click', (e) => {
+      if (!measuring) return;
+      pts.push(e.lngLat);
+      if (pts.length === 2) { const d = hav(pts[0], pts[1]); msg = `Strecke: ${d.toFixed(2)} m`; window.__s1.lastDistance = d; pts = []; }
+      else msg = 'Zweiten Punkt antippen';
+      render();
+    });
+    window.__s1.render = render;
+    render();
+  </script>
+</body>
+</html>

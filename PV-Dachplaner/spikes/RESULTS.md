@@ -2,6 +2,28 @@
 
 Ergebnisse der Spikes aus [`../SPIKES.md`](../SPIKES.md). Aussagen zu Genauigkeit sind **vorläufig**, solange keine unabhängigen Referenzmaße vorliegen.
 
+## S1 – Luftbild im Browser: **bestanden** (mit Vorbehalt Safari/iPhone), 2026-10-09
+
+Code: [`s1-luftbild`](s1-luftbild) (statische Seite mit MapLibre, Testskript mit Playwright). Testseite: <https://pv-dachplaner-spikes.netlify.app> (Netlify-Site `pv-dachplaner-spikes`, nur für Spikes).
+
+| Frage | Ergebnis |
+|---|---|
+| Direkter Abruf aus dem Browser (CORS)? | **Ja.** Der Server antwortet mit `Access-Control-Allow-Origin` passend zur Herkunft. Kein CORS- und kein Kartenfehler in Chromium, sowohl von `localhost` als auch von `https://pv-dachplaner-spikes.netlify.app`. |
+| 10 cm pro Pixel? | **Ja.** Die Metadaten melden je Kachel `Bodenauflösung 0.10`, `RGBI`, 8 Bit. In der Karte sind PV-Module, Dachfenster und Lüfter einzeln erkennbar ([Bild](s1-luftbild/evidence/stadion-25832-0.2m.jpg)). Es sind **True-Orthophotos**: Das Stadiondach zeigt keine Gebäudeschrägstellung. |
+| Maßhaltigkeit | **Gut.** Mittelkreise (Radius laut Regelwerk 9,15 m außen, ca. 9,09 m Linienmitte) im Bild gemessen: 9,06 m und 9,10 m, Abweichung unter 1 %. Grundlage: Abruf in EPSG:25832 mit 0,2 m je Pixel, Kreisanpassung an die Linienpixel. |
+| Aufnahmedatum abfragbar? | **Ja.** `GetFeatureInfo` auf `nw_dop_utm_info`: Beispiel Bielefeld Kachel `32466_5764`, Bildflugdatum **13.08.2024**. Damit kann die App das Alter des Bildes anzeigen. |
+| Infrarot verfügbar? | **Ja.** `nw_dop_nir` und `nw_dop_cir` liefern dieselbe Auflösung (für S6 nutzbar). |
+| Dateigröße je 512-px-Kachel | **PNG 584 kB, JPEG 47 kB** (12-mal kleiner). |
+| Ladezeit | In der Testumgebung (über einen Proxy, daher nicht repräsentativ): JPEG 512 px Median 0,5–0,8 s, PNG 512 px Median 1,5 s, PNG 256 px Median 1,0 s. Auf iPhone und Mobilfunk **noch zu messen**. |
+| Sinnvolle Maximalstufe | MapLibre-Zoom 19 mit 512-px-Kacheln entspricht in OWL etwa 9,2 cm je Bildschirmpixel; mehr Zoom vergrößert nur noch. |
+
+**Entscheidung:** Das Luftbild wird **direkt aus dem Browser** geladen, ein Proxy ist nicht nötig. Für die Anzeige **JPEG mit 512-px-Kacheln**. Für die Erkennung (S6) wird je Dach ein Ausschnitt in EPSG:25832 mit 0,1 m je Pixel geholt; ob JPEG-Artefakte die Erkennung stören, prüft S6.
+
+**Vorbehalte / offen**
+- **Safari auf dem iPhone und Edge auf Windows wurden noch nicht geprüft.** Getestet wurde Chromium (headless). Bitte <https://pv-dachplaner-spikes.netlify.app> auf dem iPhone öffnen: Karte muss erscheinen, Zoom und Wischen müssen flüssig sein, „Aufnahme-Info“ muss ein Datum zeigen.
+- Es ist keine Abrufbegrenzung dokumentiert (Dienstbeschreibung: keine Zugriffsbeschränkung). Bei vielen gleichzeitigen Nutzern könnte ein eigener Zwischenspeicher sinnvoll werden. Das ist **[prüfen]** vor dem Rollout und kein Hindernis für M1.
+- Netzgeschwindigkeit auf Mobilfunk unbekannt (siehe oben).
+
 ## S4 – Geometrie-Kern: **bestanden** (2026-10-09)
 
 Code: [`../packages/geometry-core`](../packages/geometry-core) (TypeScript, Tests mit Vitest).
