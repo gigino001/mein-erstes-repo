@@ -74,7 +74,7 @@ Code: [`s2-lod2`](s2-lod2) (`parse_tile.py` liest eine Kachel, berechnet je Dach
 
 **Offen für S3:** Wo liegen die rund 1,3 GB (OWL) bzw. 7 GB (NRW) kostenlos, und wer führt die Aufbereitung aus (z. B. ein Netlify-fremder Job)? Der Plan in `PLAN.md` Kap. 8 wird entsprechend angepasst.
 
-## S3 – Netlify-Grenzen und Hosting der Dachflächen-Kacheln: **Netlify-Funktionen nicht nötig**, Hosting neu bewertet, 2026-10-09
+## S3 – Netlify-Grenzen und Hosting der Dachflächen-Kacheln: **Netlify-Funktionen nicht nötig**, Hosting bleibt bei Netlify, 2026-10-09
 
 Weil S2 den Weg B (Vorverarbeitung) ergeben hat, braucht die App **keine Server-Funktion** für die Gebäudedaten. Die ursprüngliche Frage („Reichen Netlify-Funktionen?“) erübrigt sich. Offen war stattdessen: Wo liegen die Kachel-Dateien, und was heißt das für das Hosting der App?
 
@@ -97,11 +97,15 @@ Weil S2 den Weg B (Vorverarbeitung) ergeben hat, braucht die App **keine Server-
 - OWL: ca. 32 GB Download und ca. 20 Minuten Rechenzeit (S2). Das passt in einen kostenlosen Lauf, z. B. mit GitHub Actions (bei öffentlichen Repos unbegrenzt, bei privaten ein monatliches Kontingent **[prüfen]**), oder lokal auf einem Rechner mit Python.
 - Hochladen nach R2 erfordert einen Zugangsschlüssel von dir (als geheimer Wert in der Pipeline, nie im Repository).
 
-**Entscheidung**
+**Entscheidung (mit deiner Vorgabe: Hosting bleibt bei Netlify)**
 1. **Keine Netlify-Funktionen im Betrieb.** Die App ist rein statisch.
-2. **Kachel-Dateien auf Cloudflare R2** (Gratis, kostenloser Abruf). Alternative bei fehlendem Cloudflare-Konto: GitHub Pages (Seitengröße etwa 1 GB, nur Teilgebiet) – schlechter.
-3. **App-Hosting:** Empfohlen **Cloudflare Pages** (Gratis, unbegrenzte Bandbreite laut Anbieter **[prüfen]**), damit der Dachplaner nicht das Netlify-Kontingent deiner anderen Sites teilt. Netlify bleibt für die Spikes. Wenn du Netlify behalten willst: eigenes Konto nur für den Dachplaner oder genaue Beobachtung der Credits.
-4. **Konten und Teilen:** Supabase bleibt Favorit, Prüfung in S7.
+2. **App-Hosting: Netlify** (deine Entscheidung). Das Credit-Risiko ist beherrschbar, wenn wir es im Blick behalten:
+   - Das Luftbild kommt direkt vom NRW-Dienst und belastet Netlify nicht.
+   - Eine Kachel-Abfrage ist etwa 0,2 MB groß. Bei 20 Nutzern mit je 200 Abfragen im Monat sind das rund 0,8 GB, nach den genannten Raten etwa 8 bis 16 Credits von 300.
+   - Der größere Posten sind **Veröffentlichungen: 15 Credits je Produktivveröffentlichung.** Mehr als etwa 10 im Monat sollten wir vermeiden (dann 150 Credits). Entwicklungsstände gehen auf eine Vorschau-Adresse (Branch-Deploy) oder lokal.
+   - Wichtig: Die Credits teilt sich das ganze Konto mit deinen anderen Sites. **Bitte unter app.netlify.com → Nutzung die Credits im Auge behalten**, besonders in den ersten Wochen.
+3. **Kachel-Dateien: zunächst auf Netlify**, als eigene statische Site `pv-dachplaner-daten` oder im selben Projekt. Wir starten mit einem **Pilotgebiet** (z. B. Stadt Bielefeld und Umgebung, einige hundert Kacheln, grob 50 bis 100 MB), nicht gleich mit ganz OWL (bis 1,3 GB). Maximale Deploy-Größe und Dateianzahl bei Netlify sind noch zu prüfen **[prüfen beim Pilot]**. Wächst der Bedarf, ist **Cloudflare R2** die Alternative (kostenloser Abruf), dazu bräuchten wir später ein Konto.
+4. **Konten und Teilen (Supabase): zurückgestellt.** Du hast noch kein Konto. S7 wird erst vor Meilenstein M3 (Teamarbeit) ausgeführt. M1 (Kern) und M2 (PDF) laufen ohne Konten, Projekte liegen dann lokal auf dem Gerät.
 
 **Quellen:** [Netlify Free Plan Limits 2026 (netli.fyi)](https://netli.fyi/blog/netlify-free-plan-limits-2026), [Netlify Free Tier 2026 (agentdeals.dev)](https://agentdeals.dev/vendor/netlify), [Cloudflare R2 Preise](https://developers.cloudflare.com/r2/pricing), [Supabase Free Tier Limits](https://www.itpathsolutions.com/supabase-free-tier-limits).
 

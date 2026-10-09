@@ -1,6 +1,6 @@
 # PV-Dachplaner – Projektplan
 
-Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.8 (Entwurf zur Abstimmung)
+Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.9 (Entwurf zur Abstimmung)
 
 Aussagen mit **[prüfen]** stammen aus Recherche oder Erinnerung und sind noch nicht in der Praxis verifiziert. Sie werden in den Spikes (Kap. 13) geklärt, bevor etwas darauf aufgebaut wird.
 
@@ -149,7 +149,7 @@ Kamin/Schornstein, Dachfenster, Gaube, Antenne/Sat-Schüssel, Lüfter/Entlüftun
 │ UI (Editor, Listen, PDF)  ·  Karte  ·  Geometrie-Kern  ·  Erkennung (ONNX)     │
 └──────┬─────────────────────────┬──────────────────────────┬────────────────────┘
        │ Luftbild (WMS)          │ Dachflächen-Kacheln      │ Konten, Projekte, Teilen
-  NRW Geobasis             Cloudflare R2 (statisch)     Supabase (Auth + Datenbank)
+  NRW Geobasis             Netlify (statisch)           Supabase (Auth + Datenbank, später)
 ```
 
 **Frontend:** TypeScript, Vite, MapLibre GL JS (WMS als Raster-Quelle), Polygon-Bibliothek für Verschneidung/Versatz (z. B. Clipper-basiert oder turf.js), proj4 für 25832 ↔ Karte, Workbox für die PWA, client-seitiges PDF (z. B. pdf-lib). Framework: React oder Svelte – Entscheidung im Spike.
@@ -158,9 +158,9 @@ Kamin/Schornstein, Dachfenster, Gaube, Antenne/Sat-Schüssel, Lüfter/Entlüftun
 
 **Hosting und Dienste (Stand nach S1 bis S3)**
 - **App:** rein statische PWA, keine Server-Funktion im Betrieb. Das Luftbild kommt direkt vom NRW-WMS (S1), die Dachflächen aus vorbereiteten Kachel-Dateien (S2).
-- **Dachflächen-Kacheln:** je 1 km² eine kleine komprimierte Datei (ca. 0,2 MB), erzeugt von einem Aufbereitungsprogramm aus den NRW-CityGML-Kacheln. Ablage auf **Cloudflare R2** (Gratis-Rahmen, kostenloser Abruf). Umfang OWL ca. 1,3 GB, ganz NRW ca. 7 GB.
-- **App-Hosting:** Empfehlung **Cloudflare Pages**. Netlify im Gratis-Tarif teilt ein monatliches Credit-Kontingent über alle Sites des Kontos und pausiert bei Erschöpfung alle Sites (S3); der Dachplaner sollte deine anderen Sites nicht gefährden. Netlify bleibt für die Spikes.
-- **Konten und Teilen:** **Supabase** (Anmeldung per Einladungslink, Datenbank mit Zeilenrechten). Gratis-Projekte pausieren nach 7 Tagen ohne Anfragen (S7 prüft Details).
+- **Dachflächen-Kacheln:** je 1 km² eine kleine komprimierte Datei (ca. 0,2 MB), erzeugt von einem Aufbereitungsprogramm aus den NRW-CityGML-Kacheln. **Zunächst auf Netlify** (eigene statische Site oder im selben Projekt), mit einem Pilotgebiet (z. B. Bielefeld und Umgebung). Umfang OWL bis ca. 1,3 GB, ganz NRW ca. 7 GB. Bei Platzproblemen später **Cloudflare R2** als Alternative.
+- **App-Hosting: Netlify** (Entscheidung des Auftraggebers). Das Gratis-Kontingent (Credits) wird mit den anderen Sites des Kontos geteilt. Gegenmaßnahmen: wenige Produktivveröffentlichungen (je 15 Credits), Vorschau-Adressen für Entwicklungsstände, Verbrauch beobachten (S3).
+- **Konten und Teilen:** **Supabase** (Anmeldung per Einladungslink, Datenbank mit Zeilenrechten), **zurückgestellt bis vor M3**, weil noch kein Konto besteht. Bis dahin liegen Projekte lokal auf dem Gerät. Gratis-Projekte pausieren nach 7 Tagen ohne Anfragen (S7 prüft Details).
 - Netlify Identity ist laut meiner Erinnerung abgekündigt **[prüfen]** und nicht Basis.
 
 **LoD2-Verarbeitung – Entscheidung: Weg B (Vorverarbeitung)**
@@ -218,7 +218,7 @@ Jeder Spike ist klein, hat eine Frage und ein klares Ja/Nein.
 |---|---|---|---|
 | S1 | Lässt sich das NRW-Luftbild per WMS direkt im Browser laden (CORS)? In welcher Auflösung? | Sonst Proxy nötig | **Ja**, kein Proxy nötig (nur Safari/iPhone-Test offen), siehe `spikes/RESULTS.md` |
 | S2 | Wie sind LoD2-Daten bereitgestellt (Format, Kachelgröße, WFS?) und wie groß ist ein Gebäude-Abruf? | Entscheidet Weg A/B/C | **Weg B** (Vorverarbeitung zu kleinen Kachel-Dateien), siehe `spikes/RESULTS.md` |
-| S3 | Reicht Netlify Functions (Gratis-Limits) für die LoD2-Abfrage? | Kosten und Machbarkeit | **Keine Funktionen nötig** (Weg B). Kachel-Dateien auf Cloudflare R2, App-Hosting besser nicht im geteilten Netlify-Kontingent; siehe `spikes/RESULTS.md` |
+| S3 | Reicht Netlify Functions (Gratis-Limits) für die LoD2-Abfrage? | Kosten und Machbarkeit | **Keine Funktionen nötig** (Weg B). Hosting bleibt bei Netlify (Credits beobachten), Kachel-Dateien zunächst als Pilotgebiet auf Netlify; siehe `spikes/RESULTS.md` |
 | S4 | Geometrie-Kern: Schrägfläche, Abzüge, Belegung gegen Handrechnung | Kernlogik | **Bestanden**, 26 Tests grün, ca. 50 ms je Dach, siehe `spikes/RESULTS.md` |
 | S5 | Läuft ein kleines ONNX-Modell auf dem iPhone in akzeptabler Zeit/Speicher? | Entscheidet Browser- vs. Server-Erkennung | Messwerte |
 | S6 | Wie gut trennt ein Vorab-Modell Hindernisse auf 10-cm-Bildern? | Aufwand der Beschriftung | Trefferquote je Klasse |
@@ -240,7 +240,7 @@ Die detaillierte Ausarbeitung der Spikes steht in [`SPIKES.md`](SPIKES.md).
 | **M0 Spikes** | S1–S4, S7, S8 | Entscheidungen für Datenzugriff, Backend, Geometrie |
 | **M1 Kern** | Karte mit Luftbild, Adresssuche, Dach zeichnen, Neigung eingeben, Hindernisse zeichnen, Fläche und Modulanzahl, lokal speichern | Nutzbar für dich allein |
 | **M2 Ausgabe** | PDF, Randabstände optional, hochkant/quer-Vergleich, mehrere Dachflächen | Kundentauglich |
-| **M3 Teamarbeit** | Konten, Projekte teilen, Rollen | Nutzbar für Kollegen |
+| **M3 Teamarbeit** | Konten (Supabase-Konto nötig, vorher S7), Projekte teilen, Rollen | Nutzbar für Kollegen |
 | **M4 LoD2** | Dachflächen, Neigung und Ausrichtung automatisch vorbelegt | Weniger Handarbeit |
 | **M5 Erkennung** | S5, S6, Hindernis-Vorschläge mit „Zu prüfen“ | Automatische Erkennung |
 | **M6 Politur** | Referenzdächer, Fehlerkorrektur, Rollout | Einsatzreif |

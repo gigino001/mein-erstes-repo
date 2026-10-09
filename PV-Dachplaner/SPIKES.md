@@ -29,7 +29,7 @@ Aussagen mit **[prüfen]** sind noch nicht belegt. Zahlen zu Zeitaufwand und Sch
 | S7 | Welche Lösung für Konten, Einladungslink und geteilte Projekte? | 1 Tag | – | Backend-Wahl |
 | S8 | Welche Adresssuche trifft das richtige Gebäude? | ½ Tag | – | Adresssuche |
 
-**Empfohlene Reihenfolge:** S1 → S2 → S4 (parallel zu S2) → S3 → S8 → S7 → S5 → S6. Insgesamt grob 9 bis 13 Arbeitstage, falls nichts Unerwartetes auftaucht.
+**Empfohlene Reihenfolge:** S1 → S2 → S4 (parallel zu S2) → S3 → S8 → S5 → S6; **S7 (Konten) zurückgestellt bis vor M3**, weil noch kein Supabase-Konto besteht. Insgesamt grob 9 bis 13 Arbeitstage, falls nichts Unerwartetes auftaucht.
 
 ## 2. Gemeinsame Grundlage: Testdach-Set
 
