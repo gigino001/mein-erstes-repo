@@ -1,6 +1,6 @@
 # PV-Dachplaner – Projektplan
 
-Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.10 (Entwurf zur Abstimmung)
+Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.11 (Entwurf zur Abstimmung)
 
 Aussagen mit **[prüfen]** stammen aus Recherche oder Erinnerung und sind noch nicht in der Praxis verifiziert. Sie werden in den Spikes (Kap. 13) geklärt, bevor etwas darauf aufgebaut wird.
 
@@ -221,8 +221,8 @@ Jeder Spike ist klein, hat eine Frage und ein klares Ja/Nein.
 | S2 | Wie sind LoD2-Daten bereitgestellt (Format, Kachelgröße, WFS?) und wie groß ist ein Gebäude-Abruf? | Entscheidet Weg A/B/C | **Weg B** (Vorverarbeitung zu kleinen Kachel-Dateien), siehe `spikes/RESULTS.md` |
 | S3 | Reicht Netlify Functions (Gratis-Limits) für die LoD2-Abfrage? | Kosten und Machbarkeit | **Keine Funktionen nötig** (Weg B). Hosting bleibt bei Netlify (Credits beobachten), Kachel-Dateien zunächst als Pilotgebiet auf Netlify; siehe `spikes/RESULTS.md` |
 | S4 | Geometrie-Kern: Schrägfläche, Abzüge, Belegung gegen Handrechnung | Kernlogik | **Bestanden**, 26 Tests grün, ca. 50 ms je Dach, siehe `spikes/RESULTS.md` |
-| S5 | Läuft ein kleines ONNX-Modell auf dem iPhone in akzeptabler Zeit/Speicher? | Entscheidet Browser- vs. Server-Erkennung | Messwerte |
-| S6 | Wie gut trennt ein Vorab-Modell Hindernisse auf 10-cm-Bildern? | Aufwand der Beschriftung | Trefferquote je Klasse |
+| S5 | Läuft ein kleines ONNX-Modell auf dem iPhone in akzeptabler Zeit/Speicher? | Entscheidet Browser- vs. Server-Erkennung | Desktop ja (5,5 s Analyse, 0,3 s je Antippen); **iPhone-Messung steht aus**, siehe `spikes/RESULTS.md` |
+| S6 | Wie gut trennt ein Vorab-Modell Hindernisse auf 10-cm-Bildern? | Aufwand der Beschriftung | **Antippen-Werkzeug ja, Vollautomatik zurückgestellt** (Stichprobe klein), siehe `spikes/RESULTS.md` |
 | S7 | Konten und Teilen: Supabase vs. Netlify Blobs – Aufwand, Limits, Datenschutz | Entscheidet Backend | Gewählte Lösung |
 | S8 | Adresssuche: Nominatim ausreichend oder amtliche Geokodierung? | Nutzbarkeit/Bedingungen | **Eigener Adressindex** aus amtlichen Hauskoordinaten, 98–100 % Trefferquote im Prototyp; siehe `spikes/RESULTS.md` |
 
@@ -243,7 +243,7 @@ Die detaillierte Ausarbeitung der Spikes steht in [`SPIKES.md`](SPIKES.md).
 | **M2 Ausgabe** | PDF, Randabstände optional, hochkant/quer-Vergleich, mehrere Dachflächen | Kundentauglich |
 | **M3 Teamarbeit** | Konten (Supabase-Konto nötig, vorher S7), Projekte teilen, Rollen | Nutzbar für Kollegen |
 | **M4 LoD2** | Dachflächen, Neigung und Ausrichtung automatisch vorbelegt | Weniger Handarbeit |
-| **M5 Erkennung** | S5, S6, Hindernis-Vorschläge mit „Zu prüfen“ | Automatische Erkennung |
+| **M5 Erkennung** | Antippen-Werkzeug (MobileSAM im Browser) mit Klassenwahl; automatische „Zu prüfen“-Vorschläge erst nach Training | Halbautomatische Erkennung |
 | **M6 Politur** | Referenzdächer, Fehlerkorrektur, Rollout | Einsatzreif |
 
 Reihenfolge-Prinzip: **früh etwas Nutzbares (M1/M2) und das riskante Automatisieren (M4/M5) später**, damit Fehlschläge dort das Gesamtprojekt nicht aufhalten.

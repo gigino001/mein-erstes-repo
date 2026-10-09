@@ -134,6 +134,49 @@ Code: [`s8-adressen`](s8-adressen) (`build_index.py` baut den Index, `search_tes
 3. **Fehlende Adressen:** Freie Eingabe „auf der Karte antippen“ bleibt als Fallback.
 4. **Aktualisierung:** halbjährlich (neue Gebäudereferenzen und LoD2-Kacheln), als wiederholbarer Aufbereitungslauf.
 
+## S5 – KI-Modell im Browser: **Desktop ja, iPhone steht aus**, 2026-10-09
+
+Code und Testseite: [`s5-iphone-test`](s5-iphone-test), Testseite <https://pv-dachplaner-ki-test.netlify.app> (eigene Netlify-Site `pv-dachplaner-ki-test`).
+
+**Modell:** MobileSAM (promptbare Segmentierung: Antippen → Maske), ONNX-Export von Acly (MIT), geladen von Hugging Face. Bild-Modell 28,2 MB, Masken-Modell 16,5 MB, zusammen **44,7 MB**; dazu die ONNX-Runtime (WASM, 25 MB). Die Originalprojekte (MobileSAM/SAM) stehen meines Wissens unter Apache-2.0 **[prüfen]**; die ONNX-Runtime ist MIT.
+
+| Messung (headless Chromium, 4 virtuelle Kerne, Testumgebung) | Ergebnis |
+|---|---|
+| Modelle laden | 2,1 bis 2,5 s (schnelle Leitung, nicht repräsentativ) |
+| Sitzung erstellen | 3,1 bis 4,4 s |
+| Bild analysieren (einmal je Dach) | **10,4 s mit 1 Thread, 5,5 s mit 4 Threads** (Seite mit Cross-Origin-Isolation) |
+| Maske je Antippen | 0,3 s (4 Threads), 0,5 bis 0,7 s (1 Thread) |
+| Ergebnis gleich wie mit nativer Python-Runtime? | **Ja** (z. B. 1,32 m² gegen 1,29 m²; native Analyse: 1,0 s) |
+| Fehler/Abstürze | keine |
+
+**Wichtige Erkenntnisse**
+- Der Encoder erwartet das Bild **vorab auf 1024 Pixel (längste Seite)** vergrößert; mit dem kleinen Originalausschnitt liefert er unbrauchbare, flächenfüllende Masken. Das ist in Skript und Seite berücksichtigt.
+- Mehrere Threads brauchen **Cross-Origin-Isolation** (HTTP-Kopfzeilen `COOP: same-origin`, `COEP: require-corp`). Netlify kann das über `_headers`. Die Kopfzeilen schränken das Einbinden fremder Ressourcen ein (z. B. Kartenkacheln, Schriften); der WMS des Luftbilds bräuchte dann passende Freigaben. **Für die App-Karte ist das noch zu prüfen**, die KI-Seite kann sonst auch auf einer eigenen Unterseite laufen.
+- Einmalige Last pro Gerät: ca. 70 MB (Modelle + Runtime). Mit Service Worker nur beim ersten Mal.
+
+**Noch offen: iPhone.** Bitte <https://pv-dachplaner-ki-test.netlify.app> auf dem iPhone öffnen (am besten im WLAN, ca. 70 MB), „Modell laden“, Beispiel wählen, auf Objekte tippen, „Bericht kopieren“ und mir senden. Kriterium: Analyse höchstens 10 s, kein Absturz bei 10 Durchläufen.
+
+## S6 – Hinderniserkennung ohne Training: **Antippen funktioniert, Vollautomatik nicht**, 2026-10-09
+
+Code: [`s6-erkennung`](s6-erkennung). Bewertung per **Sichtprüfung durch mich** an zwei Häusern in Bielefeld, keine unabhängige Beschriftung. Die Stichprobe ist klein; sie zeigt eine Richtung, keine Trefferquote.
+
+| Ansatz | Ergebnis |
+|---|---|
+| **A: Antippen → Maske** | **Brauchbar.** Beispiel B ([Bild](s6-erkennung/evidence/antippen-beispiel-b.png)): Entlüftung (0,5 m²) und eine lange Dachrinnen-/Gratkante (1,3 m²) wurden sauber umrissen; die große helle Dachfläche (ca. 14 m²) wurde von einer der vier Masken getroffen, aber durch meine Größenbegrenzung (8 m²) verworfen. Zwei weitere Tippen waren knapp daneben und lieferten keine Maske am Objekt. Das Modell gibt je Antippen vier Masken (Teil bis Ganzes) mit Sicherheitswert; die App muss die passende wählen oder den Nutzer wählen lassen. |
+| **B: Auffälligkeiten als Antippunkte** (Farbabweichung vom Dach, dann Maske) | **Schwach.** Beispiel A: 7 Auffälligkeiten, nach Filter 1 Kandidat (0,17 m²), das sichtbare Dachfenster wurde nicht erfasst. |
+| **Raster aus Antippunkten** (jeder Meter) | **Ungeeignet.** Die Masken umfassen meist ganze Dachflächen; kleine Objekte werden zwischen den Punkten verfehlt; ein engeres Raster (0,3 m) bräuchte rund 1.500 Masken je Dach (ca. 100 s). |
+| **C: eigenes Training** | **Nicht ausprobiert.** Braucht beschriftete Dächer (Schätzung einige hundert, siehe `SPIKES.md`). |
+
+**Weitere Befunde**
+- SAM liefert **Umrisse, keine Klassen**. Ob etwas ein Kamin oder ein Dachfenster ist, wählt der Nutzer (oder ein späteres trainiertes Modell).
+- Das **LoD2-Dach passt nicht immer**: Beim Beispiel A deckt der LoD2-Umriss nur zwei der sichtbaren Dachflächen ab ([Bild](s6-erkennung/evidence/auffaelligkeiten-beispiel-a.png)). Die App braucht deshalb immer die Möglichkeit, Dachflächen anzupassen.
+- Die Luftbilder sind True-Orthophotos mit gelegentlichen Rechenartefakten (schwarze/weiße Ränder an Hauswänden).
+
+**Entscheidung (laut Vorgabe aus `SPIKES.md`: Ansatz A als Rückfall)**
+1. **M5 beginnt mit „Antippen-Werkzeug“** (Ansatz A): Nutzer tippt auf ein Hindernis, die App schlägt eine Maske vor (mit Auswahl zwischen den vier Größenstufen), Nutzer wählt die Klasse (Kamin, Dachfenster, Gaube, …) und kann den Umriss nachziehen.
+2. **Vollautomatische Vorschläge („Zu prüfen“-Liste) werden zurückgestellt**, bis beschriftete Beispiele vorliegen (Ansatz C). Der Rest des Produkts bleibt unverändert nutzbar.
+3. Beschriftung kann schon vorher beginnen: Jede Korrektur in der App (mit Einwilligung) liefert später Trainingsdaten.
+
 ## S4 – Geometrie-Kern: **bestanden** (2026-10-09)
 
 Code: [`../packages/geometry-core`](../packages/geometry-core) (TypeScript, Tests mit Vitest).

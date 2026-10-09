@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>S5 KI-Test iPhone</title>
+  <style>
+    :root { --bg:#fff; --fg:#1a1a1a; --line:#d0d0d0; --ok:#0a7d33; --bad:#b00020; --acc:#0b5fff; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#111; --fg:#eee; --line:#444; --ok:#4cd07d; --bad:#ff6b81; --acc:#6aa0ff; } }
+    html, body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.4 system-ui, sans-serif; }
+    main { padding:12px 16px 40px; max-width:640px; margin:0 auto; }
+    h1 { font-size:18px; margin:8px 0; }
+    button { font:inherit; padding:10px 14px; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--fg); min-height:44px; margin:4px 4px 4px 0; }
+    button.primary { border-color:var(--acc); color:var(--acc); }
+    #stage { position:relative; width:100%; touch-action:manipulation; }
+    #stage canvas { width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:8px; }
+    pre { white-space:pre-wrap; font:12px/1.4 ui-monospace, monospace; background:rgba(128,128,128,.12); padding:8px; border-radius:8px; }
+    .ok { color:var(--ok); } .bad { color:var(--bad); }
+    progress { width:100%; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>S5 · KI auf dem iPhone</h1>
+  <p>Test, ob die Erkennung im Browser läuft. Ablauf: <b>1.</b> „Modell laden“ (ca. 45 MB, am besten im WLAN), <b>2.</b> Beispieldach wählen, <b>3.</b> auf ein kleines Objekt auf dem Dach tippen (Kamin, Dachfenster, Entlüftung). Danach „Bericht kopieren“ und mir senden.</p>
+  <div>
+    <button id="load" class="primary">1 · Modell laden</button>
+    <button id="d1" disabled>Beispiel A</button>
+    <button id="d2" disabled>Beispiel B</button>
+  </div>
+  <progress id="prog" value="0" max="1" hidden></progress>
+  <div id="stage"><canvas id="cv" width="265" height="265"></canvas></div>
+  <p id="hint"><small>Tippe auf ein Objekt. Die farbige Fläche ist die Maske, die das Modell vorschlägt.</small></p>
+  <div><button id="copy">Bericht kopieren</button><button id="reset">Zurücksetzen</button></div>
+  <pre id="log">bereit</pre>
+</main>
+<script src="vendor/ort/ort.min.js"></script>
+<script>
+const HF = 'https://huggingface.co/Acly/MobileSAM/resolve/main/';
+const FILES = { enc: HF + 'mobile_sam_image_encoder.onnx', dec: HF + 'sam_mask_decoder_multi.onnx' };
+const RES = 0.1; // Meter je Pixel
+const report = { start: new Date().toISOString(), userAgent: navigator.userAgent, crossOriginIsolated: self.crossOriginIsolated, hardwareConcurrency: navigator.hardwareConcurrency, deviceMemory: navigator.deviceMemory ?? null, taps: [], errors: [] };
+window.__report = report;
+const $ = (id) => document.getElementById(id);
+const log = (s) => { $('log').textContent = s; };
+const lines = [];
+const say = (s) => { lines.push(s); log(lines.slice(-14).join('\n')); };
+
+let encS, decS, emb = null, img = null, imgName = '', scale = 1;
+const cv = $('cv'), ctx = cv.getContext('2d');
+
+async function fetchWithProgress(url, label) {
+  const t0 = performance.now();
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(label + ' HTTP ' + r.status);
+  const total = Number(r.headers.get('content-length')) || 0;
+  const reader = r.body.getReader(); const chunks = []; let got = 0;
+  for (;;) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); got += value.length;
+    if (total) { $('prog').value = got / total; } }
+  const buf = new Uint8Array(got); let o = 0; for (const c of chunks) { buf.set(c, o); o += c.length; }
+  return { buf, ms: performance.now() - t0, bytes: got };
+}
+
+$('load').onclick = async () => {
+  try {
+    $('load').disabled = true; $('prog').hidden = false;
+    ort.env.wasm.wasmPaths = new URL('vendor/ort/', location.href).href;
+    ort.env.wasm.numThreads = self.crossOriginIsolated ? Math.min(4, navigator.hardwareConcurrency || 1) : 1;
+    report.threads = ort.env.wasm.numThreads;
+    say('Lade Bild-Modell …');
+    const a = await fetchWithProgress(FILES.enc, 'Encoder'); report.encoderDownloadMs = Math.round(a.ms); report.encoderBytes = a.bytes;
+    say(`Bild-Modell: ${(a.bytes/1e6).toFixed(1)} MB in ${(a.ms/1000).toFixed(1)} s`);
+    const b = await fetchWithProgress(FILES.dec, 'Decoder'); report.decoderDownloadMs = Math.round(b.ms); report.decoderBytes = b.bytes;
+    say(`Masken-Modell: ${(b.bytes/1e6).toFixed(1)} MB in ${(b.ms/1000).toFixed(1)} s`);
+    const t0 = performance.now();
+    encS = await ort.InferenceSession.create(a.buf, { executionProviders: ['wasm'], graphOptimizationLevel: 'all' });
+    decS = await ort.InferenceSession.create(b.buf, { executionProviders: ['wasm'], graphOptimizationLevel: 'all' });
+    report.sessionCreateMs = Math.round(performance.now() - t0);
+    say(`Sitzungen erstellt in ${(report.sessionCreateMs/1000).toFixed(1)} s (Threads: ${report.threads})`);
+    $('d1').disabled = $('d2').disabled = false; $('prog').hidden = true;
+    window.__ready = true;
+  } catch (e) { report.errors.push(String(e)); say('FEHLER: ' + e); $('load').disabled = false; }
+};
+
+function loadImage(name) {
+  return new Promise((res) => { const im = new Image(); im.onload = () => { img = im; imgName = name; cv.width = im.width; cv.height = im.height; ctx.drawImage(im, 0, 0); emb = null; res(); }; im.src = 'img/' + name + '.png'; });
+}
+$('d1').onclick = () => loadImage('dach1').then(() => say('Beispiel A geladen – tippe auf ein Objekt'));
+$('d2').onclick = () => loadImage('dach2').then(() => say('Beispiel B geladen – tippe auf ein Objekt'));
+window.loadImage = loadImage;
+
+async function encode() {
+  const w = img.width, h = img.height; scale = 1024 / Math.max(w, h);
+  const tw = Math.round(w * scale), th = Math.round(h * scale);
+  const c = document.createElement('canvas'); c.width = tw; c.height = th; const x = c.getContext('2d', { willReadFrequently: true });
+  x.imageSmoothingQuality = 'high'; x.drawImage(img, 0, 0, tw, th);
+  const d = x.getImageData(0, 0, tw, th).data; const f = new Float32Array(tw * th * 3);
+  for (let i = 0, j = 0; i < d.length; i += 4) { f[j++] = d[i]; f[j++] = d[i + 1]; f[j++] = d[i + 2]; }
+  const t0 = performance.now();
+  const out = await encS.run({ input_image: new ort.Tensor('float32', f, [th, tw, 3]) });
+  emb = out.image_embeddings; return performance.now() - t0;
+}
+
+async function tap(px, py) {
+  const w = img.width, h = img.height;
+  let encMs = null;
+  if (!emb) { say('Bild wird analysiert … (beim ersten Tippen)'); encMs = await encode(); say(`Analyse: ${(encMs/1000).toFixed(2)} s`); }
+  const t0 = performance.now();
+  const out = await decS.run({
+    image_embeddings: emb,
+    point_coords: new ort.Tensor('float32', new Float32Array([px * scale, py * scale, 0, 0]), [1, 2, 2]),
+    point_labels: new ort.Tensor('float32', new Float32Array([1, -1]), [1, 2]),
+    mask_input: new ort.Tensor('float32', new Float32Array(256 * 256), [1, 1, 256, 256]),
+    has_mask_input: new ort.Tensor('float32', new Float32Array([0]), [1]),
+    orig_im_size: new ort.Tensor('float32', new Float32Array([h, w]), [2]),
+  });
+  const decMs = performance.now() - t0;
+  const masks = out.masks.data, iou = out.iou_predictions.data, n = h * w;
+  const cands = [];
+  for (let k = 0; k < 4; k++) { let area = 0; for (let i = 0; i < n; i++) if (masks[k * n + i] > 0) area++; cands.push({ k, iou: iou[k], areaM2: area * RES * RES, hit: masks[k * n + py * w + px] > 0 }); }
+  const ok = cands.filter((c) => c.hit && c.areaM2 <= 8).sort((a, b) => b.iou - a.iou);
+  const best = ok[0] || null;
+  ctx.drawImage(img, 0, 0);
+  if (best) { const id = ctx.getImageData(0, 0, w, h); for (let i = 0; i < n; i++) if (masks[best.k * n + i] > 0) { id.data[i*4] = id.data[i*4]*0.4 + 255*0.6; id.data[i*4+1] *= 0.4; id.data[i*4+2] *= 0.4; } ctx.putImageData(id, 0, 0); }
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(px, py, 4, 0, 7); ctx.stroke();
+  const rec = { image: imgName, tap: [px, py], encodeMs: encMs && Math.round(encMs), decodeMs: Math.round(decMs), masks: cands.map(c => ({ iou: +c.iou.toFixed(2), m2: +c.areaM2.toFixed(2), hit: c.hit })), chosen: best && { iou: +best.iou.toFixed(2), m2: +best.areaM2.toFixed(2) } };
+  report.taps.push(rec);
+  say(`Tippen ${px},${py}: Maske ${best ? best.areaM2.toFixed(2) + ' m² (Sicherheit ' + best.iou.toFixed(2) + ')' : 'keine passende'} · ${Math.round(decMs)} ms`);
+  return rec;
+}
+window.tapAt = tap;
+cv.addEventListener('click', async (e) => {
+  if (!img || !decS) return;
+  const r = cv.getBoundingClientRect(); const px = Math.round((e.clientX - r.left) / r.width * img.width), py = Math.round((e.clientY - r.top) / r.height * img.height);
+  try { await tap(px, py); } catch (err) { report.errors.push(String(err)); say('FEHLER: ' + err); }
+});
+$('reset').onclick = () => { if (img) { ctx.drawImage(img, 0, 0); } };
+$('copy').onclick = async () => {
+  const txt = JSON.stringify(report, null, 1);
+  try { await navigator.clipboard.writeText(txt); say('Bericht kopiert – bitte einfügen und senden'); } catch (e) { $('log').textContent = txt; }
+};
+</script>
+</body>
+</html>
