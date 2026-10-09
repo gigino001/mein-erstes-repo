@@ -3,6 +3,7 @@
   import type maplibregl from "maplibre-gl";
   import Karte from "../lib/Karte.svelte";
   import Werkzeugleiste from "../lib/editor/Werkzeugleiste.svelte";
+  import Lupe from "../lib/editor/Lupe.svelte";
   import { EditorZustand } from "../lib/editor/zustand.svelte";
   import { Ueberlagerung } from "../lib/editor/ueberlagerung";
   import { router } from "../lib/router.svelte";
@@ -14,6 +15,7 @@
   let p = $state<Project | null | undefined>(undefined);
   let z = $state<EditorZustand | undefined>();
   let ueb = $state<Ueberlagerung | undefined>();
+  let karte = $state<maplibregl.Map | undefined>();
   let gespeichert = $state(true);
   let auto: ReturnType<typeof autospeicher> | undefined;
 
@@ -68,6 +70,7 @@
   }
 
   function kartebereit(map: maplibregl.Map) {
+    karte = map;
     ueb = new Ueberlagerung(map, z!);
   }
   // Ebenen neu zeichnen, sobald sich der Zustand ändert (liest Zustand → reaktiv)
@@ -92,6 +95,7 @@
       <strong data-testid="projektname">{p.name}</strong>
     </header>
     {#if p.imageDate}<div class="bild">Luftbild vom {p.imageDate.split("-").reverse().join(".")}</div>{/if}
+    <Lupe {z} {karte} />
     <Werkzeugleiste {z} {gespeichert} />
   </div>
 {/if}

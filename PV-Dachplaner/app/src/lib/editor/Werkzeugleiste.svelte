@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { EditorZustand } from "./zustand.svelte";
-  import { flaeche, selbstschnitt } from "./geom";
+  import { flaeche, kantenLaengen, selbstschnitt } from "./geom";
 
   let { z, gespeichert }: { z: EditorZustand; gespeichert: boolean } = $props();
 
@@ -15,7 +15,10 @@
       return `${n} Ecken – „Fertig“ drücken oder den grünen ersten Punkt antippen.`;
     }
     if (!dach) return z.projekt.roofs.length === 0 ? "Noch keine Dachfläche. Wähle „Dach“ und zeichne eine." : "Tippe eine Dachfläche an.";
-    if (z.auswahl?.punkt !== null && z.auswahl?.punkt !== undefined) return "Ecke ziehen oder „Ecke löschen“.";
+    if (z.auswahl?.punkt !== null && z.auswahl?.punkt !== undefined) {
+      const n = dach.outline.length, i = z.auswahl.punkt, l = kantenLaengen(dach.outline);
+      return `Ecke ${i + 1}: Kanten ${deutsch(l[(i + n - 1) % n]!)} m und ${deutsch(l[i]!)} m. Ziehen oder löschen.`;
+    }
     return "Ecken ziehen, weiße Punkte tippen fügen eine Ecke ein. Fläche ziehen verschiebt sie.";
   });
   const deutsch = (x: number) => x.toFixed(1).replace(".", ",");
@@ -32,6 +35,7 @@
   <div class="reihe">
     <button class:an={z.werkzeug === "auswahl"} onclick={() => z.setzeWerkzeug("auswahl")} data-testid="werkzeug-auswahl">Auswahl</button>
     <button class:an={z.werkzeug === "dach"} onclick={() => z.setzeWerkzeug("dach")} data-testid="werkzeug-dach">Dach</button>
+    <button class:an={z.einrasten} onclick={() => z.schalteEinrasten()} aria-pressed={z.einrasten} data-testid="einrasten">Einrasten</button>
     <button onclick={() => z.rueckgaengig()} disabled={!z.kannZurueck} aria-label="Rückgängig" data-testid="rueckgaengig">↶</button>
     <button onclick={() => z.wiederholen()} disabled={!z.kannVor} aria-label="Wiederholen" data-testid="wiederholen">↷</button>
   </div>

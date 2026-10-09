@@ -47,6 +47,8 @@
       zoom,
       maxZoom: 21,
       attributionControl: { compact: true },
+      // nötig, damit die Lupe das Kartenbild auslesen kann
+      canvasContextAttributes: { preserveDrawingBuffer: true },
       dragRotate: false,
       pitchWithRotate: false,
     });

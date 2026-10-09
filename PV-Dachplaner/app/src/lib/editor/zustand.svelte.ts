@@ -1,7 +1,16 @@
 import type { Point } from "@pv-dachplaner/geometry-core";
 import type { Project, RoofPlane } from "../model";
 import { punktEinfuegen, punktLoeschen, verschieben } from "./geom";
+import type { EinrastErgebnis } from "./einrasten";
 import { Verlauf } from "./verlauf";
+
+function lesen(): boolean {
+  try {
+    return localStorage.getItem("pv-einrasten") !== "aus";
+  } catch {
+    return true;
+  }
+}
 
 export type Werkzeug = "auswahl" | "dach";
 export interface Auswahl {
@@ -16,6 +25,12 @@ export class EditorZustand {
   werkzeug = $state<Werkzeug>("dach");
   auswahl = $state<Auswahl | null>(null);
   entwurf = $state<Point[]>([]);
+  /** Einrasten an Ecken und Kanten (wird im Browser gemerkt) */
+  einrasten = $state(lesen());
+  /** Zielpunkt, an den gerade eingerastet wird (für die Markierung) */
+  einrastZiel = $state<EinrastErgebnis | null>(null);
+  /** Position (Bildschirmpixel) für die Lupe, solange eine Ecke gezogen wird */
+  lupe = $state<{ x: number; y: number } | null>(null);
   kannZurueck = $state(false);
   kannVor = $state(false);
   private verlauf = new Verlauf<RoofPlane[]>();
@@ -48,6 +63,16 @@ export class EditorZustand {
   }
   private geaendert() {
     this.beiAenderung($state.snapshot(this.projekt) as Project);
+  }
+
+  schalteEinrasten() {
+    this.einrasten = !this.einrasten;
+    this.einrastZiel = null;
+    try {
+      localStorage.setItem("pv-einrasten", this.einrasten ? "an" : "aus");
+    } catch {
+      /* ohne Speicher weiter */
+    }
   }
 
   setzeWerkzeug(w: Werkzeug) {
