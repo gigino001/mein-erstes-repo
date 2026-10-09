@@ -1,4 +1,4 @@
 node_modules/
 dist/
 *.log
-e2e/last.png
+e2e/*.png
