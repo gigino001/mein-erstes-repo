@@ -147,11 +147,9 @@ Kamin/Schornstein, Dachfenster, Gaube, Antenne/Sat-Schüssel, Lüfter/Entlüftun
 ```
 ┌──────────────────────────── PWA (iPhone / Windows) ────────────────────────────┐
 │ UI (Editor, Listen, PDF)  ·  Karte  ·  Geometrie-Kern  ·  Erkennung (ONNX)     │
-└───────────────┬────────────────────────────────────────┬───────────────────────┘
-                │ Kartenbilder / Daten                   │ Konten, Projekte, Teilen
-        Netlify Functions (Proxy, LoD2-Abfrage)          Datenbank + Auth
-                │
-        NRW Geobasis (WMS Luftbild, LoD2)
+└──────┬─────────────────────────┬──────────────────────────┬────────────────────┘
+       │ Luftbild (WMS)          │ Dachflächen-Kacheln      │ Konten, Projekte, Teilen
+  NRW Geobasis             Cloudflare R2 (statisch)     Supabase (Auth + Datenbank)
 ```
 
 **Frontend:** TypeScript, Vite, MapLibre GL JS (WMS als Raster-Quelle), Polygon-Bibliothek für Verschneidung/Versatz (z. B. Clipper-basiert oder turf.js), proj4 für 25832 ↔ Karte, Workbox für die PWA, client-seitiges PDF (z. B. pdf-lib). Framework: React oder Svelte – Entscheidung im Spike.
