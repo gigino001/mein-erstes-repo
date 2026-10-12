@@ -25,64 +25,22 @@ export default function GaleriePage() {
         </span>
         <h1 className="font-poster uppercase text-5xl md:text-6xl">Galerie</h1>
         <p className="text-ink-soft">
-          Ein echtes Vorher/Nachher-Beispiel sowie ein paar Eindrücke aus dem Studio als
-          Beispielbilder.
+          Hier entstehen bald echte Vorher/Nachher-Fotos und Eindrücke aus dem Studio — bis
+          dahin ein paar Beispielbilder als Platzhalter.
         </p>
       </div>
-
-      <div className="flex flex-col gap-4">
-        <span className="text-[13px] font-semibold tracking-[0.14em] uppercase text-ocean">
-          Vorher / Nachher
-        </span>
-        <div className="grid grid-cols-2 gap-5 max-w-2xl">
-          <div className="flex flex-col gap-2">
-            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-sky-mist">
-              <Image
-                src="/images/vorher-nachher/vorher-1.jpg"
-                alt="Vorher: Augen ohne Wimpernverlängerung"
-                fill
-                sizes="(min-width: 768px) 33vw, 50vw"
-                className="object-cover"
-              />
-            </div>
-            <span className="text-center text-sm font-semibold uppercase tracking-[0.08em] text-ink-soft">
-              Vorher
-            </span>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+        {TILES.map((tile, i) => (
+          <div key={i} className="relative aspect-square rounded-2xl overflow-hidden bg-sky-mist">
+            <Image
+              src={tile.src}
+              alt={tile.alt}
+              fill
+              sizes="(min-width: 768px) 33vw, 50vw"
+              className="object-cover"
+            />
           </div>
-          <div className="flex flex-col gap-2">
-            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-sky-mist">
-              <Image
-                src="/images/vorher-nachher/nachher-1.jpg"
-                alt="Nachher: Augen mit Wimpernverlängerung von coco lashes"
-                fill
-                sizes="(min-width: 768px) 33vw, 50vw"
-                className="object-cover"
-              />
-            </div>
-            <span className="text-center text-sm font-semibold uppercase tracking-[0.08em] text-ink-soft">
-              Nachher
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <span className="text-[13px] font-semibold tracking-[0.14em] uppercase text-ocean">
-          Beispielbilder
-        </span>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-          {TILES.map((tile, i) => (
-            <div key={i} className="relative aspect-square rounded-2xl overflow-hidden bg-sky-mist">
-              <Image
-                src={tile.src}
-                alt={tile.alt}
-                fill
-                sizes="(min-width: 768px) 33vw, 50vw"
-                className="object-cover"
-              />
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
     </div>
   );

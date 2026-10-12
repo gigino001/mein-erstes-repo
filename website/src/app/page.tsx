@@ -173,6 +173,13 @@ export default async function HomePage() {
         </div>
         <ScrollPanColumn>
           {[
+            {
+              vorher: "/images/vorher-nachher/vorher-1.jpg",
+              nachher: "/images/vorher-nachher/nachher-1.jpg",
+              real: true,
+              vorherAlt: "Vorher: Auge ohne Wimpernverlängerung",
+              nachherAlt: "Nachher: Auge mit Wimpernverlängerung von coco lashes",
+            },
             { vorher: "/images/lashes-photo/photo-3-dark-natural.jpg", nachher: "/images/lashes-photo/photo-6-dark-dense.jpg" },
             { vorher: "/images/lashes-photo/photo-1-sky-natural.jpg", nachher: "/images/lashes-photo/photo-4-sky-dense.jpg" },
           ].map((pair, i) => (
@@ -184,13 +191,22 @@ export default async function HomePage() {
                 >
                   <Image
                     src={pair[key]}
-                    alt={key === "vorher" ? "Nahaufnahme: natürliches Wimpernset" : "Nahaufnahme: volles Wimpernset"}
+                    alt={
+                      pair.real
+                        ? key === "vorher"
+                          ? pair.vorherAlt!
+                          : pair.nachherAlt!
+                        : key === "vorher"
+                          ? "Nahaufnahme: natürliches Wimpernset"
+                          : "Nahaufnahme: volles Wimpernset"
+                    }
                     fill
                     sizes="(min-width: 768px) 320px, 45vw"
                     className="object-cover"
                   />
                   <span className="absolute bottom-3 left-3 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full capitalize">
-                    {key} · Beispielbild
+                    {key}
+                    {pair.real ? "" : " · Beispielbild"}
                   </span>
                 </div>
               ))}
