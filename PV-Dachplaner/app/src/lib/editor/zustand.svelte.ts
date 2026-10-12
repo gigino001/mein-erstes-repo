@@ -1,6 +1,7 @@
 import type { Point } from "@pv-dachplaner/geometry-core";
 import type { Ausrichtung, Obstacle, ObstacleArt, Project, RoofPlane } from "../model";
 import type { Gesamt } from "../berechnung";
+import { modulPerId, wechselrichterPerId, stringGrenzen } from "../geraete";
 import type { StringPlan, StringGruppe, Bereich } from "../strings";
 import { drehen, punktEinfuegen, punktLoeschen, rechteckAusDiagonale, schwerpunkt, verschieben, abstand } from "./geom";
 import type { EinrastErgebnis } from "./einrasten";
@@ -304,6 +305,16 @@ export class EditorZustand {
     const d = this.projekt.roofs.find((r) => r.id === roofId);
     if (!d) return;
     d.stringGruppen = gruppen && gruppen.length > 0 ? gruppen.map((g) => ({ laenge: g.laenge, anzahl: g.anzahl })) : null;
+    this.geaendert();
+  }
+  /** Modul und Wechselrichter wählen; der zulässige Stringbereich wird daraus berechnet (fehlende Werte → Bereich leer). */
+  setzeGeraete(modulId: string | null, wechselrichterId: string | null) {
+    const s = this.projekt.settings;
+    s.modulId = modulId;
+    s.wechselrichterId = wechselrichterId;
+    const m = modulPerId(modulId);
+    const w = wechselrichterPerId(wechselrichterId);
+    if (m && w) this.projekt.settings.stringBereich = stringGrenzen(m, w).bereich;
     this.geaendert();
   }
   setzeStringBereich(b: Bereich | null) {

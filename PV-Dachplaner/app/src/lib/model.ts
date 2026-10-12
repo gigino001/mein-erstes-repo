@@ -34,6 +34,9 @@ export interface ProjectSettings {
   orientation: Ausrichtung;
   /** Zulässige Stringlänge (aus Modul- und Wechselrichterdaten); null = ungeprüft */
   stringBereich: Bereich | null;
+  /** gewähltes Modul / gewählter Wechselrichter aus der Geräteliste (leitet den Bereich ab) */
+  modulId?: string | null;
+  wechselrichterId?: string | null;
 }
 
 export interface Project {
@@ -153,6 +156,12 @@ export function pruefeProjekt(v: unknown): Project {
     version: isNum(v.version) ? v.version : 1,
     roofs,
     obstacles,
-    settings: { randabstandM: rand, orientation: ori, stringBereich: sb },
+    settings: {
+      randabstandM: rand,
+      orientation: ori,
+      stringBereich: sb,
+      ...(isStr(settings.modulId) ? { modulId: settings.modulId } : {}),
+      ...(isStr(settings.wechselrichterId) ? { wechselrichterId: settings.wechselrichterId } : {}),
+    },
   };
 }

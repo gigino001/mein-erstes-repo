@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { EditorZustand } from "./zustand.svelte";
   import { zahl } from "../berechnung";
+  import { MODULE, WECHSELRICHTER, modulPerId, wechselrichterPerId, stringGrenzen } from "../geraete";
   import { stringFarbe, stringZusammenfassung, teiler, versuchLaenge, pruefePlan, zweiGruppen, modulAlternativen, gruppenText, type StringGruppe } from "../strings";
 
   let { z, kompakt = false }: { z: EditorZustand; kompakt?: boolean } = $props();
@@ -10,6 +11,17 @@
   const ori = $derived(z.projekt.settings.orientation);
   const bereich = $derived(z.projekt.settings.stringBereich);
   const vs = $derived(z.verstringung);
+  const modulId = $derived(z.projekt.settings.modulId ?? "");
+  const wrId = $derived(z.projekt.settings.wechselrichterId ?? "");
+  const grenzen = $derived.by(() => {
+    const m = modulPerId(modulId);
+    const w = wechselrichterPerId(wrId);
+    return m && w ? stringGrenzen(m, w) : null;
+  });
+  function geraetWahl(art: "modul" | "wr", e: Event) {
+    const v = (e.target as HTMLSelectElement).value || null;
+    z.setzeGeraete(art === "modul" ? v : (z.projekt.settings.modulId ?? null), art === "wr" ? v : (z.projekt.settings.wechselrichterId ?? null));
+  }
   let meldung = $state<Record<string, string>>({});
   function dachGruppen(id: string): StringGruppe[] | null {
     return z.projekt.roofs.find((r) => r.id === id)?.stringGruppen ?? null;
@@ -84,6 +96,25 @@
           <button class:an={ori === "quer"} onclick={() => z.setzeAusrichtungsModus("quer")} data-testid="ausrichtung-quer">quer</button>
           <button class:an={ori === "beste"} onclick={() => z.setzeAusrichtungsModus("beste")} data-testid="ausrichtung-beste">beste</button>
         </div>
+        <span class="etikett">Modul und Wechselrichter (für die zulässige Stringlänge)</span>
+        <div class="seg">
+          <select value={modulId} onchange={(e) => geraetWahl("modul", e)} aria-label="Modul" data-testid="geraet-modul">
+            <option value="">Modul wählen …</option>
+            {#each MODULE as m}<option value={m.id}>{m.name}</option>{/each}
+          </select>
+          <select value={wrId} onchange={(e) => geraetWahl("wr", e)} aria-label="Wechselrichter" data-testid="geraet-wr">
+            <option value="">Wechselrichter wählen …</option>
+            {#each WECHSELRICHTER as w}<option value={w.id}>{w.name}</option>{/each}
+          </select>
+        </div>
+        {#if grenzen}
+          <div class="vdach" data-testid="grenzen">
+            {#if grenzen.bereich}<strong>{grenzen.bereich.min} bis {grenzen.bereich.max} Module je String</strong>{/if}
+            {#each grenzen.fehler as t}<p class="fehlt">{t}</p>{/each}
+            {#each grenzen.warnungen as t}<p class="mut">⚠ {t}</p>{/each}
+            <details><summary class="mut">Rechenweg (−10 °C / +70 °C)</summary>{#each grenzen.zeilen as t}<p class="mut">{t}</p>{/each}</details>
+          </div>
+        {/if}
         <span class="etikett">Zulässige Stringlänge (Module je String, aus Modul- und Wechselrichterdaten; leer = ungeprüft)</span>
         <div class="seg">
           <input type="text" inputmode="numeric" placeholder="min" value={bereich?.min ?? ""} onchange={(e) => bereichEingabe("min", e)} aria-label="Kleinste Stringlänge" data-testid="string-min" />
@@ -159,6 +190,7 @@
   .strings { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; background: var(--panel); border-radius: 8px; padding: 4px 8px; }
   .chip i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,.4); }
+  select { font: inherit; min-height: 40px; flex: 1 1 140px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--fg); padding: 0 8px; }
   .vdach { display: grid; gap: 4px; background: var(--panel); border-radius: 10px; padding: 8px 10px; }
   .zeile { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .zeile input { width: 130px; }
