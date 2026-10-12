@@ -3,7 +3,7 @@ import { business } from "@/lib/business";
 
 // Statt bei jedem Crawl "heute" zu melden (verfälscht Freshness-Signale),
 // hier bei inhaltlichen Änderungen an den Kernseiten bewusst nachziehen.
-const CONTENT_LAST_MODIFIED = new Date("2026-09-28");
+const CONTENT_LAST_MODIFIED = new Date("2026-10-12");
 
 const MAIN_ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"] }[] = [
   { path: "", priority: 1, changeFrequency: "weekly" },
