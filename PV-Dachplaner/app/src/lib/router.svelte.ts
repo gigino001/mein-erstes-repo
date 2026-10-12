@@ -1,9 +1,10 @@
 /** Minimaler Router über den URL-Teil nach `#` (funktioniert mit der Zurück-Taste und ohne Server-Einstellungen). */
-export type Ansicht = { name: "liste" } | { name: "neu" } | { name: "projekt"; id: string };
+export type Ansicht = { name: "liste" } | { name: "neu" } | { name: "geraete" } | { name: "projekt"; id: string };
 
 export function leseHash(hash: string): Ansicht {
   const h = hash.replace(/^#\/?/, "");
   if (h === "neu") return { name: "neu" };
+  if (h === "geraete") return { name: "geraete" };
   const m = /^p\/([A-Za-z0-9-]{8,})$/.exec(h);
   if (m?.[1]) return { name: "projekt", id: m[1] };
   return { name: "liste" };
@@ -11,6 +12,7 @@ export function leseHash(hash: string): Ansicht {
 
 export function hashFuer(a: Ansicht): string {
   if (a.name === "neu") return "#/neu";
+  if (a.name === "geraete") return "#/geraete";
   if (a.name === "projekt") return `#/p/${a.id}`;
   return "#/";
 }

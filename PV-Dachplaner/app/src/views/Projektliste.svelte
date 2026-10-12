@@ -53,6 +53,7 @@
 <main>
   <header>
     <h1>PV-Dachplaner</h1>
+    <button onclick={() => router.gehe({ name: "geraete" })} data-testid="geraete-oeffnen">Geräte</button>
     <button class="primary" onclick={() => router.gehe({ name: "neu" })} data-testid="neu">+ Neu</button>
   </header>
 

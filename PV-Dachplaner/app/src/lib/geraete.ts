@@ -44,43 +44,42 @@ export const MODULE: ModulTyp[] = [
     pmaxW: 460, vmppV: 30.34, imppA: 15.16, vocV: 35.31, iscA: 16.0,
     tkVocProzent: -0.25, tkPmaxProzent: -0.28, tkIscProzent: 0.045,
     maxSystemV: 1500, maxSicherungA: 35, laengeMm: 1762, breiteMm: 1134,
-    quelle: "Jolywood Datenblatt JW-HD96N-R2 435–460 W (STC, Frontseite)",
+    quelle: "Jolywood Datenblatt JW-HD96N Serie (STC, Frontseite)",
   },
   {
     id: "aiko-a485-mce54db",
-    name: "AIKO Neostar 3S+ A485-MCE54Db 485 W",
-    pmaxW: 485, vmppV: NaN, imppA: NaN, vocV: NaN, iscA: NaN,
-    tkVocProzent: NaN, tkPmaxProzent: NaN, tkIscProzent: NaN,
-    maxSystemV: 1500, maxSicherungA: 30, laengeMm: 1762, breiteMm: 1134,
-    quelle: "nur Artikeltext; Spannungen/Ströme fehlen (Datenblatt nachtragen)",
+    name: "AIKO Neostar 3S+ AIKO-A485-MCE54Db 485 W",
+    pmaxW: 485, vmppV: 34.3, imppA: 14.15, vocV: 40.9, iscA: 14.88,
+    tkVocProzent: -0.22, tkPmaxProzent: -0.26, tkIscProzent: 0.05,
+    maxSystemV: 1500, maxSicherungA: 25, laengeMm: 1762, breiteMm: 1134,
+    quelle: "AIKO Datenblatt Neostar 3S+54 AIKO-A-MCE54Db (STC); Artikeltext nennt 30 A, Datenblatt 25 A",
   },
 ];
 
-const sungrowRT = (id: string, name: string, acKw: number, mpptMin: number, start: number, maxA: number[], iscA: number[], strings: number[], quelle: string, hinweis?: string): WechselrichterTyp => ({
-  id, name, hersteller: "Sungrow", acKw, maxDcV: 1000, mpptMinV: mpptMin, mpptMaxV: 950, startV: start,
-  mppt: maxA.map((a, i) => ({ strings: strings[i]!, maxA: a, iscMaxA: iscA[i]! })), quelle, hinweis,
-});
+const DS_T = "Sungrow Datenblatt SH5/6/8/10/12T V1.1 und SH15/20/25T";
+const DS_TP = "Sigenergy Datenblatt Hybrid 5.0–25.0 kW Three Phase (TP)";
+const DS_TP2 = "Sigenergy Datenblatt Hybrid 5.0–12.0 kW Three Phase (TP2, vorläufig)";
 
-const DS_RT = "Sungrow SH5.0/10RT Datenblatt V1.5";
-const DS_RT20 = "Sungrow SH5.0/6.0/8.0/10RT-20 Datenblatt";
-const DS_T = "Sungrow SH15/20/25T Datenblatt";
-const DS_SIGEN = "Sigenergy Hybrid-Datenblatt (TP/TP2)";
-
-const sigen = (id: string, name: string, acKw: number, mppt: number, maxA: number, iscA: number, quelle: string, hinweis?: string): WechselrichterTyp => ({
-  id, name, hersteller: "Sigenergy", acKw, maxDcV: 1100, mpptMinV: 160, mpptMaxV: 1000, startV: 180,
-  mppt: Array.from({ length: mppt }, () => ({ strings: 1, maxA, iscMaxA: iscA })), quelle, hinweis,
+const sungrow = (id: string, name: string, acKw: number, mppt: { strings: number; maxA: number; iscMaxA: number }[]): WechselrichterTyp => ({
+  id, name, hersteller: "Sungrow", acKw, maxDcV: 1000, mpptMinV: 150, mpptMaxV: 950, startV: 180, mppt, quelle: DS_T,
 });
+const sigen = (id: string, name: string, acKw: number, mppt: { strings: number; maxA: number; iscMaxA: number }[], quelle: string, hinweis?: string): WechselrichterTyp => ({
+  id, name, hersteller: "Sigenergy", acKw, maxDcV: 1100, mpptMinV: 160, mpptMaxV: 1000, startV: 180, mppt, quelle, hinweis,
+});
+const gleich = (n: number, strings: number, maxA: number, iscMaxA: number) => Array.from({ length: n }, () => ({ strings, maxA, iscMaxA }));
 
 export const WECHSELRICHTER: WechselrichterTyp[] = [
-  sungrowRT("sungrow-sh5.0rt", "Sungrow SH5.0RT", 5, 150, 180, [12.5, 12.5], [18, 18], [1, 1], DS_RT),
-  sungrowRT("sungrow-sh6.0rt", "Sungrow SH6.0RT", 6, 200, 250, [12.5, 12.5], [18, 18], [1, 1], DS_RT20, "Spannungen aus dem Datenblatt der -20-Variante; Ströme wie SH5.0RT/SH10RT, bitte gegen Original-Datenblatt prüfen."),
-  sungrowRT("sungrow-sh8.0rt", "Sungrow SH8.0RT", 8, 200, 250, [12.5, 12.5], [18, 18], [1, 1], DS_RT20, "Spannungen aus dem Datenblatt der -20-Variante; Ströme wie SH5.0RT/SH10RT, bitte gegen Original-Datenblatt prüfen."),
-  sungrowRT("sungrow-sh10rt", "Sungrow SH10RT", 10, 200, 250, [12.5, 25], [18, 36], [1, 2], DS_RT),
-  sungrowRT("sungrow-sh15t", "Sungrow SH15T", 15, 150, 180, [32, 32, 16], [40, 40, 20], [2, 2, 1], DS_T),
-  sungrowRT("sungrow-sh20t", "Sungrow SH20T", 20, 150, 180, [32, 32, 16], [40, 40, 20], [2, 2, 1], DS_T),
-  sungrowRT("sungrow-sh25t", "Sungrow SH25T", 25, 150, 180, [32, 32, 16], [40, 40, 20], [2, 2, 1], DS_T),
-  ...[3, 4, 5, 6, 8, 10, 12].map((kw) => sigen(`sigen-hybrid-tp2-${kw}`, `Sigen Hybrid ${kw}.0 kW TP2`, kw, 2, 16, 22, DS_SIGEN, "Je MPPT 16 A (bei Modellen mit zwei Strings je MPPT 16/32 A) – hier vorsichtig mit 16 A und einem String je MPPT geführt.")),
-  ...[[5, 2], [6, 2], [8, 2], [10, 3], [12, 3], [15, 3], [17, 4], [20, 4], [25, 4], [30, 4]].map(([kw, m]) => sigen(`sigen-ec-${kw}`, `Sigen Energy Controller ${kw}.0 kW`, kw!, m!, 16, 20, DS_SIGEN, "MPPT-Anzahl aus den Speicherpaketen der Artikelliste; Ströme aus dem TP-Datenblatt.")),
+  // Sungrow SH-T: 2 MPPT; SH5T/6T/8T je 1 String (16 A / 20 A), SH10T/12T: MPPT 1 mit 2 Strings (32 A / 40 A), MPPT 2 mit 1 String (16 A / 20 A)
+  ...[[5, "SH5.0T"], [6, "SH6.0T"], [8, "SH8.0T"]].map(([kw, n]) => sungrow(`sungrow-${String(n).toLowerCase()}`, `Sungrow ${n}`, kw as number, gleich(2, 1, 16, 20))),
+  ...[[10, "SH10T"], [12, "SH12T"]].map(([kw, n]) => sungrow(`sungrow-${String(n).toLowerCase()}`, `Sungrow ${n}`, kw as number, [{ strings: 2, maxA: 32, iscMaxA: 40 }, { strings: 1, maxA: 16, iscMaxA: 20 }])),
+  // Sungrow SH15T/20T/25T: 3 MPPT mit 2/2/1 Strings
+  ...[[15, "SH15T"], [20, "SH20T"], [25, "SH25T"]].map(([kw, n]) => sungrow(`sungrow-${String(n).toLowerCase()}`, `Sungrow ${n}`, kw as number, [{ strings: 2, maxA: 32, iscMaxA: 40 }, { strings: 2, maxA: 32, iscMaxA: 40 }, { strings: 1, maxA: 16, iscMaxA: 20 }])),
+  // Sigen Hybrid TP2: 3.0–8.0 kW je MPPT 1 String 16 A / 22 A; 10.0/12.0 kW: MPPT 1 mit 1 String, MPPT 2 mit 2 Strings (16/32 A, 22/44 A)
+  ...[3, 4].map((kw) => sigen(`sigen-hybrid-tp2-${kw}`, `Sigen Hybrid ${kw}.0 kW TP2`, kw, gleich(2, 1, 16, 22), DS_TP2, "3.0/4.0 kW: Werte der 5.0-kW-Baureihe übernommen, kein eigenes Datenblatt gefunden.")),
+  ...[5, 6, 8].map((kw) => sigen(`sigen-hybrid-tp2-${kw}`, `Sigen Hybrid ${kw}.0 kW TP2`, kw, gleich(2, 1, 16, 22), DS_TP2)),
+  ...[10, 12].map((kw) => sigen(`sigen-hybrid-tp2-${kw}`, `Sigen Hybrid ${kw}.0 kW TP2`, kw, [{ strings: 1, maxA: 16, iscMaxA: 22 }, { strings: 2, maxA: 32, iscMaxA: 44 }], DS_TP2)),
+  // Sigen Energy Controller / Hybrid TP: je MPPT 1 String, 16 A / 20 A; 5–8 kW 2 MPPT, 10–15 kW 3 MPPT, 17–25 kW 4 MPPT (30 kW: 4 laut Artikelliste)
+  ...[[5, 2], [6, 2], [8, 2], [10, 3], [12, 3], [15, 3], [17, 4], [20, 4], [25, 4], [30, 4]].map(([kw, m]) => sigen(`sigen-ec-${kw}`, `Sigen Energy Controller ${kw}.0 kW`, kw!, gleich(m!, 1, 16, 20), DS_TP, kw === 30 ? "30 kW: nicht im 5.0–25.0-kW-Datenblatt; Werte der Baureihe übernommen." : undefined)),
 ];
 
 export interface Temperaturen {
@@ -118,7 +117,8 @@ export function stringGrenzen(m: ModulTyp, w: WechselrichterTyp, t: Temperaturen
   const vocHeiss = m.vocV * (1 + (m.tkVocProzent / 100) * dK(t.heissC));
   const vmppKalt = m.vmppV * (1 + (m.tkPmaxProzent / 100) * dK(t.kaltC));
   const vmppHeiss = m.vmppV * (1 + (m.tkPmaxProzent / 100) * dK(t.heissC));
-  const grenzeV = Math.min(w.maxDcV, m.maxSystemV);
+  const grenzeV = Math.min(w.maxDcV, Number.isFinite(m.maxSystemV) ? m.maxSystemV : Infinity);
+  if (!Number.isFinite(m.maxSystemV)) warnungen.push("Die maximale Systemspannung des Moduls fehlt; es gilt nur die Grenze des Wechselrichters.");
   const maxLeer = Math.floor(grenzeV / vocKalt);
   const maxMpp = Math.floor(w.mpptMaxV / vmppKalt);
   const max = Math.min(maxLeer, maxMpp);
@@ -129,9 +129,9 @@ export function stringGrenzen(m: ModulTyp, w: WechselrichterTyp, t: Temperaturen
   zeilen.push(`Voc bei ${t.heissC} °C: ${r(vocHeiss)} V; MPP-Spannung bei ${t.heissC} °C: ${r(vmppHeiss)} V`);
   zeilen.push(`Höchstens ${maxLeer} Module (${r(grenzeV, 0)} V ÷ ${r(vocKalt)} V) und ${maxMpp} Module (MPPT-Obergrenze ${w.mpptMaxV} V ÷ ${r(vmppKalt)} V) → ${max}`);
   zeilen.push(`Mindestens ${minMpp} Module (MPPT-Untergrenze ${w.mpptMinV} V ÷ ${r(vmppHeiss)} V) und ${minStart} Module (Startspannung ${w.startV} V ÷ ${r(vocHeiss)} V) → ${min}`);
-  if (m.iscA > Math.min(...w.mppt.map((x) => x.iscMaxA))) fehler.push(`Kurzschlussstrom des Moduls (${r(m.iscA)} A) übersteigt den zulässigen Wert je MPPT (${Math.min(...w.mppt.map((x) => x.iscMaxA))} A).`);
-  const minA = Math.min(...w.mppt.map((x) => x.maxA));
-  if (m.imppA > minA) warnungen.push(`MPP-Strom des Moduls (${r(m.imppA)} A) liegt über dem maximalen Eingangsstrom einzelner MPPT-Eingänge (${r(minA)} A): der Wechselrichter begrenzt dort die Leistung.`);
+  if (Number.isFinite(m.iscA) && m.iscA > Math.min(...w.mppt.map((x) => x.iscMaxA).filter(Number.isFinite))) fehler.push(`Kurzschlussstrom des Moduls (${r(m.iscA)} A) übersteigt den zulässigen Wert je MPPT (${Math.min(...w.mppt.map((x) => x.iscMaxA).filter(Number.isFinite))} A).`);
+  const minA = Math.min(...w.mppt.map((x) => x.maxA).filter(Number.isFinite));
+  if (Number.isFinite(m.imppA) && m.imppA > minA) warnungen.push(`MPP-Strom des Moduls (${r(m.imppA)} A) liegt über dem maximalen Eingangsstrom einzelner MPPT-Eingänge (${r(minA)} A): der Wechselrichter begrenzt dort die Leistung.`);
   if (min > max) fehler.push(`Mit ${m.name} an ${w.name} ist keine zulässige Stringlänge möglich (mindestens ${min}, höchstens ${max}).`);
   if (w.hinweis) warnungen.push(w.hinweis);
   return { ok: fehler.length === 0, bereich: min <= max ? { min, max } : null, zeilen, warnungen, fehler };
@@ -158,8 +158,8 @@ export function wechselrichterPruefung(strings: { nr: number; mppt: number | nul
       continue;
     }
     if (n > e.strings) fehler.push(`MPPT ${nr}: ${n} Strings angeschlossen, erlaubt sind ${e.strings}.`);
-    if (Number.isFinite(m.iscA) && n * m.iscA > e.iscMaxA) fehler.push(`MPPT ${nr}: Kurzschlussstrom ${r(n * m.iscA)} A (${n} × ${r(m.iscA)} A) übersteigt ${e.iscMaxA} A.`);
-    if (Number.isFinite(m.imppA) && n * m.imppA > e.maxA) hinweise.push(`MPPT ${nr}: MPP-Strom ${r(n * m.imppA)} A über dem Eingangsstrom ${e.maxA} A – Leistungsbegrenzung.`);
+    if (Number.isFinite(m.iscA) && Number.isFinite(e.iscMaxA) && n * m.iscA > e.iscMaxA) fehler.push(`MPPT ${nr}: Kurzschlussstrom ${r(n * m.iscA)} A (${n} × ${r(m.iscA)} A) übersteigt ${e.iscMaxA} A.`);
+    if (Number.isFinite(m.imppA) && Number.isFinite(e.maxA) && n * m.imppA > e.maxA) hinweise.push(`MPPT ${nr}: MPP-Strom ${r(n * m.imppA)} A über dem Eingangsstrom ${e.maxA} A – Leistungsbegrenzung.`);
   }
   if (auto.length > 0) {
     const gruppen = new Set(auto.map((s) => `${s.roofId}:${s.gruppe}`)).size;
@@ -167,4 +167,45 @@ export function wechselrichterPruefung(strings: { nr: number; mppt: number | nul
     if (gruppen > frei) hinweise.push(`Die automatischen Gruppen brauchen ${gruppen} MPPT-Eingänge, frei sind ${Math.max(frei, 0)} von ${w.mppt.length}.`);
   }
   return { fehler, hinweise };
+}
+
+// ---------- Eigene Geräte (Eingabemaske, Import) ----------
+
+const zahlOderNaN = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : NaN);
+const text = (v: unknown) => (typeof v === "string" ? v.trim() : "");
+
+/** Liest ein Modul aus gespeicherten/importierten Daten; fehlende Zahlen werden NaN (dann gibt es keine Stringgrenzen). */
+export function leseModul(v: unknown): ModulTyp | null {
+  if (typeof v !== "object" || v === null) return null;
+  const o = v as Record<string, unknown>;
+  const id = text(o.id), name = text(o.name);
+  const pmax = zahlOderNaN(o.pmaxW);
+  if (!id || !name || !(pmax > 0)) return null;
+  return {
+    id, name, pmaxW: pmax,
+    vmppV: zahlOderNaN(o.vmppV), imppA: zahlOderNaN(o.imppA), vocV: zahlOderNaN(o.vocV), iscA: zahlOderNaN(o.iscA),
+    tkVocProzent: zahlOderNaN(o.tkVocProzent), tkPmaxProzent: zahlOderNaN(o.tkPmaxProzent), tkIscProzent: zahlOderNaN(o.tkIscProzent),
+    maxSystemV: zahlOderNaN(o.maxSystemV), maxSicherungA: zahlOderNaN(o.maxSicherungA),
+    laengeMm: zahlOderNaN(o.laengeMm), breiteMm: zahlOderNaN(o.breiteMm),
+    quelle: text(o.quelle) || "eigene Eingabe",
+  };
+}
+
+export function leseWechselrichter(v: unknown): WechselrichterTyp | null {
+  if (typeof v !== "object" || v === null) return null;
+  const o = v as Record<string, unknown>;
+  const id = text(o.id), name = text(o.name);
+  if (!id || !name || !Array.isArray(o.mppt) || o.mppt.length < 1 || o.mppt.length > 12) return null;
+  const mppt = o.mppt.map((x) => {
+    const e = (typeof x === "object" && x !== null ? x : {}) as Record<string, unknown>;
+    const s = zahlOderNaN(e.strings);
+    return { strings: Number.isInteger(s) && s >= 1 ? s : 1, maxA: zahlOderNaN(e.maxA), iscMaxA: zahlOderNaN(e.iscMaxA) };
+  });
+  const maxDc = zahlOderNaN(o.maxDcV), mn = zahlOderNaN(o.mpptMinV), mx = zahlOderNaN(o.mpptMaxV), st = zahlOderNaN(o.startV);
+  if (![maxDc, mn, mx, st].every((x) => x > 0)) return null;
+  return {
+    id, name, hersteller: text(o.hersteller) || "eigene Eingabe", acKw: zahlOderNaN(o.acKw),
+    maxDcV: maxDc, mpptMinV: mn, mpptMaxV: mx, startV: st, mppt,
+    quelle: text(o.quelle) || "eigene Eingabe", hinweis: text(o.hinweis) || undefined,
+  };
 }

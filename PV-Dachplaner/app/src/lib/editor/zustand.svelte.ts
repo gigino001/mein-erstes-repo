@@ -1,7 +1,8 @@
 import type { Point } from "@pv-dachplaner/geometry-core";
 import type { Ausrichtung, Obstacle, ObstacleArt, Project, RoofPlane } from "../model";
 import type { Gesamt } from "../berechnung";
-import { modulPerId, wechselrichterPerId, stringGrenzen } from "../geraete";
+import { stringGrenzen } from "../geraete";
+import { geraete } from "../geraeteStore.svelte";
 import type { StringPlan, StringGruppe, Bereich } from "../strings";
 import { drehen, punktEinfuegen, punktLoeschen, rechteckAusDiagonale, schwerpunkt, verschieben, abstand } from "./geom";
 import type { EinrastErgebnis } from "./einrasten";
@@ -316,8 +317,8 @@ export class EditorZustand {
     const s = this.projekt.settings;
     s.modulId = modulId;
     s.wechselrichterId = wechselrichterId;
-    const m = modulPerId(modulId);
-    const w = wechselrichterPerId(wechselrichterId);
+    const m = geraete.modul(modulId);
+    const w = geraete.wr(wechselrichterId);
     if (m && w) this.projekt.settings.stringBereich = stringGrenzen(m, w).bereich;
     this.geaendert();
   }

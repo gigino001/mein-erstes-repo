@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { EditorZustand } from "./zustand.svelte";
   import { zahl } from "../berechnung";
-  import { MODULE, WECHSELRICHTER, modulPerId, wechselrichterPerId, stringGrenzen, wechselrichterPruefung } from "../geraete";
+  import { stringGrenzen, wechselrichterPruefung } from "../geraete";
+  import { geraete } from "../geraeteStore.svelte";
   import { stringFarbe, stringZusammenfassung, teiler, versuchLaenge, pruefePlan, zweiGruppen, modulAlternativen, gruppenText, type StringGruppe } from "../strings";
 
   let { z, kompakt = false }: { z: EditorZustand; kompakt?: boolean } = $props();
@@ -14,13 +15,13 @@
   const modulId = $derived(z.projekt.settings.modulId ?? "");
   const wrId = $derived(z.projekt.settings.wechselrichterId ?? "");
   const grenzen = $derived.by(() => {
-    const m = modulPerId(modulId);
-    const w = wechselrichterPerId(wrId);
+    const m = geraete.modul(modulId);
+    const w = geraete.wr(wrId);
     return m && w ? stringGrenzen(m, w) : null;
   });
   const wrCheck = $derived.by(() => {
-    const m = modulPerId(modulId);
-    const w = wechselrichterPerId(wrId);
+    const m = geraete.modul(modulId);
+    const w = geraete.wr(wrId);
     return m && w && vs ? wechselrichterPruefung(vs.strings, m, w) : { fehler: [] as string[], hinweise: [] as string[] };
   });
   function geraetWahl(art: "modul" | "wr", e: Event) {
@@ -105,13 +106,14 @@
         <div class="seg">
           <select value={modulId} onchange={(e) => geraetWahl("modul", e)} aria-label="Modul" data-testid="geraet-modul">
             <option value="">Modul wählen …</option>
-            {#each MODULE as m}<option value={m.id}>{m.name}</option>{/each}
+            {#each geraete.module as m}<option value={m.id}>{m.name}</option>{/each}
           </select>
           <select value={wrId} onchange={(e) => geraetWahl("wr", e)} aria-label="Wechselrichter" data-testid="geraet-wr">
             <option value="">Wechselrichter wählen …</option>
-            {#each WECHSELRICHTER as w}<option value={w.id}>{w.name}</option>{/each}
+            {#each geraete.wechselrichter as w}<option value={w.id}>{w.name}</option>{/each}
           </select>
         </div>
+        <a class="mut" href="#/geraete" data-testid="geraete-verwalten">Geräte verwalten / eigene Module und Wechselrichter eintragen</a>
         {#if grenzen}
           <div class="vdach" data-testid="grenzen">
             {#if grenzen.bereich}<strong>{grenzen.bereich.min} bis {grenzen.bereich.max} Module je String</strong>{/if}

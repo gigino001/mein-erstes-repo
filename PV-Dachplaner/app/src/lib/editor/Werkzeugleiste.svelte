@@ -4,7 +4,7 @@
   import Eigenschaften from "./Eigenschaften.svelte";
   import HindernisEigenschaften from "./HindernisEigenschaften.svelte";
   import { stringFarbe } from "../strings";
-  import { wechselrichterPerId } from "../geraete";
+  import { geraete } from "../geraeteStore.svelte";
   import Ergebnisblatt from "./Ergebnisblatt.svelte";
 
   let { z, gespeichert }: { z: EditorZustand; gespeichert: boolean } = $props();
@@ -42,7 +42,7 @@
   const dachStrings = $derived(z.verstringung?.strings.filter((s) => s.roofId === z.stringDachId) ?? []);
   const stringNr = $derived(z.aktString ?? 0);
   const aktuell = $derived(stringDach?.stringManuell?.strings[z.aktString ?? -1] ?? null);
-  const mpptAnzahl = $derived(wechselrichterPerId(z.projekt.settings.wechselrichterId)?.mppt.length ?? 4);
+  const mpptAnzahl = $derived(geraete.wr(z.projekt.settings.wechselrichterId)?.mppt.length ?? 4);
   const deutsch = (x: number) => x.toFixed(1).replace(".", ",");
   /** Eingeklappt: nur Hinweis, Werkzeuge und Summe; beim Wählen der Traufkante automatisch, damit die Karte frei ist */
   let kleinWunsch = $state(false);
