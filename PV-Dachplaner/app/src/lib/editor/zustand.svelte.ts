@@ -43,6 +43,8 @@ export class EditorZustand {
   traufeWahl = $state(false);
   /** Aktuelles Rechenergebnis (wird vom Editor nach Änderungen gesetzt) */
   ergebnis = $state<Gesamt | null>(null);
+  /** Modulraster auf der Karte zeigen (ausblenden, um Hindernisse besser zu erkennen und zu markieren) */
+  moduleSichtbar = $state(true);
   kannZurueck = $state(false);
   kannVor = $state(false);
   private verlauf = new Verlauf<Stand>();
@@ -95,6 +97,10 @@ export class EditorZustand {
   }
   private geaendert() {
     this.beiAenderung($state.snapshot(this.projekt) as Project);
+  }
+
+  schalteModule() {
+    this.moduleSichtbar = !this.moduleSichtbar;
   }
 
   schalteEinrasten() {

@@ -55,6 +55,7 @@
     <button class:an={z.werkzeug === "auswahl"} onclick={() => z.setzeWerkzeug("auswahl")} data-testid="werkzeug-auswahl">Auswahl</button>
     <button class:an={z.werkzeug === "dach"} onclick={() => z.setzeWerkzeug("dach")} data-testid="werkzeug-dach">Dach</button>
     <button class:an={z.werkzeug === "hindernis"} onclick={() => z.setzeWerkzeug("hindernis")} data-testid="werkzeug-hindernis">Hindernis</button>
+    <button class:an={z.moduleSichtbar} onclick={() => z.schalteModule()} aria-pressed={z.moduleSichtbar} data-testid="module-sichtbar">Module</button>
     <button class:an={z.einrasten} onclick={() => z.schalteEinrasten()} aria-pressed={z.einrasten} data-testid="einrasten">Einrasten</button>
     <button onclick={() => z.rueckgaengig()} disabled={!z.kannZurueck} aria-label="Rückgängig" data-testid="rueckgaengig">↶</button>
     <button onclick={() => z.wiederholen()} disabled={!z.kannVor} aria-label="Wiederholen" data-testid="wiederholen">↷</button>

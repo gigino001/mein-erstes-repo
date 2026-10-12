@@ -78,6 +78,18 @@ await page.getByTestId("details-umschalten").click();
 pruefen("Details nennen den Hindernis-Verlust", /Hindernisse −\d/.test(await text("ergebnis-D1")));
 await page.getByTestId("details-umschalten").click();
 
+// Module ausblenden (Hindernisse besser erkennen) und wieder einblenden; die Zahlen bleiben unverändert
+const featureAnzahl = () => page.evaluate(() => window.__karte.getSource("module")._data.features.length);
+pruefen("Module sind standardmäßig sichtbar", (await featureAnzahl()) === mit);
+await page.getByTestId("module-sichtbar").click();
+await page.waitForFunction(() => window.__karte.getSource("module")._data.features.length === 0);
+pruefen("Module lassen sich ausblenden", (await featureAnzahl()) === 0 && (await page.getByTestId("module-sichtbar").getAttribute("aria-pressed")) === "false");
+pruefen("Ergebnis bleibt beim Ausblenden unverändert", (await modulzahl()) === mit);
+// Im ausgeblendeten Zustand ein Hindernis zeichnen (nur zur Kontrolle der Bedienung), danach wieder einblenden
+await page.getByTestId("module-sichtbar").click();
+await page.waitForFunction((n) => window.__karte.getSource("module")._data.features.length === n, mit);
+pruefen("Module lassen sich wieder einblenden", (await featureAnzahl()) === mit);
+
 // 2. Art und Puffer
 await page.getByTestId("hindernis-art").selectOption("dachfenster");
 pruefen("Art geändert", (await projekt()).obstacles[0].art === "dachfenster");

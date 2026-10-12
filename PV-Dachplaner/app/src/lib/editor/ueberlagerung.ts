@@ -100,7 +100,7 @@ export class Ueberlagerung {
       properties: { id: o.id, gewaehlt: sel?.art === "hindernis" && o.id === sel.id, abziehen: o.abziehen },
       geometry: { type: "Polygon", coordinates: [ring(o.outline)] },
     }));
-    const module: GeoJSON.Feature[] = (z.ergebnis?.daecher ?? []).flatMap((e) =>
+    const module: GeoJSON.Feature[] = (z.moduleSichtbar ? (z.ergebnis?.daecher ?? []) : []).flatMap((e) =>
       (e.layout?.modules ?? []).map((mo): GeoJSON.Feature => ({ type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [ring(mo.corners)] } })),
     );
     const griffe: GeoJSON.Feature[] = [];

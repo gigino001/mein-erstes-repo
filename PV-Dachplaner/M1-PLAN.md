@@ -223,6 +223,7 @@ Jedes Paket endet mit einem **Test und einem lauffähigen Stand**. Dauer in Arbe
 | 8 Hindernisse | fertig (Rechteck an der nächsten Dachkante ausgerichtet, Vieleck, Art, abziehen ja/nein, Abstand 20/30 cm, Drehen, Verschieben; Griffe passen sich kleinen Objekten an) |
 | 9 Adresssuche | fertig (eigener Index aus amtlichen Hauskoordinaten, Ort + Straße/Hausnummer mit Vorschlägen, Tippfehler-tolerant; Daten OWL 14 MB, in der App-Auslieferung) |
 | 10, 11 (LoD2) | offen |
+| 8b Module ausblenden | fertig (Schalter „Module“ im Editor; Ergebnis bleibt unverändert) |
 | 12 Politur | offen (u. a. Quellenhinweis der Karte nicht verdecken, Programmgröße) |
 | 13 Tests und Abnahme | offen |
 

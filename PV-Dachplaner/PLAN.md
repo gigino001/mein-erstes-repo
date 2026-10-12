@@ -1,6 +1,6 @@
 # PV-Dachplaner – Projektplan
 
-Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.13 (Entwurf zur Abstimmung)
+Stand: 2026-10-09 · Status: **Planung, es gibt noch keinen Code** · Version: 0.14 (Entwurf zur Abstimmung)
 
 Aussagen mit **[prüfen]** stammen aus Recherche oder Erinnerung und sind noch nicht in der Praxis verifiziert. Sie werden in den Spikes (Kap. 13) geklärt, bevor etwas darauf aufgebaut wird.
 
@@ -246,7 +246,7 @@ Die detaillierte Ausarbeitung der Spikes steht in [`SPIKES.md`](SPIKES.md).
 | **M5 Erkennung** | Antippen-Werkzeug (MobileSAM im Browser) mit Klassenwahl; automatische „Zu prüfen“-Vorschläge erst nach Training | Halbautomatische Erkennung |
 | **M6 Politur** | Referenzdächer, Fehlerkorrektur, Rollout | Einsatzreif |
 
-Detailplan für M1: [`M1-PLAN.md`](M1-PLAN.md).
+Detailplan für M1: [`M1-PLAN.md`](M1-PLAN.md). Detailplan für die Erweiterungen PDF-Export, Verstringung und CRM-Export (M2): [`M2-PLAN.md`](M2-PLAN.md).
 
 Reihenfolge-Prinzip: **früh etwas Nutzbares (M1/M2) und das riskante Automatisieren (M4/M5) später**, damit Fehlschläge dort das Gesamtprojekt nicht aufhalten.
 
