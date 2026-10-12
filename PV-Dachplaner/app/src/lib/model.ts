@@ -29,6 +29,10 @@ export interface ProjectSettings {
   /** Randabstand in Metern: 0 = aus, 0.2 = Standard, 0.1 = knapp */
   randabstandM: 0 | 0.1 | 0.2;
   orientation: Ausrichtung;
+  /** Höchstzahl Module je String; null = keine Verstringung */
+  stringLaenge: number | null;
+  /** gleich lange Strings je Dachfläche (45 Module bei höchstens 14 → 12, 11, 11, 11) */
+  stringGleichLang: boolean;
 }
 
 export interface Project {
@@ -36,6 +40,8 @@ export interface Project {
   name: string;
   kunde: { name: string; notiz: string };
   adresse: { text: string; position: Utm | null };
+  /** Wer das Projekt bearbeitet hat (erscheint im PDF) */
+  bearbeiter: string;
   /** Befliegungsdatum des Luftbilds (JJJJ-MM-TT), falls bekannt */
   imageDate: string | null;
   created: string;
@@ -62,7 +68,8 @@ export function neuesProjekt(partial: Partial<Pick<Project, "name" | "adresse" |
     version: 1,
     roofs: [],
     obstacles: [],
-    settings: { randabstandM: 0, orientation: "hochkant" },
+    bearbeiter: "",
+    settings: { randabstandM: 0, orientation: "hochkant", stringLaenge: null, stringGleichLang: true },
   };
 }
 
@@ -118,9 +125,11 @@ export function pruefeProjekt(v: unknown): Project {
       abziehen: o.abziehen !== false,
     };
   });
+  const sl = isNum(settings.stringLaenge) && Number.isInteger(settings.stringLaenge) && settings.stringLaenge >= 1 && settings.stringLaenge <= 60 ? settings.stringLaenge : null;
   return {
     id: v.id,
     name: v.name,
+    bearbeiter: isStr(v.bearbeiter) ? v.bearbeiter : "",
     kunde: { name: isStr(kunde.name) ? kunde.name : "", notiz: isStr(kunde.notiz) ? kunde.notiz : "" },
     adresse: { text: isStr(adr.text) ? adr.text : "", position: pos },
     imageDate: isStr(v.imageDate) ? v.imageDate : null,
@@ -129,6 +138,6 @@ export function pruefeProjekt(v: unknown): Project {
     version: isNum(v.version) ? v.version : 1,
     roofs,
     obstacles,
-    settings: { randabstandM: rand, orientation: ori },
+    settings: { randabstandM: rand, orientation: ori, stringLaenge: sl, stringGleichLang: settings.stringGleichLang !== false },
   };
 }

@@ -9,7 +9,7 @@
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "test": "vitest run",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "e2e": "node e2e/smoke.mjs && node e2e/projekte.mjs && node e2e/zeichnen.mjs && node e2e/einrasten.mjs && node e2e/rechnen.mjs && node e2e/hindernisse.mjs && node e2e/adresse.mjs"
+    "e2e": "node e2e/smoke.mjs && node e2e/projekte.mjs && node e2e/zeichnen.mjs && node e2e/einrasten.mjs && node e2e/rechnen.mjs && node e2e/hindernisse.mjs && node e2e/adresse.mjs && node e2e/export.mjs"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
@@ -23,8 +23,10 @@
   },
   "dependencies": {
     "@pv-dachplaner/geometry-core": "file:../packages/geometry-core",
+    "fflate": "^0.8.3",
     "idb": "^8.0.4",
     "maplibre-gl": "^5.6.2",
+    "pdf-lib": "^1.17.1",
     "proj4": "^2.22.0"
   }
 }

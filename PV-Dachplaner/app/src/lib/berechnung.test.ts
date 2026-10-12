@@ -11,7 +11,7 @@ const dach = (extra: Partial<RoofPlane> = {}): RoofPlane => ({
   quelle: "manuell",
   ...extra,
 });
-const projekt = (roofs: RoofPlane[], settings: Partial<Project["settings"]> = {}): Project => ({ ...neuesProjekt(), roofs, settings: { randabstandM: 0, orientation: "hochkant", ...settings } });
+const projekt = (roofs: RoofPlane[], settings: Partial<Project["settings"]> = {}): Project => ({ ...neuesProjekt(), roofs, settings: { randabstandM: 0, orientation: "hochkant", stringLaenge: null, stringGleichLang: true, ...settings } });
 
 describe("Berechnung im Projekt (UTM-Koordinaten wie im echten Betrieb)", () => {
   it("Beispiel aus dem Plan: 24 Module, 11,04 kWp, 61,04 m²", () => {

@@ -4,6 +4,7 @@
   import Karte from "../lib/Karte.svelte";
   import Werkzeugleiste from "../lib/editor/Werkzeugleiste.svelte";
   import Lupe from "../lib/editor/Lupe.svelte";
+  import Exportblatt from "../lib/editor/Exportblatt.svelte";
   import { EditorZustand } from "../lib/editor/zustand.svelte";
   import { Ueberlagerung } from "../lib/editor/ueberlagerung";
   import { router } from "../lib/router.svelte";
@@ -11,6 +12,7 @@
   import { utmToLngLat } from "../lib/coords";
   import type { Project } from "../lib/model";
   import { rechne } from "../lib/berechnung";
+  import { verstringen } from "../lib/strings";
 
   let { id }: { id: string } = $props();
   let p = $state<Project | null | undefined>(undefined);
@@ -18,6 +20,7 @@
   let ueb = $state<Ueberlagerung | undefined>();
   let karte = $state<maplibregl.Map | undefined>();
   let gespeichert = $state(true);
+  let exportOffen = $state(false);
   let auto: ReturnType<typeof autospeicher> | undefined;
 
   onMount(async () => {
@@ -79,7 +82,10 @@
     if (!z) return;
     JSON.stringify([z.projekt.roofs, z.projekt.obstacles, z.projekt.settings]); // liest tief → reaktiv
     const t = setTimeout(() => {
-      z!.ergebnis = rechne($state.snapshot(z!.projekt) as Project);
+      const proj = $state.snapshot(z!.projekt) as Project;
+      const erg = rechne(proj);
+      z!.ergebnis = erg;
+      z!.verstringung = proj.settings.stringLaenge ? verstringen(erg, { laenge: proj.settings.stringLaenge, gleichLang: proj.settings.stringGleichLang }) : null;
     }, 100);
     return () => clearTimeout(t);
   });
@@ -102,11 +108,13 @@
     <Karte center={mitte ? [mitte.lng, mitte.lat] : undefined} zoom={mitte ? 19 : 17} onReady={kartebereit} />
     <header>
       <button onclick={() => router.gehe({ name: "liste" })} aria-label="Zur Projektliste">‹</button>
-      <strong data-testid="projektname">{p.name}</strong>
+      <strong data-testid="projektname">{z.projekt.name}</strong>
+      <button class="export" onclick={() => (exportOffen = true)} data-testid="export-oeffnen">Export</button>
     </header>
     {#if p.imageDate}<div class="bild">Luftbild vom {p.imageDate.split("-").reverse().join(".")}</div>{/if}
     <Lupe {z} {karte} />
     <Werkzeugleiste {z} {gespeichert} />
+    {#if exportOffen}<Exportblatt {z} schliessen={() => (exportOffen = false)} />{/if}
   </div>
 {/if}
 
@@ -114,6 +122,7 @@
   .seite { position: fixed; inset: 0; }
   header { position: absolute; top: max(8px, env(safe-area-inset-top)); left: 8px; right: 60px; z-index: 3; display: flex; gap: 8px; align-items: center; color: #fff; }
   header button { background: rgba(0,0,0,.6); color: #fff; border-color: transparent; width: 44px; padding: 0; font-size: 22px; }
+  header .export { width: auto; padding: 0 14px; font-size: 15px; margin-left: auto; pointer-events: auto; }
   header strong { background: rgba(0,0,0,.6); padding: 8px 12px; border-radius: 10px; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .bild { position: absolute; left: 8px; top: calc(max(8px, env(safe-area-inset-top)) + 54px); z-index: 2; background: rgba(0,0,0,.6); color: #fff; font-size: 12px; padding: 4px 8px; border-radius: 6px; }
   .info { padding: 24px 16px; }

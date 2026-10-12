@@ -1,12 +1,29 @@
 # PV-Dachplaner – Detailplan Meilenstein M2 (PDF, Verstringung, CRM-Export)
 
-Stand: 2026-10-12 · Gehört zu [`PLAN.md`](PLAN.md) (Kap. 14) und folgt auf [`M1-PLAN.md`](M1-PLAN.md) · Status: **Entwurf zur Abstimmung, noch nichts gebaut**
+Stand: 2026-10-12 · Gehört zu [`PLAN.md`](PLAN.md) (Kap. 14) und folgt auf [`M1-PLAN.md`](M1-PLAN.md) · Status: **Stand 2026-10-12: E1 (PDF), E2 Stufe A (grafische Verstringung) und E3 Dateiexport sind gebaut und getestet; offen sind E2 Stufe B (elektrische Prüfung) und die direkte CRM-Übertragung**
 
 Auslöser: Wunsch des Auftraggebers, am Ende der Erstellung ein **PDF mit allen wichtigen Daten** zu erzeugen, inklusive **Dachbild mit Modulplatzierung** und der **Verstringung der PV-Module**, dazu eine **Exportmöglichkeit für das CRM**.
 
 Aussagen mit **[prüfen]** sind nicht belegt. Zeitangaben sind **Schätzungen**. Alles, was Datenblattwerte oder Normen betrifft, braucht deine Vorgaben (siehe Kap. 8); ich erfinde keine Kennwerte.
 
 ---
+
+## 0. Entscheidungen des Auftraggebers (2026-10-12)
+
+- **CRM:** erst **Dateiexport** (ZIP mit PDF, JSON, CSV), direkte Anbindung später, sobald das CRM feststeht.
+- **Verstringung:** erst **grafisch (Stufe A)**; die elektrische Prüfung (Stufe B) folgt, sobald Modul- und Wechselrichterdaten vorliegen.
+- **Reihenfolge:** PDF und Verstringung **vor** den Gebäudedaten (Pakete 10 und 11).
+- Zusatzwunsch: Modulansicht **ausblendbar**, um Hindernisse besser zu markieren (fertig, Schalter „Module“).
+
+## 0a. Umsetzungsstand
+
+| Teil | Stand |
+|---|---|
+| E1 PDF-Export | **fertig**: 5 Seiten (Deckblatt mit Kennzahlen und Übersichtsbild, Dachbild mit Modulen, Tabellen mit Hindernissen, Annahmen und Hinweisen, Stringplan, String-Tabelle). Das Luftbild wird in EPSG:25832 mit 5 cm je Pixel geladen und im PDF mit **Vektor-Überlagerung** (Dachflächen, Module, Hindernisse, Strings), **Maßstab** und **Nordpfeil** (mit Meridiankonvergenz) versehen. Test prüft Seitentext mit `pdftotext`, Seitenzahl und dass die Zahlen mit der App übereinstimmen. |
+| E2 Stufe A Verstringung | **fertig**: Eingabe „Module je String (höchstens)“, Option „gleich lange Strings“ (45 Module bei höchstens 14: 12, 11, 11, 11), Schlangenlinie entlang der Modulreihen von der Traufe zum First, Dachflächen werden nie gemischt. Darstellung farbig auf der Karte und im PDF mit Ziffern, Startkreis und Verbindungslinie. Keine elektrische Prüfung. |
+| E3 Dateiexport | **fertig**: ZIP (PDF, `projekt.json`, `projekt.csv`, `daecher.csv`, Liesmich), einzelne JSON/CSV, Kurztext für die Zwischenablage; CSV mit Semikolon, Dezimalkomma, UTF-8 mit BOM. Auf dem iPhone über das Teilen-Menü versendbar, wo der Browser es erlaubt. |
+| E2 Stufe B | offen: braucht Datenblätter (Modul, Wechselrichter) |
+| E3 direkte Übertragung | offen: braucht die Angabe, welches CRM |
 
 ## 1. Was dazukommt
 

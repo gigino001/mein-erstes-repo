@@ -29,3 +29,12 @@ export function lngLatToUtm(p: LngLat): Utm {
 export function kachelName(p: Utm): string {
   return `${Math.floor(p.e / 1000)}_${Math.floor(p.n / 1000)}`;
 }
+
+/**
+ * Meridiankonvergenz in Grad: Winkel, um den die Nordrichtung des UTM-Gitters (Bildoberkante) von der wahren Nordrichtung abweicht.
+ * Positiv östlich des Mittelmeridians (9° Ost bei Zone 32).
+ */
+export function meridiankonvergenz(p: LngLat): number {
+  const dl = ((p.lng - 9) * Math.PI) / 180;
+  return (Math.atan(Math.tan(dl) * Math.sin((p.lat * Math.PI) / 180)) * 180) / Math.PI;
+}

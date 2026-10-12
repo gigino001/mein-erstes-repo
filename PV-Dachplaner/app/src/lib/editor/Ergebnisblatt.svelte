@@ -1,12 +1,19 @@
 <script lang="ts">
   import type { EditorZustand } from "./zustand.svelte";
   import { zahl } from "../berechnung";
+  import { stringFarbe, stringZusammenfassung } from "../strings";
 
   let { z, kompakt = false }: { z: EditorZustand; kompakt?: boolean } = $props();
   let offen = $state(false);
   const g = $derived(z.ergebnis);
   const rand = $derived(z.projekt.settings.randabstandM);
   const ori = $derived(z.projekt.settings.orientation);
+  const sl = $derived(z.projekt.settings.stringLaenge);
+  const vs = $derived(z.verstringung);
+  function stringEingabe(e: Event) {
+    const t = (e.target as HTMLInputElement).value.trim();
+    z.setzeStringLaenge(t === "" ? null : Number(t));
+  }
 </script>
 
 <section class="erg" aria-label="Ergebnis">
@@ -52,6 +59,19 @@
           <button class:an={ori === "quer"} onclick={() => z.setzeAusrichtungsModus("quer")} data-testid="ausrichtung-quer">quer</button>
           <button class:an={ori === "beste"} onclick={() => z.setzeAusrichtungsModus("beste")} data-testid="ausrichtung-beste">beste</button>
         </div>
+        <span class="etikett">Verstringung (Module je String, höchstens)</span>
+        <div class="seg">
+          <input type="text" inputmode="numeric" placeholder="aus" value={sl ?? ""} onchange={stringEingabe} aria-label="Module je String, höchstens" data-testid="string-laenge" />
+          <button class:an={z.projekt.settings.stringGleichLang} onclick={() => z.setzeStringGleichLang(!z.projekt.settings.stringGleichLang)} aria-pressed={z.projekt.settings.stringGleichLang} data-testid="string-gleich">gleich lange Strings</button>
+        </div>
+        {#if vs && vs.strings.length > 0}
+          <p class="mut" data-testid="string-info">{stringZusammenfassung(vs)}</p>
+          <div class="strings" data-testid="string-liste">
+            {#each vs.strings as st (st.nr)}
+              <span class="chip"><i style="background:{stringFarbe(st.nr)}"></i>S{st.nr} · {st.roofName} · {st.module.length}</span>
+            {/each}
+          </div>
+        {/if}
         <p class="mut">Modul 1,15 × 1,78 m, 460 Wp. Gesamt: {zahl(g.schraegflaecheM2)} m² Dachfläche, {zahl(g.nutzbarM2)} m² nutzbar.</p>
       </div>
     </div>
@@ -69,6 +89,10 @@
   .mut { color: var(--muted); font-size: 13px; margin: 0; }
   .etikett { font-size: 13px; color: var(--muted); }
   .einst { display: grid; gap: 6px; }
+  .einst input { font: inherit; width: 90px; min-height: 40px; padding: 0 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--fg); }
+  .strings { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; background: var(--panel); border-radius: 8px; padding: 4px 8px; }
+  .chip i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,.4); }
   .seg { display: flex; gap: 6px; flex-wrap: wrap; }
   .seg button { flex: 1 1 auto; min-height: 40px; padding: 0 10px; }
   button.an { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--bg)); }

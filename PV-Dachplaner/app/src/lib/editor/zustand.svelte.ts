@@ -1,6 +1,7 @@
 import type { Point } from "@pv-dachplaner/geometry-core";
 import type { Ausrichtung, Obstacle, ObstacleArt, Project, RoofPlane } from "../model";
 import type { Gesamt } from "../berechnung";
+import type { StringPlan } from "../strings";
 import { drehen, punktEinfuegen, punktLoeschen, rechteckAusDiagonale, schwerpunkt, verschieben, abstand } from "./geom";
 import type { EinrastErgebnis } from "./einrasten";
 import { Verlauf } from "./verlauf";
@@ -45,6 +46,8 @@ export class EditorZustand {
   ergebnis = $state<Gesamt | null>(null);
   /** Modulraster auf der Karte zeigen (ausblenden, um Hindernisse besser zu erkennen und zu markieren) */
   moduleSichtbar = $state(true);
+  /** Aktuelle Verstringung (wird vom Editor nach Änderungen gesetzt) */
+  verstringung = $state<StringPlan | null>(null);
   kannZurueck = $state(false);
   kannVor = $state(false);
   private verlauf = new Verlauf<Stand>();
@@ -294,6 +297,24 @@ export class EditorZustand {
   }
   setzeRandabstand(m: 0 | 0.1 | 0.2) {
     this.projekt.settings.randabstandM = m;
+    this.geaendert();
+  }
+  setzeStringLaenge(n: number | null) {
+    this.projekt.settings.stringLaenge = n !== null && Number.isInteger(n) && n >= 1 && n <= 60 ? n : null;
+    this.geaendert();
+  }
+  setzeStringGleichLang(b: boolean) {
+    this.projekt.settings.stringGleichLang = b;
+    this.geaendert();
+  }
+  /** Projektdaten (Name, Kunde, Adresse, Notiz, Bearbeiter) ändern; nicht Teil von „Rückgängig“. */
+  setzeProjektdaten(d: { name?: string; kundeName?: string; adresseText?: string; notiz?: string; bearbeiter?: string }) {
+    const p = this.projekt;
+    if (d.name !== undefined) p.name = d.name;
+    if (d.kundeName !== undefined) p.kunde.name = d.kundeName;
+    if (d.adresseText !== undefined) p.adresse.text = d.adresseText;
+    if (d.notiz !== undefined) p.kunde.notiz = d.notiz;
+    if (d.bearbeiter !== undefined) p.bearbeiter = d.bearbeiter;
     this.geaendert();
   }
   setzeAusrichtungsModus(o: Ausrichtung) {

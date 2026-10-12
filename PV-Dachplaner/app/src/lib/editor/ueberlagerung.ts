@@ -3,6 +3,7 @@ import type { Point } from "@pv-dachplaner/geometry-core";
 import { lngLatToUtm, utmToLngLat } from "../coords";
 import { ausrichtungVonKante, kantenMitte, kantenWinkel, naechsteKante, punktInVieleck } from "./geom";
 import { einrasten } from "./einrasten";
+import { stringFarbe } from "../strings";
 import type { EditorZustand, ObjektArt } from "./zustand.svelte";
 
 /** Trefferradius in Bildschirmpixeln (Finger). */
@@ -72,11 +73,14 @@ export class Ueberlagerung {
   private quellenAnlegen() {
     const leer = { type: "FeatureCollection", features: [] } as GeoJSON.FeatureCollection;
     const m = this.map;
-    for (const id of ["daecher", "module", "hindernisse", "griffe", "entwurf", "einrasten"]) m.addSource(id, { type: "geojson", data: leer });
+    for (const id of ["daecher", "module", "stringlinien", "hindernisse", "griffe", "entwurf", "einrasten"]) m.addSource(id, { type: "geojson", data: leer });
     m.addLayer({ id: "dach-flaeche", type: "fill", source: "daecher", paint: { "fill-color": ["case", ["get", "gewaehlt"], "#00e5ff", "#ffd400"], "fill-opacity": ["case", ["get", "gewaehlt"], 0.28, 0.16] } });
     m.addLayer({ id: "dach-linie", type: "line", source: "daecher", paint: { "line-color": ["case", ["get", "gewaehlt"], "#00e5ff", "#ffd400"], "line-width": ["case", ["get", "gewaehlt"], 3, 2] } });
-    m.addLayer({ id: "module-flaeche", type: "fill", source: "module", paint: { "fill-color": "#1e6bff", "fill-opacity": 0.55 } });
+    m.addLayer({ id: "module-flaeche", type: "fill", source: "module", paint: { "fill-color": ["coalesce", ["get", "farbe"], "#1e6bff"], "fill-opacity": 0.6 } });
     m.addLayer({ id: "module-linie", type: "line", source: "module", paint: { "line-color": "#ffffff", "line-width": 1 } });
+    m.addLayer({ id: "string-linie-rand", type: "line", source: "stringlinien", filter: ["==", ["geometry-type"], "LineString"], paint: { "line-color": "#000000", "line-width": 4.5, "line-opacity": 0.5 } });
+    m.addLayer({ id: "string-linie", type: "line", source: "stringlinien", filter: ["==", ["geometry-type"], "LineString"], paint: { "line-color": ["get", "farbe"], "line-width": 2.5 } });
+    m.addLayer({ id: "string-start", type: "circle", source: "stringlinien", filter: ["==", ["geometry-type"], "Point"], paint: { "circle-radius": 6, "circle-color": "#ffffff", "circle-stroke-width": 3, "circle-stroke-color": ["get", "farbe"] } });
     m.addLayer({ id: "hindernis-flaeche", type: "fill", source: "hindernisse", paint: { "fill-color": ["case", ["get", "abziehen"], "#ff3b30", "#9aa0a6"], "fill-opacity": 0.45 } });
     m.addLayer({ id: "hindernis-linie", type: "line", source: "hindernisse", paint: { "line-color": ["case", ["get", "gewaehlt"], "#00e5ff", ["get", "abziehen"], "#ff3b30", "#9aa0a6"], "line-width": ["case", ["get", "gewaehlt"], 3, 2] } });
     m.addLayer({ id: "entwurf-linie", type: "line", source: "entwurf", filter: ["==", ["geometry-type"], "LineString"], paint: { "line-color": "#ffffff", "line-width": 2.5, "line-dasharray": [2, 1.5] } });
@@ -100,8 +104,30 @@ export class Ueberlagerung {
       properties: { id: o.id, gewaehlt: sel?.art === "hindernis" && o.id === sel.id, abziehen: o.abziehen },
       geometry: { type: "Polygon", coordinates: [ring(o.outline)] },
     }));
-    const module: GeoJSON.Feature[] = (z.moduleSichtbar ? (z.ergebnis?.daecher ?? []) : []).flatMap((e) =>
-      (e.layout?.modules ?? []).map((mo): GeoJSON.Feature => ({ type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [ring(mo.corners)] } })),
+    const sichtbar = z.moduleSichtbar ? (z.ergebnis?.daecher ?? []) : [];
+    // Farbe je Modul aus der Verstringung (falls aktiv)
+    const farbeJeModul = new Map<string, string>();
+    const stringlinien: GeoJSON.Feature[] = [];
+    if (z.moduleSichtbar && z.verstringung) {
+      for (const st of z.verstringung.strings) {
+        const layout = z.ergebnis?.daecher.find((d) => d.id === st.roofId)?.layout;
+        if (!layout) continue;
+        const farbe = stringFarbe(st.nr);
+        const mitten = st.module.map((i) => {
+          const c = layout.modules[i]!.corners;
+          farbeJeModul.set(`${st.roofId}:${i}`, farbe);
+          return pt({ x: c.reduce((a, q) => a + q.x, 0) / c.length, y: c.reduce((a, q) => a + q.y, 0) / c.length });
+        });
+        if (mitten.length > 1) stringlinien.push({ type: "Feature", properties: { farbe }, geometry: { type: "LineString", coordinates: mitten } });
+        stringlinien.push({ type: "Feature", properties: { farbe }, geometry: { type: "Point", coordinates: mitten[0]! } });
+      }
+    }
+    const module: GeoJSON.Feature[] = sichtbar.flatMap((e) =>
+      (e.layout?.modules ?? []).map((mo, i): GeoJSON.Feature => ({
+        type: "Feature",
+        properties: { farbe: farbeJeModul.get(`${e.id}:${i}`) ?? null },
+        geometry: { type: "Polygon", coordinates: [ring(mo.corners)] },
+      })),
     );
     const griffe: GeoJSON.Feature[] = [];
     const d = z.gewaehltesObjekt;
@@ -121,6 +147,7 @@ export class Ueberlagerung {
     const set = (id: string, features: GeoJSON.Feature[]) => (this.map.getSource(id) as maplibregl.GeoJSONSource).setData({ type: "FeatureCollection", features });
     set("daecher", daecher);
     set("module", module);
+    set("stringlinien", stringlinien);
     set("hindernisse", hindernisse);
     set("griffe", griffe);
     set("entwurf", entwurf);

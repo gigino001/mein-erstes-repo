@@ -224,10 +224,13 @@ Jedes Paket endet mit einem **Test und einem lauffähigen Stand**. Dauer in Arbe
 | 9 Adresssuche | fertig (eigener Index aus amtlichen Hauskoordinaten, Ort + Straße/Hausnummer mit Vorschlägen, Tippfehler-tolerant; Daten OWL 14 MB, in der App-Auslieferung) |
 | 10, 11 (LoD2) | offen |
 | 8b Module ausblenden | fertig (Schalter „Module“ im Editor; Ergebnis bleibt unverändert) |
+| E1 PDF-Export | fertig (siehe `M2-PLAN.md`) |
+| E2 Verstringung Stufe A | fertig (grafisch) |
+| E3 Dateiexport für das CRM | fertig (ZIP, JSON, CSV) |
 | 12 Politur | offen (u. a. Quellenhinweis der Karte nicht verdecken, Programmgröße) |
 | 13 Tests und Abnahme | offen |
 
-Die Tests laufen mit `npm test` (64 Unit-Tests) und `npm run e2e` (sieben Browser-Abläufe gegen die gebaute App).
+Die Tests laufen mit `npm test` (81 Unit-Tests) und `npm run e2e` (acht Browser-Abläufe gegen die gebaute App).
 
 ## 10. Teststrategie
 

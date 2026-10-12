@@ -87,7 +87,7 @@ describe("Sicherung", () => {
 describe("Prüfung", () => {
   it("bereinigt unbekannte Felder und setzt Standardwerte", () => {
     const p = pruefeProjekt({ id: "abcdefgh", name: "N", created: "a", updated: "b", fremd: 1, settings: { randabstandM: 0.5 } });
-    expect(p.settings).toEqual({ randabstandM: 0, orientation: "hochkant" });
+    expect(p.settings).toEqual({ randabstandM: 0, orientation: "hochkant", stringLaenge: null, stringGleichLang: true });
     expect("fremd" in p).toBe(false);
     expect(p.roofs).toEqual([]);
   });
