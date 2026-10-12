@@ -7,7 +7,7 @@ export const business = {
   owner: "Claudia Gajda",
   description:
     "Studio für individuelle Wimpernverlängerungen in Bielefeld. Jedes Set wird persönlich besprochen und angefertigt.",
-  url: "https://cocolashes-bielefeld.de",
+  url: "https://coco-lashes.de",
   phone: "+4917643456902",
   phoneDisplay: "+49 176 43456902",
   email: "info@coco-lashes.de",

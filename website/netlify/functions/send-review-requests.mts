@@ -13,8 +13,8 @@ import nodemailer from "nodemailer";
 
 const BUSINESS_NAME = "coco lashes";
 const BUSINESS_OWNER = "Claudia Gajda";
-const BUSINESS_URL = "https://cocolashes-bielefeld.de";
-const BUSINESS_EMAIL = "cocolashes-bielefeld@gmx.de";
+const BUSINESS_URL = "https://coco-lashes.de";
+const BUSINESS_EMAIL = "info@coco-lashes.de";
 
 function formatDateTime(d: Date) {
   return d.toLocaleString("de-DE", {
