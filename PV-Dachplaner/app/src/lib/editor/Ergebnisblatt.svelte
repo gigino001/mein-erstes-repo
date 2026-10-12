@@ -1,18 +1,43 @@
 <script lang="ts">
   import type { EditorZustand } from "./zustand.svelte";
   import { zahl } from "../berechnung";
-  import { stringFarbe, stringZusammenfassung } from "../strings";
+  import { stringFarbe, stringZusammenfassung, teiler, versuchLaenge, pruefePlan, zweiGruppen, modulAlternativen, gruppenText, type StringGruppe } from "../strings";
 
   let { z, kompakt = false }: { z: EditorZustand; kompakt?: boolean } = $props();
   let offen = $state(false);
   const g = $derived(z.ergebnis);
   const rand = $derived(z.projekt.settings.randabstandM);
   const ori = $derived(z.projekt.settings.orientation);
-  const sl = $derived(z.projekt.settings.stringLaenge);
+  const bereich = $derived(z.projekt.settings.stringBereich);
   const vs = $derived(z.verstringung);
-  function stringEingabe(e: Event) {
+  let meldung = $state<Record<string, string>>({});
+  function dachGruppen(id: string): StringGruppe[] | null {
+    return z.projekt.roofs.find((r) => r.id === id)?.stringGruppen ?? null;
+  }
+  function stringEingabe(id: string, n: number, e: Event) {
+    const el = e.target as HTMLInputElement;
+    const t = el.value.trim();
+    if (t === "") {
+      z.setzeStringGruppen(id, null);
+      meldung[id] = "";
+      return;
+    }
+    const v = versuchLaenge(n, Number(t), bereich);
+    if (v.ok) {
+      z.setzeStringGruppen(id, v.gruppen!);
+      meldung[id] = "";
+    } else {
+      meldung[id] = v.meldung;
+      const alt = dachGruppen(id);
+      el.value = alt && alt.length === 1 ? String(alt[0]!.laenge) : "";
+    }
+  }
+  function bereichEingabe(art: "min" | "max", e: Event) {
     const t = (e.target as HTMLInputElement).value.trim();
-    z.setzeStringLaenge(t === "" ? null : Number(t));
+    const alt = bereich ?? { min: 1, max: 60 };
+    if (t === "" && art === "min") return z.setzeStringBereich(null);
+    const n = Number(t);
+    z.setzeStringBereich({ ...alt, [art]: n });
   }
 </script>
 
@@ -59,11 +84,52 @@
           <button class:an={ori === "quer"} onclick={() => z.setzeAusrichtungsModus("quer")} data-testid="ausrichtung-quer">quer</button>
           <button class:an={ori === "beste"} onclick={() => z.setzeAusrichtungsModus("beste")} data-testid="ausrichtung-beste">beste</button>
         </div>
-        <span class="etikett">Verstringung (Module je String, höchstens)</span>
+        <span class="etikett">Zulässige Stringlänge (Module je String, aus Modul- und Wechselrichterdaten; leer = ungeprüft)</span>
         <div class="seg">
-          <input type="text" inputmode="numeric" placeholder="aus" value={sl ?? ""} onchange={stringEingabe} aria-label="Module je String, höchstens" data-testid="string-laenge" />
-          <button class:an={z.projekt.settings.stringGleichLang} onclick={() => z.setzeStringGleichLang(!z.projekt.settings.stringGleichLang)} aria-pressed={z.projekt.settings.stringGleichLang} data-testid="string-gleich">gleich lange Strings</button>
+          <input type="text" inputmode="numeric" placeholder="min" value={bereich?.min ?? ""} onchange={(e) => bereichEingabe("min", e)} aria-label="Kleinste Stringlänge" data-testid="string-min" />
+          <input type="text" inputmode="numeric" placeholder="max" value={bereich?.max ?? ""} onchange={(e) => bereichEingabe("max", e)} aria-label="Größte Stringlänge" data-testid="string-max" />
         </div>
+        <span class="etikett">Verstringung je Dachfläche (alle Strings einer Gruppe gleich lang)</span>
+        {#each g.daecher.filter((d) => d.layout && d.layout.moduleCount > 0) as d (d.id)}
+          {@const n = d.layout!.moduleCount}
+          {@const gr = dachGruppen(d.id)}
+          {@const tl = teiler(n, bereich)}
+          {@const pr = gr ? pruefePlan(n, gr, bereich) : null}
+          <div class="vdach" data-testid="verstringung-{d.name}">
+            <div class="zeile">
+              <strong>{d.name}</strong>
+              <span class="mut">{n} Module</span>
+              <input type="text" inputmode="numeric" placeholder="Module je String" value={gr && gr.length === 1 ? gr[0]!.laenge : ""} onchange={(e) => stringEingabe(d.id, n, e)} aria-label="Module je String für {d.name}" data-testid="string-laenge-{d.name}" />
+              {#if gr}<button onclick={() => z.setzeStringGruppen(d.id, null)} data-testid="string-aus-{d.name}">aus</button>{/if}
+            </div>
+            {#if meldung[d.id]}<p class="fehlt" role="alert" data-testid="string-meldung-{d.name}">{meldung[d.id]}</p>{/if}
+            {#if gr}
+              <p class={pr?.ok ? "mut" : "fehlt"} data-testid="string-gruppen-{d.name}">{gruppenText(gr)}{pr?.ok ? " ✓" : ""}</p>
+              {#each pr?.meldungen ?? [] as m}<p class="fehlt">{m}</p>{/each}
+            {/if}
+            <div class="chips" data-testid="string-teiler-{d.name}">
+              {#if tl.length > 0}
+                <span class="mut">Passende Längen:</span>
+                {#each tl as l}<button class="kl" class:an={gr?.length === 1 && gr[0]!.laenge === l} onclick={() => { z.setzeStringGruppen(d.id, [{ laenge: l, anzahl: n / l }]); meldung[d.id] = ""; }}>{l} × {n / l}</button>{/each}
+              {:else}
+                <span class="fehlt">Mit {n} Modulen sind keine gleich langen Strings{bereich ? ` von ${bereich.min} bis ${bereich.max} Modulen` : ""} möglich.</span>
+              {/if}
+            </div>
+            {#if tl.length === 0 && bereich}
+              {@const zg = zweiGruppen(n, bereich)}
+              {#if zg.length > 0}
+                <div class="chips">
+                  <span class="mut">Zwei Gruppen (z. B. zwei MPPT-Eingänge):</span>
+                  {#each zg as x}<button class="kl" onclick={() => { z.setzeStringGruppen(d.id, x); meldung[d.id] = ""; }}>{gruppenText(x)}</button>{/each}
+                </div>
+              {/if}
+              {@const ma = modulAlternativen(n, bereich)}
+              {#if ma.length > 0}
+                <p class="mut">Oder die Modulzahl ändern: {ma.map((x) => `${x.module} Module (${x.anzahl} × ${x.laenge})`).join(", ")}.</p>
+              {/if}
+            {/if}
+          </div>
+        {/each}
         {#if vs && vs.strings.length > 0}
           <p class="mut" data-testid="string-info">{stringZusammenfassung(vs)}</p>
           <div class="strings" data-testid="string-liste">
@@ -93,6 +159,12 @@
   .strings { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; background: var(--panel); border-radius: 8px; padding: 4px 8px; }
   .chip i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,.4); }
+  .vdach { display: grid; gap: 4px; background: var(--panel); border-radius: 10px; padding: 8px 10px; }
+  .zeile { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .zeile input { width: 130px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .kl { min-height: 34px; padding: 0 10px; }
+  .fehlt { overflow-wrap: anywhere; }
   .seg { display: flex; gap: 6px; flex-wrap: wrap; }
   .seg button { flex: 1 1 auto; min-height: 40px; padding: 0 10px; }
   button.an { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--bg)); }

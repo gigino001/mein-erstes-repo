@@ -12,7 +12,7 @@
   import { utmToLngLat } from "../lib/coords";
   import type { Project } from "../lib/model";
   import { rechne } from "../lib/berechnung";
-  import { verstringen } from "../lib/strings";
+  import { verstringen, plaeneAus } from "../lib/strings";
 
   let { id }: { id: string } = $props();
   let p = $state<Project | null | undefined>(undefined);
@@ -85,7 +85,8 @@
       const proj = $state.snapshot(z!.projekt) as Project;
       const erg = rechne(proj);
       z!.ergebnis = erg;
-      z!.verstringung = proj.settings.stringLaenge ? verstringen(erg, { laenge: proj.settings.stringLaenge, gleichLang: proj.settings.stringGleichLang }) : null;
+      const sp = verstringen(erg, plaeneAus(proj), proj.settings.stringBereich);
+      z!.verstringung = sp.strings.length > 0 ? sp : null;
     }, 100);
     return () => clearTimeout(t);
   });

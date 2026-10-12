@@ -35,10 +35,22 @@ for (const [x, y] of [[300, 120], [340, 120], [320, 160]]) await klick(x, y);
 await page.getByTestId("fertig").click();
 await page.getByTestId("dachinfo").waitFor();
 
-// Verstringung: höchstens 12 Module je String
+// Verstringung: nicht teilbare Längen werden blockiert, passende Längen per Chip gesetzt
 await page.getByTestId("details-umschalten").click();
-await page.getByTestId("string-laenge").fill("12");
-await page.getByTestId("string-laenge").blur();
+const dachInfo = await page.evaluate(() => window.__pv.zustand.ergebnis.daecher.filter((d) => d.layout && d.layout.moduleCount > 0).map((d) => ({ name: d.name, n: d.layout.moduleCount })));
+for (const d of dachInfo) {
+  const falsch = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].find((l) => d.n % l !== 0);
+  if (falsch) {
+    await page.getByTestId(`string-laenge-${d.name}`).fill(String(falsch));
+    await page.getByTestId(`string-laenge-${d.name}`).blur();
+    await page.getByTestId(`string-meldung-${d.name}`).waitFor();
+    pruefen(`${d.name}: ${falsch} Module je String bei ${d.n} Modulen wird blockiert`, (await text(`string-meldung-${d.name}`)).includes("nicht in gleich lange"));
+    pruefen(`${d.name}: nach Blockade ist keine Verstringung gesetzt`, await page.evaluate((n) => !window.__pv.zustand.projekt.roofs.find((r) => r.name === n).stringGruppen, d.name));
+  }
+  const chips = page.getByTestId(`string-teiler-${d.name}`).locator("button");
+  const k = await chips.count();
+  if (k > 0) await chips.nth(k - 1).click();
+}
 await page.getByTestId("string-info").waitFor();
 const info = await text("string-info");
 const modulApp = Number(await text("gesamt-module"));
@@ -48,7 +60,7 @@ const proj = await projekt();
 const nStrings = await page.evaluate(() => window.__pv.zustand.verstringung.strings.length);
 const inStrings = await page.evaluate(() => window.__pv.zustand.verstringung.strings.reduce((a, s) => a + s.module.length, 0));
 pruefen("jedes Modul liegt in genau einem String", inStrings === modulApp, `${inStrings} von ${modulApp}`);
-pruefen("kein String länger als 12", await page.evaluate(() => window.__pv.zustand.verstringung.strings.every((s) => s.module.length <= 12)));
+pruefen("alle Strings einer Dachfläche sind gleich lang", await page.evaluate(() => { const m = {}; for (const s of window.__pv.zustand.verstringung.strings) (m[s.roofId] ??= new Set()).add(s.module.length); return Object.values(m).every((x) => x.size === 1); }));
 pruefen("Strings werden auf der Karte gezeichnet (Linien und Startpunkte)", (await page.evaluate(() => window.__karte.getSource("stringlinien")._data.features.length)) >= nStrings);
 await page.getByTestId("details-umschalten").click();
 

@@ -18,7 +18,7 @@ function beispiel(): Project {
 const kontext = () => {
   const projekt = beispiel();
   const ergebnis = rechne(projekt);
-  return { projekt, ergebnis, strings: verstringen(ergebnis, { laenge: 14, gleichLang: true }), erstelltAm: new Date("2026-10-12T10:00:00Z"), version: "0.1.0" };
+  return { projekt, ergebnis, strings: verstringen(ergebnis, { d1: [{ laenge: 12, anzahl: 2 }] }), erstelltAm: new Date("2026-10-12T10:00:00Z"), version: "0.1.0" };
 };
 
 describe("CRM-Export", () => {

@@ -1,5 +1,6 @@
 import type { Point } from "@pv-dachplaner/geometry-core";
 import type { Utm } from "./coords";
+import type { StringGruppe, Bereich } from "./strings";
 
 /** Dachfläche (eben). Umriss in EPSG:25832, Meter, Draufsicht. */
 export interface RoofPlane {
@@ -11,6 +12,8 @@ export interface RoofPlane {
   /** Fallrichtung in Kompassgrad (0 = N, 180 = S); null = noch nicht angegeben. */
   azimuthDeg: number | null;
   quelle: "manuell" | "lod2";
+  /** Gleich lange Strings dieser Dachfläche; null = noch nicht verstringt */
+  stringGruppen?: StringGruppe[] | null;
 }
 
 export type ObstacleArt = "kamin" | "dachfenster" | "gaube" | "antenne" | "luefter" | "sonstiges";
@@ -29,10 +32,8 @@ export interface ProjectSettings {
   /** Randabstand in Metern: 0 = aus, 0.2 = Standard, 0.1 = knapp */
   randabstandM: 0 | 0.1 | 0.2;
   orientation: Ausrichtung;
-  /** Höchstzahl Module je String; null = keine Verstringung */
-  stringLaenge: number | null;
-  /** gleich lange Strings je Dachfläche (45 Module bei höchstens 14 → 12, 11, 11, 11) */
-  stringGleichLang: boolean;
+  /** Zulässige Stringlänge (aus Modul- und Wechselrichterdaten); null = ungeprüft */
+  stringBereich: Bereich | null;
 }
 
 export interface Project {
@@ -69,11 +70,22 @@ export function neuesProjekt(partial: Partial<Pick<Project, "name" | "adresse" |
     roofs: [],
     obstacles: [],
     bearbeiter: "",
-    settings: { randabstandM: 0, orientation: "hochkant", stringLaenge: null, stringGleichLang: true },
+    settings: { randabstandM: 0, orientation: "hochkant", stringBereich: null },
   };
 }
 
 // ---------- Prüfung beim Import ----------
+
+function pruefeGruppen(v: unknown): StringGruppe[] | null {
+  if (!Array.isArray(v)) return null;
+  const out: StringGruppe[] = [];
+  for (const x of v) {
+    if (typeof x !== "object" || x === null) continue;
+    const { laenge, anzahl } = x as Record<string, unknown>;
+    if (typeof laenge === "number" && typeof anzahl === "number" && Number.isInteger(laenge) && Number.isInteger(anzahl) && laenge >= 1 && laenge <= 60 && anzahl >= 1 && anzahl <= 200) out.push({ laenge, anzahl });
+  }
+  return out.length > 0 ? out : null;
+}
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
 const isNum = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v);
@@ -112,6 +124,7 @@ export function pruefeProjekt(v: unknown): Project {
       slopeDeg: slope,
       azimuthDeg: az,
       quelle: r.quelle === "lod2" ? "lod2" : "manuell",
+      ...(pruefeGruppen(r.stringGruppen) ? { stringGruppen: pruefeGruppen(r.stringGruppen) } : {}),
     };
   });
   const arten: ObstacleArt[] = ["kamin", "dachfenster", "gaube", "antenne", "luefter", "sonstiges"];
@@ -125,7 +138,9 @@ export function pruefeProjekt(v: unknown): Project {
       abziehen: o.abziehen !== false,
     };
   });
-  const sl = isNum(settings.stringLaenge) && Number.isInteger(settings.stringLaenge) && settings.stringLaenge >= 1 && settings.stringLaenge <= 60 ? settings.stringLaenge : null;
+  const sb = isObj(settings.stringBereich) && isNum(settings.stringBereich.min) && isNum(settings.stringBereich.max) && settings.stringBereich.min >= 1 && settings.stringBereich.max >= settings.stringBereich.min && settings.stringBereich.max <= 60
+    ? { min: Math.floor(settings.stringBereich.min), max: Math.floor(settings.stringBereich.max) }
+    : null;
   return {
     id: v.id,
     name: v.name,
@@ -138,6 +153,6 @@ export function pruefeProjekt(v: unknown): Project {
     version: isNum(v.version) ? v.version : 1,
     roofs,
     obstacles,
-    settings: { randabstandM: rand, orientation: ori, stringLaenge: sl, stringGleichLang: settings.stringGleichLang !== false },
+    settings: { randabstandM: rand, orientation: ori, stringBereich: sb },
   };
 }

@@ -1,7 +1,7 @@
 import type { Point } from "@pv-dachplaner/geometry-core";
 import type { Ausrichtung, Obstacle, ObstacleArt, Project, RoofPlane } from "../model";
 import type { Gesamt } from "../berechnung";
-import type { StringPlan } from "../strings";
+import type { StringPlan, StringGruppe, Bereich } from "../strings";
 import { drehen, punktEinfuegen, punktLoeschen, rechteckAusDiagonale, schwerpunkt, verschieben, abstand } from "./geom";
 import type { EinrastErgebnis } from "./einrasten";
 import { Verlauf } from "./verlauf";
@@ -299,12 +299,15 @@ export class EditorZustand {
     this.projekt.settings.randabstandM = m;
     this.geaendert();
   }
-  setzeStringLaenge(n: number | null) {
-    this.projekt.settings.stringLaenge = n !== null && Number.isInteger(n) && n >= 1 && n <= 60 ? n : null;
+  /** Gleich lange Strings einer Dachfläche setzen (null = Verstringung entfernen). */
+  setzeStringGruppen(roofId: string, gruppen: StringGruppe[] | null) {
+    const d = this.projekt.roofs.find((r) => r.id === roofId);
+    if (!d) return;
+    d.stringGruppen = gruppen && gruppen.length > 0 ? gruppen.map((g) => ({ laenge: g.laenge, anzahl: g.anzahl })) : null;
     this.geaendert();
   }
-  setzeStringGleichLang(b: boolean) {
-    this.projekt.settings.stringGleichLang = b;
+  setzeStringBereich(b: Bereich | null) {
+    this.projekt.settings.stringBereich = b && Number.isInteger(b.min) && Number.isInteger(b.max) && b.min >= 1 && b.max >= b.min && b.max <= 60 ? { min: b.min, max: b.max } : null;
     this.geaendert();
   }
   /** Projektdaten (Name, Kunde, Adresse, Notiz, Bearbeiter) ändern; nicht Teil von „Rückgängig“. */
