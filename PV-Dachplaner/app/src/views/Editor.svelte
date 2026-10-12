@@ -63,10 +63,10 @@
       e.preventDefault();
       z.wiederholen();
     } else if (e.key === "Escape") z.entwurfVerwerfen();
-    else if (e.key === "Enter" && z.werkzeug === "dach") z.entwurfAbschliessen();
+    else if (e.key === "Enter" && (z.werkzeug === "dach" || z.werkzeug === "hindernis")) z.entwurfAbschliessen();
     else if ((e.key === "Delete" || e.key === "Backspace") && z.werkzeug === "auswahl") {
       if (z.auswahl?.punkt !== null && z.auswahl?.punkt !== undefined) z.punktEntfernen();
-      else z.dachEntfernen();
+      else z.objektEntfernen();
     }
   }
 

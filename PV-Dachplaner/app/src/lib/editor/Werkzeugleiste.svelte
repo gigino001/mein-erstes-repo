@@ -2,24 +2,31 @@
   import type { EditorZustand } from "./zustand.svelte";
   import { flaeche, kantenLaengen, selbstschnitt } from "./geom";
   import Eigenschaften from "./Eigenschaften.svelte";
+  import HindernisEigenschaften from "./HindernisEigenschaften.svelte";
   import Ergebnisblatt from "./Ergebnisblatt.svelte";
 
   let { z, gespeichert }: { z: EditorZustand; gespeichert: boolean } = $props();
 
   const dach = $derived(z.gewaehltesDach);
+  const hind = $derived(z.gewaehltesHindernis);
+  const objekt = $derived(z.gewaehltesObjekt);
   const grundflaeche = $derived(dach ? flaeche(dach.outline) : 0);
   const kreuzt = $derived(dach ? selbstschnitt(dach.outline) : false);
   const hinweis = $derived.by(() => {
     if (z.traufeWahl) return "Tippe auf die Kante, an der das Wasser abläuft (die Traufe). Die Fallrichtung wird daraus berechnet.";
-    if (z.werkzeug === "dach") {
+    if (z.werkzeug === "hindernis" && z.hindernisModus === "rechteck") {
+      return z.rechteckStart ? "Tippe die gegenüberliegende Ecke des Hindernisses." : "Tippe eine Ecke des Hindernisses (z. B. Kamin) an, danach die gegenüberliegende.";
+    }
+    if (z.werkzeug === "dach" || z.werkzeug === "hindernis") {
       const n = z.entwurf.length;
-      if (n === 0) return "Tippe die Ecken des Daches nacheinander an.";
+      const was = z.werkzeug === "dach" ? "des Daches" : "des Hindernisses";
+      if (n === 0) return `Tippe die Ecken ${was} nacheinander an.`;
       if (n < 3) return `${n} Ecke${n === 1 ? "" : "n"} – weiter antippen.`;
       return `${n} Ecken – „Fertig“ drücken oder den grünen ersten Punkt antippen.`;
     }
-    if (!dach) return z.projekt.roofs.length === 0 ? "Noch keine Dachfläche. Wähle „Dach“ und zeichne eine." : "Tippe eine Dachfläche an.";
+    if (!objekt) return z.projekt.roofs.length === 0 ? "Noch keine Dachfläche. Wähle „Dach“ und zeichne eine." : "Tippe eine Dachfläche oder ein Hindernis an.";
     if (z.auswahl?.punkt !== null && z.auswahl?.punkt !== undefined) {
-      const n = dach.outline.length, i = z.auswahl.punkt, l = kantenLaengen(dach.outline);
+      const n = objekt.outline.length, i = z.auswahl.punkt, l = kantenLaengen(objekt.outline);
       return `Ecke ${i + 1}: Kanten ${deutsch(l[(i + n - 1) % n]!)} m und ${deutsch(l[i]!)} m. Ziehen oder löschen.`;
     }
     return "Ecken ziehen, weiße Punkte tippen fügen eine Ecke ein. Fläche ziehen verschiebt sie.";
@@ -33,6 +40,11 @@
 <section class="leiste" aria-label="Werkzeuge">
   <button class="griff" onclick={() => (kleinWunsch = !kleinWunsch)} aria-label={klein ? "Blatt ausklappen" : "Blatt einklappen"} aria-expanded={!klein} data-testid="blatt-umschalten">{klein ? "⌃" : "⌄"}</button>
   <p class="hinweis" data-testid="hinweis">{hinweis}</p>
+  {#if hind && z.werkzeug === "auswahl"}
+    <p class="chip" data-testid="hindernisinfo">
+      <strong>Hindernis</strong> · {deutsch(Math.hypot(hind.outline[1]!.x - hind.outline[0]!.x, hind.outline[1]!.y - hind.outline[0]!.y))} × {deutsch(Math.hypot(hind.outline[hind.outline.length - 1]!.x - hind.outline[0]!.x, hind.outline[hind.outline.length - 1]!.y - hind.outline[0]!.y))} m · <span data-testid="hindernisflaeche">{deutsch(flaeche(hind.outline))}</span> m²
+    </p>
+  {/if}
   {#if dach && z.werkzeug === "auswahl"}
     <p class="chip" data-testid="dachinfo">
       <strong>{dach.name}</strong> · Grundfläche <span data-testid="grundflaeche">{deutsch(grundflaeche)}</span> m²
@@ -42,26 +54,34 @@
   <div class="reihe">
     <button class:an={z.werkzeug === "auswahl"} onclick={() => z.setzeWerkzeug("auswahl")} data-testid="werkzeug-auswahl">Auswahl</button>
     <button class:an={z.werkzeug === "dach"} onclick={() => z.setzeWerkzeug("dach")} data-testid="werkzeug-dach">Dach</button>
+    <button class:an={z.werkzeug === "hindernis"} onclick={() => z.setzeWerkzeug("hindernis")} data-testid="werkzeug-hindernis">Hindernis</button>
     <button class:an={z.einrasten} onclick={() => z.schalteEinrasten()} aria-pressed={z.einrasten} data-testid="einrasten">Einrasten</button>
     <button onclick={() => z.rueckgaengig()} disabled={!z.kannZurueck} aria-label="Rückgängig" data-testid="rueckgaengig">↶</button>
     <button onclick={() => z.wiederholen()} disabled={!z.kannVor} aria-label="Wiederholen" data-testid="wiederholen">↷</button>
   </div>
-  {#if z.werkzeug === "dach" && z.entwurf.length > 0}
+  {#if z.werkzeug === "hindernis"}
+    <div class="reihe">
+      <button class:an={z.hindernisModus === "rechteck"} onclick={() => { z.hindernisModus = "rechteck"; z.entwurfVerwerfen(); }} data-testid="modus-rechteck">Rechteck</button>
+      <button class:an={z.hindernisModus === "vieleck"} onclick={() => { z.hindernisModus = "vieleck"; z.entwurfVerwerfen(); }} data-testid="modus-vieleck">Vieleck</button>
+      {#if z.rechteckStart}<button onclick={() => z.entwurfVerwerfen()} data-testid="verwerfen">Abbrechen</button>{/if}
+    </div>
+  {/if}
+  {#if (z.werkzeug === "dach" || (z.werkzeug === "hindernis" && z.hindernisModus === "vieleck")) && z.entwurf.length > 0}
     <div class="reihe">
       <button class="primary" onclick={() => z.entwurfAbschliessen()} disabled={z.entwurf.length < 3} data-testid="fertig">Fertig</button>
       <button onclick={() => z.entwurfLetztenEntfernen()} data-testid="letzte-ecke">Letzte Ecke zurück</button>
       <button onclick={() => z.entwurfVerwerfen()} data-testid="verwerfen">Verwerfen</button>
     </div>
   {/if}
-  {#if z.werkzeug === "auswahl" && dach}
+  {#if z.werkzeug === "auswahl" && objekt}
     <div class="reihe">
       {#if z.auswahl?.punkt !== null && z.auswahl?.punkt !== undefined}
-        <button class="gefahr" onclick={() => z.punktEntfernen()} disabled={dach.outline.length <= 3} data-testid="punkt-loeschen">Ecke löschen</button>
+        <button class="gefahr" onclick={() => z.punktEntfernen()} disabled={objekt.outline.length <= 3} data-testid="punkt-loeschen">Ecke löschen</button>
       {/if}
-      <button class="gefahr" onclick={() => z.dachEntfernen()} data-testid="dach-loeschen">Dachfläche löschen</button>
+      <button class="gefahr" onclick={() => z.objektEntfernen()} data-testid={dach ? "dach-loeschen" : "hindernis-loeschen"}>{dach ? "Dachfläche löschen" : "Hindernis löschen"}</button>
     </div>
   {/if}
-  {#if !klein}<Eigenschaften {z} />{/if}
+  {#if !klein}<Eigenschaften {z} /><HindernisEigenschaften {z} />{/if}
   <Ergebnisblatt {z} kompakt={klein} />
   <p class="speicher" data-testid="speicherstand">{gespeichert ? "Gespeichert" : "Speichert …"}</p>
 </section>

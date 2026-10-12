@@ -1,7 +1,7 @@
 import type { Point } from "@pv-dachplaner/geometry-core";
-import type { Ausrichtung, Project, RoofPlane } from "../model";
+import type { Ausrichtung, Obstacle, ObstacleArt, Project, RoofPlane } from "../model";
 import type { Gesamt } from "../berechnung";
-import { punktEinfuegen, punktLoeschen, verschieben } from "./geom";
+import { drehen, punktEinfuegen, punktLoeschen, rechteckAusDiagonale, schwerpunkt, verschieben, abstand } from "./geom";
 import type { EinrastErgebnis } from "./einrasten";
 import { Verlauf } from "./verlauf";
 
@@ -13,11 +13,18 @@ function lesen(): boolean {
   }
 }
 
-export type Werkzeug = "auswahl" | "dach";
+export type Werkzeug = "auswahl" | "dach" | "hindernis";
+export type HindernisModus = "rechteck" | "vieleck";
+export type ObjektArt = "dach" | "hindernis";
 export interface Auswahl {
-  roofId: string;
+  art: ObjektArt;
+  id: string;
   /** Index der gewählten Ecke oder null, wenn nur die Fläche gewählt ist */
   punkt: number | null;
+}
+interface Stand {
+  roofs: RoofPlane[];
+  obstacles: Obstacle[];
 }
 
 /** Zustand des Editors: Projekt, Werkzeug, Auswahl, Entwurf und Rückgängig-Verlauf. Änderungen melden sich über `beiAenderung`. */
@@ -38,7 +45,11 @@ export class EditorZustand {
   ergebnis = $state<Gesamt | null>(null);
   kannZurueck = $state(false);
   kannVor = $state(false);
-  private verlauf = new Verlauf<RoofPlane[]>();
+  private verlauf = new Verlauf<Stand>();
+  /** Hindernisse: Rechteck (zwei Antippen) oder Vieleck */
+  hindernisModus = $state<HindernisModus>("rechteck");
+  /** Erste Ecke eines Hindernis-Rechtecks samt Ausrichtung (Bogenmaß) */
+  rechteckStart = $state<{ p: Point; winkel: number } | null>(null);
 
   constructor(
     projekt: Project,
@@ -51,20 +62,36 @@ export class EditorZustand {
   dach(id: string): RoofPlane | undefined {
     return this.projekt.roofs.find((r) => r.id === id);
   }
+  hindernis(id: string): Obstacle | undefined {
+    return this.projekt.obstacles.find((o) => o.id === id);
+  }
+  objekt(art: ObjektArt, id: string): RoofPlane | Obstacle | undefined {
+    return art === "dach" ? this.dach(id) : this.hindernis(id);
+  }
 
   /** Unabhängige Kopie des Umrisses (für Ziehbewegungen). */
-  umrissKopie(id: string): Point[] {
-    return ($state.snapshot(this.dach(id)?.outline ?? []) as Point[]).map((p) => ({ ...p }));
+  umrissKopie(art: ObjektArt, id: string): Point[] {
+    return ($state.snapshot(this.objekt(art, id)?.outline ?? []) as Point[]).map((p) => ({ ...p }));
   }
 
   get gewaehltesDach(): RoofPlane | undefined {
-    return this.auswahl ? this.dach(this.auswahl.roofId) : undefined;
+    return this.auswahl?.art === "dach" ? this.dach(this.auswahl.id) : undefined;
+  }
+  get gewaehltesHindernis(): Obstacle | undefined {
+    return this.auswahl?.art === "hindernis" ? this.hindernis(this.auswahl.id) : undefined;
+  }
+  /** Gewählte Dachfläche oder gewähltes Hindernis */
+  get gewaehltesObjekt(): RoofPlane | Obstacle | undefined {
+    return this.auswahl ? this.objekt(this.auswahl.art, this.auswahl.id) : undefined;
   }
 
   private merken() {
-    this.verlauf.merken($state.snapshot(this.projekt.roofs) as RoofPlane[]);
+    this.verlauf.merken(this.stand());
     this.kannZurueck = true;
     this.kannVor = false;
+  }
+  private stand(): Stand {
+    return { roofs: $state.snapshot(this.projekt.roofs) as RoofPlane[], obstacles: $state.snapshot(this.projekt.obstacles) as Obstacle[] };
   }
   private geaendert() {
     this.beiAenderung($state.snapshot(this.projekt) as Project);
@@ -83,15 +110,19 @@ export class EditorZustand {
   setzeWerkzeug(w: Werkzeug) {
     this.werkzeug = w;
     this.traufeWahl = false;
-    if (w === "auswahl") this.entwurf = [];
-    else this.auswahl = null;
+    this.entwurf = [];
+    this.rechteckStart = null;
+    if (w !== "auswahl") this.auswahl = null;
   }
 
   waehleDach(id: string | null) {
-    this.auswahl = id ? { roofId: id, punkt: null } : null;
+    this.auswahl = id ? { art: "dach", id, punkt: null } : null;
   }
-  waehlePunkt(roofId: string, punkt: number | null) {
-    this.auswahl = { roofId, punkt };
+  waehleHindernis(id: string | null) {
+    this.auswahl = id ? { art: "hindernis", id, punkt: null } : null;
+  }
+  waehlePunkt(art: ObjektArt, id: string, punkt: number | null) {
+    this.auswahl = { art, id, punkt };
   }
 
   // ----- Entwurf (neues Dach zeichnen) -----
@@ -103,10 +134,12 @@ export class EditorZustand {
   }
   entwurfVerwerfen() {
     this.entwurf = [];
+    this.rechteckStart = null;
   }
-  /** Schließt den Entwurf zu einer Dachfläche (mindestens 3 Ecken). */
-  entwurfAbschliessen(): RoofPlane | null {
+  /** Schließt den Entwurf zu einer Dachfläche oder (mit dem Hindernis-Werkzeug) zu einem Hindernis (mindestens 3 Ecken). */
+  entwurfAbschliessen(): RoofPlane | Obstacle | null {
     if (this.entwurf.length < 3) return null;
+    if (this.werkzeug === "hindernis") return this.hindernisAnlegen(this.entwurf);
     this.merken();
     const nr = this.projekt.roofs.reduce((m, r) => Math.max(m, Number(/^D(\d+)$/.exec(r.name)?.[1] ?? 0)), 0) + 1;
     const dach: RoofPlane = {
@@ -120,9 +153,64 @@ export class EditorZustand {
     this.projekt.roofs.push(dach);
     this.entwurf = [];
     this.werkzeug = "auswahl";
-    this.auswahl = { roofId: dach.id, punkt: null };
+    this.auswahl = { art: "dach", id: dach.id, punkt: null };
     this.geaendert();
     return dach;
+  }
+
+  // ----- Hindernisse -----
+  /** Legt ein Hindernis an, wählt es und wechselt zur Auswahl. */
+  hindernisAnlegen(outline: Point[]): Obstacle {
+    this.merken();
+    const o: Obstacle = { id: crypto.randomUUID(), art: "kamin", outline: outline.map((p) => ({ ...p })), bufferM: 0, abziehen: true };
+    this.projekt.obstacles.push(o);
+    this.entwurf = [];
+    this.rechteckStart = null;
+    this.werkzeug = "auswahl";
+    this.auswahl = { art: "hindernis", id: o.id, punkt: null };
+    this.geaendert();
+    return o;
+  }
+  /** Zweiter Antippen-Punkt des Rechtecks; zu kleine Rechtecke (unter 5 cm) werden verworfen. */
+  rechteckAbschliessen(b: Point): Obstacle | null {
+    const s = this.rechteckStart;
+    if (!s) return null;
+    const umriss = rechteckAusDiagonale(s.p, b, s.winkel);
+    if (abstand(umriss[0]!, umriss[1]!) < 0.05 || abstand(umriss[0]!, umriss[3]!) < 0.05) {
+      this.rechteckStart = null;
+      return null;
+    }
+    return this.hindernisAnlegen(umriss);
+  }
+  setzeHindernisArt(id: string, art: ObstacleArt) {
+    const o = this.hindernis(id);
+    if (!o || o.art === art) return;
+    this.merken();
+    o.art = art;
+    this.geaendert();
+  }
+  setzeHindernisPuffer(id: string, m: number) {
+    const o = this.hindernis(id);
+    if (!o || o.bufferM === m) return;
+    this.merken();
+    o.bufferM = m;
+    this.geaendert();
+  }
+  setzeHindernisAbziehen(id: string, ja: boolean) {
+    const o = this.hindernis(id);
+    if (!o || o.abziehen === ja) return;
+    this.merken();
+    o.abziehen = ja;
+    this.geaendert();
+  }
+  /** Dreht ein Hindernis um seinen Schwerpunkt. */
+  drehe(id: string, grad: number) {
+    const o = this.hindernis(id);
+    if (!o) return;
+    this.merken();
+    const u = $state.snapshot(o.outline) as Point[];
+    o.outline = drehen(u, schwerpunkt(u), grad);
+    this.geaendert();
   }
 
   // ----- Ändern -----
@@ -130,45 +218,48 @@ export class EditorZustand {
   ziehenBeginn() {
     this.merken();
   }
-  punktSetzen(roofId: string, index: number, p: Point) {
-    const d = this.dach(roofId);
+  punktSetzen(art: ObjektArt, id: string, index: number, p: Point) {
+    const d = this.objekt(art, id);
     if (d?.outline[index]) d.outline[index] = { ...p };
   }
-  dachSetzen(roofId: string, outline: Point[]) {
-    const d = this.dach(roofId);
+  umrissSetzen(art: ObjektArt, id: string, outline: Point[]) {
+    const d = this.objekt(art, id);
     if (d) d.outline = outline.map((p) => ({ ...p }));
   }
   ziehenEnde() {
     this.geaendert();
   }
   /** Fügt in der Mitte der Kante `kante` (von Punkt kante zu kante+1) einen Punkt ein und wählt ihn. */
-  kanteTeilen(roofId: string, kante: number, p: Point) {
-    const d = this.dach(roofId);
+  kanteTeilen(art: ObjektArt, id: string, kante: number, p: Point) {
+    const d = this.objekt(art, id);
     if (!d) return;
     this.merken();
     d.outline = punktEinfuegen($state.snapshot(d.outline) as Point[], kante, p);
-    this.auswahl = { roofId, punkt: kante + 1 };
+    this.auswahl = { art, id, punkt: kante + 1 };
     this.geaendert();
   }
   punktEntfernen() {
     const a = this.auswahl;
-    const d = this.gewaehltesDach;
+    const d = this.gewaehltesObjekt;
     if (!a || a.punkt === null || !d || d.outline.length <= 3) return;
     this.merken();
     d.outline = punktLoeschen($state.snapshot(d.outline) as Point[], a.punkt);
-    this.auswahl = { roofId: a.roofId, punkt: null };
+    this.auswahl = { art: a.art, id: a.id, punkt: null };
     this.geaendert();
   }
-  dachEntfernen() {
+  /** Entfernt die gewählte Dachfläche oder das gewählte Hindernis. */
+  objektEntfernen() {
     const a = this.auswahl;
     if (!a) return;
     this.merken();
-    this.projekt.roofs = this.projekt.roofs.filter((r) => r.id !== a.roofId);
+    if (a.art === "dach") this.projekt.roofs = this.projekt.roofs.filter((r) => r.id !== a.id);
+    else this.projekt.obstacles = this.projekt.obstacles.filter((o) => o.id !== a.id);
     this.auswahl = null;
     this.geaendert();
   }
-  dachVerschieben(roofId: string, dx: number, dy: number) {
-    const d = this.dach(roofId);
+  /** Verschiebt das gewählte Objekt um (dx, dy) Meter. */
+  verschiebeObjekt(art: ObjektArt, id: string, dx: number, dy: number) {
+    const d = this.objekt(art, id);
     if (!d) return;
     this.merken();
     d.outline = verschieben($state.snapshot(d.outline) as Point[], dx, dy);
@@ -205,22 +296,24 @@ export class EditorZustand {
   }
 
   // ----- Rückgängig / Wiederholen -----
-  private uebernehmen(roofs: RoofPlane[] | null) {
-    if (!roofs) return;
-    this.projekt.roofs = roofs;
-    if (this.auswahl && !this.dach(this.auswahl.roofId)) this.auswahl = null;
-    else if (this.auswahl && this.auswahl.punkt !== null) {
-      const d = this.gewaehltesDach;
-      if (!d || this.auswahl.punkt >= d.outline.length) this.auswahl = { roofId: this.auswahl.roofId, punkt: null };
+  private uebernehmen(stand: Stand | null) {
+    if (!stand) return;
+    this.projekt.roofs = stand.roofs;
+    this.projekt.obstacles = stand.obstacles;
+    const a = this.auswahl;
+    if (a) {
+      const o = this.objekt(a.art, a.id);
+      if (!o) this.auswahl = null;
+      else if (a.punkt !== null && a.punkt >= o.outline.length) this.auswahl = { art: a.art, id: a.id, punkt: null };
     }
     this.kannZurueck = this.verlauf.kannZurueck;
     this.kannVor = this.verlauf.kannVor;
     this.geaendert();
   }
   rueckgaengig() {
-    this.uebernehmen(this.verlauf.rueckgaengig($state.snapshot(this.projekt.roofs) as RoofPlane[]));
+    this.uebernehmen(this.verlauf.rueckgaengig(this.stand()));
   }
   wiederholen() {
-    this.uebernehmen(this.verlauf.wiederholen($state.snapshot(this.projekt.roofs) as RoofPlane[]));
+    this.uebernehmen(this.verlauf.wiederholen(this.stand()));
   }
 }

@@ -107,3 +107,36 @@ export function naechsteKante(ring: Point[], p: Point): { index: number; abstand
   });
   return best;
 }
+
+export function schwerpunkt(ring: Point[]): Point {
+  const n = ring.length || 1;
+  return { x: ring.reduce((a, q) => a + q.x, 0) / n, y: ring.reduce((a, q) => a + q.y, 0) / n };
+}
+
+/** Dreht ein Vieleck um `mitte` (Grad, gegen den Uhrzeigersinn bei y nach Norden). */
+export function drehen(ring: Point[], mitte: Point, grad: number): Point[] {
+  const t = (grad * Math.PI) / 180;
+  const c = Math.cos(t), s = Math.sin(t);
+  return ring.map((q) => ({ x: mitte.x + (q.x - mitte.x) * c - (q.y - mitte.y) * s, y: mitte.y + (q.x - mitte.x) * s + (q.y - mitte.y) * c }));
+}
+
+/** Rechteck aus zwei gegenüberliegenden Ecken in einem um `winkelRad` gedrehten Achsensystem. */
+export function rechteckAusDiagonale(a: Point, b: Point, winkelRad: number): Point[] {
+  const ex = Math.cos(winkelRad), ey = Math.sin(winkelRad);
+  const dx = b.x - a.x, dy = b.y - a.y;
+  const u = dx * ex + dy * ey; // Anteil entlang der Achse
+  const v = -dx * ey + dy * ex; // Anteil senkrecht dazu
+  return [
+    { x: a.x, y: a.y },
+    { x: a.x + u * ex, y: a.y + u * ey },
+    { x: b.x, y: b.y },
+    { x: a.x - v * ey, y: a.y + v * ex },
+  ];
+}
+
+/** Richtung der Kante i in Bogenmaß (von Punkt i zu Punkt i+1). */
+export function kantenWinkel(ring: Point[], i: number): number {
+  const a = ring[i]!;
+  const b = ring[(i + 1) % ring.length]!;
+  return Math.atan2(b.y - a.y, b.x - a.x);
+}

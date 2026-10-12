@@ -220,13 +220,13 @@ Jedes Paket endet mit einem **Test und einem lauffähigen Stand**. Dauer in Arbe
 | 5 Editor-Grundlage | fertig (Zeichnen, Ziehen, Kante teilen, Ecke/Fläche löschen, Rückgängig/Wiederholen) |
 | 6 Einrasten | fertig (Ecken und Kanten, Lupe beim Ziehen, Kantenlängen, ein/aus) |
 | 7 Eigenschaften und Berechnung | fertig (Neigung, Fallrichtung per Traufkante, Module auf der Karte, Ergebnisblatt, Randabstand, Ausrichtung) |
-| 8 Hindernisse | offen |
+| 8 Hindernisse | fertig (Rechteck an der nächsten Dachkante ausgerichtet, Vieleck, Art, abziehen ja/nein, Abstand 20/30 cm, Drehen, Verschieben; Griffe passen sich kleinen Objekten an) |
 | 9 Adresssuche | offen |
 | 10, 11 (LoD2) | offen |
 | 12 Politur | offen (u. a. Quellenhinweis der Karte nicht verdecken, Programmgröße) |
 | 13 Tests und Abnahme | offen |
 
-Die Tests laufen mit `npm test` (45 Unit-Tests) und `npm run e2e` (fünf Browser-Abläufe gegen die gebaute App).
+Die Tests laufen mit `npm test` (49 Unit-Tests) und `npm run e2e` (sechs Browser-Abläufe gegen die gebaute App).
 
 ## 10. Teststrategie
 

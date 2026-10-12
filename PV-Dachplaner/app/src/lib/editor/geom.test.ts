@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ausrichtungVonKante, naechsteKante, flaeche, kantenLaengen, kantenMitte, punktEinfuegen, punktInVieleck, punktLoeschen, selbstschnitt, verschieben } from "./geom";
+import { drehen, kantenWinkel, rechteckAusDiagonale, schwerpunkt, ausrichtungVonKante, naechsteKante, flaeche, kantenLaengen, kantenMitte, punktEinfuegen, punktInVieleck, punktLoeschen, selbstschnitt, verschieben } from "./geom";
 import { Verlauf } from "./verlauf";
 
 const quadrat = [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: 5 }, { x: 0, y: 5 }];
@@ -58,6 +58,38 @@ describe("Fallrichtung aus der Traufkante", () => {
   it("nächste Kante", () => {
     expect(naechsteKante(ccw, { x: 5, y: 0.3 })).toEqual({ index: 0, abstand: 0.3 });
     expect(naechsteKante(ccw, { x: 9.8, y: 2 }).index).toBe(1);
+  });
+});
+
+describe("Rechteck und Drehen", () => {
+  it("achsenparalleles Rechteck aus der Diagonale", () => {
+    const r = rechteckAusDiagonale({ x: 0, y: 0 }, { x: 4, y: 2 }, 0);
+    expect(r[1]!.x).toBeCloseTo(4); expect(r[1]!.y).toBeCloseTo(0);
+    expect(r[3]!.x).toBeCloseTo(0); expect(r[3]!.y).toBeCloseTo(2);
+    expect(flaeche(r)).toBeCloseTo(8);
+  });
+  it("gedrehtes Rechteck hat rechte Winkel und die Diagonale als Eckpunkte", () => {
+    const a = { x: 10, y: 20 }, b = { x: 13, y: 24 };
+    const r = rechteckAusDiagonale(a, b, (30 * Math.PI) / 180);
+    expect(r[0]).toEqual(a);
+    expect(r[2]).toEqual(b);
+    const e1 = { x: r[1]!.x - r[0]!.x, y: r[1]!.y - r[0]!.y }, e2 = { x: r[3]!.x - r[0]!.x, y: r[3]!.y - r[0]!.y };
+    expect(e1.x * e2.x + e1.y * e2.y).toBeCloseTo(0, 9);
+    expect(Math.atan2(e1.y, e1.x)).toBeCloseTo((30 * Math.PI) / 180, 9);
+    // Fläche = Breite × Höhe im gedrehten System
+    expect(flaeche(r)).toBeCloseTo(Math.abs(e1.x * e2.y - e1.y * e2.x), 9);
+  });
+  it("Drehen um den Schwerpunkt erhält Fläche und Schwerpunkt", () => {
+    const q = [{ x: 0, y: 0 }, { x: 4, y: 0 }, { x: 4, y: 2 }, { x: 0, y: 2 }];
+    const m = schwerpunkt(q);
+    const d = drehen(q, m, 37);
+    expect(flaeche(d)).toBeCloseTo(8, 9);
+    expect(schwerpunkt(d).x).toBeCloseTo(m.x, 9);
+    expect(schwerpunkt(d).y).toBeCloseTo(m.y, 9);
+    expect(drehen(q, m, 90)[0]!.x).toBeCloseTo(3, 9);
+  });
+  it("Kantenwinkel", () => {
+    expect(kantenWinkel([{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 0, y: 2 }], 0)).toBeCloseTo(Math.PI / 4);
   });
 });
 

@@ -26,6 +26,9 @@
           <strong>{d.name}</strong>
           {#if d.layout}
             <span>{zahl(d.layout.grossAreaM2)} m² Dachfläche, {zahl(d.layout.usableAreaM2)} m² nutzbar</span>
+            {#if d.layout.obstacleLossM2 > 0.005}
+              <span data-testid="hindernis-verlust-{d.name}">Hindernisse −{zahl(d.layout.obstacleLossM2)} m²</span>
+            {/if}
             <span>
               {d.layout.moduleCount} Module {d.layout.orientation}
               <span class="mut">(hochkant {d.hochkant}, quer {d.quer})</span>
