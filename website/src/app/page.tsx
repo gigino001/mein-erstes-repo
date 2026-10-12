@@ -19,11 +19,22 @@ export default async function HomePage() {
     take: 4,
   });
 
-  const reviews = await prisma.review.findMany({
-    where: { status: "approved" },
-    orderBy: { approvedAt: "desc" },
-    take: 3,
-  });
+  // try/catch statt direktem await: beim allerersten Deploy nach Hinzufügen
+  // der Review-Tabelle läuft die Build-time-Abfrage hier VOR der
+  // Datenbank-Migration (Netlify wendet Migrationen erst nach dem Build an)
+  // — ohne Fallback würde das den kompletten Seiten-Build zum Absturz
+  // bringen. Ab dem nächsten Deploy/Revalidieren existiert die Tabelle und
+  // die Abfrage läuft normal.
+  const reviews = await prisma.review
+    .findMany({
+      where: { status: "approved" },
+      orderBy: { approvedAt: "desc" },
+      take: 3,
+    })
+    .catch((err) => {
+      console.error("[page] Bewertungen konnten nicht geladen werden:", err);
+      return [];
+    });
 
   return (
     <>
