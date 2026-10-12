@@ -253,7 +253,7 @@ export async function sendReviewToOwner(data: {
     : "Über den allgemeinen Bewertungslink (/bewertung)";
 
   await sendMail({
-    to: business.email,
+    to: "info@coco-lashes.de",
     subject: `Neue Bewertung von ${data.customerName} (${data.rating}/5 Sternen)`,
     text: `${source} wurde eine neue Bewertung abgegeben:
 
