@@ -4,7 +4,7 @@ import { business, fullAddress } from "@/lib/business";
 import { buildAppointmentIcs } from "@/lib/ics";
 
 type MailAttachment = { filename: string; content: string; contentType?: string };
-type MailInput = { to: string; subject: string; text: string; attachments?: MailAttachment[] };
+type MailInput = { to: string; subject: string; text: string; html?: string; attachments?: MailAttachment[] };
 
 function getTransport() {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
@@ -24,7 +24,7 @@ function getTransport() {
  * nur in die Konsole geloggt statt zu scheitern — die Terminbuchung selbst
  * soll nie an einer fehlenden Mail-Konfiguration scheitern.
  */
-export async function sendMail({ to, subject, text, attachments }: MailInput) {
+export async function sendMail({ to, subject, text, html, attachments }: MailInput) {
   const transport = getTransport();
 
   if (!transport) {
@@ -41,6 +41,7 @@ export async function sendMail({ to, subject, text, attachments }: MailInput) {
       to,
       subject,
       text,
+      html,
       attachments,
     });
   } catch (err) {
@@ -242,15 +243,33 @@ ${business.owner}`,
   });
 }
 
+// Für die Freischalten-/Ablehnen-Links in der Benachrichtigungs-Mail. Die
+// Website lief früher unter dieser Domain (siehe business.url) — die Links
+// hier zeigen bewusst direkt auf die aktuell echte, live geschaltete Domain.
+const REVIEW_MODERATION_URL = "https://coco-lashes.de";
+
+function escapeHtml(s: string) {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 export async function sendReviewToOwner(data: {
   customerName: string;
   rating: number;
   text: string;
+  token: string;
   appointmentId?: string;
 }) {
   const source = data.appointmentId
     ? "Über den persönlichen Bewertungslink nach einem Termin"
     : "Über den allgemeinen Bewertungslink (/bewertung)";
+
+  const freischaltenUrl = `${REVIEW_MODERATION_URL}/api/bewertungen/freischalten?token=${data.token}`;
+  const ablehnenUrl = `${REVIEW_MODERATION_URL}/api/bewertungen/ablehnen?token=${data.token}`;
+  const stars = `${"★".repeat(data.rating)}${"☆".repeat(5 - data.rating)}`;
 
   await sendMail({
     to: "info@coco-lashes.de",
@@ -258,10 +277,39 @@ export async function sendReviewToOwner(data: {
     text: `${source} wurde eine neue Bewertung abgegeben:
 
 Von: ${data.customerName}
-Bewertung: ${"★".repeat(data.rating)}${"☆".repeat(5 - data.rating)} (${data.rating}/5)
+Bewertung: ${stars} (${data.rating}/5)
 
 „${data.text}“
 
-Wenn du magst, kannst du diese Bewertung (mit Einverständnis der Kundin) auf der Homepage veröffentlichen.`,
+Freischalten (erscheint dann auf der Website): ${freischaltenUrl}
+Ablehnen (wird endgültig gelöscht): ${ablehnenUrl}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; color: #16232b;">
+        <p>${source} wurde eine neue Bewertung abgegeben:</p>
+        <div style="background: #f3e3e0; border-radius: 16px; padding: 20px 24px; margin: 16px 0;">
+          <p style="margin: 0 0 8px; font-weight: bold;">${escapeHtml(data.customerName)}</p>
+          <p style="margin: 0 0 12px; color: #a8475a; font-size: 20px; letter-spacing: 2px;">${stars}</p>
+          <p style="margin: 0; white-space: pre-wrap;">„${escapeHtml(data.text)}“</p>
+        </div>
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 24px 0;">
+          <tr>
+            <td style="padding-right: 12px;">
+              <a href="${freischaltenUrl}" style="display: inline-block; background: #ff9398; color: #16232b; text-decoration: none; font-weight: bold; padding: 14px 24px; border-radius: 999px;">
+                ✓ Freischalten
+              </a>
+            </td>
+            <td>
+              <a href="${ablehnenUrl}" style="display: inline-block; background: #eddce2; color: #16232b; text-decoration: none; font-weight: bold; padding: 14px 24px; border-radius: 999px;">
+                ✕ Ablehnen
+              </a>
+            </td>
+          </tr>
+        </table>
+        <p style="font-size: 13px; color: #6b7e87;">
+          „Freischalten“ veröffentlicht die Bewertung direkt auf der Website.
+          „Ablehnen“ löscht sie endgültig.
+        </p>
+      </div>
+    `,
   });
 }

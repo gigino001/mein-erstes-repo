@@ -164,6 +164,28 @@ model OrderItem {
   @@index([orderId])
 }
 
+/// Über /bewertung bzw. /bewertung/[id] abgegebene Bewertungen. Landet immer
+/// erst hier als "pending" plus Mail an die Inhaberin mit Freischalten-/
+/// Ablehnen-Link (Token-geschützt, kein Login nötig). Erst "approved"
+/// Bewertungen erscheinen auf der Website; "abgelehnt" wird nicht als Status
+/// geführt, sondern löscht die Zeile direkt.
+model Review {
+  id           String    @id @default(cuid())
+  customerName String
+  rating       Int
+  text         String    @db.Text
+  /// "pending" | "approved"
+  status       String    @default("pending")
+  /// Langer Zufallswert für die Freischalten-/Ablehnen-Links in der
+  /// Benachrichtigungs-Mail — ersetzt einen Login für diese eine Aktion.
+  token        String    @unique
+  appointmentId String?
+  createdAt    DateTime  @default(now())
+  approvedAt   DateTime?
+
+  @@index([status, approvedAt])
+}
+
 /// Ein einzelner Datensatz (id = "singleton") für Shop-weite Einstellungen.
 model ShopSettings {
   id                String  @id @default("singleton")

@@ -19,3 +19,12 @@ export const CATEGORY_LABELS: Record<string, string> = {
   auffuellen: "Auffülltermine",
   sonstiges: "Sonstiges",
 };
+
+/** "Lisa Müller" -> "Lisa M." — für öffentlich angezeigte Bewertungen. */
+export function formatReviewerName(fullName: string): string {
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length <= 1) return parts[0] ?? fullName;
+  const first = parts[0];
+  const lastInitial = parts[parts.length - 1][0];
+  return `${first} ${lastInitial}.`;
+}

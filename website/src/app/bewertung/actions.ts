@@ -1,6 +1,6 @@
 "use server";
 
-import { sendReviewToOwner } from "@/lib/mail";
+import { createPendingReview } from "@/lib/reviews";
 import type { ReviewResult } from "./[id]/actions";
 
 export async function submitGeneralReview(
@@ -23,7 +23,7 @@ export async function submitGeneralReview(
     return { ok: false, error: "Bitte wähle eine Sternebewertung von 1 bis 5." };
   }
 
-  await sendReviewToOwner({
+  await createPendingReview({
     customerName: customerName.trim().slice(0, 200),
     rating,
     text: text.trim().slice(0, 4000),

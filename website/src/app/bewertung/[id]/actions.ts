@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { sendReviewToOwner } from "@/lib/mail";
+import { createPendingReview } from "@/lib/reviews";
 
 export type ReviewResult = { ok: true } | { ok: false; error: string };
 
@@ -25,7 +25,7 @@ export async function submitReview(
     return { ok: false, error: "Zu diesem Termin kann leider keine Bewertung abgegeben werden." };
   }
 
-  await sendReviewToOwner({
+  await createPendingReview({
     customerName: customerName.trim(),
     rating,
     text: text.trim(),

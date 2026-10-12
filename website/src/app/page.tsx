@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
-import { formatPrice, formatDuration } from "@/lib/format";
+import { formatPrice, formatDuration, formatReviewerName } from "@/lib/format";
 import { business } from "@/lib/business";
 import { ScrollFadeIn } from "@/components/motion/ScrollFadeIn";
 import { ScrollPanColumn } from "@/components/motion/ScrollPanColumn";
@@ -17,6 +17,12 @@ export default async function HomePage() {
     where: { active: true },
     orderBy: { sortOrder: "asc" },
     take: 4,
+  });
+
+  const reviews = await prisma.review.findMany({
+    where: { status: "approved" },
+    orderBy: { approvedAt: "desc" },
+    take: 3,
   });
 
   return (
@@ -220,12 +226,31 @@ export default async function HomePage() {
         <span className="text-[13px] font-semibold tracking-[0.14em] uppercase text-ocean">
           Was Kundinnen erleben
         </span>
-        <ScrollFadeIn className="max-w-2xl flex flex-col items-center gap-6">
-          <p className="font-display italic font-medium text-2xl md:text-3xl leading-relaxed text-ink-muted">
-            „[Platz für eine echte Kundenstimme — z. B. eine Google-Bewertung, mit
-            Einverständnis der Kundin einzufügen]“
-          </p>
-        </ScrollFadeIn>
+        {reviews.length > 0 ? (
+          <div className="max-w-5xl grid md:grid-cols-3 gap-8">
+            {reviews.map((review) => (
+              <ScrollFadeIn key={review.id} className="flex flex-col items-center gap-4 text-center">
+                <span className="text-ocean text-lg tracking-[0.1em]">
+                  {"★".repeat(review.rating)}
+                  <span className="text-ink/20">{"★".repeat(5 - review.rating)}</span>
+                </span>
+                <p className="font-display italic font-medium text-xl leading-relaxed text-ink-muted">
+                  „{review.text}“
+                </p>
+                <span className="text-sm font-semibold text-ink-soft">
+                  {formatReviewerName(review.customerName)}
+                </span>
+              </ScrollFadeIn>
+            ))}
+          </div>
+        ) : (
+          <ScrollFadeIn className="max-w-2xl flex flex-col items-center gap-6">
+            <p className="font-display italic font-medium text-2xl md:text-3xl leading-relaxed text-ink-muted">
+              „[Platz für eine echte Kundenstimme — z. B. eine Google-Bewertung, mit
+              Einverständnis der Kundin einzufügen]“
+            </p>
+          </ScrollFadeIn>
+        )}
       </section>
 
       {/* KONTAKT STRIP */}
