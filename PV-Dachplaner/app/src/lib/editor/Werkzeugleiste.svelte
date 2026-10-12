@@ -3,6 +3,8 @@
   import { flaeche, kantenLaengen, selbstschnitt } from "./geom";
   import Eigenschaften from "./Eigenschaften.svelte";
   import HindernisEigenschaften from "./HindernisEigenschaften.svelte";
+  import { stringFarbe } from "../strings";
+  import { wechselrichterPerId } from "../geraete";
   import Ergebnisblatt from "./Ergebnisblatt.svelte";
 
   let { z, gespeichert }: { z: EditorZustand; gespeichert: boolean } = $props();
@@ -16,6 +18,11 @@
     if (z.traufeWahl) return "Tippe auf die Kante, an der das Wasser abläuft (die Traufe). Die Fallrichtung wird daraus berechnet.";
     if (z.werkzeug === "hindernis" && z.hindernisModus === "rechteck") {
       return z.rechteckStart ? "Tippe die gegenüberliegende Ecke des Hindernisses." : "Tippe eine Ecke des Hindernisses (z. B. Kamin) an, danach die gegenüberliegende.";
+    }
+    if (z.werkzeug === "strings") {
+      if (!z.stringDachId) return "Tippe eine Dachfläche an, deren Strings du von Hand legen willst.";
+      if (z.aktString === null) return "Tippe „Neuer String“ und danach die Module in der Reihenfolge der Verkabelung an (1, 2, 3 …).";
+      return `S${stringNr + 1} aktiv: Module nacheinander antippen. Ein angetipptes Modul des aktiven Strings wird wieder entfernt, das eines anderen Strings wandert hierher.`;
     }
     if (z.werkzeug === "dach" || z.werkzeug === "hindernis") {
       const n = z.entwurf.length;
@@ -31,6 +38,11 @@
     }
     return "Ecken ziehen, weiße Punkte tippen fügen eine Ecke ein. Fläche ziehen verschiebt sie.";
   });
+  const stringDach = $derived(z.stringDachId ? z.projekt.roofs.find((r) => r.id === z.stringDachId) ?? null : null);
+  const dachStrings = $derived(z.verstringung?.strings.filter((s) => s.roofId === z.stringDachId) ?? []);
+  const stringNr = $derived(z.aktString ?? 0);
+  const aktuell = $derived(stringDach?.stringManuell?.strings[z.aktString ?? -1] ?? null);
+  const mpptAnzahl = $derived(wechselrichterPerId(z.projekt.settings.wechselrichterId)?.mppt.length ?? 4);
   const deutsch = (x: number) => x.toFixed(1).replace(".", ",");
   /** Eingeklappt: nur Hinweis, Werkzeuge und Summe; beim Wählen der Traufkante automatisch, damit die Karte frei ist */
   let kleinWunsch = $state(false);
@@ -55,6 +67,7 @@
     <button class:an={z.werkzeug === "auswahl"} onclick={() => z.setzeWerkzeug("auswahl")} data-testid="werkzeug-auswahl">Auswahl</button>
     <button class:an={z.werkzeug === "dach"} onclick={() => z.setzeWerkzeug("dach")} data-testid="werkzeug-dach">Dach</button>
     <button class:an={z.werkzeug === "hindernis"} onclick={() => z.setzeWerkzeug("hindernis")} data-testid="werkzeug-hindernis">Hindernis</button>
+    <button class:an={z.werkzeug === "strings"} onclick={() => z.setzeWerkzeug("strings")} data-testid="werkzeug-strings">Strings</button>
     <button class:an={z.moduleSichtbar} onclick={() => z.schalteModule()} aria-pressed={z.moduleSichtbar} data-testid="module-sichtbar">Module</button>
     <button class:an={z.einrasten} onclick={() => z.schalteEinrasten()} aria-pressed={z.einrasten} data-testid="einrasten">Einrasten</button>
     <button onclick={() => z.rueckgaengig()} disabled={!z.kannZurueck} aria-label="Rückgängig" data-testid="rueckgaengig">↶</button>
@@ -73,6 +86,29 @@
       <button onclick={() => z.entwurfLetztenEntfernen()} data-testid="letzte-ecke">Letzte Ecke zurück</button>
       <button onclick={() => z.entwurfVerwerfen()} data-testid="verwerfen">Verwerfen</button>
     </div>
+  {/if}
+  {#if z.werkzeug === "strings" && stringDach}
+    <div class="reihe" data-testid="string-werkzeug">
+      <strong>{stringDach.name}</strong>
+      {#each dachStrings as s, i (s.nr)}
+        <button class:an={z.aktString === i} onclick={() => z.waehleString(i)} data-testid="string-waehlen-{i}"><i class="punkt" style="background:{stringFarbe(s.nr)}"></i>S{s.nr} · {s.module.length}</button>
+      {/each}
+      <button onclick={() => z.stringNeu()} data-testid="string-neu">+ Neuer String</button>
+    </div>
+    {#if aktuell}
+      <div class="reihe">
+        <label class="mp">MPPT-Eingang
+          <select value={aktuell.mppt ?? ""} onchange={(e) => z.setzeStringMppt(stringNr, (e.target as HTMLSelectElement).value === "" ? null : Number((e.target as HTMLSelectElement).value))} data-testid="string-mppt">
+            <option value="">offen</option>
+            {#each Array.from({ length: mpptAnzahl }, (_, k) => k + 1) as k}<option value={k}>{k}</option>{/each}
+          </select>
+        </label>
+        <button class="gefahr" onclick={() => z.stringLoeschen(stringNr)} data-testid="string-entfernen">String löschen</button>
+      </div>
+    {/if}
+    {#if stringDach.stringManuell}
+      <div class="reihe"><button onclick={() => z.stringeAutomatisch(stringDach.id)} data-testid="strings-automatisch">Zurück zu automatisch (gleich lange Strings)</button></div>
+    {/if}
   {/if}
   {#if z.werkzeug === "auswahl" && objekt}
     <div class="reihe">
@@ -98,6 +134,9 @@
   .reihe button { flex: 1 1 auto; padding: 0 12px; }
   button.an { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--bg)); }
   button:disabled { opacity: .4; }
+  .punkt { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,.4); margin-right: 6px; }
+  .mp { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+  .mp select { font: inherit; min-height: 40px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--fg); padding: 0 8px; }
   .gefahr { color: var(--bad); }
   .speicher { font-size: 12px; color: var(--muted); text-align: right; }
 </style>

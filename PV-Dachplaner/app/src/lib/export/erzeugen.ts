@@ -1,7 +1,7 @@
 import { rechne } from "../berechnung";
 import { lngLatToUtm, meridiankonvergenz, utmToLngLat } from "../coords";
 import type { Project } from "../model";
-import { verstringen, plaeneAus } from "../strings";
+import { verstringen, plaeneAus, manuellAus } from "../strings";
 import { APP_VERSION } from "../../lib-version";
 import { aufSeitenverhaeltnis, bereichAus, ladeLuftbild, type Luftbild } from "./bild";
 import { paketZip, type ExportKontext } from "./crm";
@@ -18,7 +18,7 @@ export interface Erzeugt {
 /** Berechnet frisch aus dem Projekt (nicht aus einem möglicherweise veralteten Anzeigestand) und erzeugt Kontext für den Export. */
 export function kontextAus(p: Project, jetzt = new Date()): ExportKontext {
   const ergebnis = rechne(p);
-  const sp = verstringen(ergebnis, plaeneAus(p), p.settings.stringBereich);
+  const sp = verstringen(ergebnis, plaeneAus(p), p.settings.stringBereich, manuellAus(p));
   const strings = sp.strings.length > 0 ? sp : null;
   return { projekt: p, ergebnis, strings, erstelltAm: jetzt, version: APP_VERSION };
 }

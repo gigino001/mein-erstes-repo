@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { gruppenText, modulAlternativen, pruefePlan, reihenfolge, restText, stringFarbe, stringZusammenfassung, summe, teiler, verstringen, versuchLaenge, zweiGruppen } from "./strings";
+import { mpptGleichLang, pruefeManuell, gruppenText, modulAlternativen, pruefePlan, reihenfolge, restText, stringFarbe, stringZusammenfassung, summe, teiler, verstringen, versuchLaenge, zweiGruppen } from "./strings";
 import { rechne } from "./berechnung";
 import { neuesProjekt, type RoofPlane } from "./model";
 
@@ -150,5 +150,23 @@ describe("Verstringung im Projekt", () => {
     const plan = verstringen(g, { a: [{ laenge: 10, anzahl: 2 }, { laenge: 4, anzahl: 1 }] });
     expect(plan.strings.map((s) => [s.gruppe, s.module.length])).toEqual([[1, 10], [1, 10], [2, 4]]);
     expect(plan.ok).toBe(true);
+  });
+});
+
+describe("Strings von Hand", () => {
+  it("prüft Vollständigkeit, doppelte Module, Bereich und veraltete Belegung", () => {
+    expect(pruefeManuell(4, { n: 4, strings: [{ module: [0, 1], mppt: 1 }, { module: [2, 3], mppt: 1 }] })).toEqual([]);
+    expect(pruefeManuell(4, { n: 4, strings: [{ module: [0, 1], mppt: null }] }).join()).toContain("2 Module ohne String");
+    expect(pruefeManuell(4, { n: 4, strings: [{ module: [0, 1], mppt: null }, { module: [1, 2, 3], mppt: null }] }).join()).toContain("Modul 2 ist in mehreren Strings");
+    expect(pruefeManuell(4, { n: 3, strings: [{ module: [0, 1, 2, 3], mppt: null }] }).join()).toContain("Modulbelegung hat sich geändert");
+    expect(pruefeManuell(4, { n: 4, strings: [{ module: [0, 1, 2, 3], mppt: null }] }, { min: 6, max: 10 }).join()).toContain("außerhalb des Bereichs 6 bis 10");
+  });
+  it("blockiert verschieden lange Strings an einem MPPT", () => {
+    const mk = (nr: number, n: number, mppt: number | null) => ({ nr, roofId: "a", roofName: "D1", gruppe: 0, mppt, module: Array.from({ length: n }, (_, i) => i) });
+    expect(mpptGleichLang([mk(1, 12, 1), mk(2, 12, 1), mk(3, 10, 2)])).toEqual([]);
+    const m = mpptGleichLang([mk(1, 12, 1), mk(2, 10, 1)]);
+    expect(m[0]).toContain("MPPT 1");
+    expect(m[0]).toContain("verschieden lang");
+    expect(mpptGleichLang([mk(1, 12, null), mk(2, 10, null)])).toEqual([]);
   });
 });

@@ -1,6 +1,6 @@
 import type { Point } from "@pv-dachplaner/geometry-core";
 import type { Utm } from "./coords";
-import type { StringGruppe, Bereich } from "./strings";
+import type { StringGruppe, StringManuell, Bereich } from "./strings";
 
 /** Dachfläche (eben). Umriss in EPSG:25832, Meter, Draufsicht. */
 export interface RoofPlane {
@@ -14,6 +14,8 @@ export interface RoofPlane {
   quelle: "manuell" | "lod2";
   /** Gleich lange Strings dieser Dachfläche; null = noch nicht verstringt */
   stringGruppen?: StringGruppe[] | null;
+  /** Von Hand gelegte Strings (haben Vorrang vor `stringGruppen`) */
+  stringManuell?: StringManuell | null;
 }
 
 export type ObstacleArt = "kamin" | "dachfenster" | "gaube" | "antenne" | "luefter" | "sonstiges";
@@ -79,6 +81,21 @@ export function neuesProjekt(partial: Partial<Pick<Project, "name" | "adresse" |
 
 // ---------- Prüfung beim Import ----------
 
+function pruefeManuell(v: unknown): StringManuell | null {
+  if (typeof v !== "object" || v === null) return null;
+  const o = v as Record<string, unknown>;
+  if (typeof o.n !== "number" || !Number.isInteger(o.n) || !Array.isArray(o.strings)) return null;
+  const strings: StringManuell["strings"] = [];
+  for (const s of o.strings) {
+    if (typeof s !== "object" || s === null) continue;
+    const { module, mppt } = s as Record<string, unknown>;
+    if (!Array.isArray(module)) continue;
+    const mod = module.filter((i): i is number => typeof i === "number" && Number.isInteger(i) && i >= 0);
+    strings.push({ module: mod, mppt: typeof mppt === "number" && Number.isInteger(mppt) && mppt >= 1 && mppt <= 12 ? mppt : null });
+  }
+  return { n: o.n, strings };
+}
+
 function pruefeGruppen(v: unknown): StringGruppe[] | null {
   if (!Array.isArray(v)) return null;
   const out: StringGruppe[] = [];
@@ -127,6 +144,7 @@ export function pruefeProjekt(v: unknown): Project {
       slopeDeg: slope,
       azimuthDeg: az,
       quelle: r.quelle === "lod2" ? "lod2" : "manuell",
+      ...(pruefeManuell(r.stringManuell) ? { stringManuell: pruefeManuell(r.stringManuell) } : {}),
       ...(pruefeGruppen(r.stringGruppen) ? { stringGruppen: pruefeGruppen(r.stringGruppen) } : {}),
     };
   });

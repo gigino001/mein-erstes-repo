@@ -15,7 +15,7 @@ function lesen(): boolean {
   }
 }
 
-export type Werkzeug = "auswahl" | "dach" | "hindernis";
+export type Werkzeug = "auswahl" | "dach" | "hindernis" | "strings";
 export type HindernisModus = "rechteck" | "vieleck";
 export type ObjektArt = "dach" | "hindernis";
 export interface Auswahl {
@@ -49,6 +49,9 @@ export class EditorZustand {
   moduleSichtbar = $state(true);
   /** Aktuelle Verstringung (wird vom Editor nach Änderungen gesetzt) */
   verstringung = $state<StringPlan | null>(null);
+  /** Dachfläche und String, die mit dem Strings-Werkzeug gerade bearbeitet werden */
+  stringDachId = $state<string | null>(null);
+  aktString = $state<number | null>(null);
   kannZurueck = $state(false);
   kannVor = $state(false);
   private verlauf = new Verlauf<Stand>();
@@ -123,6 +126,7 @@ export class EditorZustand {
     this.entwurf = [];
     this.rechteckStart = null;
     if (w !== "auswahl") this.auswahl = null;
+    if (w !== "strings") this.aktString = null;
   }
 
   waehleDach(id: string | null) {
@@ -315,6 +319,85 @@ export class EditorZustand {
     const m = modulPerId(modulId);
     const w = wechselrichterPerId(wechselrichterId);
     if (m && w) this.projekt.settings.stringBereich = stringGrenzen(m, w).bereich;
+    this.geaendert();
+  }
+  // ----- Strings von Hand -----
+  /** Anzahl Module der Dachfläche laut aktuellem Ergebnis. */
+  private modulZahl(roofId: string): number {
+    return this.ergebnis?.daecher.find((d) => d.id === roofId)?.layout?.modules.length ?? 0;
+  }
+  /** Überführt die vorhandene Verstringung der Dachfläche (oder einen leeren Plan) in Strings von Hand. */
+  stringeVonHand(roofId: string) {
+    const d = this.dach(roofId);
+    if (!d || d.stringManuell) return;
+    this.merken();
+    const vorhanden = this.verstringung?.strings.filter((s) => s.roofId === roofId) ?? [];
+    d.stringManuell = { n: this.modulZahl(roofId), strings: vorhanden.map((s) => ({ module: [...s.module], mppt: null })) };
+    this.aktString = d.stringManuell.strings.length > 0 ? 0 : null;
+    this.geaendert();
+  }
+  waehleStringDach(id: string | null) {
+    this.stringDachId = id;
+    this.aktString = null;
+  }
+  waehleString(i: number | null) {
+    this.aktString = i;
+  }
+  stringNeu() {
+    const d = this.stringDachId ? this.dach(this.stringDachId) : null;
+    if (!d) return;
+    if (!d.stringManuell) {
+      this.stringeVonHand(d.id);
+    }
+    this.merken();
+    d.stringManuell!.strings.push({ module: [], mppt: null });
+    this.aktString = d.stringManuell!.strings.length - 1;
+    this.geaendert();
+  }
+  stringLoeschen(i: number) {
+    const m = this.stringDachId ? this.dach(this.stringDachId)?.stringManuell : null;
+    if (!m || !m.strings[i]) return;
+    this.merken();
+    m.strings.splice(i, 1);
+    this.aktString = m.strings.length > 0 ? Math.min(i, m.strings.length - 1) : null;
+    this.geaendert();
+  }
+  /** Zurück zur automatischen Verstringung (gleich lange Strings) für die Dachfläche. */
+  stringeAutomatisch(roofId: string) {
+    const d = this.dach(roofId);
+    if (!d?.stringManuell) return;
+    this.merken();
+    d.stringManuell = null;
+    this.aktString = null;
+    this.geaendert();
+  }
+  setzeStringMppt(i: number, mppt: number | null) {
+    const m = this.stringDachId ? this.dach(this.stringDachId)?.stringManuell : null;
+    const s = m?.strings[i];
+    if (!s) return;
+    this.merken();
+    s.mppt = mppt !== null && Number.isInteger(mppt) && mppt >= 1 && mppt <= 12 ? mppt : null;
+    this.geaendert();
+  }
+  /** Tippen auf ein Modul: frei → ans Ende des aktiven Strings; im aktiven String → entfernen; in anderem String → in den aktiven verschieben. */
+  stringModulTippen(roofId: string, modul: number) {
+    const d = this.dach(roofId);
+    if (!d) return;
+    if (this.stringDachId !== roofId) this.waehleStringDach(roofId);
+    if (!d.stringManuell) this.stringeVonHand(roofId);
+    const m = d.stringManuell!;
+    if (this.aktString === null || !m.strings[this.aktString]) {
+      this.merken();
+      m.strings.push({ module: [], mppt: null });
+      this.aktString = m.strings.length - 1;
+    } else this.merken();
+    const akt = m.strings[this.aktString]!;
+    const wo = m.strings.findIndex((s) => s.module.includes(modul));
+    if (wo === this.aktString) akt.module.splice(akt.module.indexOf(modul), 1);
+    else {
+      if (wo >= 0) m.strings[wo]!.module.splice(m.strings[wo]!.module.indexOf(modul), 1);
+      akt.module.push(modul);
+    }
     this.geaendert();
   }
   setzeStringBereich(b: Bereich | null) {

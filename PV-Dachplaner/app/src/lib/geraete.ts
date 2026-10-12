@@ -139,3 +139,32 @@ export function stringGrenzen(m: ModulTyp, w: WechselrichterTyp, t: Temperaturen
 
 export const modulPerId = (id: string | null | undefined) => MODULE.find((m) => m.id === id) ?? null;
 export const wechselrichterPerId = (id: string | null | undefined) => WECHSELRICHTER.find((w) => w.id === id) ?? null;
+
+/**
+ * Prüft die Strings gegen den Wechselrichter: MPPT-Nummern, Strings je Eingang, Kurzschlussstrom je Eingang (parallele Strings),
+ * Zahl der benötigten Eingänge bei automatischer Gruppenbildung.
+ */
+export function wechselrichterPruefung(strings: { nr: number; mppt: number | null; gruppe: number; roofId: string }[], m: ModulTyp, w: WechselrichterTyp): { fehler: string[]; hinweise: string[] } {
+  const fehler: string[] = [];
+  const hinweise: string[] = [];
+  const hand = strings.filter((s) => s.mppt !== null);
+  const auto = strings.filter((s) => s.mppt === null);
+  const je = new Map<number, number>();
+  for (const s of hand) je.set(s.mppt!, (je.get(s.mppt!) ?? 0) + 1);
+  for (const [nr, n] of je) {
+    const e = w.mppt[nr - 1];
+    if (!e) {
+      fehler.push(`MPPT ${nr} gibt es bei ${w.name} nicht (${w.mppt.length} Eingänge).`);
+      continue;
+    }
+    if (n > e.strings) fehler.push(`MPPT ${nr}: ${n} Strings angeschlossen, erlaubt sind ${e.strings}.`);
+    if (Number.isFinite(m.iscA) && n * m.iscA > e.iscMaxA) fehler.push(`MPPT ${nr}: Kurzschlussstrom ${r(n * m.iscA)} A (${n} × ${r(m.iscA)} A) übersteigt ${e.iscMaxA} A.`);
+    if (Number.isFinite(m.imppA) && n * m.imppA > e.maxA) hinweise.push(`MPPT ${nr}: MPP-Strom ${r(n * m.imppA)} A über dem Eingangsstrom ${e.maxA} A – Leistungsbegrenzung.`);
+  }
+  if (auto.length > 0) {
+    const gruppen = new Set(auto.map((s) => `${s.roofId}:${s.gruppe}`)).size;
+    const frei = w.mppt.length - je.size;
+    if (gruppen > frei) hinweise.push(`Die automatischen Gruppen brauchen ${gruppen} MPPT-Eingänge, frei sind ${Math.max(frei, 0)} von ${w.mppt.length}.`);
+  }
+  return { fehler, hinweise };
+}

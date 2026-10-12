@@ -157,3 +157,11 @@ Die offenen M1-Pakete (10, 11 Gebäudedaten; 12 Politur; 13 Abnahme) laufen weit
 5. **PDF-Inhalt:** Passt die Seitenliste aus Kap. 2.1? Fehlt etwas (z. B. Ertragsschätzung, Fotos, Preis, Unterschriftsfeld, Hinweise für den Netzbetreiber)? Soll auf dem Dachbild die **Modulnummerierung** stehen (in M1 hattest du „nein“ gesagt; bei der Verstringung wären Stringnummern sinnvoll)?
 6. **Sprache und Ton:** Das PDF geht an Kunden oder an Installateure oder beide? (Beeinflusst Detailtiefe und Hinweise.)
 7. **Reihenfolge:** Einverstanden, dass E1 (PDF) **vor** den Gebäudedaten (Pakete 10, 11) gebaut wird?
+
+## Stand Verstringung Stufe B (v0.10.0)
+
+- **Gleich lange Strings je Dachfläche**, mathematisch blockiert: Länge muss die Modulzahl teilen (34 mit 12 oder 11 wird abgelehnt, mit Begründung); Auswahl passender Längen, Zwei-Gruppen-Vorschläge (z. B. 2 × 12 + 1 × 10), nahe Modulzahlen.
+- **Geräte-Datenbank** (`app/src/lib/geraete.ts`): Modul Jolywood JW-HD96N-R2 460 W (Datenblatt), Sungrow SH5.0RT–SH25T, Sigen Hybrid TP2 / Energy Controller. Aus Modul + Wechselrichter wird die zulässige Stringlänge berechnet (−10 °C / +70 °C, Rechenweg sichtbar). Annahme: Vmpp-Temperaturgang ≈ Pmax-Koeffizient. AIKO ohne Datenblattwerte → keine Grenzen.
+- **Strings von Hand**: Werkzeug „Strings“, Module der Reihe nach antippen (1, 2, 3 …), Modul im aktiven String erneut antippen = entfernen, Modul eines anderen Strings antippen = verschieben, MPPT-Eingang je String, „zurück zu automatisch“.
+- **Prüfungen**: Modul ohne String, doppelte Module, Bereich, veraltete Belegung (Modulzahl geändert), verschieden lange Strings je MPPT (projektweit), MPPT-Nummer/Strings je Eingang/Kurzschlussstrom je Wechselrichter.
+- **Offen**: Datenblattwerte SH6.0/8.0RT (Original), Sigen-Ströme je Modell, Datenbank selbst erweitern (Eingabemaske/Import), Module einzeln sperren, PDF-Spalte MPPT.

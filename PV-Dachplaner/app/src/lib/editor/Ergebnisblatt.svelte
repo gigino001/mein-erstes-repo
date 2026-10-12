@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { EditorZustand } from "./zustand.svelte";
   import { zahl } from "../berechnung";
-  import { MODULE, WECHSELRICHTER, modulPerId, wechselrichterPerId, stringGrenzen } from "../geraete";
+  import { MODULE, WECHSELRICHTER, modulPerId, wechselrichterPerId, stringGrenzen, wechselrichterPruefung } from "../geraete";
   import { stringFarbe, stringZusammenfassung, teiler, versuchLaenge, pruefePlan, zweiGruppen, modulAlternativen, gruppenText, type StringGruppe } from "../strings";
 
   let { z, kompakt = false }: { z: EditorZustand; kompakt?: boolean } = $props();
@@ -17,6 +17,11 @@
     const m = modulPerId(modulId);
     const w = wechselrichterPerId(wrId);
     return m && w ? stringGrenzen(m, w) : null;
+  });
+  const wrCheck = $derived.by(() => {
+    const m = modulPerId(modulId);
+    const w = wechselrichterPerId(wrId);
+    return m && w && vs ? wechselrichterPruefung(vs.strings, m, w) : { fehler: [] as string[], hinweise: [] as string[] };
   });
   function geraetWahl(art: "modul" | "wr", e: Event) {
     const v = (e.target as HTMLSelectElement).value || null;
@@ -123,15 +128,25 @@
         <span class="etikett">Verstringung je Dachfläche (alle Strings einer Gruppe gleich lang)</span>
         {#each g.daecher.filter((d) => d.layout && d.layout.moduleCount > 0) as d (d.id)}
           {@const n = d.layout!.moduleCount}
-          {@const gr = dachGruppen(d.id)}
+          {@const handPlan = z.projekt.roofs.find((r) => r.id === d.id)?.stringManuell ?? null}
+          {@const handInfo = vs?.daecher.find((x) => x.roofId === d.id)}
+          {@const gr = handPlan ? null : dachGruppen(d.id)}
           {@const tl = teiler(n, bereich)}
           {@const pr = gr ? pruefePlan(n, gr, bereich) : null}
           <div class="vdach" data-testid="verstringung-{d.name}">
+            {#if handPlan}
+              <div class="zeile">
+                <strong>{d.name}</strong>
+                <span class="mut">{n} Module · Strings von Hand: {handInfo ? gruppenText(handInfo.gruppen) || "noch keine" : "noch keine"}{handInfo?.ok ? " ✓" : ""}</span>
+                <button onclick={() => z.stringeAutomatisch(d.id)} data-testid="hand-aus-{d.name}">automatisch</button>
+              </div>
+              {#each handInfo?.meldungen ?? [] as t}<p class="fehlt">{t}</p>{/each}
+            {:else}
             <div class="zeile">
               <strong>{d.name}</strong>
               <span class="mut">{n} Module</span>
               <input type="text" inputmode="numeric" placeholder="Module je String" value={gr && gr.length === 1 ? gr[0]!.laenge : ""} onchange={(e) => stringEingabe(d.id, n, e)} aria-label="Module je String für {d.name}" data-testid="string-laenge-{d.name}" />
-              {#if gr}<button onclick={() => z.setzeStringGruppen(d.id, null)} data-testid="string-aus-{d.name}">aus</button>{/if}
+              {#if gr && !handPlan}<button onclick={() => z.setzeStringGruppen(d.id, null)} data-testid="string-aus-{d.name}">aus</button>{/if}
             </div>
             {#if meldung[d.id]}<p class="fehlt" role="alert" data-testid="string-meldung-{d.name}">{meldung[d.id]}</p>{/if}
             {#if gr}
@@ -159,8 +174,12 @@
                 <p class="mut">Oder die Modulzahl ändern: {ma.map((x) => `${x.module} Module (${x.anzahl} × ${x.laenge})`).join(", ")}.</p>
               {/if}
             {/if}
+            {/if}
           </div>
         {/each}
+        {#each vs?.mpptMeldungen ?? [] as t}<p class="fehlt" data-testid="mppt-meldung">{t}</p>{/each}
+        {#each wrCheck.fehler as t}<p class="fehlt" data-testid="wr-fehler">{t}</p>{/each}
+        {#each wrCheck.hinweise as t}<p class="mut">⚠ {t}</p>{/each}
         {#if vs && vs.strings.length > 0}
           <p class="mut" data-testid="string-info">{stringZusammenfassung(vs)}</p>
           <div class="strings" data-testid="string-liste">

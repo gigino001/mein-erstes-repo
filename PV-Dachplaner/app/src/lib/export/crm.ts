@@ -70,7 +70,7 @@ export function projektJson(k: ExportKontext): string {
         daecher: daecherZeilen(k),
       },
       strings: k.strings
-        ? k.strings.strings.map((s) => ({ nr: s.nr, dachflaeche: s.roofName, module: s.module.length, leistung_kwp: r((s.module.length * 460) / 1000) }))
+        ? k.strings.strings.map((s) => ({ nr: s.nr, dachflaeche: s.roofName, mppt: s.mppt, module: s.module.length, leistung_kwp: r((s.module.length * 460) / 1000) }))
         : [],
       projekt: p,
     },

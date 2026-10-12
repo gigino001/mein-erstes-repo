@@ -31,3 +31,14 @@ describe("Stringgrenzen", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 });
+
+import { wechselrichterPruefung } from "./geraete";
+describe("Prüfung gegen den Wechselrichter", () => {
+  const s = (nr: number, mppt: number | null) => ({ nr, mppt, gruppe: 0, roofId: "a" });
+  it("MPPT-Nummer, Stringzahl und Kurzschlussstrom je Eingang", () => {
+    const w = wechselrichterPerId("sungrow-sh10rt")!;
+    expect(wechselrichterPruefung([s(1, 1), s(2, 2), s(3, 2)], jw, w).fehler).toEqual([]);
+    expect(wechselrichterPruefung([s(1, 1), s(2, 1)], jw, w).fehler.join()).toContain("MPPT 1: 2 Strings");
+    expect(wechselrichterPruefung([s(1, 3)], jw, w).fehler.join()).toContain("MPPT 3 gibt es");
+  });
+});

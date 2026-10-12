@@ -1,4 +1,4 @@
-import type maplibregl from "maplibre-gl";
+import maplibregl from "maplibre-gl";
 import type { Point } from "@pv-dachplaner/geometry-core";
 import { lngLatToUtm, utmToLngLat } from "../coords";
 import { ausrichtungVonKante, kantenMitte, kantenWinkel, naechsteKante, punktInVieleck } from "./geom";
@@ -61,7 +61,35 @@ export class Ueberlagerung {
 
   private neuZeichnen = () => this.zeichnen();
 
+  private nummern: maplibregl.Marker[] = [];
+
+  /** Positionsnummern der Strings (1, 2, 3 …) als Marken auf den Modulen, solange das Strings-Werkzeug aktiv ist. */
+  private nummernZeichnen() {
+    for (const m of this.nummern) m.remove();
+    this.nummern = [];
+    const z = this.z;
+    if (z.werkzeug !== "strings" || !z.stringDachId || !z.moduleSichtbar) return;
+    const layout = z.ergebnis?.daecher.find((d) => d.id === z.stringDachId)?.layout;
+    const plan = z.verstringung?.strings.filter((s) => s.roofId === z.stringDachId) ?? [];
+    if (!layout) return;
+    const aktiv = z.aktString === null ? null : plan[z.aktString];
+    for (const s of plan) {
+      s.module.forEach((mi, pos) => {
+        const c = layout.modules[mi]?.corners;
+        if (!c) return;
+        const el = document.createElement("div");
+        el.className = "string-nummer";
+        el.textContent = String(pos + 1);
+        el.style.cssText = `pointer-events:none;font:700 12px system-ui;color:#000;background:${stringFarbe(s.nr)};border:${s === aktiv ? "3px solid #fff" : "1px solid #000"};border-radius:50%;min-width:20px;height:20px;display:grid;place-items:center;padding:0 2px`;
+        const mitte = pt({ x: c.reduce((a, q) => a + q.x, 0) / c.length, y: c.reduce((a, q) => a + q.y, 0) / c.length });
+        this.nummern.push(new maplibregl.Marker({ element: el }).setLngLat(mitte).addTo(this.map));
+      });
+    }
+  }
+
   entfernen() {
+    for (const m of this.nummern) m.remove();
+    this.nummern = [];
     this.map.off("zoomend", this.neuZeichnen);
     for (const t of ["mousedown", "touchstart"] as const) this.map.off(t, this.runter);
     for (const t of ["mousemove", "touchmove"] as const) this.map.off(t, this.bewegen);
@@ -151,8 +179,9 @@ export class Ueberlagerung {
     set("hindernisse", hindernisse);
     set("griffe", griffe);
     set("entwurf", entwurf);
+    this.nummernZeichnen();
     set("einrasten", z.einrastZiel ? [{ type: "Feature", properties: {}, geometry: { type: "Point", coordinates: pt(z.einrastZiel.punkt) } }] : []);
-    this.map.getCanvas().style.cursor = z.werkzeug === "auswahl" ? "" : "crosshair";
+    this.map.getCanvas().style.cursor = z.werkzeug === "auswahl" || z.werkzeug === "strings" ? "" : "crosshair";
   }
 
   // ---------- Einrasten ----------
@@ -354,6 +383,15 @@ export class Ueberlagerung {
       z.einrastZiel = null;
       if (!z.rechteckStart) z.rechteckStart = { p, winkel: this.winkelAm(ort) };
       else z.rechteckAbschliessen(p);
+      return;
+    }
+    if (z.werkzeug === "strings") {
+      const dach = [...z.projekt.roofs].reverse().find((r) => punktInVieleck(ort, r.outline));
+      if (!dach) return z.waehleStringDach(null);
+      const layout = z.ergebnis?.daecher.find((d) => d.id === dach.id)?.layout;
+      const mi = layout?.modules.findIndex((m) => punktInVieleck(ort, m.corners)) ?? -1;
+      if (mi >= 0) z.stringModulTippen(dach.id, mi);
+      else z.waehleStringDach(dach.id);
       return;
     }
     if (z.traufeWahl) {

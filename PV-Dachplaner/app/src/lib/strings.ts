@@ -132,6 +132,13 @@ export function reihenfolge(module: { u: number; v: number }[]): number[] {
 // ---------- Plan aus den Gruppen je Dachfläche ----------
 
 /** Ein String: aufeinanderfolgende Module einer Dachfläche in Anschlussreihenfolge. */
+/** Von Hand gelegte Strings einer Dachfläche: Modulindizes (in Verkabelungsreihenfolge) und optional der MPPT-Eingang. */
+export interface StringManuell {
+  /** Modulzahl der Dachfläche beim Anlegen; weicht sie später ab, ist der Plan veraltet */
+  n: number;
+  strings: { module: number[]; mppt: number | null }[];
+}
+
 export interface StringInfo {
   /** laufende Nummer im Projekt (S1, S2, …) */
   nr: number;
@@ -139,6 +146,8 @@ export interface StringInfo {
   roofName: string;
   /** Gruppe innerhalb der Dachfläche (1, 2, …); Strings einer Gruppe hängen an demselben MPPT */
   gruppe: number;
+  /** MPPT-Eingang (nur bei Strings von Hand, sonst null) */
+  mppt: number | null;
   /** Indizes der Module in `layout.modules` der Dachfläche, in Reihenfolge der Verkabelung */
   module: number[];
 }
@@ -151,6 +160,7 @@ export interface DachStrings {
   zugeordnet: number;
   ok: boolean;
   meldungen: string[];
+  manuell: boolean;
 }
 
 export interface StringPlan {
@@ -160,37 +170,99 @@ export interface StringPlan {
   laengen: Record<number, number>;
   /** alle Dachflächen mit Strings sind vollständig und im Bereich */
   ok: boolean;
+  /** Verstöße gegen „gleich lang je MPPT“ */
+  mpptMeldungen: string[];
+}
+
+/** Prüft Strings von Hand gegen Modulzahl und Bereich. */
+export function pruefeManuell(n: number, m: StringManuell, b?: Bereich | null): string[] {
+  const out: string[] = [];
+  if (m.n !== n) out.push(`Die Modulbelegung hat sich geändert (beim Anlegen ${m.n} Module, jetzt ${n}). Strings prüfen oder zurücksetzen.`);
+  const belegt = new Map<number, number>();
+  m.strings.forEach((s, si) => {
+    for (const i of s.module) {
+      if (i < 0 || i >= n) out.push(`S${si + 1}: Modul ${i + 1} gibt es nicht mehr.`);
+      else if (belegt.has(i)) out.push(`Modul ${i + 1} ist in mehreren Strings.`);
+      else belegt.set(i, si);
+    }
+  });
+  const frei = n - belegt.size;
+  if (frei > 0) out.push(`${frei} Modul${frei === 1 ? "" : "e"} ohne String.`);
+  m.strings.forEach((s, si) => {
+    if (s.module.length === 0) out.push(`S${si + 1} ist leer.`);
+    else if (b && (s.module.length < b.min || s.module.length > b.max)) out.push(`S${si + 1}: ${s.module.length} Module liegen außerhalb des Bereichs ${b.min} bis ${b.max}.`);
+  });
+  return out;
+}
+
+/** Strings an demselben MPPT-Eingang müssen gleich lang sein (gilt über alle Dachflächen). */
+export function mpptGleichLang(strings: StringInfo[]): string[] {
+  const je = new Map<number, Map<number, string[]>>();
+  for (const s of strings) {
+    if (s.mppt === null) continue;
+    const m = je.get(s.mppt) ?? new Map<number, string[]>();
+    m.set(s.module.length, [...(m.get(s.module.length) ?? []), `S${s.nr}`]);
+    je.set(s.mppt, m);
+  }
+  const out: string[] = [];
+  for (const [mppt, laengen] of [...je].sort((a, b) => a[0] - b[0])) {
+    if (laengen.size > 1) out.push(`MPPT ${mppt}: Strings sind verschieden lang (${[...laengen].map(([l, n]) => `${n.join(", ")} = ${l}`).join("; ")}). An einem MPPT müssen parallele Strings gleich lang sein.`);
+  }
+  return out;
 }
 
 /** Baut die Strings aus den Gruppen je Dachfläche (`plaene`: Dach-Kennung → Gruppen oder null). Dachflächen werden nie vermischt. */
-export function verstringen(g: Gesamt, plaene: Record<string, StringGruppe[] | null | undefined>, b?: Bereich | null): StringPlan {
+export function verstringen(g: Gesamt, plaene: Record<string, StringGruppe[] | null | undefined>, b?: Bereich | null, manuell: Record<string, StringManuell | null | undefined> = {}): StringPlan {
   const strings: StringInfo[] = [];
   const daecher: DachStrings[] = [];
   const laengen: Record<number, number> = {};
   let nr = 1;
   for (const d of g.daecher) {
-    const gruppen = plaene[d.id];
+    const hand = manuell[d.id];
     const modules = d.layout?.modules;
+    if (hand && modules) {
+      const meldungen = pruefeManuell(modules.length, hand, b);
+      const gruppen: StringGruppe[] = [];
+      for (const s of hand.strings) {
+        const gu = s.module.filter((i) => i >= 0 && i < modules.length);
+        if (gu.length === 0) continue;
+        strings.push({ nr, roofId: d.id, roofName: d.name, gruppe: s.mppt ?? 0, mppt: s.mppt, module: gu });
+        nr++;
+        laengen[gu.length] = (laengen[gu.length] ?? 0) + 1;
+        const x = gruppen.find((q) => q.laenge === gu.length);
+        if (x) x.anzahl++;
+        else gruppen.push({ laenge: gu.length, anzahl: 1 });
+      }
+      const zugeordnet = new Set(hand.strings.flatMap((s) => s.module).filter((i) => i >= 0 && i < modules.length)).size;
+      daecher.push({ roofId: d.id, name: d.name, module: modules.length, gruppen, zugeordnet, ok: meldungen.length === 0, meldungen, manuell: true });
+      continue;
+    }
+    const gruppen = plaene[d.id];
     if (!gruppen || gruppen.length === 0 || !modules) continue;
     const pruef = pruefePlan(modules.length, gruppen, b);
-    daecher.push({ roofId: d.id, name: d.name, module: modules.length, gruppen, zugeordnet: pruef.zugeordnet, ok: pruef.ok, meldungen: pruef.meldungen });
+    daecher.push({ roofId: d.id, name: d.name, module: modules.length, gruppen, zugeordnet: pruef.zugeordnet, ok: pruef.ok, meldungen: pruef.meldungen, manuell: false });
     const folge = reihenfolge(modules);
     let pos = 0;
     gruppen.forEach((gr, gi) => {
       for (let i = 0; i < gr.anzahl && pos < folge.length; i++) {
         const stueck = folge.slice(pos, pos + gr.laenge);
-        strings.push({ nr: nr++, roofId: d.id, roofName: d.name, gruppe: gi + 1, module: stueck });
+        strings.push({ nr: nr++, roofId: d.id, roofName: d.name, gruppe: gi + 1, mppt: null, module: stueck });
         laengen[stueck.length] = (laengen[stueck.length] ?? 0) + 1;
         pos += stueck.length;
       }
     });
   }
-  return { strings, daecher, laengen, ok: daecher.every((x) => x.ok) };
+  const mppt = mpptGleichLang(strings);
+  return { strings, daecher, laengen, ok: daecher.every((x) => x.ok) && mppt.length === 0, mpptMeldungen: mppt };
 }
 
 /** Gruppen je Dachfläche aus dem Projekt. */
 export function plaeneAus(p: { roofs: { id: string; stringGruppen?: StringGruppe[] | null }[] }): Record<string, StringGruppe[] | null> {
   return Object.fromEntries(p.roofs.map((r) => [r.id, r.stringGruppen ?? null]));
+}
+
+export function manuellAus(p: { roofs: { id: string; stringManuell?: StringManuell | null }[] }): Record<string, StringManuell | null> {
+  return Object.fromEntries(p.roofs.map((r) => [r.id, r.stringManuell ?? null]));
 }
 
 /** Farben für Strings (Okabe-Ito-Palette plus Ergänzungen, gut unterscheidbar auch bei Farbschwäche). */
