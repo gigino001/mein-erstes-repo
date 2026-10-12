@@ -79,7 +79,7 @@ function formatEuro(cents: number) {
 
 export async function sendNewRequestToOwner(data: AppointmentMailData) {
   await sendMail({
-    to: business.email,
+    to: "buchung@coco-lashes.de",
     subject: `Neue Terminanfrage: ${data.customerName}`,
     text: `Neue Terminanfrage über die Website:
 

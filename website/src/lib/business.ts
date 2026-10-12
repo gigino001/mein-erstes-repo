@@ -10,7 +10,7 @@ export const business = {
   url: "https://cocolashes-bielefeld.de",
   phone: "+4917643456902",
   phoneDisplay: "+49 176 43456902",
-  email: "cocolashes-bielefeld@gmx.de",
+  email: "info@coco-lashes.de",
   instagram: "cocolashesbielefeld",
   instagramUrl: "https://www.instagram.com/cocolashesbielefeld",
   address: {
