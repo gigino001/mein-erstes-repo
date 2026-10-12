@@ -2,15 +2,21 @@
 
 import { useState } from "react";
 import { submitReview } from "@/app/bewertung/[id]/actions";
+import { submitGeneralReview } from "@/app/bewertung/actions";
+
+type Props =
+  | { appointmentId: string; initialName: string }
+  | { appointmentId?: undefined; initialName?: undefined };
 
 const fieldClass =
   "border-2 border-ink/20 rounded-xl px-4 py-3 bg-white focus:border-ocean focus:outline-none transition-colors";
 
-export function ReviewForm({ appointmentId, initialName }: { appointmentId: string; initialName: string }) {
-  const [name, setName] = useState(initialName);
+export function ReviewForm({ appointmentId, initialName }: Props) {
+  const [name, setName] = useState(initialName ?? "");
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [text, setText] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<
     { type: "idle" } | { type: "submitting" } | { type: "success" } | { type: "error"; message: string }
   >({ type: "idle" });
@@ -22,7 +28,9 @@ export function ReviewForm({ appointmentId, initialName }: { appointmentId: stri
       return;
     }
     setStatus({ type: "submitting" });
-    const result = await submitReview(appointmentId, name, rating, text);
+    const result = appointmentId
+      ? await submitReview(appointmentId, name, rating, text)
+      : await submitGeneralReview(name, rating, text, honeypot);
     if (!result.ok) {
       setStatus({ type: "error", message: result.error });
       return;
@@ -41,6 +49,18 @@ export function ReviewForm({ appointmentId, initialName }: { appointmentId: stri
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      {!appointmentId && (
+        <input
+          type="text"
+          name="website"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="absolute -left-[9999px] w-px h-px overflow-hidden"
+        />
+      )}
       <div className="flex flex-col gap-2">
         <span className="text-sm font-semibold">Deine Bewertung</span>
         <div className="flex gap-1" onMouseLeave={() => setHoverRating(0)}>

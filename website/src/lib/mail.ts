@@ -246,12 +246,16 @@ export async function sendReviewToOwner(data: {
   customerName: string;
   rating: number;
   text: string;
-  appointmentId: string;
+  appointmentId?: string;
 }) {
+  const source = data.appointmentId
+    ? "Über den persönlichen Bewertungslink nach einem Termin"
+    : "Über den allgemeinen Bewertungslink (/bewertung)";
+
   await sendMail({
     to: business.email,
     subject: `Neue Bewertung von ${data.customerName} (${data.rating}/5 Sternen)`,
-    text: `Über die Website wurde eine neue Bewertung abgegeben:
+    text: `${source} wurde eine neue Bewertung abgegeben:
 
 Von: ${data.customerName}
 Bewertung: ${"★".repeat(data.rating)}${"☆".repeat(5 - data.rating)} (${data.rating}/5)
