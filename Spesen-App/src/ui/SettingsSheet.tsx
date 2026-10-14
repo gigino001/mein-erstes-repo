@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { updateSettings } from '../db/db'
 import { formatDuration, parseDuration } from '../domain/time'
 import type { Settings } from '../domain/types'
+import { BackupSection } from './BackupSection'
 import { Sheet } from './Sheet'
 
 const toNumber = (text: string) => Number(text.replace(',', '.'))
@@ -67,6 +68,7 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
       <div className="note">Mail-Betreff: <span className="mono">{settings.mailSubject}</span></div>
       {error && <div className="hint" role="alert">{error}</div>}
       <button className="btn primary block" onClick={save}>Speichern</button>
+      <BackupSection settings={settings} onToast={onSaved} onClose={onClose} />
     </Sheet>
   )
 }

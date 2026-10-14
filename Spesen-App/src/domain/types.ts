@@ -38,6 +38,10 @@ export interface Settings {
   openingDate: string
   mailTo: string
   mailSubject: string
+  /** Zeitpunkt der letzten Sicherung (Epoch-ms). */
+  lastBackupAt?: number
+  /** Erinnerung an die Sicherung bis dahin ausblenden (Epoch-ms). */
+  backupSnoozeUntil?: number
 }
 
 export const DEFAULT_SETTINGS: Settings = {

@@ -5,6 +5,7 @@ import { elapsedMinutes } from '../domain/timer'
 import { formatDuration, formatTime, toDateKey } from '../domain/time'
 import type { DayType } from '../domain/types'
 import { euro0, germanDate, longDate } from './format'
+import { BackupBanner } from './BackupBanner'
 import { Header } from './Header'
 import { TYPE_LABEL } from './labels'
 
@@ -48,6 +49,7 @@ export function Heute({ onSettings, onEdit, onToast, goTab }: Props) {
   return (
     <>
       <Header title={longDate(today).split(',')[0] ?? ''} sub={germanDate(today)} onSettings={onSettings} />
+      <BackupBanner onToast={onToast} />
       {stale && timer && (
         <div className="card warn-card">
           <b>Läuft seit {germanDate(toDateKey(new Date(timer.startedAt)))}, {formatTime(new Date(timer.startedAt).getHours() * 60 + new Date(timer.startedAt).getMinutes())} Uhr</b>
