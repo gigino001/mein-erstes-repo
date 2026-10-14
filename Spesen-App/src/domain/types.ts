@@ -1,0 +1,53 @@
+export type DayType = 'arbeit' | 'urlaub' | 'krank' | 'abbau' | 'feiertag'
+
+/** Ein erfasster Tag. `date` ist 'YYYY-MM-DD'. Zeiten sind 'HH:MM'. */
+export interface DayEntry {
+  date: string
+  type: DayType
+  /** Halber Tag Abwesenheit (Urlaub, Krank, Abfeiern). Die andere Hälfte wird gearbeitet. */
+  half: boolean
+  start?: string
+  end?: string
+  /** null/undefined = automatisch, sonst fester Betrag in Euro (z. B. 0). */
+  verpOverride?: number | null
+  note?: string
+}
+
+export interface Settings {
+  /** Soll pro Arbeitstag (Mo–Fr) in Minuten. */
+  sollMinutes: number
+  /** Verpflegungspauschale in Euro. */
+  verpRate: number
+  /** Ab dieser Arbeitszeit (Minuten) gibt es die Pauschale. */
+  verpThresholdMinutes: number
+  /** Zeiten werden auf dieses Raster gerundet. */
+  roundMinutes: number
+  /** Startsaldo des Stundenkontos in Minuten. */
+  openingBalance: number
+  /** Ab diesem Datum (inkl.) zählen Tage zum Konto. */
+  openingDate: string
+  mailTo: string
+  mailSubject: string
+}
+
+export const DEFAULT_SETTINGS: Settings = {
+  sollMinutes: 480,
+  verpRate: 14,
+  verpThresholdMinutes: 480,
+  roundMinutes: 15,
+  openingBalance: 0,
+  openingDate: '2026-01-01',
+  mailTo: '',
+  mailSubject: 'Spesen Adriano Falcone',
+}
+
+export type Category = 'sprit' | 'parken' | 'hotel' | 'bewirtung' | 'material' | 'sonstiges'
+
+export const CATEGORY_LABEL: Record<Category, string> = {
+  sprit: 'Sprit / Strom',
+  parken: 'Parken',
+  hotel: 'Hotel',
+  bewirtung: 'Bewirtung',
+  material: 'Material',
+  sonstiges: 'Sonstiges',
+}
