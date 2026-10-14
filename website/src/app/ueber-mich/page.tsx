@@ -24,7 +24,7 @@ export default function UeberMichPage() {
           alt="Claudia Gajda, Inhaberin von coco lashes Bielefeld"
           fill
           sizes="768px"
-          className="object-cover object-[center_25%]"
+          className="object-cover object-[center_20%]"
         />
       </div>
 
