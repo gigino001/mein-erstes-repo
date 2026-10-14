@@ -38,9 +38,13 @@ export async function getAvailableSlots({
 
   const weekday = date.getDay();
 
-  const [windows, exception, appointments] = await Promise.all([
+  const [windows, exceptions, appointments] = await Promise.all([
     prisma.availability.findMany({ where: { staffId, weekday } }),
-    prisma.availabilityException.findFirst({
+    // findMany statt findFirst: an einem Tag können mehrere Blockierungen
+    // nebeneinander bestehen (z. B. zwei getrennte Zeitfenster) — mit
+    // findFirst wurden alle außer der ersten gefundenen Blockierung
+    // stillschweigend ignoriert und blieben buchbar.
+    prisma.availabilityException.findMany({
       where: { staffId, date: { gte: date, lt: new Date(date.getTime() + 86400000) } },
     }),
     prisma.appointment.findMany({
@@ -52,7 +56,7 @@ export async function getAvailableSlots({
     }),
   ]);
 
-  if (exception?.allDay) return [];
+  if (exceptions.some((e) => e.allDay)) return [];
   if (windows.length === 0) return [];
 
   const busyRanges = appointments.map((a) => {
@@ -61,8 +65,10 @@ export async function getAvailableSlots({
     return { start, end };
   });
 
-  if (exception && !exception.allDay && exception.startMinute != null && exception.endMinute != null) {
-    busyRanges.push({ start: exception.startMinute, end: exception.endMinute });
+  for (const exception of exceptions) {
+    if (!exception.allDay && exception.startMinute != null && exception.endMinute != null) {
+      busyRanges.push({ start: exception.startMinute, end: exception.endMinute });
+    }
   }
 
   const slots: string[] = [];
