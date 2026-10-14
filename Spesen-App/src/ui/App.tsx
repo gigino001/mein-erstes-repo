@@ -3,12 +3,12 @@ import { useCallback, useState } from 'react'
 import { db } from '../db/db'
 import { useDays, useSettings } from '../db/hooks'
 import type { DayType } from '../domain/types'
+import { Abrechnung } from './Abrechnung'
 import { AdjustmentSheet } from './AdjustmentSheet'
 import { BelegDetail } from './BelegDetail'
 import { BelegSheet } from './BelegSheet'
 import { Belege } from './Belege'
 import { DayEditor } from './DayEditor'
-import { Header } from './Header'
 import { Heute } from './Heute'
 import { Icon, type IconName } from './Icon'
 import { Konto } from './Konto'
@@ -17,12 +17,12 @@ import { RangeSheet } from './RangeSheet'
 import { SettingsSheet } from './SettingsSheet'
 import { Toast } from './Toast'
 
-const TABS: { id: IconName; label: string; plan?: string[] }[] = [
+const TABS: { id: IconName; label: string }[] = [
   { id: 'heute', label: 'Heute' },
   { id: 'monat', label: 'Monat' },
   { id: 'belege', label: 'Belege' },
   { id: 'konto', label: 'Konto' },
-  { id: 'abrechnung', label: 'Abrechnung', plan: ['PDF mit Belegen, Excel, CSV', 'Teilen und Mail'] },
+  { id: 'abrechnung', label: 'Abrechnung' },
 ]
 
 function BelegEdit({ id, onClose, onSaved }: { id: number; onClose: () => void; onSaved: (m: string) => void }) {
@@ -42,7 +42,6 @@ export function App() {
   const clearToast = useCallback(() => setToast(''), [])
   const openSettings = () => setOverlay({ kind: 'settings' })
   const edit = (date: string, preset?: DayType) => setOverlay({ kind: 'day', date, preset })
-  const current = TABS.find((t) => t.id === tab)!
 
   return (
     <div className="app">
@@ -51,15 +50,7 @@ export function App() {
         {tab === 'monat' && <Monat onSettings={openSettings} onEdit={edit} onRange={() => setOverlay({ kind: 'range' })} />}
         {tab === 'belege' && <Belege onSettings={openSettings} onNew={() => setOverlay({ kind: 'beleg-new' })} onOpen={(id) => setOverlay({ kind: 'beleg-view', id })} />}
         {tab === 'konto' && <Konto onSettings={openSettings} onAdjust={() => setOverlay({ kind: 'adjust' })} onToast={setToast} />}
-        {current.plan && (
-          <>
-            <Header title={current.label} sub="Kommt in einem der nächsten Schritte" onSettings={openSettings} />
-            <section className="card">
-              <div className="label">Geplant</div>
-              <ul className="plan">{current.plan.map((p) => <li key={p}>{p}</li>)}</ul>
-            </section>
-          </>
-        )}
+        {tab === 'abrechnung' && <Abrechnung onSettings={openSettings} onToast={setToast} />}
       </main>
       <nav className="tabbar" aria-label="Hauptmenü">
         {TABS.map((t) => (

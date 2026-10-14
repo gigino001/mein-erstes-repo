@@ -156,3 +156,23 @@ svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stro
 .progress div{height:100%;background:var(--accent);transition:width .2s}
 .field input.flag{border-color:var(--warn)}
 @media (prefers-reduced-motion:reduce){.scan .beam{animation:none;top:50%}.progress div{transition:none}}
+
+/* ---- Abrechnung ---- */
+.sheetdoc{background:var(--card);border:1px solid var(--line);border-radius:6px 6px 16px 16px;padding:20px 18px;display:flex;flex-direction:column;gap:16px}
+.doc-name{font-size:21px;font-weight:700;margin-top:8px}
+.blk{display:flex;flex-direction:column;gap:8px}
+.kv{display:flex;align-items:baseline;gap:8px;font-size:14px}
+.kv i{flex:1;border-bottom:1.5px dotted var(--line);transform:translateY(-3px)}
+.kv b{font-weight:600}
+.kv.tot{font-size:16px;font-weight:600;padding-top:8px;border-top:1px solid var(--ink)}
+details summary{cursor:pointer;font-size:13.5px;color:var(--accent);font-weight:600;min-height:32px;display:flex;align-items:center}
+.mini{width:100%;border-collapse:collapse;font:12.5px var(--f-mono)}
+.mini td{padding:5px 8px 5px 0;border-top:1px solid var(--line)}
+.mini td:last-child{text-align:right;padding-right:0}
+.mini-wrap{overflow-x:auto}
+.exports{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.exports .span2{grid-column:1 / -1}
+.mailbox{display:flex;flex-direction:column;gap:10px}
+.mail-row{display:flex;align-items:center;gap:10px;min-width:0}
+.mail-row .note{width:52px;flex:none}
+.mail-row .grow{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}

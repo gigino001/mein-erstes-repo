@@ -1,19 +1,29 @@
-/** Teilt ein Bild über das Teilen-Menü (dort „Bild sichern" für die Galerie). Ohne Teilen-Menü: Download. */
-export async function shareImage(blob: Blob, filename: string): Promise<'shared' | 'downloaded' | 'cancelled'> {
-  const file = new File([blob], filename, { type: blob.type || 'image/jpeg' })
-  if (navigator.canShare?.({ files: [file] })) {
+export type ShareResult = 'shared' | 'downloaded' | 'cancelled'
+
+function download(file: File) {
+  const url = URL.createObjectURL(file)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = file.name
+  a.click()
+  setTimeout(() => URL.revokeObjectURL(url), 10000)
+}
+
+/**
+ * Öffnet das Teilen-Menü mit den Dateien (dort Mail, „Bild sichern", Dateien …).
+ * Ohne Teilen-Menü (z. B. am Desktop) werden die Dateien heruntergeladen.
+ */
+export async function shareFiles(files: File[], opts: { title?: string; text?: string } = {}): Promise<ShareResult> {
+  if (navigator.canShare?.({ files })) {
     try {
-      await navigator.share({ files: [file], title: filename })
+      await navigator.share({ files, title: opts.title, text: opts.text })
       return 'shared'
     } catch (e) {
       if (e instanceof DOMException && e.name === 'AbortError') return 'cancelled'
     }
   }
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  a.click()
-  setTimeout(() => URL.revokeObjectURL(url), 10000)
+  files.forEach((f, i) => setTimeout(() => download(f), i * 250))
   return 'downloaded'
 }
+
+export const shareImage = (blob: Blob, filename: string) => shareFiles([new File([blob], filename, { type: blob.type || 'image/jpeg' })], { title: filename })

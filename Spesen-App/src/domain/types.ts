@@ -13,7 +13,17 @@ export interface DayEntry {
   note?: string
 }
 
+export const TYPE_LABEL: Record<DayType, string> = {
+  arbeit: 'Arbeit',
+  urlaub: 'Urlaub',
+  krank: 'Krank',
+  abbau: 'Abfeiern',
+  feiertag: 'Feiertag',
+}
+
 export interface Settings {
+  /** Name auf der Abrechnung. */
+  name: string
   /** Soll pro Arbeitstag (Mo–Fr) in Minuten. */
   sollMinutes: number
   /** Verpflegungspauschale in Euro. */
@@ -31,6 +41,7 @@ export interface Settings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
+  name: 'Adriano Falcone',
   sollMinutes: 480,
   verpRate: 14,
   verpThresholdMinutes: 480,

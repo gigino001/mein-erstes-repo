@@ -9,6 +9,7 @@ const toNumber = (text: string) => Number(text.replace(',', '.'))
 export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settings; onClose: () => void; onSaved: (msg: string) => void }) {
   const [rate, setRate] = useState(String(settings.verpRate).replace('.', ','))
   const [hours, setHours] = useState(String(settings.verpThresholdMinutes / 60).replace('.', ','))
+  const [name, setName] = useState(settings.name)
   const [mailTo, setMailTo] = useState(settings.mailTo)
   const [opening, setOpening] = useState(formatDuration(settings.openingBalance, true))
   const [openingDate, setOpeningDate] = useState(settings.openingDate)
@@ -22,7 +23,7 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
     if (!(h > 0)) return setError('Schwelle: bitte Stunden eintragen, z. B. 8.')
     if (o === null) return setError('Startsaldo: bitte als H:MM eintragen, z. B. 12:30 oder -2:00.')
     if (!openingDate) return setError('Bitte einen Stichtag wählen.')
-    await updateSettings({ verpRate: r, verpThresholdMinutes: Math.round(h * 60), mailTo: mailTo.trim(), openingBalance: o, openingDate })
+    await updateSettings({ name: name.trim() || settings.name, verpRate: r, verpThresholdMinutes: Math.round(h * 60), mailTo: mailTo.trim(), openingBalance: o, openingDate })
     onSaved('Einstellungen gespeichert')
     onClose()
   }
@@ -54,6 +55,10 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
           <label className="label" htmlFor="st-date">gilt ab</label>
           <input id="st-date" type="date" value={openingDate} onChange={(e) => setOpeningDate(e.target.value)} />
         </div>
+      </div>
+      <div className="field">
+        <label className="label" htmlFor="st-name">Name auf der Abrechnung</label>
+        <input id="st-name" value={name} onChange={(e) => setName(e.target.value)} />
       </div>
       <div className="field">
         <label className="label" htmlFor="st-mail">Mail-Empfänger</label>

@@ -13,6 +13,8 @@ npm run build      # Typprüfung + Produktions-Build inkl. Service Worker
 ## Aufbau
 - `src/domain/` Rechenlogik ohne UI (Soll/Ist, Verpflegung, Feiertage NRW, Stundenkonto) mit Tests
 - `src/db/` Dexie-Schema (Einstellungen, Tage, Belege, Timer, Buchungen, Händlerregeln)
+- `src/export/` PDF (pdf-lib), Excel (write-excel-file) und CSV
+- `src/ocr/` Bildaufbereitung und Offline-Texterkennung (Tesseract)
 - `src/ui/` React-Oberfläche
 - `src/styles/` Design-Tokens (hell/dunkel)
 
@@ -21,6 +23,10 @@ npm run build      # Typprüfung + Produktions-Build inkl. Service Worker
 - Verpflegung 14 € ab 8 h Arbeitszeit (einstellbar)
 - Zeiten auf 15 Minuten gerundet
 - Mail-Betreff: „Spesen Adriano Falcone"
+
+## Export
+Die Abrechnung entsteht pro Monat als PDF (Zusammenfassung, Tagesübersicht, Belegübersicht, Belegfotos), Excel oder CSV.
+Teilen und Mail laufen über das Teilen-Menü des Geräts (Web Share API); am Desktop werden die Dateien heruntergeladen.
 
 ## Deploy
 Netlify: Base directory `Spesen-App`, Build `npm run build`, Publish `dist` (steht in `netlify.toml`).

@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import type { DayEntry, Settings } from '../domain/types'
+import { DEFAULT_SETTINGS, type DayEntry, type Settings } from '../domain/types'
 import { db, type AdjustmentRow } from './db'
 
 interface Data {
@@ -24,7 +24,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const days = useMemo(() => new Map((dayRows ?? []).map((d) => [d.date, d])), [dayRows])
 
   if (!settingsRow || !dayRows || timer === undefined || !adjustments) return <div className="app" aria-busy="true" />
-  const { id: _id, ...settings } = settingsRow
+  const { id: _id, ...stored } = settingsRow
+  const settings: Settings = { ...DEFAULT_SETTINGS, ...stored }
   return <DataContext.Provider value={{ settings, days, timer, adjustments }}>{children}</DataContext.Provider>
 }
 
