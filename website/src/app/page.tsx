@@ -69,7 +69,7 @@ export default async function HomePage() {
         </ScrollFadeIn>
         <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-sky-mist">
           <Image
-            src="/images/hero/hero-studio-original.jpg"
+            src="/images/hero/hero-studio.jpg"
             alt="Claudia bei der Arbeit: Wimpernverlängerung im Studio von coco lashes"
             fill
             sizes="(min-width: 768px) 45vw, 100vw"
