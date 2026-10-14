@@ -127,3 +127,52 @@ export function workdaysBetween(from: string, to: string): string[] {
   }
   return out
 }
+
+export interface MonthChange {
+  /** 'YYYY-MM' */
+  key: string
+  /** Summe der Tagesdifferenzen (Überstunden minus abgefeierte und fehlende Zeit). */
+  days: number
+  /** Summe der manuellen Buchungen. */
+  adjust: number
+  /** Änderung gesamt. */
+  total: number
+  /** Saldo am Monatsende (bzw. bis `upTo`). */
+  end: number
+}
+
+/** Änderung des Stundenkontos pro Monat, vom Stichtag-Monat bis zum Monat von `upTo`. */
+export function monthlyChanges(
+  upTo: string,
+  entries: ReadonlyMap<string, DayEntry>,
+  adjustments: readonly Adjustment[],
+  s: Settings,
+): MonthChange[] {
+  const days = new Map<string, number>()
+  const adjust = new Map<string, number>()
+  for (const [date, entry] of entries) {
+    if (date < s.openingDate || date > upTo || !isWeekday(date)) continue
+    const r = calcDay(entry, s)
+    if (r.booked) days.set(date.slice(0, 7), (days.get(date.slice(0, 7)) ?? 0) + r.diff)
+  }
+  for (const a of adjustments) {
+    if (a.date < s.openingDate || a.date > upTo) continue
+    adjust.set(a.date.slice(0, 7), (adjust.get(a.date.slice(0, 7)) ?? 0) + a.minutes)
+  }
+  const out: MonthChange[] = []
+  let [y, m] = [Number(s.openingDate.slice(0, 4)), Number(s.openingDate.slice(5, 7))]
+  const [ey, em] = [Number(upTo.slice(0, 4)), Number(upTo.slice(5, 7))]
+  let running = s.openingBalance
+  while ((y < ey || (y === ey && m <= em)) && out.length < 600) {
+    const key = `${y}-${String(m).padStart(2, '0')}`
+    const d = days.get(key) ?? 0
+    const a = adjust.get(key) ?? 0
+    running += d + a
+    out.push({ key, days: d, adjust: a, total: d + a, end: running })
+    if (++m > 12) {
+      m = 1
+      y++
+    }
+  }
+  return out
+}

@@ -112,3 +112,14 @@ svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stro
 .seg button{border:0;background:none;min-height:42px;padding:0 16px;font-weight:500}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
 .toast{position:absolute;left:16px;right:16px;bottom:78px;z-index:30;background:var(--ink);color:var(--surface);border-radius:14px;padding:12px 14px;font-size:13.5px;box-shadow:0 12px 30px -12px rgba(0,0,0,.6)}
+
+/* ---- Konto ---- */
+.stand{display:flex;flex-direction:column;gap:6px}
+.stand .big{font-size:52px;font-weight:500;line-height:1;letter-spacing:-.03em}
+.bars{width:100%;height:auto;display:block}
+.bars text{font:500 10.5px var(--f-mono);fill:var(--muted)}
+.bars text.val{fill:var(--ink)}
+.led.col{flex-direction:column;gap:4px}
+.led .between-line{display:flex;justify-content:space-between;gap:10px}
+.led.sum{background:var(--surface)}
+.icon-btn.small{width:32px;height:32px;border-radius:10px;font-size:18px}

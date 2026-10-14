@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { balanceAt, calcDay, summarizeMonth, workdaysBetween } from './calc'
+import { balanceAt, calcDay, monthlyChanges, summarizeMonth, workdaysBetween } from './calc'
 import { DEFAULT_SETTINGS, type DayEntry } from './types'
 
 const s = { ...DEFAULT_SETTINGS, openingBalance: 750, openingDate: '2026-07-01' }
@@ -96,5 +96,29 @@ describe('workdaysBetween', () => {
   it('leer bei ungültigem Zeitraum und über Jahreswechsel', () => {
     expect(workdaysBetween('2026-10-05', '2026-10-01')).toEqual([])
     expect(workdaysBetween('2026-12-31', '2027-01-04')).toEqual(['2026-12-31', '2027-01-04'])
+  })
+})
+
+describe('monthlyChanges', () => {
+  const st = { ...DEFAULT_SETTINGS, openingBalance: 120, openingDate: '2026-08-15' }
+  const entries = new Map<string, DayEntry>([
+    ['2026-08-17', day('2026-08-17', 'arbeit', false, '08:00', '17:00')], // +60
+    ['2026-09-01', day('2026-09-01', 'abbau')], // -480
+    ['2026-10-05', day('2026-10-05', 'arbeit', false, '08:00', '17:30')], // +90
+    ['2026-08-10', day('2026-08-10', 'arbeit', false, '08:00', '18:00')], // vor Stichtag
+    ['2026-10-10', day('2026-10-10', 'arbeit', false, '08:00', '18:00')], // Samstag
+  ])
+  const adj = [{ date: '2026-09-15', minutes: -60 }, { date: '2026-07-01', minutes: 999 }]
+  it('liefert lückenlos alle Monate ab Stichtag und summiert zum Saldo', () => {
+    const m = monthlyChanges('2026-10-14', entries, adj, st)
+    expect(m.map((x) => x.key)).toEqual(['2026-08', '2026-09', '2026-10'])
+    expect(m.map((x) => x.total)).toEqual([60, -540, 90])
+    expect(m[1]).toMatchObject({ days: -480, adjust: -60 })
+    expect(m.at(-1)?.end).toBe(balanceAt('2026-10-14', entries, adj, st))
+    expect(m.at(-1)?.end).toBe(120 + 60 - 540 + 90)
+  })
+  it('Monate ohne Einträge zählen als 0', () => {
+    const m = monthlyChanges('2026-11-30', entries, [], st)
+    expect(m.at(-1)).toMatchObject({ key: '2026-11', total: 0 })
   })
 })

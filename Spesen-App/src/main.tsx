@@ -7,6 +7,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
 import { ensureSettings, requestPersistentStorage } from './db/db'
+import { DataProvider } from './db/hooks'
 import './styles/app.css'
 import './styles/tokens.css'
 import { App } from './ui/App'
@@ -16,6 +17,8 @@ void ensureSettings().then(requestPersistentStorage)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <DataProvider>
+      <App />
+    </DataProvider>
   </StrictMode>,
 )

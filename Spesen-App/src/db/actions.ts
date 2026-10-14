@@ -39,3 +39,11 @@ export async function deleteDay(date: string): Promise<void> {
 export async function saveRange(dates: string[], type: Exclude<DayType, 'arbeit' | 'feiertag'>): Promise<void> {
   await db.days.bulkPut(dates.map((date) => ({ date, type, half: false })))
 }
+
+export async function addAdjustment(date: string, minutes: number, note: string): Promise<void> {
+  await db.adjustments.add({ date, minutes, note: note.trim() || undefined })
+}
+
+export async function deleteAdjustment(id: number): Promise<void> {
+  await db.adjustments.delete(id)
+}
