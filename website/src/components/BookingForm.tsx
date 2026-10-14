@@ -24,8 +24,14 @@ const DEPOSIT_SHARE_BY_CATEGORY: Record<string, number> = {
   neumodellage: 0.5,
 };
 
-function todayStr() {
-  return new Date().toISOString().slice(0, 10);
+// Mindestvorlauf: zwischen Buchung und Termin müssen mindestens 2
+// Kalendertage liegen (der direkt folgende Tag ist nie buchbar) — schützt
+// vor sehr kurzfristigen Buchungen, die sich organisatorisch kaum noch
+// umsetzen lassen.
+function minBookableDateStr() {
+  const d = new Date();
+  d.setDate(d.getDate() + 2);
+  return d.toISOString().slice(0, 10);
 }
 
 function maxDateStr() {
@@ -48,7 +54,7 @@ export function BookingForm({
       ? initialServiceId
       : services[0]?.id) ?? "",
   );
-  const [date, setDate] = useState(todayStr());
+  const [date, setDate] = useState(minBookableDateStr());
   const [slots, setSlots] = useState<string[]>([]);
   const [slot, setSlot] = useState<string | null>(null);
   const [loadingSlots, setLoadingSlots] = useState(false);
@@ -150,7 +156,7 @@ export function BookingForm({
         <label className="text-sm font-semibold" htmlFor="date">
           Datum
         </label>
-        <DatePicker id="date" value={date} min={todayStr()} max={maxDateStr()} onChange={setDate} />
+        <DatePicker id="date" value={date} min={minBookableDateStr()} max={maxDateStr()} onChange={setDate} />
       </div>
 
       <div className="flex flex-col gap-2">

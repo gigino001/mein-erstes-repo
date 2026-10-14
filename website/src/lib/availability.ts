@@ -28,6 +28,14 @@ export async function getAvailableSlots({
   const date = new Date(`${dateStr}T00:00:00`);
   if (Number.isNaN(date.getTime())) return [];
 
+  // Mindestvorlauf: zwischen Buchung und Termin müssen mindestens 2
+  // Kalendertage liegen (heute und der direkt folgende Tag sind nie
+  // buchbar) — unabhängig von der Uhrzeit der Anfrage.
+  const earliestBookable = new Date();
+  earliestBookable.setHours(0, 0, 0, 0);
+  earliestBookable.setDate(earliestBookable.getDate() + 2);
+  if (date < earliestBookable) return [];
+
   const weekday = date.getDay();
 
   const [windows, exception, appointments] = await Promise.all([
@@ -47,10 +55,6 @@ export async function getAvailableSlots({
   if (exception?.allDay) return [];
   if (windows.length === 0) return [];
 
-  const now = new Date();
-  const isToday = date.toDateString() === now.toDateString();
-  const nowMinutes = now.getHours() * 60 + now.getMinutes();
-
   const busyRanges = appointments.map((a) => {
     const start = (a.startAt.getHours() * 60) + a.startAt.getMinutes();
     const end = (a.endAt.getHours() * 60) + a.endAt.getMinutes();
@@ -69,7 +73,6 @@ export async function getAvailableSlots({
       start += SLOT_STEP_MINUTES
     ) {
       const end = start + durationMinutes;
-      if (isToday && start <= nowMinutes) continue;
       if (busyRanges.some((b) => overlaps(start, end, b.start, b.end))) continue;
       const hh = String(Math.floor(start / 60)).padStart(2, "0");
       const mm = String(start % 60).padStart(2, "0");
