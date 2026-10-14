@@ -1,5 +1,5 @@
 import { holidaysNRW } from './holidays'
-import { isWeekday, parseTime, weekdaysOfMonth } from './time'
+import { fromDateKey, isWeekday, parseTime, toDateKey, weekdaysOfMonth } from './time'
 import type { DayEntry, Settings } from './types'
 
 export interface DayResult {
@@ -112,4 +112,18 @@ export function balanceAt(
   }
   for (const a of adjustments) if (a.date >= s.openingDate && a.date <= upTo) total += a.minutes
   return total
+}
+
+/** Werktage von..bis (inklusive), ohne Feiertage. */
+export function workdaysBetween(from: string, to: string): string[] {
+  const out: string[] = []
+  if (!from || !to || from > to) return out
+  const cache = new Map<number, Map<string, string>>()
+  for (let d = fromDateKey(from); toDateKey(d) <= to; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1, 12)) {
+    const key = toDateKey(d)
+    const year = d.getFullYear()
+    if (!cache.has(year)) cache.set(year, holidaysNRW(year))
+    if (isWeekday(key) && !cache.get(year)!.has(key)) out.push(key)
+  }
+  return out
 }

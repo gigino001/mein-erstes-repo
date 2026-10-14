@@ -1,47 +1,51 @@
-import { useState } from 'react'
-import { useSettings } from '../db/hooks'
-import { formatDuration, formatEuro } from '../domain/time'
+import { useCallback, useState } from 'react'
+import { useDays, useSettings } from '../db/hooks'
+import type { DayType } from '../domain/types'
+import { DayEditor } from './DayEditor'
+import { Header } from './Header'
+import { Heute } from './Heute'
 import { Icon, type IconName } from './Icon'
+import { Monat } from './Monat'
+import { RangeSheet } from './RangeSheet'
+import { SettingsSheet } from './SettingsSheet'
+import { Toast } from './Toast'
 
-const TABS: { id: IconName; label: string; plan: string[] }[] = [
-  { id: 'heute', label: 'Heute', plan: ['Stempel-Ring und Start/Stopp', 'Schnellwahl Urlaub, Krank, Abfeiern'] },
-  { id: 'monat', label: 'Monat', plan: ['Stempelkarte Mo–Fr', 'Tag bearbeiten, halbe Tage, Zeitraum'] },
+const TABS: { id: IconName; label: string; plan?: string[] }[] = [
+  { id: 'heute', label: 'Heute' },
+  { id: 'monat', label: 'Monat' },
   { id: 'belege', label: 'Belege', plan: ['Foto, Texterkennung, Kategorien', 'Bewirtung mit Anlass und Personen'] },
   { id: 'konto', label: 'Konto', plan: ['Saldo, Monatsverlauf, Buchungen'] },
   { id: 'abrechnung', label: 'Abrechnung', plan: ['PDF mit Belegen, Excel, CSV', 'Teilen und Mail'] },
 ]
 
+type Overlay = { kind: 'day'; date: string; preset?: DayType } | { kind: 'range' } | { kind: 'settings' } | null
+
 export function App() {
   const [tab, setTab] = useState<IconName>('heute')
-  const s = useSettings()
+  const [overlay, setOverlay] = useState<Overlay>(null)
+  const [toast, setToast] = useState('')
+  const settings = useSettings()
+  const days = useDays()
+  const close = useCallback(() => setOverlay(null), [])
+  const clearToast = useCallback(() => setToast(''), [])
+  const openSettings = () => setOverlay({ kind: 'settings' })
+  const edit = (date: string, preset?: DayType) => setOverlay({ kind: 'day', date, preset })
   const current = TABS.find((t) => t.id === tab)!
 
   return (
     <div className="app">
       <main className="screens">
-        <div className="top">
-          <h1>{current.label}</h1>
-          <div className="sub">Aufbau läuft · Meilenstein M0 und M1 stehen</div>
-        </div>
-        <section className="card">
-          <div className="label">Kommt als Nächstes</div>
-          <ul style={{ margin: '10px 0 0', paddingLeft: 18 }}>
-            {current.plan.map((p) => (
-              <li key={p}>{p}</li>
-            ))}
-          </ul>
-        </section>
-        <section className="card">
-          <div className="label">Einstellungen aus der Datenbank</div>
-          <div className="mono" style={{ marginTop: 10, display: 'grid', gap: 4, fontSize: 13.5 }}>
-            <span>Soll pro Tag: {formatDuration(s.sollMinutes)}</span>
-            <span>
-              Verpflegung: {formatEuro(s.verpRate)} ab {formatDuration(s.verpThresholdMinutes)}
-            </span>
-            <span>Rundung: {s.roundMinutes} Min.</span>
-            <span>Mail-Betreff: {s.mailSubject}</span>
-          </div>
-        </section>
+        {tab === 'heute' && <Heute onSettings={openSettings} onEdit={edit} onToast={setToast} goTab={setTab} />}
+        {tab === 'monat' && <Monat onSettings={openSettings} onEdit={edit} onRange={() => setOverlay({ kind: 'range' })} />}
+        {current.plan && (
+          <>
+            <Header title={current.label} sub="Kommt in einem der nächsten Schritte" onSettings={openSettings} />
+            <section className="card">
+              <div className="label">Geplant</div>
+              <ul className="plan">{current.plan.map((p) => <li key={p}>{p}</li>)}</ul>
+            </section>
+          </>
+        )}
       </main>
       <nav className="tabbar" aria-label="Hauptmenü">
         {TABS.map((t) => (
@@ -51,6 +55,12 @@ export function App() {
           </button>
         ))}
       </nav>
+      {overlay?.kind === 'day' && (
+        <DayEditor key={overlay.date} date={overlay.date} preset={overlay.preset} existing={days.get(overlay.date)} settings={settings} onClose={close} onSaved={setToast} />
+      )}
+      {overlay?.kind === 'range' && <RangeSheet onClose={close} onSaved={setToast} />}
+      {overlay?.kind === 'settings' && <SettingsSheet settings={settings} onClose={close} onSaved={setToast} />}
+      {toast && <Toast message={toast} onDone={clearToast} />}
     </div>
   )
 }

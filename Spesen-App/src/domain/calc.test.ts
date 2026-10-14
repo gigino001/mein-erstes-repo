@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { balanceAt, calcDay, summarizeMonth } from './calc'
+import { balanceAt, calcDay, summarizeMonth, workdaysBetween } from './calc'
 import { DEFAULT_SETTINGS, type DayEntry } from './types'
 
 const s = { ...DEFAULT_SETTINGS, openingBalance: 750, openingDate: '2026-07-01' }
@@ -83,5 +83,18 @@ describe('Monat Oktober 2026 (Prototyp-Beispiel)', () => {
   it('Korrekturbuchungen und Datum-Grenze beim Saldo', () => {
     expect(balanceAt('2026-10-31', entries, [{ date: '2026-10-10', minutes: 60 }], s)).toBe(660)
     expect(balanceAt('2026-10-05', entries, [], s)).toBe(750 + 75 + 90)
+  })
+})
+
+describe('workdaysBetween', () => {
+  it('überspringt Wochenende und Feiertage', () => {
+    // Do 1.10. bis Mo 5.10.: Do, Fr, Mo (3.10. ist Samstag und Feiertag)
+    expect(workdaysBetween('2026-10-01', '2026-10-05')).toEqual(['2026-10-01', '2026-10-02', '2026-10-05'])
+    // Karfreitag und Ostermontag 2026
+    expect(workdaysBetween('2026-04-02', '2026-04-07')).toEqual(['2026-04-02', '2026-04-07'])
+  })
+  it('leer bei ungültigem Zeitraum und über Jahreswechsel', () => {
+    expect(workdaysBetween('2026-10-05', '2026-10-01')).toEqual([])
+    expect(workdaysBetween('2026-12-31', '2027-01-04')).toEqual(['2026-12-31', '2027-01-04'])
   })
 })

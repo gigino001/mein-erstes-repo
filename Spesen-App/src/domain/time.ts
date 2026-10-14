@@ -60,3 +60,12 @@ export function weekdaysOfMonth(year: number, month: number): string[] {
 export function formatEuro(n: number): string {
   return n.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })
 }
+
+/** 'H:MM' mit optionalem Vorzeichen (+/-/−) → Minuten. Ungültig → null. */
+export function parseDuration(text: string): number | null {
+  const m = /^\s*([+\-−]?)\s*(\d{1,3}):(\d{2})\s*$/.exec(text)
+  if (!m) return null
+  const minutes = Number(m[2]) * 60 + Number(m[3])
+  if (Number(m[3]) > 59) return null
+  return m[1] === '-' || m[1] === '−' ? -minutes : minutes
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatDuration, formatTime, parseTime, roundToStep, weekdaysOfMonth } from './time'
+import { formatDuration, formatTime, parseDuration, parseTime, roundToStep, weekdaysOfMonth } from './time'
 
 describe('time', () => {
   it('parst und formatiert Zeiten', () => {
@@ -20,5 +20,13 @@ describe('time', () => {
   })
   it('Oktober 2026 hat 22 Werktage', () => {
     expect(weekdaysOfMonth(2026, 10)).toHaveLength(22)
+  })
+  it('parst Dauern mit Vorzeichen', () => {
+    expect(parseDuration('12:30')).toBe(750)
+    expect(parseDuration('-2:30')).toBe(-150)
+    expect(parseDuration('\u22120:45')).toBe(-45)
+    expect(parseDuration('+1:05')).toBe(65)
+    expect(parseDuration('1:75')).toBeNull()
+    expect(parseDuration('abc')).toBeNull()
   })
 })
