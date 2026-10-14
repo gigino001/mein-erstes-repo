@@ -1,7 +1,12 @@
+import { useLiveQuery } from 'dexie-react-hooks'
 import { useCallback, useState } from 'react'
+import { db } from '../db/db'
 import { useDays, useSettings } from '../db/hooks'
 import type { DayType } from '../domain/types'
 import { AdjustmentSheet } from './AdjustmentSheet'
+import { BelegDetail } from './BelegDetail'
+import { BelegSheet } from './BelegSheet'
+import { Belege } from './Belege'
 import { DayEditor } from './DayEditor'
 import { Header } from './Header'
 import { Heute } from './Heute'
@@ -15,12 +20,17 @@ import { Toast } from './Toast'
 const TABS: { id: IconName; label: string; plan?: string[] }[] = [
   { id: 'heute', label: 'Heute' },
   { id: 'monat', label: 'Monat' },
-  { id: 'belege', label: 'Belege', plan: ['Foto, Texterkennung, Kategorien', 'Bewirtung mit Anlass und Personen'] },
+  { id: 'belege', label: 'Belege' },
   { id: 'konto', label: 'Konto' },
   { id: 'abrechnung', label: 'Abrechnung', plan: ['PDF mit Belegen, Excel, CSV', 'Teilen und Mail'] },
 ]
 
-type Overlay = { kind: 'day'; date: string; preset?: DayType } | { kind: 'range' } | { kind: 'adjust' } | { kind: 'settings' } | null
+function BelegEdit({ id, onClose, onSaved }: { id: number; onClose: () => void; onSaved: (m: string) => void }) {
+  const receipt = useLiveQuery(() => db.receipts.get(id), [id])
+  return receipt ? <BelegSheet receipt={receipt} onClose={onClose} onSaved={onSaved} /> : null
+}
+
+type Overlay = { kind: 'day'; date: string; preset?: DayType } | { kind: 'range' } | { kind: 'adjust' } | { kind: 'beleg-new' } | { kind: 'beleg-view'; id: number } | { kind: 'beleg-edit'; id: number } | { kind: 'settings' } | null
 
 export function App() {
   const [tab, setTab] = useState<IconName>('heute')
@@ -39,6 +49,7 @@ export function App() {
       <main className="screens">
         {tab === 'heute' && <Heute onSettings={openSettings} onEdit={edit} onToast={setToast} goTab={setTab} />}
         {tab === 'monat' && <Monat onSettings={openSettings} onEdit={edit} onRange={() => setOverlay({ kind: 'range' })} />}
+        {tab === 'belege' && <Belege onSettings={openSettings} onNew={() => setOverlay({ kind: 'beleg-new' })} onOpen={(id) => setOverlay({ kind: 'beleg-view', id })} />}
         {tab === 'konto' && <Konto onSettings={openSettings} onAdjust={() => setOverlay({ kind: 'adjust' })} onToast={setToast} />}
         {current.plan && (
           <>
@@ -61,6 +72,9 @@ export function App() {
       {overlay?.kind === 'day' && (
         <DayEditor key={overlay.date} date={overlay.date} preset={overlay.preset} existing={days.get(overlay.date)} settings={settings} onClose={close} onSaved={setToast} />
       )}
+      {overlay?.kind === 'beleg-new' && <BelegSheet onClose={close} onSaved={setToast} />}
+      {overlay?.kind === 'beleg-view' && <BelegDetail id={overlay.id} onClose={close} onEdit={() => setOverlay({ kind: 'beleg-edit', id: overlay.id })} onToast={setToast} />}
+      {overlay?.kind === 'beleg-edit' && <BelegEdit id={overlay.id} onClose={() => setOverlay({ kind: 'beleg-view', id: overlay.id })} onSaved={setToast} />}
       {overlay?.kind === 'adjust' && <AdjustmentSheet onClose={close} onSaved={setToast} />}
       {overlay?.kind === 'range' && <RangeSheet onClose={close} onSaved={setToast} />}
       {overlay?.kind === 'settings' && <SettingsSheet settings={settings} onClose={close} onSaved={setToast} />}

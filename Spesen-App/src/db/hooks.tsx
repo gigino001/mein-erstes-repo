@@ -49,3 +49,15 @@ export function useNow(intervalMs: number): number {
   }, [intervalMs])
   return now
 }
+
+/** Beleg-Fotos nur als Objekt-URL halten, solange die Komponente sie anzeigt. */
+export function useObjectUrl(blob: Blob | undefined): string | undefined {
+  const [url, setUrl] = useState<string>()
+  useEffect(() => {
+    if (!blob) return setUrl(undefined)
+    const u = URL.createObjectURL(blob)
+    setUrl(u)
+    return () => URL.revokeObjectURL(u)
+  }, [blob])
+  return url
+}
