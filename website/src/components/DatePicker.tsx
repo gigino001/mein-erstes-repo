@@ -33,12 +33,15 @@ export function DatePicker({
   value,
   min,
   max,
+  staffId,
   onChange,
 }: {
   id?: string;
   value: string;
   min: string;
   max: string;
+  /** Wenn gesetzt, werden ganztägig blockierte Tage (Admin → Zeiten blockieren) ausgegraut. */
+  staffId?: string;
   onChange: (dateStr: string) => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -48,6 +51,7 @@ export function DatePicker({
   const maxDate = parseYMD(max);
   const [viewYear, setViewYear] = useState(selected.getFullYear());
   const [viewMonth, setViewMonth] = useState(selected.getMonth());
+  const [blockedDates, setBlockedDates] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!open) return;
@@ -64,6 +68,22 @@ export function DatePicker({
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [open]);
+
+  useEffect(() => {
+    if (!open || !staffId) return;
+    let cancelled = false;
+    fetch(`/api/blocked-dates?staffId=${staffId}&year=${viewYear}&month=${viewMonth + 1}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled) setBlockedDates(new Set(data.dates ?? []));
+      })
+      .catch(() => {
+        if (!cancelled) setBlockedDates(new Set());
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, staffId, viewYear, viewMonth]);
 
   function openPicker() {
     setViewYear(selected.getFullYear());
@@ -150,7 +170,9 @@ export function DatePicker({
             ))}
             {cells.map((cell, i) => {
               if (!cell) return <span key={`empty-${i}`} />;
-              const disabled = cell < minDate || cell > maxDate;
+              const outOfRange = cell < minDate || cell > maxDate;
+              const isBlocked = blockedDates.has(formatYMD(cell));
+              const disabled = outOfRange || isBlocked;
               const isSelected = isSameDay(cell, selected);
               const isToday = isSameDay(cell, today);
               return (
@@ -158,6 +180,7 @@ export function DatePicker({
                   key={cell.toISOString()}
                   type="button"
                   disabled={disabled}
+                  title={isBlocked ? "Ausgebucht / blockiert" : undefined}
                   onClick={() => {
                     onChange(formatYMD(cell));
                     setOpen(false);
@@ -166,7 +189,7 @@ export function DatePicker({
                     isSelected
                       ? "bg-ocean text-white font-semibold"
                       : disabled
-                        ? "text-ink-muted/40 cursor-not-allowed"
+                        ? `text-ink-muted/40 cursor-not-allowed ${isBlocked ? "line-through" : ""}`
                         : `hover:bg-sky-mist ${isToday ? "border-2 border-ocean" : ""}`
                   }`}
                 >

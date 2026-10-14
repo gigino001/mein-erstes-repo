@@ -156,7 +156,7 @@ export function BookingForm({
         <label className="text-sm font-semibold" htmlFor="date">
           Datum
         </label>
-        <DatePicker id="date" value={date} min={minBookableDateStr()} max={maxDateStr()} onChange={setDate} />
+        <DatePicker id="date" value={date} min={minBookableDateStr()} max={maxDateStr()} staffId={staffId} onChange={setDate} />
       </div>
 
       <div className="flex flex-col gap-2">
