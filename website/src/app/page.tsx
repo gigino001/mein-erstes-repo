@@ -69,16 +69,13 @@ export default async function HomePage() {
         </ScrollFadeIn>
         <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-sky-mist">
           <Image
-            src="/images/lashes-photo/photo-4-sky-dense.jpg"
-            alt="Nahaufnahme: Mega-Volumen-Wimpernset"
+            src="/images/hero/hero-studio.jpg"
+            alt="Claudia bei der Arbeit: Wimpernverlängerung im Studio von coco lashes"
             fill
             sizes="(min-width: 768px) 45vw, 100vw"
             className="object-cover"
             priority
           />
-          <span className="absolute bottom-4 left-4 text-xs text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
-            Beispielbild — echtes Foto folgt
-          </span>
         </div>
       </section>
 
