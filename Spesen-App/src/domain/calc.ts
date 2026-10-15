@@ -32,8 +32,11 @@ export function calcDay(entry: DayEntry | undefined, s: Settings): DayResult {
     entry.type === 'urlaub' || entry.type === 'krank' || entry.type === 'feiertag' ? s.sollMinutes * fraction : 0
   const ist = work + credit
   const booked = entry.type === 'arbeit' || entry.half ? hasTimes && !invalid : true
-  const auto = work >= s.verpThresholdMinutes ? s.verpRate : 0
-  const verp = entry.verpOverride != null ? entry.verpOverride : auto
+  // Verpflegung gibt es nur an echten Arbeitstagen und nur bei MEHR als der Schwelle (8:00 → ab 8:01).
+  // Urlaub, Krank, Abfeiern und Feiertag bekommen nie Verpflegung, auch nicht an halben Tagen.
+  const eligible = entry.type === 'arbeit'
+  const auto = work > s.verpThresholdMinutes ? s.verpRate : 0
+  const verp = !eligible ? 0 : entry.verpOverride != null ? entry.verpOverride : auto
   return { booked, soll: s.sollMinutes, work, credit, ist, diff: ist - s.sollMinutes, verp: booked ? verp : 0, invalid }
 }
 

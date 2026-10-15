@@ -21,7 +21,8 @@ npm run build      # Typprüfung + Produktions-Build inkl. Service Worker
 
 ## Regeln
 - Soll 8 h pro Tag, Mo–Fr, Feiertage NRW
-- Verpflegung 14 € ab 8 h Arbeitszeit (einstellbar)
+- Verpflegung 14 € nur an Arbeitstagen und nur bei mehr als 8 h Arbeitszeit (also ab 8:01), nie bei Urlaub, Krank, Abfeiern oder Feiertag (Betrag und Schwelle einstellbar)
+- Stundenkonto: Arbeitstage buchen Ist minus Soll (weniger als 8 h mindert die Überstunden), Urlaub, Krank und Feiertag erfüllen das Soll, Abfeiern zieht das Soll ab (halber Tag 4 h)
 - Zeiten auf 15 Minuten gerundet
 - Mail-Betreff: „Spesen Adriano Falcone"
 

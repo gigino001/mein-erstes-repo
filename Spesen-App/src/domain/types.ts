@@ -28,8 +28,8 @@ export interface Settings {
   sollMinutes: number
   /** Verpflegungspauschale in Euro. */
   verpRate: number
-  /** Ab dieser Arbeitszeit (Minuten) gibt es die Pauschale. */
-  verpThresholdMinutes: number
+  /** Nur Arbeitstage mit mehr Arbeitszeit (Minuten) als dieser Wert bekommen die Pauschale. */
+  verpThresholdMinutes: number // Pauschale nur bei MEHR Arbeitszeit als diesem Wert
   /** Zeiten werden auf dieses Raster gerundet. */
   roundMinutes: number
   /** Startsaldo des Stundenkontos in Minuten. */

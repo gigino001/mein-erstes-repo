@@ -43,7 +43,7 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
           <input id="st-rate" inputMode="decimal" value={rate} onChange={(e) => setRate(e.target.value)} />
         </div>
         <div className="field grow">
-          <label className="label" htmlFor="st-hours">ab Stunden</label>
+          <label className="label" htmlFor="st-hours">mehr als Stunden</label>
           <input id="st-hours" inputMode="decimal" value={hours} onChange={(e) => setHours(e.target.value)} />
         </div>
       </div>

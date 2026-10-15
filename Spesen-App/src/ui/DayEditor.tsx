@@ -39,6 +39,7 @@ export function DayEditor({ date, preset, existing, settings, onClose, onSaved }
     patch({
       type,
       half: false,
+      verpOverride: type === 'arbeit' ? draft.verpOverride : null,
       start: type === 'arbeit' ? draft.start || '08:00' : '',
       end: type === 'arbeit' ? draft.end || '16:00' : '',
     })
@@ -101,6 +102,7 @@ export function DayEditor({ date, preset, existing, settings, onClose, onSaved }
           </div>
         </div>
       )}
+      {draft.type === 'arbeit' && (
       <div>
         <div className="label spaced">Verpflegung</div>
         <div className="seg">
@@ -109,6 +111,7 @@ export function DayEditor({ date, preset, existing, settings, onClose, onSaved }
           <button aria-pressed={draft.verpOverride === settings.verpRate} onClick={() => patch({ verpOverride: settings.verpRate })}>{euro0(settings.verpRate)}</button>
         </div>
       </div>
+      )}
       <div className="res">
         {complete ? (
           <>

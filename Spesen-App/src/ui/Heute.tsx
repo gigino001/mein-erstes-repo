@@ -32,7 +32,8 @@ export function Heute({ onSettings, onEdit, onToast, goTab }: Props) {
 
   const ist = timer && !stale ? elapsedMinutes(timer.startedAt, now) : result.booked && entry?.type === 'arbeit' ? result.work : 0
   const progress = Math.min(1, ist / settings.sollMinutes)
-  const reached = ist >= settings.verpThresholdMinutes
+  const reached = ist > settings.verpThresholdMinutes
+  const showVerp = !entry || entry.type === 'arbeit'
 
   const month = summarizeMonth(Number(today.slice(0, 4)), Number(today.slice(5, 7)), days, settings, today)
 
@@ -67,11 +68,13 @@ export function Heute({ onSettings, onEdit, onToast, goTab }: Props) {
             <div className="cap">{ist > settings.sollMinutes ? `${formatDuration(ist - settings.sollMinutes, true)} Überstunden` : `von ${formatDuration(settings.sollMinutes)} Soll`}</div>
           </div>
         </div>
+        {showVerp && (
         <div className={`verp${reached ? ' ok' : ''}`}>
           {reached
             ? `Verpflegung ${euro0(settings.verpRate)} erreicht`
-            : `Verpflegung ${euro0(settings.verpRate)} ab ${formatDuration(settings.verpThresholdMinutes)} · noch ${formatDuration(settings.verpThresholdMinutes - ist)}`}
+            : `Verpflegung ${euro0(settings.verpRate)} bei mehr als ${formatDuration(settings.verpThresholdMinutes)} · noch ${formatDuration(settings.verpThresholdMinutes + 1 - ist)}`}
         </div>
+        )}
       </section>
 
       {running ? (

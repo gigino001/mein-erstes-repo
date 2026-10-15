@@ -14,9 +14,21 @@ describe('calcDay', () => {
     expect(r.diff).toBe(75)
     expect(r.verp).toBe(14)
   })
-  it('genau 8 h gibt Verpflegung, 7:59 nicht', () => {
-    expect(calcDay(day('2026-10-02', 'arbeit', false, '08:00', '16:00'), s).verp).toBe(14)
+  it('Verpflegung nur bei MEHR als 8 h: genau 8:00 nicht, 8:01 ja', () => {
     expect(calcDay(day('2026-10-02', 'arbeit', false, '08:00', '15:59'), s).verp).toBe(0)
+    expect(calcDay(day('2026-10-02', 'arbeit', false, '08:00', '16:00'), s).verp).toBe(0)
+    expect(calcDay(day('2026-10-02', 'arbeit', false, '08:00', '16:01'), s).verp).toBe(14)
+    expect(calcDay(day('2026-10-02', 'arbeit', false, '08:00', '16:15'), s).verp).toBe(14)
+  })
+  it('weniger als das Soll mindert die Überstunden', () => {
+    expect(calcDay(day('2026-10-02', 'arbeit', false, '08:00', '15:30'), s).diff).toBe(-30)
+  })
+  it('nie Verpflegung bei Urlaub, Krank, Abfeiern oder Feiertag, auch nicht bei langer Arbeit am halben Tag oder mit Überschreibung', () => {
+    for (const t of ['urlaub', 'krank', 'abbau', 'feiertag'] as const) {
+      expect(calcDay(day('2026-10-02', t, true, '08:00', '18:00'), s).verp).toBe(0)
+      expect(calcDay({ ...day('2026-10-02', t, true, '08:00', '18:00'), verpOverride: 14 }, s).verp).toBe(0)
+      expect(calcDay(day('2026-10-02', t), s).verp).toBe(0)
+    }
   })
   it('Urlaub und Krank ganztags: Saldo ±0, keine Verpflegung', () => {
     for (const t of ['urlaub', 'krank'] as const) {
