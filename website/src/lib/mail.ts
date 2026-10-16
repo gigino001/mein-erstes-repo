@@ -313,3 +313,44 @@ Ablehnen (wird endgültig gelöscht): ${ablehnenUrl}`,
     `,
   });
 }
+
+/**
+ * Freitext-Mail (z. B. Rabattaktion) an eine einzelne Kundin aus dem
+ * Kontakte-Admin. Anders als sendMail() gibt diese Funktion den Erfolg pro
+ * Empfängerin zurück, damit das Admin-UI nach einem Massenversand anzeigen
+ * kann, wie viele Mails tatsächlich zugestellt wurden.
+ */
+export async function sendMarketingMailToCustomer(data: {
+  customerName: string;
+  customerEmail: string;
+  subject: string;
+  message: string;
+}): Promise<boolean> {
+  const firstName = data.customerName.trim().split(/\s+/)[0] || data.customerName;
+  const text = `Hallo ${firstName},
+
+${data.message}
+
+Liebe Grüße
+${business.owner}
+${business.name}`;
+
+  const transport = getTransport();
+  if (!transport) {
+    console.log(`[mail:dev] An ${data.customerEmail} — „${data.subject}“\n${text}\n`);
+    return true;
+  }
+
+  try {
+    await transport.sendMail({
+      from: process.env.MAIL_FROM || business.email,
+      to: data.customerEmail,
+      subject: data.subject,
+      text,
+    });
+    return true;
+  } catch (err) {
+    console.error(`[mail] Marketing-Mail an ${data.customerEmail} fehlgeschlagen:`, err);
+    return false;
+  }
+}

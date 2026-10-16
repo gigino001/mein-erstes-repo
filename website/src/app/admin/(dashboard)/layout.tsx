@@ -23,6 +23,9 @@ export default async function AdminDashboardLayout({ children }: LayoutProps<"/a
             <Link href="/admin/bestellungen" className="hover:text-ocean transition-colors">
               Bestellungen
             </Link>
+            <Link href="/admin/kontakte" className="hover:text-ocean transition-colors">
+              Kontakte
+            </Link>
           </nav>
         </div>
         <form action={logout}>

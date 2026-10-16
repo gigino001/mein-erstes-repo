@@ -5,7 +5,11 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createAdminSession, deleteAdminSession } from "@/lib/session";
 import { verifyAdminSession } from "@/lib/dal";
-import { sendAppointmentConfirmedToCustomer, sendAppointmentCancelledToCustomer } from "@/lib/mail";
+import {
+  sendAppointmentConfirmedToCustomer,
+  sendAppointmentCancelledToCustomer,
+  sendMarketingMailToCustomer,
+} from "@/lib/mail";
 import { getStripe } from "@/lib/stripe";
 
 export type LoginResult = { ok: false; error: string } | never;
@@ -178,4 +182,44 @@ export async function updateShopSettings(input: { shippingEnabled: boolean; ship
 export async function markOrderCompleted(id: string) {
   await verifyAdminSession();
   await prisma.order.update({ where: { id }, data: { status: "completed" } });
+}
+
+/**
+ * Freitext-Mail (z. B. Rabattaktion) an eine Auswahl von Kundinnen aus dem
+ * Kontakte-Admin. Namen werden hier nochmal aus der DB nachgeschlagen statt
+ * dem Client zu vertrauen; versendet wird sequentiell, damit ein einzelner
+ * SMTP-Fehler nicht den ganzen Versand abbricht.
+ */
+export async function sendMarketingMail(input: { emails: string[]; subject: string; message: string }) {
+  await verifyAdminSession();
+
+  const emails = [...new Set(input.emails.map((e) => e.trim().toLowerCase()).filter(Boolean))];
+  const subject = input.subject.trim();
+  const message = input.message.trim();
+  if (emails.length === 0 || !subject || !message) {
+    return { sent: 0, failed: 0, total: 0 };
+  }
+
+  const appointments = await prisma.appointment.findMany({
+    where: { customerEmail: { in: emails } },
+    orderBy: { startAt: "desc" },
+    select: { customerName: true, customerEmail: true },
+  });
+  const nameByEmail = new Map<string, string>();
+  for (const a of appointments) {
+    const key = a.customerEmail.trim().toLowerCase();
+    if (!nameByEmail.has(key)) nameByEmail.set(key, a.customerName);
+  }
+
+  let sent = 0;
+  let failed = 0;
+  for (const email of emails) {
+    const customerName = nameByEmail.get(email);
+    if (!customerName) continue;
+    const ok = await sendMarketingMailToCustomer({ customerName, customerEmail: email, subject, message });
+    if (ok) sent++;
+    else failed++;
+  }
+
+  return { sent, failed, total: emails.length };
 }
