@@ -105,6 +105,9 @@ model Appointment {
   stripePaymentIntentId String?
   /// Zeitpunkt, zu dem die Bewertungs-Anfrage-Mail (2 Tage nach dem Termin) verschickt wurde.
   reviewRequestSentAt DateTime?
+  /// Zufälliger Token für den Selbststornierungs-Link in der Bestätigungsmail
+  /// (kein Login nötig, siehe /termin/stornieren/[token]).
+  cancelToken       String   @unique
   createdAt         DateTime @default(now())
 
   service Service @relation(fields: [serviceId], references: [id])

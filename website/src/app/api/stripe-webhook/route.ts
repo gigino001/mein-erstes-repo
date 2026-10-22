@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
+import { randomBytes } from "node:crypto";
 import { prisma } from "@/lib/prisma";
 import { getAvailableSlots, slotToRange } from "@/lib/availability";
 import {
@@ -84,6 +85,7 @@ export async function POST(request: Request) {
         status: "requested",
         depositAmountCents: Number(m.depositAmountCents) || 0,
         stripePaymentIntentId: paymentIntentId ?? null,
+        cancelToken: randomBytes(24).toString("hex"),
       },
     });
 

@@ -1,5 +1,6 @@
 "use server";
 
+import { randomBytes } from "node:crypto";
 import { prisma } from "@/lib/prisma";
 import { getAvailableSlots, slotToRange } from "@/lib/availability";
 import { sendNewRequestToOwner, sendRequestReceivedToCustomer } from "@/lib/mail";
@@ -121,6 +122,7 @@ export async function requestAppointment(input: BookingInput): Promise<BookingRe
       customerInstagram: customerInstagram?.trim() || null,
       note: note?.trim() || null,
       status: "requested",
+      cancelToken: randomBytes(24).toString("hex"),
     },
   });
 

@@ -110,7 +110,7 @@ ${business.name}`,
   });
 }
 
-export async function sendAppointmentConfirmedToCustomer(data: AppointmentMailData) {
+export async function sendAppointmentConfirmedToCustomer(data: AppointmentMailData & { cancelToken: string }) {
   const ics = buildAppointmentIcs({
     id: data.id,
     startAt: data.startAt,
@@ -119,6 +119,7 @@ export async function sendAppointmentConfirmedToCustomer(data: AppointmentMailDa
     customerName: data.customerName,
     customerEmail: data.customerEmail,
   });
+  const cancelUrl = `${business.url}/termin/stornieren/${data.cancelToken}`;
 
   await sendMail({
     to: data.customerEmail,
@@ -132,6 +133,9 @@ Termin: ${formatDateTime(data.startAt)}
 
 ${fullAddress}
 ${ics ? "\nIm Anhang findest du eine Kalenderdatei zum direkten Speichern in deinem Kalender (Apple Kalender, Google Kalender, Outlook usw.).\n" : ""}
+Kannst du doch nicht, kannst du den Termin hier selbst stornieren (mindestens 24 Stunden vorher, siehe AGB):
+${cancelUrl}
+
 Ich freue mich auf dich!
 ${business.owner}`,
     attachments: ics
@@ -159,6 +163,25 @@ Telefon: ${business.phoneDisplay}
 E-Mail: ${business.email}
 
 ${business.owner}`,
+  });
+}
+
+export async function sendCustomerCancelledNotificationToOwner(data: AppointmentMailData) {
+  await sendMail({
+    to: "buchung@coco-lashes.de",
+    subject: `Kundin hat ihren Termin storniert: ${data.customerName}`,
+    text: `${data.customerName} hat ihren Termin selbst über den Stornierungslink storniert:
+
+Leistung: ${data.serviceName}
+Termin war: ${formatDateTime(data.startAt)}${
+      data.depositAmountCents
+        ? data.depositRefunded
+          ? `\nAnzahlung von ${formatEuro(data.depositAmountCents)} wurde automatisch zurückerstattet (mehr als 24 Std. vor dem Termin).`
+          : `\nAnzahlung von ${formatEuro(data.depositAmountCents)} verfällt gemäß AGB (weniger als 24 Std. vor dem Termin).`
+        : ""
+    }
+
+Der Slot ist jetzt wieder frei buchbar.`,
   });
 }
 
