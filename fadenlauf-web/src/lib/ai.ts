@@ -17,7 +17,7 @@ const toB64 = (b: Blob) => new Promise<string>((res, rej) => { const r = new Fil
 export class EdgeAi implements Ai {
   async json(prompt: string, images: Blob[] = []) {
     const imgs = await Promise.all(images.map(async (b) => ({ mime: b.type || "image/jpeg", data: await toB64(b) })));
-    const { data, error } = await supabase().functions.invoke("ai", { body: { prompt, images: imgs } });
+    const { data, error } = await supabase().functions.invoke(import.meta.env.VITE_AI_FUNCTION || "ai", { body: { prompt, images: imgs } });
     if (error) {
       const body = await (error as any).context?.json?.().catch(() => null);
       throw new AppError(body?.code ?? "offline");
