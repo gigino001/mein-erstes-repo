@@ -40,7 +40,7 @@ export class DirectAi implements Ai {
     let res: Response;
     try {
       res = this.cfg.provider === "gemini"
-        ? await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`, {
+        ? await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent`, {
             method: "POST", headers: { "content-type": "application/json", "x-goog-api-key": this.cfg.key },
             body: JSON.stringify({ contents: [{ parts: [{ text: prompt }, ...imgs.map((i) => ({ inline_data: { mime_type: i.mime, data: i.data } }))] }], generationConfig: { responseMimeType: "application/json", temperature: 0.8 } }),
           })

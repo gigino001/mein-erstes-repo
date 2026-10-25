@@ -32,6 +32,7 @@ npm run check    # Tests + Typecheck + Build
    npx supabase secrets set AI_PROVIDER=gemini GEMINI_API_KEY=... AI_DAILY_LIMIT=150
    npx supabase functions deploy ai
    ```
+   Das Gemini-Modell ist über das Secret `AI_MODEL` änderbar (Standard `gemini-3.5-flash`; ältere Namen wie `gemini-2.5-flash` sind für neue Nutzer abgeschaltet).
    Für Claude: `AI_PROVIDER=anthropic ANTHROPIC_API_KEY=...`.
 6. `.env` nach `.env.example` anlegen (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) und auf Netlify als Umgebungsvariablen setzen. `netlify.toml` ist vorbereitet.
 

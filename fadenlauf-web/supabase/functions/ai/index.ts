@@ -9,6 +9,12 @@ const fail = async (r: Response, code: string, status: number) => {
   let msg = t; try { msg = JSON.parse(t)?.error?.message ?? t; } catch { /* Rohtext */ }
   return reply({ code, detail: `${r.status}: ${String(msg).slice(0, 160)}` }, status);
 };
+/** Wiederholt kurz bei Überlastung (503), damit Lastspitzen den Nutzer nicht stören. */
+async function post(url: string, init: RequestInit) {
+  let r = await fetch(url, init);
+  for (let i = 0; i < 2 && r.status === 503; i++) { await new Promise((ok) => setTimeout(ok, 1500 * (i + 1))); r = await fetch(url, init); }
+  return r;
+}
 const reply = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { ...cors, "content-type": "application/json" } });
 
 function parseJson(text: string) {
@@ -42,7 +48,7 @@ Deno.serve(async (req) => {
   try {
     let text = "";
     if (provider === "anthropic") {
-      const r = await fetch("https://api.anthropic.com/v1/messages", {
+      const r = await post("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: { "content-type": "application/json", "x-api-key": Deno.env.get("ANTHROPIC_API_KEY")!, "anthropic-version": "2023-06-01" },
         body: JSON.stringify({ model: Deno.env.get("AI_MODEL") ?? "claude-sonnet-5-5", max_tokens: 4096, messages: [{ role: "user", content: [...images.map((i: any) => ({ type: "image", source: { type: "base64", media_type: i.mime, data: i.data } })), { type: "text", text: prompt }] }] }),
@@ -51,8 +57,8 @@ Deno.serve(async (req) => {
       if (!r.ok) return fail(r, "provider", 502);
       text = (await r.json()).content?.map((p: any) => p.text).join("") ?? "";
     } else {
-      const model = Deno.env.get("AI_MODEL") ?? "gemini-2.5-flash";
-      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+      const model = Deno.env.get("AI_MODEL") ?? "gemini-3.5-flash";
+      const r = await post(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
         method: "POST", headers: { "content-type": "application/json", "x-goog-api-key": Deno.env.get("GEMINI_API_KEY")! },
         body: JSON.stringify({ contents: [{ parts: [{ text: prompt }, ...images.map((i: any) => ({ inline_data: { mime_type: i.mime, data: i.data } }))] }], generationConfig: { responseMimeType: "application/json", temperature: 0.8 } }),
       });
