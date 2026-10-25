@@ -16,6 +16,13 @@ const toB64 = (b: Blob) => new Promise<string>((res, rej) => { const r = new Fil
 /** Cloud: Aufruf über die Supabase-Edge-Function. Der API-Schlüssel bleibt auf dem Server. */
 export class EdgeAi implements Ai {
   async json(prompt: string, images: Blob[] = []) {
+    // Kurzzeitige Aussetzer (Überlastung, Netz) bis zu zweimal automatisch wiederholen.
+    for (let i = 0; ; i++) {
+      try { return await this.once(prompt, images); }
+      catch (e) { const c = (e as AppError).code; if (i >= 2 || (c !== "offline" && c !== "provider")) throw e; await new Promise((ok) => setTimeout(ok, 2000 * (i + 1))); }
+    }
+  }
+  private async once(prompt: string, images: Blob[]) {
     const imgs = await Promise.all(images.map(async (b) => ({ mime: b.type || "image/jpeg", data: await toB64(b) })));
     const { data, error } = await supabase().functions.invoke(import.meta.env.VITE_AI_FUNCTION || "ai", { body: { prompt, images: imgs } });
     if (error) {

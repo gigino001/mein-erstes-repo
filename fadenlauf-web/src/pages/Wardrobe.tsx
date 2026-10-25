@@ -15,7 +15,7 @@ export function WardrobePage() {
   const shown = items.filter((i) => (archived ? i.archived : !i.archived) && (cat === "Alle" || i.category === cat) && (!season || i.seasons.includes(season)) && (!style || i.styles.includes(style)) && (!color || i.color === color)
     && (!needle || [i.name, i.category, i.color, i.material, i.brand, i.notes, i.occasions.join(" ")].join(" ").toLowerCase().includes(needle)));
   const up = busy.upload && !busy.upload.kind ? busy.upload : null; const recutN = items.filter((i) => !i.cutId && !i.cutTried && i.imageId && i.status !== "pending").length;
-  const rc = busy.recut;
+  const rc = busy.recut; const unrec = items.filter((i) => i.status === "manual" && !i.archived).length;
   const openItem = items.find((i) => i.id === open) ?? null;
   return (
     <>
@@ -23,6 +23,8 @@ export function WardrobePage() {
       <FileButton multiple label="+ Teile fotografieren oder hochladen" busy={up && `Analysiere ${up.done + 1} von ${up.total} …`} onFiles={app.uploadItems} />
       <p className="mt-3 text-xs text-muted">Tipp: ein Teil pro Foto, flach hingelegt oder auf dem Bügel vor ruhigem Hintergrund.</p>
       {(recutN > 0 || rc) && <div className="note mt-4 flex items-center justify-between gap-4 text-sm"><p>{rc ? `Stelle frei: ${rc.done} von ${rc.total} …` : `${recutN} ${recutN === 1 ? "Teil hat" : "Teile haben"} noch den Hintergrund. Jetzt freistellen?`}</p><button className="btn btn-sm btn-ghost shrink-0" disabled={!!rc} onClick={app.recutAll}>Freistellen</button></div>}
+
+      {(unrec > 0 || busy.reall) && <div className="note mt-4 flex items-center justify-between gap-4 text-sm"><p>{busy.reall ? `Erkenne: ${busy.reall.done} von ${busy.reall.total} …` : `${unrec} ${unrec === 1 ? "Teil wurde" : "Teile wurden"} noch nicht erkannt (KI kurz nicht erreichbar).`}</p><button className="btn btn-sm btn-ghost shrink-0" disabled={!!busy.reall || !app.aiReady} onClick={app.reanalyzeMissing}>Erneut erkennen</button></div>}
 
       <section className="mt-8 space-y-4">
         <input type="search" className="input" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Suchen: Farbe, Material, Marke …" aria-label="Kleiderschrank durchsuchen" />

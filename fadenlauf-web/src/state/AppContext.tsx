@@ -249,6 +249,17 @@ function useAppState() {
     catch (e) { fail(e); } finally { setBusyKey("re-" + i.id, false); }
   };
 
+  const reanalyzeMissing = async () => {
+    const todo = live.current.items.filter((i) => i.status === "manual" && i.imageId && !i.archived);
+    setBusyKey("reall", { done: 0, total: todo.length }); let ok = 0, done = 0;
+    for (const i of todo) {
+      try { const a = Z.ItemAnalysis.parse(await ai.json(P.analyzeItemPrompt(allCats()), [await blobOf(i.imageId)])); if (!a.error) { await patchDoc("items", i.id, itemFromAI(a)); ok++; } }
+      catch (e) { if ((e as AppError).code === "no_ai" || (e as AppError).code === "daily_limit") { fail(e); break; } }
+      setBusyKey("reall", { done: ++done, total: todo.length });
+    }
+    setBusyKey("reall", null); toast(`${ok} von ${todo.length} Teilen erkannt.${ok < todo.length ? " Der Rest lässt sich einzeln oder später erneut versuchen." : ""}`);
+  };
+
   /* ---------- Inspiration ---------- */
   const uploadInspo = async (files: File[]) => {
     files = files.slice(0, 12); setBusyKey("upload", { done: 0, total: files.length, kind: "inspo" }); let done = 0;
@@ -310,7 +321,7 @@ function useAppState() {
     phase, store, profile, items, inspo, outfits, trips, wear, results, busy, toasts, wx, keyCfg, aiReady, usable: usable(items), allCats,
     toast, fail, setWx, setKey, signOut, patchProfile, finishOnboarding, stylePhotos, learn,
     outfitById, toggleFav, setRating, setReason, setItemFeedback, toggleWorn, generate, adjust, setResults, outfitIssues: (o: Outfit) => outfitIssues(o.itemIds, items),
-    uploadItems, recut, recutAll, saveItemImage, saveItem, archiveItem, deleteItem, reanalyze, uploadInspo, deleteInspo, patchInspo: (id: string, p: Partial<Inspo>) => patchDoc("inspo", id, p).catch(fail), findPatterns,
+    uploadItems, recut, recutAll, saveItemImage, reanalyzeMissing, saveItem, archiveItem, deleteItem, reanalyze, uploadInspo, deleteInspo, patchInspo: (id: string, p: Partial<Inspo>) => patchDoc("inspo", id, p).catch(fail), findPatterns,
     createTrip, packTrip, deleteTrip, exportAll, importOld, wipeAll,
   };
 }
