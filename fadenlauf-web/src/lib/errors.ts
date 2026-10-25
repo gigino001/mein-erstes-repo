@@ -1,6 +1,7 @@
 export class AppError extends Error {
   code: string;
-  constructor(code: string, message?: string) { super(message ?? code); this.code = code; }
+  detail?: string;
+  constructor(code: string, message?: string, detail?: string) { super(message ?? code); this.code = code; this.detail = detail; }
 }
 const TEXTS: Record<string, string> = {
   no_ai: "Die KI ist nicht eingerichtet. Hinterlege unter Profil → KI einen API-Schlüssel.",
@@ -13,5 +14,10 @@ const TEXTS: Record<string, string> = {
   quota: "Der Speicher ist voll. Lösche alte Einträge.",
   offline: "Keine Verbindung. Prüfe dein Netz und versuche es erneut.",
   auth: "Bitte melde dich neu an.",
+  provider: "Die KI hat den Aufruf abgelehnt.",
 };
-export const errText = (e: unknown) => TEXTS[(e as AppError)?.code] ?? "Etwas ist schiefgelaufen. Bitte noch einmal versuchen.";
+export const errText = (e: unknown) => {
+  const base = TEXTS[(e as AppError)?.code] ?? "Etwas ist schiefgelaufen. Bitte noch einmal versuchen.";
+  const d = (e as AppError)?.detail;
+  return d ? `${base} (${d})` : base;
+};

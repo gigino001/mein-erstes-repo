@@ -20,7 +20,7 @@ export class EdgeAi implements Ai {
     const { data, error } = await supabase().functions.invoke(import.meta.env.VITE_AI_FUNCTION || "ai", { body: { prompt, images: imgs } });
     if (error) {
       const body = await (error as any).context?.json?.().catch(() => null);
-      throw new AppError(body?.code ?? "offline");
+      throw new AppError(body?.code ?? "offline", undefined, body?.detail ?? (body?.message ? String(body.message).slice(0, 160) : String((error as Error).message).slice(0, 120)));
     }
     if (data?.error) throw new AppError(data.error);
     return data.result;

@@ -3,6 +3,12 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const cors = { "access-control-allow-origin": "*", "access-control-allow-headers": "authorization, x-client-info, apikey, content-type" };
+const fail = async (r: Response, code: string, status: number) => {
+  const t = (await r.text().catch(() => "")).slice(0, 300);
+  console.error("Anbieter-Fehler", r.status, t);
+  let msg = t; try { msg = JSON.parse(t)?.error?.message ?? t; } catch { /* Rohtext */ }
+  return reply({ code, detail: `${r.status}: ${String(msg).slice(0, 160)}` }, status);
+};
 const reply = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { ...cors, "content-type": "application/json" } });
 
 function parseJson(text: string) {
@@ -41,8 +47,8 @@ Deno.serve(async (req) => {
         headers: { "content-type": "application/json", "x-api-key": Deno.env.get("ANTHROPIC_API_KEY")!, "anthropic-version": "2023-06-01" },
         body: JSON.stringify({ model: Deno.env.get("AI_MODEL") ?? "claude-sonnet-5-5", max_tokens: 4096, messages: [{ role: "user", content: [...images.map((i: any) => ({ type: "image", source: { type: "base64", media_type: i.mime, data: i.data } })), { type: "text", text: prompt }] }] }),
       });
-      if (r.status === 429) return reply({ code: "rate_limited" }, 429);
-      if (!r.ok) return reply({ code: "offline" }, 502);
+      if (r.status === 429) return fail(r, "rate_limited", 429);
+      if (!r.ok) return fail(r, "provider", 502);
       text = (await r.json()).content?.map((p: any) => p.text).join("") ?? "";
     } else {
       const model = Deno.env.get("AI_MODEL") ?? "gemini-2.5-flash";
@@ -50,13 +56,14 @@ Deno.serve(async (req) => {
         method: "POST", headers: { "content-type": "application/json", "x-goog-api-key": Deno.env.get("GEMINI_API_KEY")! },
         body: JSON.stringify({ contents: [{ parts: [{ text: prompt }, ...images.map((i: any) => ({ inline_data: { mime_type: i.mime, data: i.data } }))] }], generationConfig: { responseMimeType: "application/json", temperature: 0.8 } }),
       });
-      if (r.status === 429) return reply({ code: "rate_limited" }, 429);
-      if (!r.ok) return reply({ code: "offline" }, 502);
+      if (r.status === 429) return fail(r, "rate_limited", 429);
+      if (!r.ok) return fail(r, "provider", 502);
       text = (await r.json()).candidates?.[0]?.content?.parts?.map((p: any) => p.text).join("") ?? "";
     }
     if (!text) return reply({ code: "refused" }, 422);
     return reply({ result: parseJson(text) });
-  } catch {
-    return reply({ code: "invalid_json" }, 422);
+  } catch (e) {
+    console.error("Fehler", e);
+    return reply({ code: "invalid_json", detail: String(e).slice(0, 160) }, 422);
   }
 });
