@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Ai } from "../lib/ai";
 import { DirectAi, EdgeAi, loadKey, noAi, saveKey, type KeyConfig } from "../lib/ai";
-import { cutoutBlob, prepImage } from "../lib/cutout";
+import { cutout, prepImage } from "../lib/cutout";
 import { AppError, errText } from "../lib/errors";
 import { parseOldExport } from "../lib/importOld";
 import { cleanOutfit, outfitIssues, usable, wornToday } from "../lib/logic";
@@ -79,6 +79,8 @@ function useAppState() {
     await store!.patchProfile(patch); setProfile((p) => (p ? { ...p, ...patch } : p));
   }, [store]);
   const ctx = (): P.Ctx => ({ profile: live.current.profile!, items: live.current.items, outfits: live.current.outfits, wear: live.current.wear, wx: live.current.wx });
+  /** Fortschritt beim ersten Laden des Freistell-Modells (null = nicht am Laden). */
+  const onModel = (p: number | null) => { setBusy((b) => (b.model === p ? b : { ...b, model: p })); if (p === 0) toast("Lade das Freistell-Modell, einmalig ca. 44 MB. Danach geht es schneller."); };
   const allCats = () => [...CATS, ...(live.current.profile?.customCats ?? [])];
 
   /* ---------- Profil ---------- */
@@ -190,7 +192,7 @@ function useAppState() {
       try {
         const img = await prepImage(f); const orig = await store!.putBlob(img); made.push(orig);
         let cut: string | null = null;
-        try { const b = await cutoutBlob(img); if (b) { cut = await store!.putBlob(b); made.push(cut); cutCount++; } } catch (e) { console.warn("cutout", e); }
+        try { const b = await cutout(img, 1, onModel); if (b) { cut = await store!.putBlob(b); made.push(cut); cutCount++; } } catch (e) { console.warn("cutout", e); }
         const id = uid();
         const base: Item = { id, imageId: cut ?? orig, origId: orig, cutId: cut, cutTried: true, status: "pending", createdAt: Date.now(), category: "Weitere Accessoires", name: "", color: "", pattern: "", material: "", details: "", fit: "", styles: [], seasons: [], weather: "", formality: 3, occasions: [], uncertain: [] };
         await putDoc("items", base);
@@ -210,7 +212,7 @@ function useAppState() {
   const recut = async (i: Item, tol = 1) => {
     setBusyKey("cut-" + i.id, true);
     try {
-      const src = i.origId || i.imageId; const b = await cutoutBlob(await blobOf(src), tol);
+      const src = i.origId || i.imageId; const b = await cutout(await blobOf(src), tol, onModel);
       if (!b) { await patchDoc("items", i.id, { cutTried: true }); toast("Der Hintergrund ließ sich nicht sauber trennen. Probier „Fein“ oder „Grob“ oder ein Foto auf einfarbigem Untergrund."); return; }
       const id = await store!.putBlob(b); const old = i.cutId;
       await patchDoc("items", i.id, { origId: src, cutId: id, imageId: id, cutTried: true });
@@ -223,12 +225,27 @@ function useAppState() {
     setBusyKey("recut", { done: 0, total: todo.length }); let ok = 0, done = 0;
     for (const i of todo) {
       try {
-        const src = i.origId || i.imageId; const b = await cutoutBlob(await blobOf(src)); let cut: string | null = null; if (b) { cut = await store!.putBlob(b); ok++; }
+        const src = i.origId || i.imageId; const b = await cutout(await blobOf(src), 1, onModel); let cut: string | null = null; if (b) { cut = await store!.putBlob(b); ok++; }
         await patchDoc("items", i.id, { origId: src, cutId: cut, imageId: cut ?? src, cutTried: true });
       } catch (e) { if ((e as AppError).code === "offline") { toast("Die Fotos konnten nicht geladen werden."); break; } }
       setBusyKey("recut", { done: ++done, total: todo.length });
     }
     setBusyKey("recut", null); toast(`${ok} von ${todo.length} Teilen freigestellt.`);
+  };
+  /** Stellt alle Teile aus dem Originalfoto neu frei (z. B. nach dem Wechsel auf die KI-Methode). Schlechte Ergebnisse werden verworfen, das bisherige Bild bleibt. */
+  const recutEverything = async () => {
+    if (live.current.items.length === 0 || busy.recut) return;
+    const todo = live.current.items.filter((i) => i.origId && i.status !== "pending");
+    setBusyKey("recut", { done: 0, total: todo.length }); let ok = 0, done = 0;
+    for (const i of todo) {
+      try {
+        const b = await cutout(await blobOf(i.origId!), 1, onModel);
+        if (b) { const id = await store!.putBlob(b); const old = i.cutId; await patchDoc("items", i.id, { cutId: id, imageId: id, cutTried: true }); if (old && old !== i.origId) void store!.removeBlob(old).catch(() => {}); ok++; }
+        else await patchDoc("items", i.id, { cutTried: true });
+      } catch (e) { if ((e as AppError).code === "offline") { toast("Die Fotos konnten nicht geladen werden."); break; } }
+      setBusyKey("recut", { done: ++done, total: todo.length });
+    }
+    setBusyKey("recut", null); toast(`${ok} von ${todo.length} Teilen neu freigestellt.`);
   };
   const saveItem = async (id: string, patch: Partial<Item>, newCat?: string) => {
     try {
@@ -324,7 +341,7 @@ function useAppState() {
     phase, store, profile, items, inspo, outfits, trips, wear, results, busy, toasts, wx, keyCfg, aiReady, usable: usable(items), allCats,
     toast, fail, setWx, setKey, signOut, patchProfile, finishOnboarding, stylePhotos, learn,
     outfitById, toggleFav, setRating, setReason, setItemFeedback, toggleWorn, generate, adjust, setResults, outfitIssues: (o: Outfit) => outfitIssues(o.itemIds, items),
-    uploadItems, recut, recutAll, saveItemImage, reanalyzeMissing, saveItem, archiveItem, deleteItem, reanalyze, uploadInspo, deleteInspo, patchInspo: (id: string, p: Partial<Inspo>) => patchDoc("inspo", id, p).catch(fail), findPatterns,
+    uploadItems, recut, recutAll, recutEverything, saveItemImage, reanalyzeMissing, saveItem, archiveItem, deleteItem, reanalyze, uploadInspo, deleteInspo, patchInspo: (id: string, p: Partial<Inspo>) => patchDoc("inspo", id, p).catch(fail), findPatterns,
     createTrip, packTrip, deleteTrip, exportAll, importOld, wipeAll,
   };
 }

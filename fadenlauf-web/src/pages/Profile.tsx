@@ -5,6 +5,7 @@ import { FITS, SKIN_TONES, defaultAvatar, type Analysis, type Profile } from "..
 import { isHex, list, toggle } from "../lib/util";
 import { useApp } from "../state/AppContext";
 import { StylesPicker } from "./Onboarding";
+import { MODEL_MB, getCutMode, setCutMode, type CutMode } from "../lib/mlCutout";
 
 export function AnalysisBlock({ analysis: a, onChange, draftProfile, saveLabel }: { analysis: Analysis | null; onChange: (a: Analysis | null) => void | Promise<void>; draftProfile: Profile; saveLabel?: string }) {
   const app = useApp(); const [draft, setDraft] = useState(a); const dirty = JSON.stringify(draft) !== JSON.stringify(a);
@@ -70,6 +71,7 @@ export function ProfilePage() {
           </div>
         </div>
       </Section>
+      <CutSection />
       <Section title="Foto-Style-Analyse"><AnalysisBlock analysis={p.analysis} draftProfile={p} saveLabel="Analyse-Texte speichern" onChange={async (a) => { try { await app.patchProfile({ analysis: a }); app.toast("Style-Analyse gespeichert."); } catch (e) { app.fail(e); } }} /></Section>
       <Section title="Was ich gelernt habe" action={<button className="btn btn-sm btn-ghost" disabled={app.busy.learn || !app.aiReady} onClick={() => app.learn(false)}>{app.busy.learn ? "Lerne …" : "Aus Feedback lernen"}</button>}>
         <p className="mb-4 text-sm text-muted">Ich aktualisiere das nach jeweils vier Bewertungen automatisch. Tippe auf ×, um etwas zu streichen.</p>
@@ -101,6 +103,21 @@ function KeySection() {
         <Field label="API-Schlüssel"><input type="password" className="input" value={key} onChange={(e) => setKey(e.target.value)} autoComplete="off" placeholder={provider === "gemini" ? "AIza…" : "sk-ant-…"} /></Field>
         <div className="flex gap-2"><button className="btn btn-sm" disabled={!key.trim()} onClick={() => { app.setKey({ provider, key: key.trim() }); app.toast("Schlüssel gespeichert."); }}>Speichern</button>{app.keyCfg && <button className="btn btn-sm btn-ghost" onClick={() => { app.setKey(null); setKey(""); }}>Entfernen</button>}</div>
         <p className="text-xs text-muted">Hinweis: Im kostenlosen Gemini-Tarif dürfen eingesendete Inhalte laut Google zur Produktverbesserung genutzt werden. Für Selfies und private Fotos ist ein bezahlter Tarif oder die Claude-API die bessere Wahl.</p>
+      </div>
+    </Section>
+  );
+}
+
+function CutSection() {
+  const app = useApp(); const [mode, setMode] = useState<CutMode>(getCutMode); const rc = app.busy.recut;
+  const pick = (m: CutMode) => { setCutMode(m); setMode(m); };
+  return (
+    <Section title="Freistellen">
+      <div className="space-y-4">
+        <div className="flex flex-wrap gap-2"><Chip on={mode === "ml"} onClick={() => pick("ml")}>KI (empfohlen)</Chip><Chip on={mode === "fast"} onClick={() => pick("fast")}>Schnell</Chip></div>
+        <p className="text-sm text-muted">{mode === "ml" ? `Ein KI-Modell auf deinem Gerät schneidet die Teile aus, auch vor ähnlich farbigem Hintergrund. Beim ersten Mal lädt es einmalig ca. ${MODEL_MB} MB. Deine Fotos verlassen dafür das Gerät nicht.` : "Die einfache Farbmethode ist schneller, braucht keinen Download, scheitert aber bei Hintergründen, die dem Teil ähneln."}</p>
+        <button className="btn btn-sm btn-ghost" disabled={!!rc || app.items.length === 0} onClick={app.recutEverything}>{rc ? `Stelle frei: ${rc.done} von ${rc.total} …` : "Alle Teile neu freistellen"}</button>
+        <p className="text-xs text-muted">Nutzt die oben gewählte Methode. Misslingt ein Teil, bleibt das bisherige Bild bestehen. Nicht-kommerzielle Lizenz des Modells (RMBG-1.4 von Bria).</p>
       </div>
     </Section>
   );

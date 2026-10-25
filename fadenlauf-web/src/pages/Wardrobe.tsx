@@ -20,7 +20,7 @@ export function WardrobePage() {
   return (
     <>
       <PageHead eyebrow={`${usable.length} Teile`} title="Kleiderschrank" />
-      <FileButton multiple label="+ Teile fotografieren oder hochladen" busy={up && `Analysiere ${up.done + 1} von ${up.total} …`} onFiles={app.uploadItems} />
+      <FileButton multiple label="+ Teile fotografieren oder hochladen" busy={busy.model != null ? `Lade KI-Modell … ${busy.model} %` : up && `Analysiere ${up.done + 1} von ${up.total} …`} onFiles={app.uploadItems} />
       <p className="mt-3 text-xs text-muted">Tipp: ein Teil pro Foto, flach hingelegt oder auf dem Bügel vor ruhigem Hintergrund.</p>
       {(recutN > 0 || rc) && <div className="note mt-4 flex items-center justify-between gap-4 text-sm"><p>{rc ? `Stelle frei: ${rc.done} von ${rc.total} …` : `${recutN} ${recutN === 1 ? "Teil hat" : "Teile haben"} noch den Hintergrund. Jetzt freistellen?`}</p><button className="btn btn-sm btn-ghost shrink-0" disabled={!!rc} onClick={app.recutAll}>Freistellen</button></div>}
 

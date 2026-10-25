@@ -119,3 +119,20 @@ export function prepImage(file: Blob, max = 1400, q = 0.86): Promise<Blob> {
     img.src = url;
   });
 }
+
+/**
+ * Freistellen mit Rangfolge: KI-Modell (wenn aktiviert), sonst oder bei Scheitern die schnelle Pixel-Methode.
+ * Liefert null, wenn beide kein sauberes Ergebnis erzeugen. Dann bleibt das Original stehen.
+ */
+export async function cutout(src: Blob, tol = 1, onModelLoad?: (percent: number | null) => void): Promise<Blob | null> {
+  const ml = await import("./mlCutout");
+  if (ml.getCutMode() === "ml") {
+    try {
+      if (!ml.mlReady()) onModelLoad?.(0);
+      const b = await ml.mlCutoutBlob(src, tol, (p) => onModelLoad?.(p));
+      onModelLoad?.(null);
+      if (b) return b;
+    } catch (e) { onModelLoad?.(null); console.warn("KI-Freistellen nicht verfügbar, nutze schnelle Methode", e); }
+  }
+  return cutoutBlob(src, tol);
+}
