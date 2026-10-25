@@ -245,7 +245,7 @@ function useAppState() {
   const saveItemImage = (i: Item, which: "cut" | "orig") => patchDoc("items", i.id, { imageId: which === "cut" ? i.cutId! : i.origId! }).catch(fail);
   const reanalyze = async (i: Item) => {
     setBusyKey("re-" + i.id, true);
-    try { const a = Z.ItemAnalysis.parse(await ai.json(P.analyzeItemPrompt(allCats()), [await blobOf(i.imageId)])); if (a.error) throw new AppError("image_rejected"); await patchDoc("items", i.id, itemFromAI(a)); toast("Neu erkannt. Bitte kurz prüfen."); }
+    try { const a = Z.ItemAnalysis.parse(await ai.json(P.analyzeItemPrompt(allCats()), [await blobOf(i.origId || i.imageId)])); if (a.error) throw new AppError("image_rejected"); await patchDoc("items", i.id, itemFromAI(a)); toast("Neu erkannt. Bitte kurz prüfen."); }
     catch (e) { fail(e); } finally { setBusyKey("re-" + i.id, false); }
   };
 
@@ -253,7 +253,7 @@ function useAppState() {
     const todo = live.current.items.filter((i) => i.status === "manual" && i.imageId && !i.archived);
     setBusyKey("reall", { done: 0, total: todo.length }); let ok = 0, done = 0, limited = 0;
     for (const i of todo) {
-      try { const a = Z.ItemAnalysis.parse(await ai.json(P.analyzeItemPrompt(allCats()), [await blobOf(i.imageId)])); if (!a.error) { await patchDoc("items", i.id, itemFromAI(a)); ok++; } }
+      try { const a = Z.ItemAnalysis.parse(await ai.json(P.analyzeItemPrompt(allCats()), [await blobOf(i.origId || i.imageId)])); if (!a.error) { await patchDoc("items", i.id, itemFromAI(a)); ok++; } }
       catch (e) {
         const c = (e as AppError).code; if (c === "no_ai" || c === "daily_limit") { fail(e); break; }
         if (c === "rate_limited" && ++limited >= 2) { toast("Das KI-Limit ist gerade erreicht. Versuch es in ein, zwei Minuten noch einmal."); break; }
