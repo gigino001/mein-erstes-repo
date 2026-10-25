@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Chip, ConfirmButton, Field, FileButton, PageHead, Section } from "../components/ui";
-import { FITS, type Analysis, type Profile } from "../lib/types";
+import { AvatarStage } from "../components/Avatar";
+import { FITS, SKIN_TONES, defaultAvatar, type Analysis, type Profile } from "../lib/types";
 import { isHex, list, toggle } from "../lib/util";
 import { useApp } from "../state/AppContext";
 import { StylesPicker } from "./Onboarding";
@@ -58,6 +59,17 @@ export function ProfilePage() {
         <div className="field"><span>Halbkugel (für die Jahreszeit)</span><div className="flex gap-2"><Chip on={f.hemisphere === "north"} onClick={() => set("hemisphere", "north")}>Nord</Chip><Chip on={f.hemisphere === "south"} onClick={() => set("hemisphere", "south")}>Süd</Chip></div></div>
         <button className="btn w-full" disabled={!dirty} onClick={save}>{dirty ? "Änderungen speichern" : "Gespeichert"}</button>
       </div></Section>
+      <Section title="Avatar">
+        <p className="mb-4 text-sm text-muted">Deine Outfits erscheinen auf einer Figur und tragen genau die Fotos deiner Teile. Passe Figur und Hautton an.</p>
+        <div className="grid items-start gap-6 sm:grid-cols-2">
+          <AvatarStage items={[]} settings={p.avatar ?? defaultAvatar} />
+          <div className="space-y-5">
+            <div className="field"><span>Figur</span><div className="flex flex-wrap gap-2">{([["slim", "Schlank"], ["normal", "Normal"], ["strong", "Kräftig"]] as const).map(([k, l]) => <Chip key={k} on={(p.avatar ?? defaultAvatar).build === k} onClick={() => void app.patchProfile({ avatar: { ...(p.avatar ?? defaultAvatar), build: k } }).catch(app.fail)}>{l}</Chip>)}</div></div>
+            <div className="field"><span>Hautton</span><div className="flex flex-wrap gap-3">{SKIN_TONES.map((c) => <button key={c} aria-label={`Hautton ${c}`} aria-pressed={(p.avatar ?? defaultAvatar).skin === c} onClick={() => void app.patchProfile({ avatar: { ...(p.avatar ?? defaultAvatar), skin: c } }).catch(app.fail)} className="h-9 w-9 rounded-full border border-line aria-pressed:ring-2 aria-pressed:ring-gold aria-pressed:ring-offset-2 aria-pressed:ring-offset-paper" style={{ background: c }} />)}</div></div>
+            <p className="note text-xs">Das ist eine Zeichnung, kein Foto von dir. Eine echte Anprobe an deinem Körper braucht einen bezahlten Bild-KI-Dienst und ist als späterer Ausbau vorgesehen.</p>
+          </div>
+        </div>
+      </Section>
       <Section title="Foto-Style-Analyse"><AnalysisBlock analysis={p.analysis} draftProfile={p} saveLabel="Analyse-Texte speichern" onChange={async (a) => { try { await app.patchProfile({ analysis: a }); app.toast("Style-Analyse gespeichert."); } catch (e) { app.fail(e); } }} /></Section>
       <Section title="Was ich gelernt habe" action={<button className="btn btn-sm btn-ghost" disabled={app.busy.learn || !app.aiReady} onClick={() => app.learn(false)}>{app.busy.learn ? "Lerne …" : "Aus Feedback lernen"}</button>}>
         <p className="mb-4 text-sm text-muted">Ich aktualisiere das nach jeweils vier Bewertungen automatisch. Tippe auf ×, um etwas zu streichen.</p>

@@ -20,8 +20,11 @@ export type Profile = {
   likeColors: string; dislikeColors: string; brands: string; goals: string;
   styles: string[]; styleText: string; analysis: Analysis | null; learned: Learned;
   inspoSummary: string[]; customCats: string[]; fbCount: number; onboarded: boolean;
-  hemisphere: "north" | "south"; createdAt: number;
+  hemisphere: "north" | "south"; createdAt: number; avatar?: AvatarSettings;
 };
+export type AvatarSettings = { build: "slim" | "normal" | "strong"; skin: string };
+export const SKIN_TONES = ["#f3d9c4", "#e8bf9e", "#d3a07a", "#b27a55", "#8a5a3c", "#5e3b27"];
+export const defaultAvatar: AvatarSettings = { build: "normal", skin: SKIN_TONES[1] };
 
 export type Item = {
   id: string; imageId: string; origId: string | null; cutId: string | null; cutTried?: boolean;

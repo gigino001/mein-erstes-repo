@@ -2,6 +2,7 @@ import { useState } from "react";
 import { roleOf, wornCount, wornToday, type Role } from "../lib/logic";
 import { ADJUSTMENTS, REJECT_REASONS, type Item, type Outfit } from "../lib/types";
 import { useApp } from "../state/AppContext";
+import { AvatarStage, avatarPossible } from "./Avatar";
 import { Chip, Dots, Photo, Sheet, cx, useBlob } from "./ui";
 
 const viewMode = () => { try { return localStorage.getItem("fadenlauf-view") || "flat"; } catch { return "flat"; } };
@@ -43,13 +44,17 @@ function GridView({ ids, items, onOpen }: { ids: string[]; items: Item[]; onOpen
 }
 
 export function OutfitVisual({ outfit, onOpen, noToggle }: { outfit: Outfit; onOpen: (i: Item) => void; noToggle?: boolean }) {
-  const { items } = useApp(); const [mode, setMode] = useState(viewMode);
+  const { items, profile } = useApp(); const [mode, setMode] = useState(viewMode);
   const its = outfit.itemIds.map((id) => items.find((i) => i.id === id)).filter(Boolean) as Item[];
-  const flat = Flatlay({ items: its, onOpen }); const showFlat = mode === "flat" && flat;
+  const flat = Flatlay({ items: its, onOpen }); const avatar = avatarPossible(its);
+  // Gewünschte Ansicht, sonst die nächstbeste verfügbare
+  const shown = mode === "avatar" && avatar ? "avatar" : mode === "flat" && flat ? "flat" : mode === "grid" ? "grid" : flat ? "flat" : avatar ? "avatar" : "grid";
+  const pick = (m: string) => { try { localStorage.setItem("fadenlauf-view", m); } catch { /* privat */ } setMode(m); };
+  const opts = [flat && ["flat", "Flatlay"], avatar && ["avatar", "Avatar"], ["grid", "Einzelteile"]].filter(Boolean) as [string, string][];
   return (
-    <div className="relative">
-      {showFlat ? flat : <GridView ids={outfit.itemIds} items={items} onOpen={onOpen} />}
-      {flat && !noToggle && <button className="chip absolute right-3 top-3 bg-paper/90 backdrop-blur" onClick={() => { const m = showFlat ? "grid" : "flat"; try { localStorage.setItem("fadenlauf-view", m); } catch { /* privat */ } setMode(m); }}>{showFlat ? "Einzelteile" : "Flatlay"}</button>}
+    <div>
+      {shown === "avatar" ? <AvatarStage items={its} settings={profile?.avatar} /> : shown === "flat" ? flat : <GridView ids={outfit.itemIds} items={items} onOpen={onOpen} />}
+      {!noToggle && opts.length > 1 && <div className="flex justify-center gap-1.5 border-t border-line bg-surface py-2.5" role="group" aria-label="Ansicht">{opts.map(([k, l]) => <Chip key={k} on={shown === k} onClick={() => pick(k)}>{l}</Chip>)}</div>}
     </div>
   );
 }
