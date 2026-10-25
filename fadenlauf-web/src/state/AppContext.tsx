@@ -251,10 +251,13 @@ function useAppState() {
 
   const reanalyzeMissing = async () => {
     const todo = live.current.items.filter((i) => i.status === "manual" && i.imageId && !i.archived);
-    setBusyKey("reall", { done: 0, total: todo.length }); let ok = 0, done = 0;
+    setBusyKey("reall", { done: 0, total: todo.length }); let ok = 0, done = 0, limited = 0;
     for (const i of todo) {
       try { const a = Z.ItemAnalysis.parse(await ai.json(P.analyzeItemPrompt(allCats()), [await blobOf(i.imageId)])); if (!a.error) { await patchDoc("items", i.id, itemFromAI(a)); ok++; } }
-      catch (e) { if ((e as AppError).code === "no_ai" || (e as AppError).code === "daily_limit") { fail(e); break; } }
+      catch (e) {
+        const c = (e as AppError).code; if (c === "no_ai" || c === "daily_limit") { fail(e); break; }
+        if (c === "rate_limited" && ++limited >= 2) { toast("Das KI-Limit ist gerade erreicht. Versuch es in ein, zwei Minuten noch einmal."); break; }
+      }
       setBusyKey("reall", { done: ++done, total: todo.length });
     }
     setBusyKey("reall", null); toast(`${ok} von ${todo.length} Teilen erkannt.${ok < todo.length ? " Der Rest lässt sich einzeln oder später erneut versuchen." : ""}`);

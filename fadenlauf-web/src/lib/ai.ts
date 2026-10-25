@@ -14,12 +14,21 @@ export function parseJson(text: string): unknown {
 const toB64 = (b: Blob) => new Promise<string>((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(",")[1]); r.onerror = () => rej(new AppError("image_rejected")); r.readAsDataURL(b); });
 
 /** Cloud: Aufruf über die Supabase-Edge-Function. Der API-Schlüssel bleibt auf dem Server. */
+const sleep = (ms: number) => new Promise((ok) => setTimeout(ok, ms));
+let lastCall = 0;
+/** Kostenlose Kontingente erlauben nur wenige Anfragen pro Minute: Aufrufe im Abstand von mindestens 4 Sekunden. */
+async function pace() { const wait = lastCall + 4000 - Date.now(); lastCall = Math.max(Date.now(), lastCall + 4000); if (wait > 0) await sleep(wait); }
+
 export class EdgeAi implements Ai {
   async json(prompt: string, images: Blob[] = []) {
-    // Kurzzeitige Aussetzer (Überlastung, Netz) bis zu zweimal automatisch wiederholen.
+    // Aussetzer (Überlastung, Netz) bis zu zweimal, Minutenlimit mit längerer Pause automatisch wiederholen.
     for (let i = 0; ; i++) {
+      await pace();
       try { return await this.once(prompt, images); }
-      catch (e) { const c = (e as AppError).code; if (i >= 2 || (c !== "offline" && c !== "provider")) throw e; await new Promise((ok) => setTimeout(ok, 2000 * (i + 1))); }
+      catch (e) {
+        const c = (e as AppError).code; const retry = c === "offline" || c === "provider" || c === "rate_limited";
+        if (i >= 2 || !retry) throw e; await sleep(c === "rate_limited" ? 15000 * (i + 1) : 2000 * (i + 1));
+      }
     }
   }
   private async once(prompt: string, images: Blob[]) {

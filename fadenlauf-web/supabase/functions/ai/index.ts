@@ -57,15 +57,15 @@ Deno.serve(async (req) => {
       if (!r.ok) return fail(r, "provider", 502);
       text = (await r.json()).content?.map((p: any) => p.text).join("") ?? "";
     } else {
-      // Erst das gewählte Modell, bei Überlastung (503) oder abgeschaltetem Modell (404) die Ausweichmodelle.
-      const models = [...new Set([Deno.env.get("AI_MODEL") ?? "gemini-3.5-flash", "gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-3.8-flash"])];
+      // Erst das gewählte Modell, bei Überlastung (503), Minutenlimit (429) oder abgeschaltetem Modell (404) die Ausweichmodelle.
+      const models = [...new Set([Deno.env.get("AI_MODEL") ?? "gemini-3.5-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-flash-lite-latest", "gemini-3.8-flash"])];
       let r!: Response;
       for (const model of models) {
         r = await post(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
           method: "POST", headers: { "content-type": "application/json", "x-goog-api-key": Deno.env.get("GEMINI_API_KEY")! },
           body: JSON.stringify({ contents: [{ parts: [{ text: prompt }, ...images.map((i: any) => ({ inline_data: { mime_type: i.mime, data: i.data } }))] }], generationConfig: { responseMimeType: "application/json", temperature: 0.8 } }),
         });
-        if (r.ok || (r.status !== 503 && r.status !== 404)) break;
+        if (r.ok || (r.status !== 503 && r.status !== 404 && r.status !== 429)) break;
         console.error("Modell nicht nutzbar, weiche aus:", model, r.status);
       }
       if (r.status === 429) return fail(r, "rate_limited", 429);
