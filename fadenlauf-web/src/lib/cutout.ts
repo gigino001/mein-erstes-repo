@@ -70,7 +70,12 @@ export function computeMask(px: ArrayLike<number>, w: number, h: number, tol = 1
   for (let i = 0; i < N; i++) if (er[i]) { cnt++; const x = i % w, y = (i / w) | 0; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
   for (const i of border) if (fg[i]) bf++;
   const frac = cnt / N, bfr = bf / border.length;
+  // Qualitätsprüfung: ein Kleidungsstück füllt das Foto spürbar und ist eine zusammenhängende Fläche.
+  // Zerfetzte oder winzige Masken (Teil und Hintergrund fast gleichfarbig) lieber verwerfen als Müll liefern.
+  const bboxArea = (x1 - x0 + 1) * (y1 - y0 + 1), solidity = cnt / Math.max(1, bboxArea);
   if (frac < .02) return { ok: false, why: "leer", frac, bfr };
+  if (frac < .05) return { ok: false, why: "zu klein", frac, bfr };
+  if (solidity < .3) return { ok: false, why: "zerfetzt", frac, bfr };
   if (frac > .95) return { ok: false, why: "voll", frac, bfr };
   if (bfr > .8) return { ok: false, why: "rand", frac, bfr };
   return { ok: true, mask: er, box: [x0, y0, x1, y1], frac, bfr, tG };

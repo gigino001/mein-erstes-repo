@@ -37,6 +37,8 @@ const cases = [
   ["Brauner Schuh auf hellem Boden", img(sheet, shoe, () => [110, 70, 40]), "cut"],
   ["Weißes Hemd auf dunklem Boden", img(dark, shirt, () => [238, 238, 240]), "cut"],
   ["Bunter, unruhiger Hintergrund", img(busy, shirt, () => [35, 45, 85]), "reject"],
+  // Beige Hose vor beiger Wand (Fehler aus der Praxis): Teil und Hintergrund fast gleich -> verwerfen statt Fetzen
+  ["Beige Hose vor beiger Wand", img((x, y) => { const s = (rnd() - 0.5) * 6; return [176 + s, 160 + s, 135 + s]; }, jeans, (x, y) => [172 + (x % 40 < 3 ? -40 : 0), 156 + (x % 40 < 3 ? -40 : 0), 131], undefined), "reject"],
 ];
 
 
