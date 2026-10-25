@@ -1,0 +1,26 @@
+/* Farb- und Schrift-Tokens. Hell ist Standard, Dunkel folgt dem System. */
+:root {
+  --bg: #e4e9e6; --surface: #f5f7f5; --card: #ffffff; --ink: #0f1c1a; --muted: #5b6a66; --line: #d5ddd9;
+  --accent: #1f3fd1; --accent-ink: #ffffff; --accent-soft: #e2e8fb;
+  --urlaub: #9a6410; --urlaub-soft: #f5ead0;
+  --krank: #b0344a; --krank-soft: #f7dce1;
+  --abbau: #0b7468; --abbau-soft: #d3ede9;
+  --feiertag: #566176; --feiertag-soft: #e3e6ec;
+  --good: #1d7a4b; --warn: #a8581a; --kl: 40%;
+  --f-display: 'Bricolage Grotesque Variable', 'Segoe UI', system-ui, sans-serif;
+  --f-body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a100f; --surface: #111917; --card: #19231f; --ink: #e7eeeb; --muted: #93a39e; --line: #27342f;
+    --accent: #8499ff; --accent-ink: #0a1033; --accent-soft: #1e2654;
+    --urlaub: #e5b55c; --urlaub-soft: #3a2f15;
+    --krank: #f28c9b; --krank-soft: #3b1c22;
+    --abbau: #5ed2c1; --abbau-soft: #12342f;
+    --feiertag: #a5afc1; --feiertag-soft: #272d38;
+    --good: #5fd197; --warn: #f0a45f; --kl: 68%;
+    color-scheme: dark;
+  }
+}
