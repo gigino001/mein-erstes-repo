@@ -36,7 +36,7 @@ function minBookableDateStr() {
 
 function maxDateStr() {
   const d = new Date();
-  d.setDate(d.getDate() + 60);
+  d.setMonth(d.getMonth() + 6);
   return d.toISOString().slice(0, 10);
 }
 
