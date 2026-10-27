@@ -5,9 +5,10 @@ import { buildCalendarFeedIcs } from "@/lib/ics";
 /**
  * Privater, mit einem geheimen Token geschützter Kalender-Feed zum
  * Abonnieren (webcal://…?token=…) in Claudias iPhone-Kalender — zeigt alle
- * bestätigten Termine. Kein Admin-Login, da Kalender-Apps keine
- * Formular-Logins unterstützen; stattdessen ein eigener, nur Claudia
- * bekannter Token statt der Admin-Session.
+ * bestätigten Termine sowie selbst gesetzte Blockierungen (Urlaub, private
+ * Termine usw.). Kein Admin-Login, da Kalender-Apps keine Formular-Logins
+ * unterstützen; stattdessen ein eigener, nur Claudia bekannter Token statt
+ * der Admin-Session.
  */
 export async function GET(request: Request) {
   const token = new URL(request.url).searchParams.get("token");
@@ -17,11 +18,14 @@ export async function GET(request: Request) {
     return new NextResponse("Forbidden", { status: 403 });
   }
 
-  const appointments = await prisma.appointment.findMany({
-    where: { status: "confirmed" },
-    include: { service: true },
-    orderBy: { startAt: "asc" },
-  });
+  const [appointments, blocks] = await Promise.all([
+    prisma.appointment.findMany({
+      where: { status: "confirmed" },
+      include: { service: true },
+      orderBy: { startAt: "asc" },
+    }),
+    prisma.availabilityException.findMany({ orderBy: { date: "asc" } }),
+  ]);
 
   const ics = buildCalendarFeedIcs(
     appointments.map((a) => ({
@@ -31,6 +35,14 @@ export async function GET(request: Request) {
       serviceName: a.service.name,
       customerName: a.customerName,
       customerEmail: a.customerEmail,
+    })),
+    blocks.map((b) => ({
+      id: b.id,
+      date: b.date,
+      allDay: b.allDay,
+      startMinute: b.startMinute,
+      endMinute: b.endMinute,
+      reason: b.reason,
     })),
   );
 
