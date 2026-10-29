@@ -27,6 +27,7 @@ import fassade from '../assets/demo/fassade.jpg';
 import event1 from '../assets/demo/event-1.jpg';
 import event2 from '../assets/demo/event-2.jpg';
 import event3 from '../assets/demo/event-3.jpg';
+import silvester2026 from '../assets/fotos/silvester-2026.jpg';
 
 /** Auf false setzen, sobald echte Fotos eingesetzt sind */
 export const demoImages: boolean = true;
@@ -58,8 +59,12 @@ export const images = {
   },
 } as const;
 
-/** Event-Slug → Bild. Fehlt ein Eintrag, bleibt die Fläche leer. */
-export const eventImages: Record<string, { src: ImageMetadata; alt: string }> = {
+/**
+ * Event-Slug → Bild. Fehlt ein Eintrag, bleibt die Fläche leer.
+ * `real: true` markiert ein echtes Motiv (kein KI-Demobild) — unterdrückt
+ * den "Demobild"-Hinweis in der Figure-Komponente für diesen Eintrag.
+ */
+export const eventImages: Record<string, { src: ImageMetadata; alt: string; real?: boolean }> = {
   'opening-weekend': {
     src: event1,
     alt: 'Abendstimmung im Gastraum mit Kerzenlicht, Rattanleuchten und der Bar im Hintergrund.',
@@ -71,5 +76,10 @@ export const eventImages: Record<string, { src: ImageMetadata; alt: string }> = 
   'sunday-brunch-vinyl': {
     src: event3,
     alt: 'Gedeckte Tische unter Lichterketten, im Hintergrund die beleuchtete Bar.',
+  },
+  'silvester-2026': {
+    src: silvester2026,
+    alt: 'Ankündigungsmotiv zur Silvesterparty: Porträt vor der beleuchteten LUMO-Fassade mit Palmen und Feuerwerk am Nachthimmel, Schriftzug „New Year’s Eve 2026 – Special Guest Juelz, 31.12.2026".',
+    real: true,
   },
 };
