@@ -1,0 +1,26 @@
+name: lumo-mg
+on:
+  push: { paths: ["lumo-mg/**", ".github/workflows/lumo-mg.yml"] }
+  pull_request: { paths: ["lumo-mg/**"] }
+  workflow_dispatch:
+concurrency: { group: lumo-mg-deploy, cancel-in-progress: false }
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: lumo-mg } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: lumo-mg/package-lock.json }
+      - run: npm ci
+      - run: npm run check:todo
+      - run: npm run build
+      # Ab hier nur auf main: dist/ geht live. Auf jedem anderen Branch
+      # endet der Lauf nach dem Build und prueft damit nur, ob er gruen ist.
+      - name: .env aus Secret schreiben
+        if: github.ref == 'refs/heads/main'
+        env: { LUMO_ENV: "${{ secrets.LUMO_ENV }}" }
+        run: printf '%s' "$LUMO_ENV" > .env
+      - name: Per FTP zu all-inkl hochladen
+        if: github.ref == 'refs/heads/main'
+        run: npm run deploy
