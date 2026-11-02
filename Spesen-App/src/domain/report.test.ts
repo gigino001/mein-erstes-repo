@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { buildReport, reportFileBase, type ReceiptLike } from './report'
 import { DEFAULT_SETTINGS, type DayEntry } from './types'
 
-const s = { ...DEFAULT_SETTINGS, openingBalance: 750, openingDate: '2026-07-01' }
+const s = { ...DEFAULT_SETTINGS, openingBalance: 750, openingDate: '2026-07-01', vacation: { '2026': { days: 30, carryOver: 2 } } }
 const d = (date: string, type: DayEntry['type'], half = false, start?: string, end?: string): DayEntry => ({ date, type, half, start, end })
 const entries = new Map<string, DayEntry>(
   [
@@ -58,6 +58,18 @@ describe('buildReport Oktober 2026', () => {
     const w = buildReport({ ...base, receipts: rc }).warnings
     expect(w).toContain('1 Bewirtungsbeleg ohne Anlass oder Personenzahl.')
     expect(w).toContain('1 Beleg hat kein Foto.')
+  })
+  it('Urlaub im Monat und Rest', () => {
+    // 2.10. ganz, 9.10. halb = 1,5 Tage; Anspruch 30 + 2
+    expect(r.vacation).toMatchObject({ year: 2026, total: 32, inMonth: 1.5, untilMonthEnd: 1.5, remaining: 30.5, unset: false })
+  })
+  it('ohne Anspruch und ohne Urlaub im Monat kein Urlaubsblock, mit Urlaub nur die Monatszahl', () => {
+    expect(buildReport({ ...base, settings: { ...s, vacation: {} }, entries: new Map() }).vacation).toBeNull()
+    expect(buildReport({ ...base, settings: { ...s, vacation: {} } }).vacation).toMatchObject({ unset: true, inMonth: 1.5 })
+  })
+  it('Hinweis bei überschrittenem Anspruch', () => {
+    const w = buildReport({ ...base, settings: { ...s, vacation: { '2026': { days: 1, carryOver: 0 } } } }).warnings
+    expect(w).toContain('Urlaubsanspruch 2026 überschritten: 0,5 Tage mehr als dein Anspruch.')
   })
   it('Monat vor dem Stichtag hat kein Konto', () => {
     expect(buildReport({ ...base, month: 6 }).konto).toBeNull()

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatDays, parseDays, summarizeVacation, vacationFor } from './vacation'
+import { daysLabel, formatDays, parseDays, summarizeVacation, vacationFor, vacationForMonth } from './vacation'
 import type { DayEntry } from './types'
 
 const d = (date: string, type: DayEntry['type'], half = false): DayEntry => ({ date, type, half })
@@ -66,5 +66,36 @@ describe('Tage ein- und ausgeben', () => {
     expect(parseDays('')).toBeNull()
     expect(parseDays('-3')).toBeNull()
     expect(parseDays('abc')).toBeNull()
+  })
+})
+
+describe('vacationForMonth', () => {
+  const v = { vacation: { '2026': { days: 30, carryOver: 2 } } }
+  const e = map(
+    d('2026-09-10', 'urlaub'),
+    d('2026-10-02', 'urlaub'),
+    d('2026-10-09', 'urlaub', true),
+    d('2026-10-13', 'krank'),
+    d('2026-12-28', 'urlaub'),
+    d('2026-12-29', 'urlaub', true),
+  )
+  it('im Monat, bis Monatsende und danach', () => {
+    expect(vacationForMonth(2026, 10, e, v)).toMatchObject({ total: 32, inMonth: 1.5, untilMonthEnd: 2.5, afterMonth: 1.5, remaining: 29.5, unset: false })
+  })
+  it('Vormonat kennt nur den Urlaub bis dahin', () => {
+    expect(vacationForMonth(2026, 9, e, v)).toMatchObject({ inMonth: 1, untilMonthEnd: 1, afterMonth: 3, remaining: 31 })
+  })
+  it('Dezember: alles im Jahr', () => {
+    expect(vacationForMonth(2026, 12, e, v)).toMatchObject({ inMonth: 1.5, untilMonthEnd: 4, afterMonth: 0, remaining: 28 })
+  })
+  it('ohne Anspruch: unset', () => expect(vacationForMonth(2026, 10, e, {}).unset).toBe(true))
+})
+
+describe('daysLabel', () => {
+  it('Einzahl und Mehrzahl', () => {
+    expect(daysLabel(1)).toBe('1 Tag')
+    expect(daysLabel(2.5)).toBe('2,5 Tage')
+    expect(daysLabel(0)).toBe('0 Tage')
+    expect(daysLabel(-1)).toBe('-1 Tag')
   })
 })

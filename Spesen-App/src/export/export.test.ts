@@ -6,7 +6,7 @@ import { buildCsv, csvBlob } from './csv'
 import { buildPdf } from './pdf'
 import { xlsxBlob } from './xlsx'
 
-const s = { ...DEFAULT_SETTINGS, openingBalance: 750, openingDate: '2026-07-01' }
+const s = { ...DEFAULT_SETTINGS, openingBalance: 750, openingDate: '2026-07-01', vacation: { '2026': { days: 30, carryOver: 2 } } }
 const d = (date: string, type: DayEntry['type'], half = false, start?: string, end?: string): DayEntry => ({ date, type, half, start, end })
 const entries = new Map<string, DayEntry>(
   [
@@ -54,6 +54,8 @@ describe('CSV', () => {
     expect(csv).toContain('08.10.2026;Abfeiern;;;0;-8;')
     expect(csv).toContain('Gesamt Auszahlung (EUR);204,70')
     expect(csv).toContain('Konto Stand (Std.);10')
+    expect(csv).toContain('Urlaub im Monat (Tage);1,5')
+    expect(csv).toContain('Urlaub noch übrig (Tage);30,5')
   })
   it('maskiert Semikolon, Anführungszeichen und Formeln', () => {
     expect(csv).toContain('"Parkhaus ""Hbf""; Köln"')

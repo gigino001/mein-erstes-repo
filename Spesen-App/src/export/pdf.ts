@@ -2,6 +2,7 @@ import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf
 import { formatDuration } from '../domain/time'
 import { CATEGORY_LABEL, type Category } from '../domain/types'
 import type { Report } from '../domain/report'
+import { daysLabel, formatDays } from '../domain/vacation'
 
 const W = 595.28
 const H = 841.89
@@ -159,6 +160,17 @@ export async function buildPdf(r: Report, photos: (Uint8Array | undefined)[] = [
     w.kv('Vormonat', dur(r.konto.previous, true))
     w.kv('Dieser Monat', dur(r.konto.change, true))
     w.kv('Stand', dur(r.konto.end, true), { bold: true })
+  }
+  if (r.vacation) {
+    const v = r.vacation
+    w.heading('Urlaub')
+    w.kv('Im Monat genommen', daysLabel(v.inMonth))
+    if (!v.unset) {
+      w.kv(`Anspruch ${v.year}${v.carryOver > 0 ? ` (inkl. ${formatDays(v.carryOver)} Resturlaub)` : ''}`, daysLabel(v.total))
+      w.kv('Genommen im Jahr bis Monatsende', daysLabel(v.untilMonthEnd))
+      w.kv('Noch \u00fcbrig', daysLabel(v.remaining), { bold: true, color: v.remaining < 0 ? RED : INK })
+      if (v.afterMonth > 0) w.kv('Danach schon eingetragen', daysLabel(v.afterMonth))
+    }
   }
   if (r.warnings.length) {
     w.y -= 6

@@ -2,6 +2,7 @@ import { CATEGORY_LABEL } from '../domain/types'
 import type { Report } from '../domain/report'
 
 const hours = (min: number) => String(Math.round((min / 60) * 100) / 100).replace('.', ',')
+const days = (n: number) => String(n).replace('.', ',')
 const money = (n: number) => n.toFixed(2).replace('.', ',')
 const dateDe = (key: string) => `${key.slice(8)}.${key.slice(5, 7)}.${key.slice(0, 4)}`
 
@@ -30,6 +31,11 @@ export function buildCsv(r: Report): string {
   rows.push(line(['Soll (Std.)', hours(r.soll)]), line(['Ist (Std.)', hours(r.ist)]), line(['Differenz (Std.)', hours(r.diff)]))
   rows.push(line([`Verpflegung (${r.verpDays} Tage)`, money(r.verp)]), line(['Belege', money(r.receiptTotal)]), line(['Gesamt Auszahlung (EUR)', money(r.total)]))
   if (r.konto) rows.push(line(['Konto Vormonat (Std.)', hours(r.konto.previous)]), line(['Konto Änderung (Std.)', hours(r.konto.change)]), line(['Konto Stand (Std.)', hours(r.konto.end)]))
+  if (r.vacation) {
+    const v = r.vacation
+    rows.push(line(['Urlaub im Monat (Tage)', days(v.inMonth)]))
+    if (!v.unset) rows.push(line([`Urlaubsanspruch ${v.year} inkl. Resturlaub (Tage)`, days(v.total)]), line(['Urlaub genommen bis Monatsende (Tage)', days(v.untilMonthEnd)]), line(['Urlaub noch übrig (Tage)', days(v.remaining)]))
+  }
   return rows.join('\r\n') + '\r\n'
 }
 

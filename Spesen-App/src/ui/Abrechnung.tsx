@@ -10,6 +10,7 @@ import { pdfFile, receiptImageFiles } from '../export/files'
 import { xlsxBlob } from '../export/xlsx'
 import { Header } from './Header'
 import { shareFiles } from './share'
+import { daysLabel, formatDays } from '../domain/vacation'
 
 const CATS = Object.keys(CATEGORY_LABEL) as Category[]
 const tone = (n: number) => (n > 0 ? 'pos' : n < 0 ? 'neg' : '')
@@ -133,6 +134,20 @@ export function Abrechnung({ onSettings, onToast }: { onSettings: () => void; on
             <div className="kv"><span>Vormonat</span><i /><b className="mono">{formatDuration(r.konto.previous, true)}</b></div>
             <div className="kv"><span>Dieser Monat</span><i /><b className={`mono ${tone(r.konto.change)}`}>{formatDuration(r.konto.change, true)}</b></div>
             <div className="kv"><span>Stand</span><i /><b className="mono">{formatDuration(r.konto.end, true)}</b></div>
+          </div>
+        )}
+        {r.vacation && (
+          <div className="blk">
+            <div className="label">Urlaub</div>
+            <div className="kv"><span>Im Monat genommen</span><i /><b className="mono">{daysLabel(r.vacation.inMonth)}</b></div>
+            {!r.vacation.unset && (
+              <>
+                <div className="kv"><span>Anspruch {r.vacation.year}{r.vacation.carryOver > 0 ? ` (inkl. ${formatDays(r.vacation.carryOver)} Resturlaub)` : ''}</span><i /><b className="mono">{daysLabel(r.vacation.total)}</b></div>
+                <div className="kv"><span>Genommen bis Monatsende</span><i /><b className="mono">{daysLabel(r.vacation.untilMonthEnd)}</b></div>
+                <div className="kv"><span>Noch übrig</span><i /><b className={`mono ${r.vacation.remaining < 0 ? 'neg' : ''}`}>{daysLabel(r.vacation.remaining)}</b></div>
+                {r.vacation.afterMonth > 0 && <div className="kv"><span>Danach schon eingetragen</span><i /><b className="mono">{daysLabel(r.vacation.afterMonth)}</b></div>}
+              </>
+            )}
           </div>
         )}
         <details>

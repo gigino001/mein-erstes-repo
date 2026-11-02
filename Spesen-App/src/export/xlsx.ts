@@ -27,6 +27,20 @@ export async function xlsxBlob(r: Report): Promise<Blob> {
     ...(r.konto
       ? [[], [head('Stundenkonto')], [text('Vormonat (Std.)'), num(hours(r.konto.previous))], [text('Änderung (Std.)'), num(hours(r.konto.change))], [text('Stand (Std.)'), num(hours(r.konto.end))]]
       : []),
+    ...(r.vacation
+      ? [
+          [],
+          [head('Urlaub')],
+          [text('Im Monat (Tage)'), num(r.vacation.inMonth, '0.0')],
+          ...(r.vacation.unset
+            ? []
+            : [
+                [text(`Anspruch ${r.vacation.year} inkl. Resturlaub (Tage)`), num(r.vacation.total, '0.0')],
+                [text('Genommen bis Monatsende (Tage)'), num(r.vacation.untilMonthEnd, '0.0')],
+                [text('Noch übrig (Tage)'), num(r.vacation.remaining, '0.0')],
+              ]),
+        ]
+      : []),
   ]
 
   const days = [

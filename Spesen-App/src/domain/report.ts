@@ -1,5 +1,6 @@
 import { balanceAt, summarizeMonth, type Adjustment } from './calc'
 import { sumAmounts } from './receipt'
+import { vacationForMonth, daysLabel, type VacationMonth } from './vacation'
 import { fromDateKey } from './time'
 import { CATEGORY_LABEL, TYPE_LABEL, type Category, type DayEntry, type Settings } from './types'
 
@@ -47,6 +48,8 @@ export interface Report {
   total: number
   /** Stundenkonto; null, wenn der Monat vor dem Stichtag des Startsaldos liegt. */
   konto: { previous: number; change: number; end: number } | null
+  /** Urlaubsstand; null, wenn weder Anspruch eingetragen noch Urlaub im Monat. */
+  vacation: VacationMonth | null
   warnings: string[]
 }
 
@@ -96,7 +99,11 @@ export function buildReport(p: {
     konto = { previous, change: end - previous, end }
   }
 
+  const vac = vacationForMonth(year, month, entries, settings)
+  const vacation = vac.unset && vac.inMonth === 0 ? null : vac
+
   const warnings: string[] = []
+  if (vacation && !vacation.unset && vacation.remaining < 0) warnings.push(`Urlaubsanspruch ${year} überschritten: ${daysLabel(-vacation.remaining)} mehr als dein Anspruch.`)
   if (summary.missing.length) {
     const list = summary.missing.slice(0, 6).map(germanShort).join(', ')
     warnings.push(`${summary.missing.length} ${summary.missing.length === 1 ? 'Werktag' : 'Werktage'} ohne Eintrag: ${list}${summary.missing.length > 6 ? ' …' : ''}`)
@@ -125,6 +132,7 @@ export function buildReport(p: {
     receiptTotal,
     total: sumAmounts([summary.verp, receiptTotal]),
     konto,
+    vacation,
     warnings,
   }
 }
