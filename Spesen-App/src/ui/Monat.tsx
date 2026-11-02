@@ -44,7 +44,7 @@ export function Monat({ onSettings, onEdit, onRange }: Props) {
 
   return (
     <>
-      <Header title={title} sub={`${formatDuration(summary.ist)} von ${formatDuration(summary.soll)} gebucht · ${euro0(summary.verp)} Verpflegung`} onSettings={onSettings} />
+      <Header title={title} sub={`${formatDuration(summary.ist)} von ${formatDuration(summary.soll)} gebucht${settings.verpEnabled ? ` · ${euro0(summary.verp)} Verpflegung` : ''}`} onSettings={onSettings} />
       <div className="row between">
         <div className="row">
           <button className="icon-btn" onClick={() => shift(-1)} aria-label="Vorheriger Monat">‹</button>

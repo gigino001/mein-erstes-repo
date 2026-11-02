@@ -41,6 +41,8 @@ export interface Report {
   verp: number
   verpDays: number
   verpRate: number
+  /** Verpflegungspauschale ist eingeschaltet. */
+  verpEnabled: boolean
   receipts: ReceiptLike[]
   byCategory: Record<Category, number>
   receiptTotal: number
@@ -127,6 +129,7 @@ export function buildReport(p: {
     verp: summary.verp,
     verpDays: summary.verpDays,
     verpRate: settings.verpRate,
+    verpEnabled: settings.verpEnabled,
     receipts,
     byCategory,
     receiptTotal,

@@ -139,8 +139,10 @@ export async function buildPdf(r: Report, photos: (Uint8Array | undefined)[] = [
   w.kv('Ist', dur(r.ist))
   w.kv('Differenz', dur(r.diff, true), { bold: true, color: r.diff < 0 ? RED : r.diff > 0 ? GREEN : INK })
 
-  w.heading('Verpflegung')
-  w.kv(`${r.verpDays} ${r.verpDays === 1 ? 'Tag' : 'Tage'} × ${eur(r.verpRate)}`, eur(r.verp))
+  if (r.verpEnabled) {
+    w.heading('Verpflegung')
+    w.kv(`${r.verpDays} ${r.verpDays === 1 ? 'Tag' : 'Tage'} × ${eur(r.verpRate)}`, eur(r.verp))
+  }
 
   w.heading('Belege')
   const used = CAT_ORDER.filter((c) => r.byCategory[c] > 0)
@@ -193,7 +195,7 @@ export async function buildPdf(r: Report, photos: (Uint8Array | undefined)[] = [
       { title: 'Ende', x: M + 222, w: 48, align: 'right' },
       { title: 'Ist', x: M + 282, w: 50, align: 'right' },
       { title: 'Differenz', x: M + 338, w: 66, align: 'right' },
-      { title: 'Verpflegung', x: M + 410, w: cw - 410, align: 'right' },
+      ...(r.verpEnabled ? [{ title: 'Verpflegung', x: M + 410, w: cw - 410, align: 'right' as const }] : []),
     ],
     r.days.map((d) => ({
       cells: [
@@ -203,14 +205,14 @@ export async function buildPdf(r: Report, photos: (Uint8Array | undefined)[] = [
         d.end ?? '',
         d.booked ? dur(d.ist) : '',
         d.booked ? dur(d.diff, true) : '',
-        d.verp ? eur(d.verp) : '',
+        ...(r.verpEnabled ? [d.verp ? eur(d.verp) : ''] : []),
       ],
       color: d.missing ? RED : undefined,
     })),
     header,
   )
   w.y -= 2
-  w.kv('Summe', `${dur(r.ist)} · ${dur(r.diff, true)} · ${eur(r.verp)}`, { bold: true })
+  w.kv('Summe', `${dur(r.ist)} · ${dur(r.diff, true)}${r.verpEnabled ? ` · ${eur(r.verp)}` : ''}`, { bold: true })
 
   // Belegübersicht
   if (r.receipts.length) {

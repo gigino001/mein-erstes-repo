@@ -117,10 +117,12 @@ export function Abrechnung({ onSettings, onToast }: { onSettings: () => void; on
           <div className="kv"><span>Ist</span><i /><b className="mono">{formatDuration(r.ist)}</b></div>
           <div className="kv"><span>Differenz</span><i /><b className={`mono ${tone(r.diff)}`}>{formatDuration(r.diff, true)}</b></div>
         </div>
+        {r.verpEnabled && (
         <div className="blk">
           <div className="label">Verpflegung</div>
           <div className="kv"><span>{r.verpDays} {r.verpDays === 1 ? 'Tag' : 'Tage'} × {formatEuro(r.verpRate)}</span><i /><b className="mono">{formatEuro(r.verp)}</b></div>
         </div>
+        )}
         <div className="blk">
           <div className="label">Belege</div>
           {usedCats.length === 0 && <div className="note">Keine Belege in diesem Monat.</div>}
@@ -160,7 +162,7 @@ export function Abrechnung({ onSettings, onToast }: { onSettings: () => void; on
                     <td>{d.date.slice(8)}.{d.date.slice(5, 7)}.</td>
                     <td>{d.label}</td>
                     <td>{d.start && d.end ? `${d.start}–${d.end}` : ''}</td>
-                    <td>{d.verp ? formatEuro(d.verp).replace(',00', '') : ''}</td>
+                    {r.verpEnabled && <td>{d.verp ? formatEuro(d.verp).replace(',00', '') : ''}</td>}
                   </tr>
                 ))}
               </tbody>

@@ -36,7 +36,7 @@ export function calcDay(entry: DayEntry | undefined, s: Settings): DayResult {
   // Urlaub, Krank, Abfeiern und Feiertag bekommen nie Verpflegung, auch nicht an halben Tagen.
   const eligible = entry.type === 'arbeit'
   const auto = work > s.verpThresholdMinutes ? s.verpRate : 0
-  const verp = !eligible ? 0 : entry.verpOverride != null ? entry.verpOverride : auto
+  const verp = !s.verpEnabled || !eligible ? 0 : entry.verpOverride != null ? entry.verpOverride : auto
   return { booked, soll: s.sollMinutes, work, credit, ist, diff: ist - s.sollMinutes, verp: booked ? verp : 0, invalid }
 }
 

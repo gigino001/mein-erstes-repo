@@ -59,6 +59,12 @@ describe('buildReport Oktober 2026', () => {
     expect(w).toContain('1 Bewirtungsbeleg ohne Anlass oder Personenzahl.')
     expect(w).toContain('1 Beleg hat kein Foto.')
   })
+  it('Verpflegung ausgeschaltet: keine Pauschale, Gesamt sind nur die Belege', () => {
+    const off = buildReport({ ...base, settings: { ...s, verpEnabled: false } })
+    expect(off).toMatchObject({ verpEnabled: false, verp: 0, verpDays: 0, total: 134.7, diff: -150 })
+    expect(off.days.every((x) => x.verp === 0)).toBe(true)
+    expect(r.verpEnabled).toBe(true)
+  })
   it('Urlaub im Monat und Rest', () => {
     // 2.10. ganz, 9.10. halb = 1,5 Tage; Anspruch 30 + 2
     expect(r.vacation).toMatchObject({ year: 2026, total: 32, inMonth: 1.5, untilMonthEnd: 1.5, remaining: 30.5, unset: false })

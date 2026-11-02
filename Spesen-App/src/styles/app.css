@@ -195,3 +195,12 @@ details summary{cursor:pointer;font-size:13.5px;color:var(--accent);font-weight:
 .vac-note{font-size:13px;color:var(--muted)}
 .vac-note.over{color:var(--krank);font-weight:600}
 .vac-block{border-top:1px solid var(--line);padding-top:16px;gap:10px}
+
+/* ---- Schalter ---- */
+.switch-row{display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.switch-title{font-weight:600;margin-bottom:2px}
+.switch{flex:none;width:52px;height:32px;border-radius:16px;border:1px solid var(--line);background:var(--line);position:relative;padding:0;transition:background .15s}
+.switch .knob{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .15s}
+.switch[aria-checked="true"]{background:var(--accent);border-color:var(--accent)}
+.switch[aria-checked="true"] .knob{transform:translateX(20px)}
+@media (prefers-reduced-motion:reduce){.switch,.switch .knob{transition:none}}

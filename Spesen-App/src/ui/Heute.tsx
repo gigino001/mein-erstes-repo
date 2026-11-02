@@ -34,7 +34,7 @@ export function Heute({ onSettings, onEdit, onToast, goTab }: Props) {
   const ist = timer && !stale ? elapsedMinutes(timer.startedAt, now) : result.booked && entry?.type === 'arbeit' ? result.work : 0
   const progress = Math.min(1, ist / settings.sollMinutes)
   const reached = ist > settings.verpThresholdMinutes
-  const showVerp = !entry || entry.type === 'arbeit'
+  const showVerp = settings.verpEnabled && (!entry || entry.type === 'arbeit')
 
   const month = summarizeMonth(Number(today.slice(0, 4)), Number(today.slice(5, 7)), days, settings, today)
 
@@ -105,15 +105,17 @@ export function Heute({ onSettings, onEdit, onToast, goTab }: Props) {
         </>
       )}
 
-      <div className="facts">
+      <div className="facts" style={{ gridTemplateColumns: `repeat(${settings.verpEnabled ? 3 : 2}, 1fr)` }}>
         <button className="fact" onClick={() => goTab('monat')}>
           <span className="label">Monat</span>
           <b className={`mono ${month.diff > 0 ? 'pos' : month.diff < 0 ? 'neg' : ''}`}>{formatDuration(month.diff, true)}</b>
         </button>
-        <button className="fact" onClick={() => goTab('monat')}>
-          <span className="label">Verpflegung</span>
-          <b className="mono">{euro0(month.verp)}</b>
-        </button>
+        {settings.verpEnabled && (
+          <button className="fact" onClick={() => goTab('monat')}>
+            <span className="label">Verpflegung</span>
+            <b className="mono">{euro0(month.verp)}</b>
+          </button>
+        )}
         <button className="fact" onClick={() => goTab('monat')}>
           <span className="label">Offen</span>
           <b className={`mono ${month.missing.length ? 'neg' : ''}`}>{month.missing.length}</b>

@@ -33,6 +33,8 @@ export interface Settings {
   name: string
   /** Soll pro Arbeitstag (Mo–Fr) in Minuten. */
   sollMinutes: number
+  /** Verpflegungspauschale überhaupt verwenden? Aus: keine Pauschale, nirgends. */
+  verpEnabled: boolean
   /** Verpflegungspauschale in Euro. */
   verpRate: number
   /** Nur Arbeitstage mit mehr Arbeitszeit (Minuten) als dieser Wert bekommen die Pauschale. */
@@ -56,6 +58,7 @@ export interface Settings {
 export const DEFAULT_SETTINGS: Settings = {
   name: 'Adriano Falcone',
   sollMinutes: 480,
+  verpEnabled: true,
   verpRate: 14,
   verpThresholdMinutes: 480,
   roundMinutes: 15,

@@ -20,7 +20,7 @@ export async function xlsxBlob(r: Report): Promise<Blob> {
     [text('Differenz (Std.)'), num(hours(r.diff))],
     [],
     [head('Auszahlung')],
-    [text(`Verpflegung (${r.verpDays} Tage)`), num(r.verp)],
+    ...(r.verpEnabled ? [[text(`Verpflegung (${r.verpDays} Tage)`), num(r.verp)]] : []),
     ...(Object.keys(CATEGORY_LABEL) as (keyof typeof CATEGORY_LABEL)[]).filter((c) => r.byCategory[c] > 0).map((c) => [text(CATEGORY_LABEL[c]), num(r.byCategory[c])]),
     [text('Summe Belege'), num(r.receiptTotal)],
     [head('Gesamt Auszahlung (EUR)'), { value: r.total, type: Number, format: '0.00', fontWeight: 'bold' as const }],
@@ -44,7 +44,7 @@ export async function xlsxBlob(r: Report): Promise<Blob> {
   ]
 
   const days = [
-    ['Datum', 'Art', 'Beginn', 'Ende', 'Ist (Std.)', 'Differenz (Std.)', 'Verpflegung (EUR)'].map(head),
+    ['Datum', 'Art', 'Beginn', 'Ende', 'Ist (Std.)', 'Differenz (Std.)', ...(r.verpEnabled ? ['Verpflegung (EUR)'] : [])].map(head),
     ...r.days.map((d) => [
       { value: noon(d.date), type: Date, format: 'dd.mm.yyyy' },
       text(d.label || (d.missing ? 'fehlt' : '')),
@@ -52,7 +52,7 @@ export async function xlsxBlob(r: Report): Promise<Blob> {
       text(d.end ?? ''),
       d.booked ? num(hours(d.ist)) : text(''),
       d.booked ? num(hours(d.diff)) : text(''),
-      d.verp ? num(d.verp) : text(''),
+      ...(r.verpEnabled ? [d.verp ? num(d.verp) : text('')] : []),
     ]),
   ]
 

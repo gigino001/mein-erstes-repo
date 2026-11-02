@@ -10,6 +10,7 @@ import { Sheet } from './Sheet'
 const toNumber = (text: string) => Number(text.replace(',', '.'))
 
 export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settings; onClose: () => void; onSaved: (msg: string) => void }) {
+  const [verpOn, setVerpOn] = useState(settings.verpEnabled)
   const [rate, setRate] = useState(String(settings.verpRate).replace('.', ','))
   const [hours, setHours] = useState(String(settings.verpThresholdMinutes / 60).replace('.', ','))
   const [name, setName] = useState(settings.name)
@@ -45,8 +46,8 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
     const r = toNumber(rate)
     const h = toNumber(hours)
     const o = parseDuration(opening)
-    if (!(r >= 0)) return setError('Verpflegung: bitte einen Betrag eintragen.')
-    if (!(h > 0)) return setError('Schwelle: bitte Stunden eintragen, z. B. 8.')
+    if (verpOn && !(r >= 0)) return setError('Verpflegung: bitte einen Betrag eintragen.')
+    if (verpOn && !(h > 0)) return setError('Schwelle: bitte Stunden eintragen, z. B. 8.')
     if (o === null) return setError('Startsaldo: bitte als H:MM eintragen, z. B. 12:30 oder -2:00.')
     if (!openingDate) return setError('Bitte einen Stichtag wählen.')
     let vacation = settings.vacation
@@ -55,7 +56,7 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
       if (vCarryNum === null) return setError('Resturlaub: bitte eine Zahl eintragen, z. B. 2,5 oder leer lassen.')
       vacation = { ...settings.vacation, [String(vYear)]: { days: vDaysNum, carryOver: vCarryNum } }
     }
-    await updateSettings({ vacation, name: name.trim() || settings.name, verpRate: r, verpThresholdMinutes: Math.round(h * 60), mailTo: mailTo.trim(), openingBalance: o, openingDate })
+    await updateSettings({ vacation, name: name.trim() || settings.name, verpEnabled: verpOn, ...(verpOn ? { verpRate: r, verpThresholdMinutes: Math.round(h * 60) } : {}), mailTo: mailTo.trim(), openingBalance: o, openingDate })
     onSaved('Einstellungen gespeichert')
     onClose()
   }
@@ -68,6 +69,16 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
         <div className="led"><span>Rundung</span><b className="mono">{settings.roundMinutes} Min.</b></div>
         <div className="led"><span>Feiertage</span><b className="mono">NRW</b></div>
       </div>
+      <div className="switch-row">
+        <div className="grow">
+          <div className="switch-title">Verpflegungspauschale</div>
+          <div className="note">Schalte sie aus, wenn sie für dich nicht gilt. Dann verschwindet sie überall, auch aus der Abrechnung.</div>
+        </div>
+        <button className="switch" role="switch" aria-checked={verpOn} aria-label="Verpflegungspauschale verwenden" onClick={() => { setVerpOn(!verpOn); setError('') }}>
+          <span className="knob" />
+        </button>
+      </div>
+      {verpOn && (
       <div className="row">
         <div className="field grow">
           <label className="label" htmlFor="st-rate">Verpflegung €</label>
@@ -78,6 +89,7 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
           <input id="st-hours" inputMode="decimal" value={hours} onChange={(e) => setHours(e.target.value)} />
         </div>
       </div>
+      )}
       <div className="row">
         <div className="field grow">
           <label className="label" htmlFor="st-open">Startsaldo H:MM</label>

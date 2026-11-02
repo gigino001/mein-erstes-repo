@@ -106,7 +106,7 @@ export function DayEditor({ date, preset, existing, settings, onClose, onSaved }
           </div>
         </div>
       )}
-      {draft.type === 'arbeit' && (
+      {draft.type === 'arbeit' && settings.verpEnabled && (
       <div>
         <div className="label spaced">Verpflegung</div>
         <div className="seg">
@@ -117,12 +117,12 @@ export function DayEditor({ date, preset, existing, settings, onClose, onSaved }
       </div>
       )}
       {draft.type === 'urlaub' && <VacationAfter entries={withDraft} years={[Number(date.slice(0, 4))]} />}
-      <div className="res">
+      <div className="res" style={{ gridTemplateColumns: `repeat(${settings.verpEnabled ? 3 : 2}, 1fr)` }}>
         {complete ? (
           <>
             <div><span className="label">Ist</span><b className="mono">{formatDuration(result.ist)}</b></div>
             <div><span className="label">Differenz</span><b className={`mono ${result.diff > 0 ? 'pos' : result.diff < 0 ? 'neg' : ''}`}>{formatDuration(result.diff, true)}</b></div>
-            <div><span className="label">Verpflegung</span><b className="mono">{euro0(result.verp)}</b></div>
+            {settings.verpEnabled && <div><span className="label">Verpflegung</span><b className="mono">{euro0(result.verp)}</b></div>}
           </>
         ) : (
           <div className="note" style={{ gridColumn: '1 / -1' }}>Zeiten fehlen noch.</div>

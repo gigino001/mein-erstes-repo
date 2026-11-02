@@ -46,6 +46,21 @@ describe('PDF', () => {
   })
 })
 
+describe('ohne Verpflegung', () => {
+  const off = buildReport({ year: 2026, month: 10, entries, receipts, adjustments: [], settings: { ...s, verpEnabled: false }, today: '2026-10-14' })
+  it('CSV und Excel enthalten keine Verpflegung', async () => {
+    const csv = buildCsv(off)
+    expect(csv).not.toContain('Verpflegung')
+    expect(csv).toContain('Gesamt Auszahlung (EUR);134,70')
+    expect(csv).toContain('Datum;Art;Beginn;Ende;Ist (Std.);Differenz (Std.)\r\n')
+    expect((await xlsxBlob(off)).size).toBeGreaterThan(2000)
+  })
+  it('PDF wird erzeugt', async () => {
+    const doc = await PDFDocument.load(await buildPdf(off))
+    expect(doc.getPageCount()).toBe(2 + 1 + 2) // Zusammenfassung, Tage, Beleg-Übersicht, 3 Belege auf 2 Seiten
+  })
+})
+
 describe('CSV', () => {
   const csv = buildCsv(report(receipts))
   it('Semikolon, Dezimalkomma und Stunden als Dezimalzahl', () => {

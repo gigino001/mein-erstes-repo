@@ -20,6 +20,13 @@ describe('calcDay', () => {
     expect(calcDay(day('2026-10-02', 'arbeit', false, '08:00', '16:01'), s).verp).toBe(14)
     expect(calcDay(day('2026-10-02', 'arbeit', false, '08:00', '16:15'), s).verp).toBe(14)
   })
+  it('Verpflegung ausgeschaltet: nie eine Pauschale, Stundenkonto unverändert', () => {
+    const off = { ...s, verpEnabled: false }
+    const r = calcDay(day('2026-10-02', 'arbeit', false, '08:00', '17:00'), off)
+    expect(r.verp).toBe(0)
+    expect(r.diff).toBe(60)
+    expect(calcDay({ ...day('2026-10-02', 'arbeit', false, '08:00', '17:00'), verpOverride: 14 }, off).verp).toBe(0)
+  })
   it('weniger als das Soll mindert die Überstunden', () => {
     expect(calcDay(day('2026-10-02', 'arbeit', false, '08:00', '15:30'), s).diff).toBe(-30)
   })
