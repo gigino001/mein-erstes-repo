@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useDays } from '../db/hooks'
 import { deleteDay, saveDay } from '../db/actions'
 import { calcDay } from '../domain/calc'
 import { holidaysNRW } from '../domain/holidays'
@@ -7,6 +8,7 @@ import { DEFAULT_SETTINGS, type DayEntry, type DayType, type Settings } from '..
 import { euro0, germanDate } from './format'
 import { TYPE_LABEL, WEEKDAY_SHORT } from './labels'
 import { Sheet } from './Sheet'
+import { VacationAfter } from './VacationCard'
 
 const EDIT_TYPES: DayType[] = ['arbeit', 'urlaub', 'krank', 'abbau']
 
@@ -27,6 +29,8 @@ export function DayEditor({ date, preset, existing, settings, onClose, onSaved }
     return { date, type, half: false, start: type === 'arbeit' ? '08:00' : '', end: type === 'arbeit' ? '16:00' : '' }
   })
   const [error, setError] = useState('')
+  const allDays = useDays()
+  const withDraft = useMemo(() => new Map(allDays).set(date, draft), [allDays, date, draft])
   const showTimes = draft.type === 'arbeit' || draft.half
   const result = calcDay(draft, settings ?? DEFAULT_SETTINGS)
   const complete = !showTimes || (parseTime(draft.start) !== null && parseTime(draft.end) !== null)
@@ -112,6 +116,7 @@ export function DayEditor({ date, preset, existing, settings, onClose, onSaved }
         </div>
       </div>
       )}
+      {draft.type === 'urlaub' && <VacationAfter entries={withDraft} years={[Number(date.slice(0, 4))]} />}
       <div className="res">
         {complete ? (
           <>

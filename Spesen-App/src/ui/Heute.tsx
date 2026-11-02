@@ -8,6 +8,7 @@ import { euro0, germanDate, longDate } from './format'
 import { BackupBanner } from './BackupBanner'
 import { Header } from './Header'
 import { TYPE_LABEL } from './labels'
+import { VacationCard } from './VacationCard'
 
 const R = 92
 const CIRC = 2 * Math.PI * R
@@ -16,7 +17,7 @@ interface Props {
   onSettings: () => void
   onEdit: (date: string, preset?: DayType) => void
   onToast: (msg: string) => void
-  goTab: (tab: 'monat') => void
+  goTab: (tab: 'monat' | 'konto') => void
 }
 
 export function Heute({ onSettings, onEdit, onToast, goTab }: Props) {
@@ -118,6 +119,7 @@ export function Heute({ onSettings, onEdit, onToast, goTab }: Props) {
           <b className={`mono ${month.missing.length ? 'neg' : ''}`}>{month.missing.length}</b>
         </button>
       </div>
+      <VacationCard compact onOpen={() => goTab('konto')} onSettings={onSettings} />
     </>
   )
 }

@@ -5,6 +5,7 @@ import { monthlyChanges } from '../domain/calc'
 import { formatDuration, toDateKey } from '../domain/time'
 import { germanDate } from './format'
 import { Header } from './Header'
+import { VacationCard } from './VacationCard'
 
 const monthName = (key: string) => new Date(Number(key.slice(0, 4)), Number(key.slice(5, 7)) - 1, 1).toLocaleDateString('de-DE', { month: 'short' }).replace('.', '')
 const monthLong = (key: string) => new Date(Number(key.slice(0, 4)), Number(key.slice(5, 7)) - 1, 1).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' })
@@ -52,14 +53,15 @@ export function Konto({ onSettings, onAdjust, onToast }: { onSettings: () => voi
 
   return (
     <>
-      <Header title="Stundenkonto" sub={`Stand ${germanDate(today)}`} onSettings={onSettings} />
+      <Header title="Konto" sub={`Stunden und Urlaub · Stand ${germanDate(today)}`} onSettings={onSettings} />
       <section className="card stand">
-        <span className="label">Aktueller Saldo</span>
+        <span className="label">Stundenkonto</span>
         <div className={`big mono ${tone(stand)}`}>{formatDuration(stand, true)}</div>
         <div className="note">
           {stand > 0 ? `≈ ${String(tage).replace('.', ',')} Arbeitstage zum Abfeiern` : stand < 0 ? 'Minusstunden' : 'ausgeglichen'}
         </div>
       </section>
+      <VacationCard onSettings={onSettings} />
       <section className="card">
         <div className="label spaced">Änderung pro Monat</div>
         <Bars data={shown.map((m) => ({ label: monthName(m.key), value: m.total }))} />

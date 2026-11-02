@@ -8,7 +8,7 @@ const DAY = 86400000
 
 async function seed() {
   await ensureSettings()
-  await db.settings.update('main', { openingBalance: 750, openingDate: '2026-07-01', mailTo: 'a@b.de' })
+  await db.settings.update('main', { openingBalance: 750, openingDate: '2026-07-01', mailTo: 'a@b.de', vacation: { '2026': { days: 30, carryOver: 2.5 } } })
   await db.days.bulkPut([
     { date: '2026-10-01', type: 'arbeit', half: false, start: '07:45', end: '17:00' },
     { date: '2026-10-09', type: 'urlaub', half: true, start: '08:00', end: '12:00', verpOverride: 0 },
@@ -46,7 +46,7 @@ describe('Sicherung und Wiederherstellung', () => {
     expect((await db.adjustments.toArray())[0]).toMatchObject({ minutes: -60, note: 'Auszahlung' })
     expect(await db.merchantRules.count()).toBe(1)
     const s = await db.settings.get('main')
-    expect(s).toMatchObject({ openingBalance: 750, mailTo: 'a@b.de' })
+    expect(s).toMatchObject({ openingBalance: 750, mailTo: 'a@b.de', vacation: { '2026': { days: 30, carryOver: 2.5 } } })
     expect(s?.lastBackupAt).toBeGreaterThan(0)
   })
 

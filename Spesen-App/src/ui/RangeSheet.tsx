@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react'
 import { saveRange } from '../db/actions'
+import { useDays } from '../db/hooks'
 import { workdaysBetween } from '../domain/calc'
 import { toDateKey } from '../domain/time'
 import type { DayType } from '../domain/types'
 import { TYPE_LABEL } from './labels'
 import { Sheet } from './Sheet'
+import { VacationAfter } from './VacationCard'
 
 type RangeType = Exclude<DayType, 'arbeit' | 'feiertag'>
 
@@ -14,6 +16,12 @@ export function RangeSheet({ onClose, onSaved }: { onClose: () => void; onSaved:
   const [from, setFrom] = useState(today)
   const [to, setTo] = useState(today)
   const dates = useMemo(() => workdaysBetween(from, to), [from, to])
+  const allDays = useDays()
+  const withRange = useMemo(() => {
+    const m = new Map(allDays)
+    for (const date of dates) m.set(date, { date, type: 'urlaub', half: false })
+    return m
+  }, [allDays, dates])
 
   const save = async () => {
     if (!dates.length) return
@@ -42,6 +50,7 @@ export function RangeSheet({ onClose, onSaved }: { onClose: () => void; onSaved:
       <div className="note">
         {dates.length ? `${dates.length} Werktage (Wochenenden und Feiertage zählen nicht). Bestehende Einträge werden ersetzt.` : 'Kein Werktag im Zeitraum.'}
       </div>
+      {type === 'urlaub' && dates.length > 0 && <VacationAfter entries={withRange} years={dates.map((d) => Number(d.slice(0, 4)))} />}
       <button className="btn primary block" onClick={save} disabled={!dates.length}>Eintragen</button>
     </Sheet>
   )

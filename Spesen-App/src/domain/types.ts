@@ -21,6 +21,13 @@ export const TYPE_LABEL: Record<DayType, string> = {
   feiertag: 'Feiertag',
 }
 
+export interface VacationYear {
+  /** Urlaubsanspruch des Jahres in Tagen (Halbe erlaubt). */
+  days: number
+  /** Resturlaub, der aus dem Vorjahr mitgenommen wurde. */
+  carryOver: number
+}
+
 export interface Settings {
   /** Name auf der Abrechnung. */
   name: string
@@ -38,6 +45,8 @@ export interface Settings {
   openingDate: string
   mailTo: string
   mailSubject: string
+  /** Urlaubstage je Jahr ('2026' → Anspruch und Resturlaub). Jahre ohne Eintrag erben den Anspruch des letzten früheren Jahres. */
+  vacation?: Record<string, VacationYear>
   /** Zeitpunkt der letzten Sicherung (Epoch-ms). */
   lastBackupAt?: number
   /** Erinnerung an die Sicherung bis dahin ausblenden (Epoch-ms). */

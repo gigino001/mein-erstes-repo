@@ -22,6 +22,7 @@ npm run build      # Typprüfung + Produktions-Build inkl. Service Worker
 ## Regeln
 - Soll 8 h pro Tag, Mo–Fr, Feiertage NRW
 - Verpflegung 14 € nur an Arbeitstagen und nur bei mehr als 8 h Arbeitszeit (also ab 8:01), nie bei Urlaub, Krank, Abfeiern oder Feiertag (Betrag und Schwelle einstellbar)
+- Urlaubskonto: Anspruch und Resturlaub pro Jahr in den Einstellungen (Halbe erlaubt, der Anspruch gilt für Folgejahre, bis er geändert wird). Ganzer Urlaubstag zählt 1, halber 0,5. Krank, Abfeiern, Wochenenden und Feiertage verbrauchen keinen Urlaub. Angezeigt als genommen (bis heute), geplant (Zukunft) und übrig.
 - Stundenkonto: Arbeitstage buchen Ist minus Soll (weniger als 8 h mindert die Überstunden), Urlaub, Krank und Feiertag erfüllen das Soll, Abfeiern zieht das Soll ab (halber Tag 4 h)
 - Zeiten auf 15 Minuten gerundet
 - Mail-Betreff: „Spesen Adriano Falcone"
