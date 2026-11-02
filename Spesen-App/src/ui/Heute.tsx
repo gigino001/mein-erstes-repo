@@ -1,12 +1,14 @@
+import { useState } from 'react'
 import { startTimer, stopTimer } from '../db/actions'
 import { useDays, useNow, useSettings, useTimer } from '../db/hooks'
 import { calcDay, summarizeMonth } from '../domain/calc'
-import { elapsedMinutes } from '../domain/timer'
-import { formatDuration, formatTime, toDateKey } from '../domain/time'
+import { elapsedMinutes, finishTimer } from '../domain/timer'
+import { formatDuration, formatTime, parseTime, toDateKey } from '../domain/time'
 import type { DayType } from '../domain/types'
 import { euro0, germanDate, longDate } from './format'
 import { BackupBanner } from './BackupBanner'
 import { Header } from './Header'
+import { Sheet } from './Sheet'
 import { TYPE_LABEL } from './labels'
 import { VacationCard } from './VacationCard'
 
@@ -38,15 +40,36 @@ export function Heute({ onSettings, onEdit, onToast, goTab }: Props) {
 
   const month = summarizeMonth(Number(today.slice(0, 4)), Number(today.slice(5, 7)), days, settings, today)
 
-  const stamp = async () => {
-    if (!running) return startTimer()
-    const r = await stopTimer(settings.roundMinutes)
-    if (r.complete) onToast('Gespeichert')
-    else {
-      onToast('Ende fehlt noch. Bitte nachtragen.')
-      onEdit(r.date)
+  /** Zeitpunkt des Antippens von „Feierabend", solange die Verpflegungsfrage offen ist. */
+  const [asking, setAsking] = useState<number | null>(null)
+  const [saving, setSaving] = useState(false)
+  const askVerp = settings.verpEnabled && !stale && (!entry || entry.type === 'arbeit')
+
+  const finish = async (at: number, verp?: number) => {
+    if (saving) return
+    setSaving(true)
+    try {
+      const r = await stopTimer(settings.roundMinutes, { at, verp })
+      setAsking(null)
+      if (r.complete) onToast(verp === undefined ? 'Gespeichert' : verp > 0 ? 'Gespeichert, mit Verpflegung' : 'Gespeichert, ohne Verpflegung')
+      else {
+        onToast('Ende fehlt noch. Bitte nachtragen.')
+        onEdit(r.date)
+      }
+    } finally {
+      setSaving(false)
     }
   }
+
+  const stamp = async () => {
+    if (!running) return startTimer()
+    const at = Date.now()
+    if (askVerp) setAsking(at)
+    else await finish(at)
+  }
+
+  const asked = asking !== null && timer ? finishTimer(timer.startedAt, asking, settings.roundMinutes) : null
+  const askedWork = asked?.end ? (parseTime(asked.end) ?? 0) - (parseTime(asked.start) ?? 0) : 0
 
   return (
     <>
@@ -78,6 +101,17 @@ export function Heute({ onSettings, onEdit, onToast, goTab }: Props) {
         )}
       </section>
 
+      {asked && (
+        <Sheet title="Verpflegungspauschale" onClose={() => setAsking(null)}>
+          <div className="ask-text">Bekommst du für heute eine Verpflegungspauschale?</div>
+          <div className="note">Heute {asked.start} – {asked.end ?? '…'} · {formatDuration(askedWork)} gearbeitet. Die Pauschale beträgt {euro0(settings.verpRate)}.</div>
+          <div className="row two">
+            <button className="btn primary" onClick={() => finish(asking!, settings.verpRate)} disabled={saving}>Ja</button>
+            <button className="btn" onClick={() => finish(asking!, 0)} disabled={saving}>Nein</button>
+          </div>
+          <button className="btn ghost block" onClick={() => setAsking(null)} disabled={saving}>Zurück, der Timer läuft weiter</button>
+        </Sheet>
+      )}
       {running ? (
         <button className="btn stop block" onClick={stamp}>{stale ? 'Ende eintragen' : 'Feierabend stempeln'}</button>
       ) : result.booked && entry?.type === 'arbeit' ? (
@@ -85,6 +119,7 @@ export function Heute({ onSettings, onEdit, onToast, goTab }: Props) {
           <div>
             <div className="label">Heute erfasst</div>
             <div className="mono done-line">{entry.start} – {entry.end} · {formatDuration(result.work)}</div>
+            {settings.verpEnabled && <div className="note verp-line">Verpflegung: {result.verp > 0 ? euro0(result.verp) : 'keine'}</div>}
           </div>
           <button className="btn" onClick={() => onEdit(today)}>Korrigieren</button>
         </div>

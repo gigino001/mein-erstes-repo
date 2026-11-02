@@ -10,17 +10,22 @@ export async function startTimer(): Promise<void> {
  * Beendet den Timer und speichert den Tag. Ist der Tag ein halber Abwesenheitstag,
  * bleibt sein Typ erhalten und nur die gearbeitete Zeit wird eingetragen.
  * `complete` ist false, wenn über Mitternacht gestempelt wurde und das Ende fehlt.
+ * `opts.at` ist der Zeitpunkt des Stempelns (damit eine spätere Antwort die Endzeit nicht verschiebt),
+ * `opts.verp` die Antwort auf die Frage nach der Verpflegung (Betrag oder 0), sonst automatisch.
  */
-export async function stopTimer(step: number): Promise<{ date: string; complete: boolean }> {
+export async function stopTimer(
+  step: number,
+  opts: { verp?: number | null; at?: number } = {},
+): Promise<{ date: string; complete: boolean }> {
   const timer = await db.timer.get('main')
   if (!timer) throw new Error('Kein laufender Timer')
-  const r = finishTimer(timer.startedAt, Date.now(), step)
+  const r = finishTimer(timer.startedAt, opts.at ?? Date.now(), step)
   await db.transaction('rw', db.days, db.timer, async () => {
     const existing = await db.days.get(r.date)
     const entry: DayEntry =
       existing?.half && existing.type !== 'arbeit'
         ? { ...existing, start: r.start, end: r.end }
-        : { date: r.date, type: 'arbeit', half: false, start: r.start, end: r.end }
+        : { date: r.date, type: 'arbeit', half: false, start: r.start, end: r.end, verpOverride: opts.verp ?? null }
     await db.days.put(entry)
     await db.timer.delete('main')
   })

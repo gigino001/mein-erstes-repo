@@ -204,3 +204,7 @@ details summary{cursor:pointer;font-size:13.5px;color:var(--accent);font-weight:
 .switch[aria-checked="true"]{background:var(--accent);border-color:var(--accent)}
 .switch[aria-checked="true"] .knob{transform:translateX(20px)}
 @media (prefers-reduced-motion:reduce){.switch,.switch .knob{transition:none}}
+
+/* ---- Frage nach der Verpflegung ---- */
+.ask-text{font-family:var(--f-display);font-size:19px;font-weight:600;line-height:1.3}
+.verp-line{margin-top:4px}
