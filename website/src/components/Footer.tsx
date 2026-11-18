@@ -10,6 +10,7 @@ export function Footer() {
           <Link href="/ueber-mich" className="hover:text-white transition-colors">Über mich</Link>
           <Link href="/leistungen" className="hover:text-white transition-colors">Leistungen</Link>
           <Link href="/galerie" className="hover:text-white transition-colors">Galerie</Link>
+          <Link href="/faq" className="hover:text-white transition-colors">FAQ</Link>
           <Link href="/kontakt" className="hover:text-white transition-colors">Kontakt</Link>
         </nav>
         <div className="flex gap-3">

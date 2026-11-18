@@ -44,13 +44,13 @@ export default async function HomePage() {
           <span className="text-[13px] font-semibold tracking-[0.14em] uppercase text-ocean">
             Studio für Wimpernverlängerung · Bielefeld
           </span>
-          <p className="font-poster uppercase leading-[0.9] text-[15vw] md:text-[6.2vw]">
+          <h1 className="font-poster uppercase leading-[0.9] text-[15vw] md:text-[6.2vw]">
             Augen
             <br />
             auf.
             <br />
             <span className="text-coral">Wow.</span>
-          </p>
+          </h1>
           <p className="text-lg leading-relaxed text-ink-soft max-w-md">
             Individuell besprochen, individuell angefertigt — dein Wimpernset entsteht im
             Gespräch mit mir, nicht von der Stange.
