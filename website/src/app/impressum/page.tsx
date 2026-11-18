@@ -6,6 +6,8 @@ import { business, fullAddress } from "@/lib/business";
 // und die als "[...]" markierten Platzhalter ergänzen (z. B. USt-IdNr., falls vorhanden).
 export const metadata: Metadata = {
   title: "Impressum",
+  description:
+    "Impressum von coco lashes in Bielefeld — Anbieterkennzeichnung nach § 5 TMG mit Kontaktdaten und rechtlichen Angaben.",
   alternates: { canonical: "/impressum" },
 };
 

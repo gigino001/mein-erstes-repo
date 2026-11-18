@@ -8,6 +8,8 @@ import { business, fullAddress } from "@/lib/business";
 // ändern oder neue Tools (Analyse, Werbung, Zahlungsanbieter) hinzukommen.
 export const metadata: Metadata = {
   title: "Datenschutzerklärung",
+  description:
+    "Datenschutzerklärung von coco lashes in Bielefeld: wie wir mit deinen Daten bei Terminbuchung und Website-Nutzung umgehen.",
   alternates: { canonical: "/datenschutz" },
 };
 

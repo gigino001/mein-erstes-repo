@@ -8,6 +8,8 @@ import { business, fullAddress } from "@/lib/business";
 // prüfen und bestätigen lassen.
 export const metadata: Metadata = {
   title: "AGB",
+  description:
+    "Allgemeine Geschäftsbedingungen von coco lashes in Bielefeld: Termine, Anzahlung und Stornierungsregeln auf einen Blick.",
   alternates: { canonical: "/agb" },
 };
 

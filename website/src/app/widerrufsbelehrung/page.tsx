@@ -10,6 +10,8 @@ import { business, fullAddress } from "@/lib/business";
 // versiegelte Hygieneartikel (z. B. Wimpernkleber).
 export const metadata: Metadata = {
   title: "Widerrufsbelehrung",
+  description:
+    "Widerrufsbelehrung für Bestellungen im coco lashes Shop — Fristen und Ablauf des Widerrufsrechts im Überblick.",
   alternates: { canonical: "/widerrufsbelehrung" },
 };
 
