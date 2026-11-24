@@ -25,12 +25,13 @@ export function buildCsv(r: Report): string {
     rows.push(line([dateDe(d.date), d.label || (d.missing ? 'fehlt' : ''), d.start ?? '', d.end ?? '', d.booked ? hours(d.ist) : '', d.booked ? hours(d.diff) : '', ...(r.verpEnabled ? [d.verp ? money(d.verp) : ''] : [])]))
   }
   rows.push('', 'Belege')
-  rows.push(line(['Nr', 'Datum', 'Händler', 'Kategorie', 'Betrag (EUR)', 'Anlass', 'Personen']))
-  r.receipts.forEach((b, i) => rows.push(line([i + 1, dateDe(b.date), b.vendor, CATEGORY_LABEL[b.category], money(b.amount), b.anlass ?? '', b.personen ?? ''])))
+  rows.push(line(['Nr', 'Datum', 'Händler', 'Kategorie', 'Betrag (EUR)', 'Anlass', 'Personen', ...(r.anyPaid ? ['Bezahlt'] : [])]))
+  r.receipts.forEach((b, i) => rows.push(line([i + 1, dateDe(b.date), b.vendor, CATEGORY_LABEL[b.category], money(b.amount), b.anlass ?? '', b.personen ?? '', ...(r.anyPaid ? [b.paid ? 'Ja' : 'Nein'] : [])])))
   rows.push('', 'Zusammenfassung')
   rows.push(line(['Soll (Std.)', hours(r.soll)]), line(['Ist (Std.)', hours(r.ist)]), line(['Differenz (Std.)', hours(r.diff)]))
   if (r.verpEnabled) rows.push(line([`Verpflegung (${r.verpDays} Tage)`, money(r.verp)]))
   rows.push(line(['Belege', money(r.receiptTotal)]), line(['Gesamt Auszahlung (EUR)', money(r.total)]))
+  if (r.anyPaid) rows.push(line(['Bereits ausgezahlt (EUR)', money(r.paidTotal)]), line(['Noch auszuzahlen (EUR)', money(r.openTotal)]))
   if (r.konto) rows.push(line(['Konto Vormonat (Std.)', hours(r.konto.previous)]), line(['Konto Änderung (Std.)', hours(r.konto.change)]), line(['Konto Stand (Std.)', hours(r.konto.end)]))
   if (r.vacation) {
     const v = r.vacation

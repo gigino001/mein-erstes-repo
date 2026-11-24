@@ -21,6 +21,7 @@ npm run build      # Typprüfung + Produktions-Build inkl. Service Worker
 
 ## Regeln
 - Soll 8 h pro Tag, Mo–Fr, Feiertage NRW
+- Belege haben einen Status: roter Knopf = noch nicht ausgezahlt, grüner Knopf mit Häkchen = schon ausgezahlt (Liste, Detailansicht, beim Erfassen). Die Abrechnung zeigt dann „Bereits ausgezahlt (Belege)" und „Noch auszuzahlen" (Gesamt Auszahlung minus bezahlte Belege, die Verpflegung gilt als noch offen). PDF, Excel und CSV enthalten den Status.
 - Beim „Feierabend stempeln" fragt die App (bei eingeschalteter Verpflegung): „Bekommst du für heute eine Verpflegungspauschale?" mit Ja/Nein. Die Antwort gilt für den Tag und hat Vorrang vor der automatischen Regel. Die Endzeit ist der Moment des Antippens.
 - Verpflegung lässt sich in den Einstellungen komplett ausschalten (für Mitarbeiter ohne Pauschale): dann gibt es sie nirgends, auch nicht in Abrechnung, PDF, Excel und CSV
 - Verpflegung 14 € nur an Arbeitstagen und nur bei mehr als 8 h Arbeitszeit (also ab 8:01), nie bei Urlaub, Krank, Abfeiern oder Feiertag (Betrag und Schwelle einstellbar)

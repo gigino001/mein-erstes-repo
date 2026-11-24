@@ -16,6 +16,8 @@ export interface ReceiptRow {
   vendor: string
   category: Category
   amount: number
+  /** Schon ausgezahlt (z. B. direkt im Büro oder aufs Konto überwiesen). Ohne Wert: noch offen. */
+  paid?: boolean
   note?: string
   /** Nur Bewirtung */
   anlass?: string

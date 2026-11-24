@@ -46,6 +46,27 @@ describe('PDF', () => {
   })
 })
 
+describe('bezahlt / offen', () => {
+  const paidReceipts = receipts.map((x) => (x.id === 1 ? { ...x, paid: true } : x))
+  const withPaid = buildReport({ year: 2026, month: 10, entries, receipts: paidReceipts, adjustments: [], settings: s, today: '2026-10-14' })
+  const noPaid = buildReport({ year: 2026, month: 10, entries, receipts, adjustments: [], settings: s, today: '2026-10-14' })
+  it('CSV: Spalte Bezahlt und die Summen, nur wenn etwas bezahlt ist', () => {
+    const csv = buildCsv(withPaid)
+    expect(csv).toContain('Betrag (EUR);Anlass;Personen;Bezahlt\r\n')
+    expect(csv).toContain('Aral Tankstelle;Sprit / Strom;78,40;;;Ja')
+    expect(csv).toContain('Bereits ausgezahlt (EUR);78,40')
+    expect(csv).toContain('Noch auszuzahlen (EUR);126,30') // 204,70 - 78,40
+    const plain = buildCsv(noPaid)
+    expect(plain).not.toContain('Bezahlt')
+    expect(plain).not.toContain('Noch auszuzahlen')
+  })
+  it('Excel und PDF werden erzeugt', async () => {
+    expect((await xlsxBlob(withPaid)).size).toBeGreaterThan(2000)
+    const doc = await PDFDocument.load(await buildPdf(withPaid))
+    expect(doc.getPageCount()).toBe(2 + 1 + 2)
+  })
+})
+
 describe('ohne Verpflegung', () => {
   const off = buildReport({ year: 2026, month: 10, entries, receipts, adjustments: [], settings: { ...s, verpEnabled: false }, today: '2026-10-14' })
   it('CSV und Excel enthalten keine Verpflegung', async () => {

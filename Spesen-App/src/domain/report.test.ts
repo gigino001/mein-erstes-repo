@@ -59,6 +59,22 @@ describe('buildReport Oktober 2026', () => {
     expect(w).toContain('1 Bewirtungsbeleg ohne Anlass oder Personenzahl.')
     expect(w).toContain('1 Beleg hat kein Foto.')
   })
+  it('bezahlte Belege: bereits ausgezahlt und noch auszuzahlen', () => {
+    const paid = receipts.map((x) => (x.id === 1 || x.id === 4 ? { ...x, paid: true } : x))
+    const p = buildReport({ ...base, receipts: paid })
+    expect(p).toMatchObject({ anyPaid: true, paidTotal: 125.2, total: 204.7, openTotal: 79.5 })
+  })
+  it('ohne bezahlte Belege: alles noch offen, kein Status', () => {
+    expect(r).toMatchObject({ anyPaid: false, paidTotal: 0, openTotal: 204.7 })
+  })
+  it('alles bezahlt: nur noch die Verpflegung ist offen', () => {
+    const all = receipts.map((x) => ({ ...x, paid: true }))
+    expect(buildReport({ ...base, receipts: all })).toMatchObject({ paidTotal: 134.7, openTotal: 70 })
+  })
+  it('bezahlter Beleg aus einem anderen Monat zählt nicht mit', () => {
+    const other = receipts.map((x) => (x.id === 9 ? { ...x, paid: true } : x))
+    expect(buildReport({ ...base, receipts: other }).anyPaid).toBe(false)
+  })
   it('Verpflegung ausgeschaltet: keine Pauschale, Gesamt sind nur die Belege', () => {
     const off = buildReport({ ...base, settings: { ...s, verpEnabled: false } })
     expect(off).toMatchObject({ verpEnabled: false, verp: 0, verpDays: 0, total: 134.7, diff: -150 })

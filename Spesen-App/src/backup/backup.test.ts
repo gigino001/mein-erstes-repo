@@ -13,7 +13,7 @@ async function seed() {
     { date: '2026-10-01', type: 'arbeit', half: false, start: '07:45', end: '17:00' },
     { date: '2026-10-09', type: 'urlaub', half: true, start: '08:00', end: '12:00', verpOverride: 0 },
   ])
-  await db.receipts.add({ date: '2026-10-06', vendor: 'Zum Löwen', category: 'bewirtung', amount: 46.8, anlass: 'Termin', personen: 3, photo: new Blob([new Uint8Array([255, 216, 255, 224, 1, 2, 3, 250])], { type: 'image/jpeg' }), createdAt: 1 })
+  await db.receipts.add({ date: '2026-10-06', vendor: 'Zum Löwen', category: 'bewirtung', amount: 46.8, paid: true, anlass: 'Termin', personen: 3, photo: new Blob([new Uint8Array([255, 216, 255, 224, 1, 2, 3, 250])], { type: 'image/jpeg' }), createdAt: 1 })
   await db.receipts.add({ date: '2026-10-07', vendor: 'Ohne Foto', category: 'sonstiges', amount: 5, createdAt: 2 })
   await db.adjustments.add({ date: '2026-10-10', minutes: -60, note: 'Auszahlung' })
   await db.merchantRules.put({ merchant: 'zumlowen', category: 'bewirtung' })
@@ -39,6 +39,8 @@ describe('Sicherung und Wiederherstellung', () => {
     const rc = await db.receipts.toArray()
     expect(rc.map((r) => r.vendor)).toEqual(['Zum Löwen', 'Ohne Foto'])
     expect(rc[0]?.anlass).toBe('Termin')
+    expect(rc[0]?.paid).toBe(true)
+    expect(rc[1]?.paid).toBeUndefined()
     expect(rc[1]?.photo).toBeUndefined()
     const bytes = new Uint8Array(await rc[0]!.photo!.arrayBuffer())
     expect([...bytes]).toEqual([255, 216, 255, 224, 1, 2, 3, 250])

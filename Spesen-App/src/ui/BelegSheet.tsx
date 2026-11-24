@@ -41,6 +41,7 @@ export function BelegSheet({ receipt, onClose, onSaved }: Props) {
   const [category, setCategory] = useState<Category>(receipt?.category ?? 'sonstiges')
   const [anlass, setAnlass] = useState(receipt?.anlass ?? '')
   const [personen, setPersonen] = useState(receipt?.personen ? String(receipt.personen) : '')
+  const [paid, setPaid] = useState(!!receipt?.paid)
   const [error, setError] = useState('')
   const photoUrl = useObjectUrl(photo)
   const busy = useRef(false)
@@ -93,6 +94,7 @@ export function BelegSheet({ receipt, onClose, onSaved }: Props) {
       amount: value,
       anlass: category === 'bewirtung' ? anlass.trim() || undefined : undefined,
       personen: category === 'bewirtung' && Number(personen) > 0 ? Math.round(Number(personen)) : undefined,
+      paid,
       photo,
       ocrText,
     }
@@ -175,6 +177,15 @@ export function BelegSheet({ receipt, onClose, onSaved }: Props) {
           ))}
         </div>
         {flags.category && flags.category !== 'high' && <span className="hint">Kategorie wurde geraten. Bitte prüfen.</span>}
+      </div>
+      <div className="switch-row">
+        <div className="grow">
+          <div className="switch-title">Schon ausgezahlt</div>
+          <div className="note">Schalte es ein, wenn du das Geld schon bekommen hast, z. B. direkt im Büro.</div>
+        </div>
+        <button className="switch" role="switch" aria-checked={paid} aria-label="Schon ausgezahlt" onClick={() => setPaid(!paid)}>
+          <span className="knob" />
+        </button>
       </div>
       {category === 'bewirtung' && (
         <>

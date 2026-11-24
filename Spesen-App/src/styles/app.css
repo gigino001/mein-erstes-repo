@@ -208,3 +208,15 @@ details summary{cursor:pointer;font-size:13.5px;color:var(--accent);font-weight:
 /* ---- Frage nach der Verpflegung ---- */
 .ask-text{font-family:var(--f-display);font-size:19px;font-weight:600;line-height:1.3}
 .verp-line{margin-top:4px}
+
+/* ---- Bezahlt ---- */
+.rc-row{display:flex;align-items:center;gap:10px;padding-right:14px}
+.rc-row+.rc-row{border-top:1px solid var(--line)}
+.rc-row .rc{flex:1;min-width:0}
+.paid-btn{flex:none;width:44px;height:44px;border-radius:50%;border:0;background:var(--krank);color:var(--surface);display:grid;place-items:center;font:700 18px var(--f-mono);padding:0}
+.paid-btn.on{background:var(--good)}
+.paid-btn svg.i{width:24px;height:24px;stroke-width:2.6}
+.paid-sum{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted);padding:0 2px}
+.paid-sum b{font-size:14px;margin-left:4px}
+.paid-row{gap:14px;align-items:center}
+.open-line{font-weight:600}
