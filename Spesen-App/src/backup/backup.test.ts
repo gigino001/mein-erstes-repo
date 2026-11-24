@@ -13,7 +13,7 @@ async function seed() {
     { date: '2026-10-01', type: 'arbeit', half: false, start: '07:45', end: '17:00' },
     { date: '2026-10-09', type: 'urlaub', half: true, start: '08:00', end: '12:00', verpOverride: 0 },
   ])
-  await db.receipts.add({ date: '2026-10-06', vendor: 'Zum Löwen', category: 'bewirtung', amount: 46.8, anlass: 'Termin', personen: 3, photo: new Blob([new Uint8Array([255, 216, 255, 224, 1, 2, 3, 250])], { type: 'image/jpeg' }), createdAt: 1 })
+  await db.receipts.add({ date: '2026-10-06', vendor: 'Zum Löwen', category: 'bewirtung', amount: 46.8, paid: true, anlass: 'Termin', personen: 3, photo: new Blob([new Uint8Array([255, 216, 255, 224, 1, 2, 3, 250])], { type: 'image/jpeg' }), createdAt: 1 })
   await db.receipts.add({ date: '2026-10-07', vendor: 'Ohne Foto', category: 'sonstiges', amount: 5, createdAt: 2 })
   await db.adjustments.add({ date: '2026-10-10', minutes: -60, note: 'Auszahlung' })
   await db.merchantRules.put({ merchant: 'zumlowen', category: 'bewirtung' })
@@ -39,6 +39,8 @@ describe('Sicherung und Wiederherstellung', () => {
     const rc = await db.receipts.toArray()
     expect(rc.map((r) => r.vendor)).toEqual(['Zum Löwen', 'Ohne Foto'])
     expect(rc[0]?.anlass).toBe('Termin')
+    expect(rc[0]?.paid).toBe(true)
+    expect(rc[1]?.paid).toBeUndefined()
     expect(rc[1]?.photo).toBeUndefined()
     const bytes = new Uint8Array(await rc[0]!.photo!.arrayBuffer())
     expect([...bytes]).toEqual([255, 216, 255, 224, 1, 2, 3, 250])
@@ -64,6 +66,28 @@ describe('Sicherung und Wiederherstellung', () => {
     await ensureSettings()
     await markBackedUp()
     expect((await db.settings.get('main'))?.lastBackupAt).toBeGreaterThan(Date.now() - 5000)
+  })
+})
+
+describe('Ältere Urlaubs-Einstellungen', () => {
+  it('beim Start: Eintrag wird manuell, Resturlaub 0 automatisch, letzter Anspruch wird Standard', async () => {
+    await db.settings.put({ id: 'main', name: 'X', vacation: { '2026': { days: 28, carryOver: 0 } } } as never)
+    await ensureSettings()
+    const row = await db.settings.get('main')
+    expect(row).toMatchObject({ vacationVersion: 2, vacationDefaultDays: 28, vacation: { '2026': { days: 28 } } })
+    expect(row?.vacation?.['2026']).not.toHaveProperty('carryOver')
+  })
+  it('beim Start: bereits umgestellte Einstellungen bleiben unverändert', async () => {
+    await ensureSettings()
+    await db.settings.update('main', { vacation: { '2026': { carryOver: 0 } }, vacationDefaultDays: 26 })
+    await ensureSettings()
+    expect(await db.settings.get('main')).toMatchObject({ vacationDefaultDays: 26, vacation: { '2026': { carryOver: 0 } } })
+  })
+  it('ein altes Backup wird beim Einlesen umgestellt', () => {
+    const old = { app: 'spesen-app', version: 1, exportedAt: '2026-10-14T10:00:00Z', settings: { vacation: { '2026': { days: 30, carryOver: 2.5 }, '2027': { days: 30, carryOver: 0 } } }, days: [], receipts: [], adjustments: [], merchantRules: [] }
+    const b = validateBackup(old)
+    expect(b.settings.vacation).toEqual({ '2026': { days: 30, carryOver: 2.5 }, '2027': { days: 30 } })
+    expect(b.settings).toMatchObject({ vacationVersion: 2, vacationDefaultDays: 30 })
   })
 })
 

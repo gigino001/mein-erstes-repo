@@ -6,6 +6,7 @@ import { formatEuro } from '../domain/time'
 import { CATEGORY_LABEL } from '../domain/types'
 import { CategoryDot } from './CategoryDot'
 import { germanDate } from './format'
+import { PaidButton } from './PaidButton'
 import { Sheet } from './Sheet'
 import { shareImage } from './share'
 
@@ -42,6 +43,13 @@ export function BelegDetail({ id, onClose, onEdit, onToast }: { id: number; onCl
       {receipt.category === 'bewirtung' && (
         <div className="note">Anlass: {receipt.anlass || '–'} · {receipt.personen ?? '–'} Personen</div>
       )}
+      <div className="row paid-row">
+        <PaidButton id={id} paid={!!receipt.paid} vendor={receipt.vendor} />
+        <div className="grow">
+          <b>{receipt.paid ? 'Schon ausgezahlt' : 'Noch nicht ausgezahlt'}</b>
+          <div className="note">{receipt.paid ? 'Antippen, um es wieder auf offen zu setzen.' : 'Antippen, sobald du das Geld bekommen hast.'}</div>
+        </div>
+      </div>
       <div className="row two">
         <button className="btn" onClick={onEdit}>Bearbeiten</button>
         <button className="btn" onClick={save} disabled={!receipt.photo}>Bild sichern</button>

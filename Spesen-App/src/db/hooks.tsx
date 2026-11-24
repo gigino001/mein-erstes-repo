@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { DEFAULT_SETTINGS, type DayEntry, type Settings } from '../domain/types'
+import { migrateVacationSettings } from '../domain/vacation'
 import { db, type AdjustmentRow } from './db'
 
 interface Data {
@@ -25,7 +26,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   if (!settingsRow || !dayRows || timer === undefined || !adjustments) return <div className="app" aria-busy="true" />
   const { id: _id, ...stored } = settingsRow
-  const settings: Settings = { ...DEFAULT_SETTINGS, ...stored }
+  const settings: Settings = { ...DEFAULT_SETTINGS, ...migrateVacationSettings(stored) }
   return <DataContext.Provider value={{ settings, days, timer, adjustments }}>{children}</DataContext.Provider>
 }
 

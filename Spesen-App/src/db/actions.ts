@@ -52,3 +52,8 @@ export async function addAdjustment(date: string, minutes: number, note: string)
 export async function deleteAdjustment(id: number): Promise<void> {
   await db.adjustments.delete(id)
 }
+
+/** Markiert einen Beleg als schon ausgezahlt oder wieder als offen. */
+export async function setReceiptPaid(id: number, paid: boolean): Promise<void> {
+  await db.receipts.update(id, { paid })
+}

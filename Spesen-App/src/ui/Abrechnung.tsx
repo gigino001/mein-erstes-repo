@@ -130,6 +130,12 @@ export function Abrechnung({ onSettings, onToast }: { onSettings: () => void; on
           {usedCats.length > 0 && <div className="kv"><span>Summe Belege</span><i /><b className="mono">{formatEuro(r.receiptTotal)}</b></div>}
         </div>
         <div className="kv tot"><span>Gesamt Auszahlung</span><i /><b className="mono">{formatEuro(r.total)}</b></div>
+        {r.anyPaid && (
+          <div className="blk">
+            <div className="kv"><span>Bereits ausgezahlt (Belege)</span><i /><b className="mono pos">−{formatEuro(r.paidTotal)}</b></div>
+            <div className="kv open-line"><span>Noch auszuzahlen</span><i /><b className="mono">{formatEuro(r.openTotal)}</b></div>
+          </div>
+        )}
         {r.konto && (
           <div className="blk">
             <div className="label">Stundenkonto</div>

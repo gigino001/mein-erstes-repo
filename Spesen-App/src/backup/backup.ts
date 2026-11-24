@@ -1,5 +1,6 @@
 import { DEFAULT_SETTINGS, type DayEntry, type DayType, type Category, type Settings } from '../domain/types'
 import { db, type AdjustmentRow, type MerchantRule, type ReceiptRow } from '../db/db'
+import { migrateVacationSettings } from '../domain/vacation'
 
 const DAY_TYPES: DayType[] = ['arbeit', 'urlaub', 'krank', 'abbau', 'feiertag']
 const CATEGORIES: Category[] = ['sprit', 'parken', 'hotel', 'bewirtung', 'material', 'sonstiges']
@@ -53,7 +54,7 @@ export async function createBackup(): Promise<{ blob: Blob; filename: string }> 
     app: 'spesen-app',
     version: 1,
     exportedAt: new Date().toISOString(),
-    settings: { ...DEFAULT_SETTINGS, ...stored },
+    settings: { ...DEFAULT_SETTINGS, ...migrateVacationSettings(stored) },
     days,
     receipts: await Promise.all(receipts.map(async ({ photo, ...r }) => ({ ...r, ...(photo ? { photo: { type: photo.type || 'image/jpeg', data: await blobToBase64(photo) } } : {}) }))),
     adjustments,
@@ -88,7 +89,7 @@ export function validateBackup(input: unknown): BackupFile {
     return a
   })
   const merchantRules = (o.merchantRules as MerchantRule[]).filter((m) => m && typeof m.merchant === 'string' && CATEGORIES.includes(m.category))
-  const settings = { ...DEFAULT_SETTINGS, ...((o.settings as Partial<Settings>) ?? {}) }
+  const settings = { ...DEFAULT_SETTINGS, ...migrateVacationSettings((o.settings as Partial<Settings>) ?? {}) }
   return { app: 'spesen-app', version: 1, exportedAt: typeof o.exportedAt === 'string' ? o.exportedAt : '', settings, days, receipts, adjustments, merchantRules }
 }
 

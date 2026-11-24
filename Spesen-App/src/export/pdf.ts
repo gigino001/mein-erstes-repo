@@ -156,6 +156,10 @@ export async function buildPdf(r: Report, photos: (Uint8Array | undefined)[] = [
   w.text('Gesamt Auszahlung', M, w.y, { size: 14, font: w.bold })
   w.text(eur(r.total), W - M, w.y, { size: 14, font: w.bold, align: 'right' })
   w.y -= 22
+  if (r.anyPaid) {
+    w.kv('Bereits ausgezahlt (Belege)', `-${eur(r.paidTotal)}`)
+    w.kv('Noch auszuzahlen', eur(r.openTotal), { bold: true })
+  }
 
   if (r.konto) {
     w.heading('Stundenkonto')
@@ -223,18 +227,28 @@ export async function buildPdf(r: Report, photos: (Uint8Array | undefined)[] = [
       [
         { title: 'Nr', x: M, w: 20 },
         { title: 'Datum', x: M + 28, w: 62 },
-        { title: 'Händler', x: M + 96, w: 150 },
-        { title: 'Kategorie', x: M + 252, w: 82 },
-        { title: 'Anlass', x: M + 340, w: 95 },
-        { title: 'Betrag', x: M + 440, w: cw - 440, align: 'right' },
+        { title: 'H\u00e4ndler', x: M + 96, w: r.anyPaid ? 104 : 128 },
+        { title: 'Kategorie', x: M + (r.anyPaid ? 206 : 230), w: 70 },
+        { title: 'Anlass', x: M + (r.anyPaid ? 282 : 310), w: r.anyPaid ? 84 : 124 },
+        ...(r.anyPaid ? [{ title: 'Status', x: M + 372, w: 56 }] : []),
+        { title: 'Betrag', x: M + 440, w: cw - 440, align: 'right' as const },
       ],
       r.receipts.map((b, i) => ({
-        cells: [String(i + 1), dateDe(b.date), b.vendor || '-', CATEGORY_LABEL[b.category], b.category === 'bewirtung' ? `${b.anlass || '-'}${b.personen ? ` (${b.personen} P.)` : ''}` : '', eur(b.amount)],
+        cells: [
+          String(i + 1),
+          dateDe(b.date),
+          b.vendor || '-',
+          CATEGORY_LABEL[b.category],
+          b.category === 'bewirtung' ? `${b.anlass || '-'}${b.personen ? ` (${b.personen} P.)` : ''}` : '',
+          ...(r.anyPaid ? [b.paid ? 'bezahlt' : 'offen'] : []),
+          eur(b.amount),
+        ],
       })),
       header,
     )
     w.y -= 2
     w.kv('Summe Belege', eur(r.receiptTotal), { bold: true })
+    if (r.anyPaid) w.kv('Davon bereits ausgezahlt', eur(r.paidTotal))
 
     // Belegfotos, zwei pro Seite
     const gap = 20
@@ -249,7 +263,7 @@ export async function buildPdf(r: Report, photos: (Uint8Array | undefined)[] = [
         const top = w.y
         w.text(`Beleg ${idx + 1}`, x, top, { size: 11, font: w.bold })
         w.text(w.fit(`${dateDe(b.date)} · ${b.vendor || 'ohne Händler'}`, 9.5, cell), x, top - 14, { size: 9.5 })
-        w.text(w.fit(`${CATEGORY_LABEL[b.category]} · ${eur(b.amount)}`, 9.5, cell), x, top - 27, { size: 9.5, color: MUTED })
+        w.text(w.fit(`${CATEGORY_LABEL[b.category]} · ${eur(b.amount)}${r.anyPaid ? (b.paid ? ' · bezahlt' : ' · offen') : ''}`, 9.5, cell), x, top - 27, { size: 9.5, color: MUTED })
         let imgTop = top - 40
         if (b.category === 'bewirtung' && (b.anlass || b.personen)) {
           w.text(w.fit(`Anlass: ${b.anlass || '-'}${b.personen ? ` · ${b.personen} Personen` : ''}`, 9, cell), x, top - 40, { size: 9, color: MUTED })

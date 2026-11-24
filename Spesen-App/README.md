@@ -21,10 +21,11 @@ npm run build      # Typprüfung + Produktions-Build inkl. Service Worker
 
 ## Regeln
 - Soll 8 h pro Tag, Mo–Fr, Feiertage NRW
+- Belege haben einen Status: roter Knopf = noch nicht ausgezahlt, grüner Knopf mit Häkchen = schon ausgezahlt (Liste, Detailansicht, beim Erfassen). Die Abrechnung zeigt dann „Bereits ausgezahlt (Belege)" und „Noch auszuzahlen" (Gesamt Auszahlung minus bezahlte Belege, die Verpflegung gilt als noch offen). PDF, Excel und CSV enthalten den Status.
 - Beim „Feierabend stempeln" fragt die App (bei eingeschalteter Verpflegung): „Bekommst du für heute eine Verpflegungspauschale?" mit Ja/Nein. Die Antwort gilt für den Tag und hat Vorrang vor der automatischen Regel. Die Endzeit ist der Moment des Antippens.
 - Verpflegung lässt sich in den Einstellungen komplett ausschalten (für Mitarbeiter ohne Pauschale): dann gibt es sie nirgends, auch nicht in Abrechnung, PDF, Excel und CSV
 - Verpflegung 14 € nur an Arbeitstagen und nur bei mehr als 8 h Arbeitszeit (also ab 8:01), nie bei Urlaub, Krank, Abfeiern oder Feiertag (Betrag und Schwelle einstellbar)
-- Urlaubskonto: Anspruch und Resturlaub pro Jahr in den Einstellungen (Halbe erlaubt, der Anspruch gilt für Folgejahre, bis er geändert wird). Ganzer Urlaubstag zählt 1, halber 0,5. Krank, Abfeiern, Wochenenden und Feiertage verbrauchen keinen Urlaub. Angezeigt als genommen (bis heute), geplant (Zukunft) und übrig.
+- Urlaubskonto: Am 1. Januar jedes Jahres kommen automatisch 30 Tage dazu (Standard einstellbar), plus der Rest des Vorjahres. Beides lässt sich pro Jahr von Hand überschreiben, z. B. bei Eintritt mitten im Jahr (leer lassen = automatisch). Gerechnet wird ab dem Jahr des Stichtags. Ein überzogener Urlaub wird nicht ins nächste Jahr mitgenommen. Ganzer Urlaubstag zählt 1, halber 0,5. Krank, Abfeiern, Wochenenden und Feiertage verbrauchen keinen Urlaub. Angezeigt als genommen (bis heute), geplant (Zukunft) und übrig.
 - Stundenkonto: Arbeitstage buchen Ist minus Soll (weniger als 8 h mindert die Überstunden), Urlaub, Krank und Feiertag erfüllen das Soll, Abfeiern zieht das Soll ab (halber Tag 4 h)
 - Zeiten auf 15 Minuten gerundet
 - Mail-Betreff: „Spesen Adriano Falcone"

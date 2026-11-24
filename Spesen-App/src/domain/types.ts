@@ -21,11 +21,12 @@ export const TYPE_LABEL: Record<DayType, string> = {
   feiertag: 'Feiertag',
 }
 
+/** Manuelle Eingaben für ein Jahr. Fehlt ein Wert, rechnet die App automatisch. */
 export interface VacationYear {
-  /** Urlaubsanspruch des Jahres in Tagen (Halbe erlaubt). */
-  days: number
-  /** Resturlaub, der aus dem Vorjahr mitgenommen wurde. */
-  carryOver: number
+  /** Urlaubsanspruch des Jahres in Tagen (Halbe erlaubt), z. B. bei Eintritt mitten im Jahr. */
+  days?: number
+  /** Resturlaub aus dem Vorjahr. Ohne Eingabe: automatisch der Rest des Vorjahres. */
+  carryOver?: number
 }
 
 export interface Settings {
@@ -47,8 +48,12 @@ export interface Settings {
   openingDate: string
   mailTo: string
   mailSubject: string
-  /** Urlaubstage je Jahr ('2026' → Anspruch und Resturlaub). Jahre ohne Eintrag erben den Anspruch des letzten früheren Jahres. */
+  /** Urlaubstage, die am 1. Januar jedes Jahres dazukommen. */
+  vacationDefaultDays: number
+  /** Manuelle Eingaben je Jahr ('2026' → Anspruch und/oder Resturlaub). Alles andere rechnet die App. */
   vacation?: Record<string, VacationYear>
+  /** 2 = Eingaben bedeuten „manuell, sonst automatisch". Ältere Daten werden beim Laden umgestellt. */
+  vacationVersion?: number
   /** Zeitpunkt der letzten Sicherung (Epoch-ms). */
   lastBackupAt?: number
   /** Erinnerung an die Sicherung bis dahin ausblenden (Epoch-ms). */
@@ -66,6 +71,8 @@ export const DEFAULT_SETTINGS: Settings = {
   openingDate: '2026-01-01',
   mailTo: '',
   mailSubject: 'Spesen Adriano Falcone',
+  vacationDefaultDays: 30,
+  vacationVersion: 2,
 }
 
 export type Category = 'sprit' | 'parken' | 'hotel' | 'bewirtung' | 'material' | 'sonstiges'

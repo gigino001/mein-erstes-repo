@@ -8,6 +8,7 @@ import { CATEGORY_LABEL, type Category } from '../domain/types'
 import { CategoryDot } from './CategoryDot'
 import { germanDate } from './format'
 import { Header } from './Header'
+import { PaidButton } from './PaidButton'
 
 const CATS = Object.keys(CATEGORY_LABEL) as Category[]
 
@@ -26,7 +27,9 @@ export function Belege({ onSettings, onNew, onOpen }: { onSettings: () => void; 
   const sums = useMemo(() => {
     const by = Object.fromEntries(CATS.map((c) => [c, [] as number[]])) as Record<Category, number[]>
     for (const r of sorted) by[r.category].push(r.amount)
-    return { by: Object.fromEntries(CATS.map((c) => [c, sumAmounts(by[c])])) as Record<Category, number>, total: sumAmounts(sorted.map((r) => r.amount)) }
+    const paid = sumAmounts(sorted.filter((r) => r.paid).map((r) => r.amount))
+    const total = sumAmounts(sorted.map((r) => r.amount))
+    return { by: Object.fromEntries(CATS.map((c) => [c, sumAmounts(by[c])])) as Record<Category, number>, total, paid, open: sumAmounts([total, -paid]) }
   }, [sorted])
   const shift = (n: number) =>
     setYm(({ y, m }) => {
@@ -54,21 +57,30 @@ export function Belege({ onSettings, onNew, onOpen }: { onSettings: () => void; 
       </div>
       {sorted.length === 0 && <div className="card note">Noch keine Belege in diesem Monat. Mit „Beleg" fotografierst du den ersten.</div>}
       {sorted.length > 0 && (
-        <div className="list">
-          {sorted.map((r: ReceiptRow) => (
-            <button key={r.id} className="rc" onClick={() => onOpen(r.id!)}>
-              <Thumb blob={r.photo} />
-              <span className="rc-main">
-                <span className="vn">{r.vendor || 'Ohne Händler'}</span>
-                <span className="mt">
-                  <CategoryDot category={r.category} />
-                  {CATEGORY_LABEL[r.category]} · {germanDate(r.date).slice(0, 6)}
-                </span>
-              </span>
-              <span className="am mono">{formatEuro(r.amount)}</span>
-            </button>
-          ))}
-        </div>
+        <>
+          <div className="paid-sum">
+            <span>Noch offen <b className="mono neg">{formatEuro(sums.open)}</b></span>
+            <span>Bezahlt <b className="mono pos">{formatEuro(sums.paid)}</b></span>
+          </div>
+          <div className="list">
+            {sorted.map((r: ReceiptRow) => (
+              <div key={r.id} className="rc-row">
+                <button className="rc" onClick={() => onOpen(r.id!)}>
+                  <Thumb blob={r.photo} />
+                  <span className="rc-main">
+                    <span className="vn">{r.vendor || 'Ohne Händler'}</span>
+                    <span className="mt">
+                      <CategoryDot category={r.category} />
+                      {CATEGORY_LABEL[r.category]} · {germanDate(r.date).slice(0, 6)}
+                    </span>
+                  </span>
+                  <span className="am mono">{formatEuro(r.amount)}</span>
+                </button>
+                <PaidButton id={r.id!} paid={!!r.paid} vendor={r.vendor} />
+              </div>
+            ))}
+          </div>
+        </>
       )}
       </>)}
       <button className="btn primary fab" onClick={onNew}>

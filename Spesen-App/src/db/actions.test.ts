@@ -2,7 +2,7 @@ import 'fake-indexeddb/auto'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { calcDay } from '../domain/calc'
 import { DEFAULT_SETTINGS } from '../domain/types'
-import { stopTimer } from './actions'
+import { setReceiptPaid, stopTimer } from './actions'
 import { db } from './db'
 
 const at = (d: number, h: number, m: number) => new Date(2026, 9, d, h, m).getTime()
@@ -67,5 +67,16 @@ describe('stopTimer', () => {
 
   it('ohne laufenden Timer: Fehler', async () => {
     await expect(stopTimer(15)).rejects.toThrow('Kein laufender Timer')
+  })
+})
+
+describe('setReceiptPaid', () => {
+  it('markiert einen Beleg als bezahlt und wieder als offen', async () => {
+    const id = await db.receipts.add({ date: '2026-10-06', vendor: 'X', category: 'sonstiges', amount: 5, createdAt: 1 })
+    expect((await db.receipts.get(id))?.paid).toBeUndefined()
+    await setReceiptPaid(id, true)
+    expect((await db.receipts.get(id))?.paid).toBe(true)
+    await setReceiptPaid(id, false)
+    expect((await db.receipts.get(id))?.paid).toBe(false)
   })
 })

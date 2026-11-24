@@ -10,6 +10,8 @@ export interface ReceiptLike {
   vendor: string
   category: Category
   amount: number
+  /** Schon ausgezahlt. */
+  paid?: boolean
   anlass?: string
   personen?: number
   photo?: Blob
@@ -46,6 +48,12 @@ export interface Report {
   receipts: ReceiptLike[]
   byCategory: Record<Category, number>
   receiptTotal: number
+  /** Mindestens ein Beleg ist schon als ausgezahlt markiert (dann zeigen Abrechnung und Exporte den Status). */
+  anyPaid: boolean
+  /** Summe der schon ausgezahlten Belege. */
+  paidTotal: number
+  /** Noch auszuzahlen: Gesamt Auszahlung minus schon ausgezahlte Belege. Die Verpflegung gilt als noch offen. */
+  openTotal: number
   /** Verpflegung plus Belege. */
   total: number
   /** Stundenkonto; null, wenn der Monat vor dem Stichtag des Startsaldos liegt. */
@@ -91,6 +99,7 @@ export function buildReport(p: {
   const byCategory = Object.fromEntries(Object.keys(CATEGORY_LABEL).map((c) => [c, 0])) as Record<Category, number>
   for (const c of Object.keys(byCategory) as Category[]) byCategory[c] = sumAmounts(receipts.filter((r) => r.category === c).map((r) => r.amount))
   const receiptTotal = sumAmounts(receipts.map((r) => r.amount))
+  const paidTotal = sumAmounts(receipts.filter((r) => r.paid).map((r) => r.amount))
 
   const monthEnd = lastDayOf(year, month)
   const prevEnd = month === 1 ? lastDayOf(year - 1, 12) : lastDayOf(year, month - 1)
@@ -133,6 +142,9 @@ export function buildReport(p: {
     receipts,
     byCategory,
     receiptTotal,
+    anyPaid: receipts.some((r) => r.paid),
+    paidTotal,
+    openTotal: sumAmounts([summary.verp, receiptTotal, -paidTotal]),
     total: sumAmounts([summary.verp, receiptTotal]),
     konto,
     vacation,
