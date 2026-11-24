@@ -1,5 +1,6 @@
 import Dexie, { type Table } from 'dexie'
 import { DEFAULT_SETTINGS, type Category, type DayEntry, type Settings } from '../domain/types'
+import { migrateVacationSettings } from '../domain/vacation'
 
 export interface SettingsRow extends Settings {
   id: 'main'
@@ -58,7 +59,10 @@ class SpesenDb extends Dexie {
 export const db = new SpesenDb()
 
 export async function ensureSettings(): Promise<void> {
-  if (!(await db.settings.get('main'))) await db.settings.put({ id: 'main', ...DEFAULT_SETTINGS })
+  const row = await db.settings.get('main')
+  if (!row) return void (await db.settings.put({ id: 'main', ...DEFAULT_SETTINGS }))
+  // Ältere Urlaubs-Einstellungen einmalig auf „manuell, sonst automatisch" umstellen.
+  if (row.vacationVersion !== 2) await db.settings.put({ ...DEFAULT_SETTINGS, ...migrateVacationSettings(row), id: 'main' })
 }
 
 export async function updateSettings(patch: Partial<Settings>): Promise<void> {

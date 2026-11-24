@@ -67,6 +67,28 @@ describe('Sicherung und Wiederherstellung', () => {
   })
 })
 
+describe('Ältere Urlaubs-Einstellungen', () => {
+  it('beim Start: Eintrag wird manuell, Resturlaub 0 automatisch, letzter Anspruch wird Standard', async () => {
+    await db.settings.put({ id: 'main', name: 'X', vacation: { '2026': { days: 28, carryOver: 0 } } } as never)
+    await ensureSettings()
+    const row = await db.settings.get('main')
+    expect(row).toMatchObject({ vacationVersion: 2, vacationDefaultDays: 28, vacation: { '2026': { days: 28 } } })
+    expect(row?.vacation?.['2026']).not.toHaveProperty('carryOver')
+  })
+  it('beim Start: bereits umgestellte Einstellungen bleiben unverändert', async () => {
+    await ensureSettings()
+    await db.settings.update('main', { vacation: { '2026': { carryOver: 0 } }, vacationDefaultDays: 26 })
+    await ensureSettings()
+    expect(await db.settings.get('main')).toMatchObject({ vacationDefaultDays: 26, vacation: { '2026': { carryOver: 0 } } })
+  })
+  it('ein altes Backup wird beim Einlesen umgestellt', () => {
+    const old = { app: 'spesen-app', version: 1, exportedAt: '2026-10-14T10:00:00Z', settings: { vacation: { '2026': { days: 30, carryOver: 2.5 }, '2027': { days: 30, carryOver: 0 } } }, days: [], receipts: [], adjustments: [], merchantRules: [] }
+    const b = validateBackup(old)
+    expect(b.settings.vacation).toEqual({ '2026': { days: 30, carryOver: 2.5 }, '2027': { days: 30 } })
+    expect(b.settings).toMatchObject({ vacationVersion: 2, vacationDefaultDays: 30 })
+  })
+})
+
 describe('Prüfung', () => {
   const ok = { app: 'spesen-app', version: 1, exportedAt: '2026-10-14T10:00:00Z', settings: {}, days: [], receipts: [], adjustments: [], merchantRules: [] }
   it('akzeptiert eine leere, gültige Sicherung', () => {

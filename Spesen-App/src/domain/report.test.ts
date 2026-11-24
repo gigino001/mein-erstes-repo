@@ -70,8 +70,8 @@ describe('buildReport Oktober 2026', () => {
     expect(r.vacation).toMatchObject({ year: 2026, total: 32, inMonth: 1.5, untilMonthEnd: 1.5, remaining: 30.5, unset: false })
   })
   it('ohne Anspruch und ohne Urlaub im Monat kein Urlaubsblock, mit Urlaub nur die Monatszahl', () => {
-    expect(buildReport({ ...base, settings: { ...s, vacation: {} }, entries: new Map() }).vacation).toBeNull()
-    expect(buildReport({ ...base, settings: { ...s, vacation: {} } }).vacation).toMatchObject({ unset: true, inMonth: 1.5 })
+    expect(buildReport({ ...base, settings: { ...s, vacation: {}, vacationDefaultDays: 0 }, entries: new Map() }).vacation).toBeNull()
+    expect(buildReport({ ...base, settings: { ...s, vacation: {}, vacationDefaultDays: 0 } }).vacation).toMatchObject({ unset: true, inMonth: 1.5 })
   })
   it('Hinweis bei überschrittenem Anspruch', () => {
     const w = buildReport({ ...base, settings: { ...s, vacation: { '2026': { days: 1, carryOver: 0 } } } }).warnings

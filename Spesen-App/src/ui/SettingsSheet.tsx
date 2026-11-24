@@ -20,27 +20,39 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
   const days = useDays()
   const todayKey = toDateKey(new Date())
   const [vYear, setVYear] = useState(Number(todayKey.slice(0, 4)))
-  const initialVac = vacationFor(settings, vYear)
-  const [vDays, setVDays] = useState(initialVac.days ? formatDays(initialVac.days) : '')
-  const [vCarry, setVCarry] = useState(initialVac.carryOver ? formatDays(initialVac.carryOver) : '')
+  const [vDefault, setVDefault] = useState(formatDays(settings.vacationDefaultDays))
+  const manualOf = (y: number) => settings.vacation?.[String(y)]
+  const [vDays, setVDays] = useState(manualOf(vYear)?.days !== undefined ? formatDays(manualOf(vYear)!.days!) : '')
+  const [vCarry, setVCarry] = useState(manualOf(vYear)?.carryOver !== undefined ? formatDays(manualOf(vYear)!.carryOver!) : '')
   const [vTouched, setVTouched] = useState(false)
   const [error, setError] = useState('')
 
   const changeYear = (y: number) => {
-    const v = vacationFor(settings, y)
+    const m = manualOf(y)
     setVYear(y)
-    setVDays(v.days ? formatDays(v.days) : '')
-    setVCarry(v.carryOver ? formatDays(v.carryOver) : '')
+    setVDays(m?.days !== undefined ? formatDays(m.days) : '')
+    setVCarry(m?.carryOver !== undefined ? formatDays(m.carryOver) : '')
     setVTouched(false)
   }
-  const vDaysNum = parseDays(vDays)
-  const vCarryNum = vCarry.trim() === '' ? 0 : parseDays(vCarry)
-  const vPreview = summarizeVacation(
-    vYear,
-    days,
-    { vacation: { ...settings.vacation, [String(vYear)]: { days: vDaysNum ?? 0, carryOver: vCarryNum ?? 0 } } },
-    todayKey,
-  )
+  const resetYear = () => {
+    setVDays('')
+    setVCarry('')
+    setVTouched(true)
+    setError('')
+  }
+  /** Leer = automatisch (undefined), ungültig = null. */
+  const optionalDays = (text: string) => (text.trim() === '' ? undefined : parseDays(text))
+  const vDefaultNum = parseDays(vDefault)
+  const vDaysNum = optionalDays(vDays)
+  const vCarryNum = optionalDays(vCarry)
+  const draftYear = { ...(vDaysNum != null ? { days: vDaysNum } : {}), ...(vCarryNum != null ? { carryOver: vCarryNum } : {}) }
+  const draft = {
+    ...settings,
+    vacationDefaultDays: vDefaultNum ?? settings.vacationDefaultDays,
+    vacation: { ...settings.vacation, [String(vYear)]: draftYear },
+  }
+  const vInfo = vacationFor(draft, vYear, days)
+  const vPreview = summarizeVacation(vYear, days, draft, todayKey)
 
   const save = async () => {
     const r = toNumber(rate)
@@ -50,13 +62,17 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
     if (verpOn && !(h > 0)) return setError('Schwelle: bitte Stunden eintragen, z. B. 8.')
     if (o === null) return setError('Startsaldo: bitte als H:MM eintragen, z. B. 12:30 oder -2:00.')
     if (!openingDate) return setError('Bitte einen Stichtag wählen.')
+    if (vDefaultNum === null) return setError('Standard-Urlaubstage: bitte eine Zahl eintragen, z. B. 30.')
     let vacation = settings.vacation
     if (vTouched) {
-      if (vDaysNum === null) return setError('Urlaubstage: bitte eine Zahl eintragen, z. B. 30 oder 27,5.')
-      if (vCarryNum === null) return setError('Resturlaub: bitte eine Zahl eintragen, z. B. 2,5 oder leer lassen.')
-      vacation = { ...settings.vacation, [String(vYear)]: { days: vDaysNum, carryOver: vCarryNum } }
+      if (vDaysNum === null) return setError('Urlaubstage: bitte eine Zahl eintragen, z. B. 30 oder 27,5, oder leer lassen für automatisch.')
+      if (vCarryNum === null) return setError('Resturlaub: bitte eine Zahl eintragen, z. B. 2,5, oder leer lassen für automatisch.')
+      const next = { ...settings.vacation }
+      if (Object.keys(draftYear).length) next[String(vYear)] = draftYear
+      else delete next[String(vYear)]
+      vacation = next
     }
-    await updateSettings({ vacation, name: name.trim() || settings.name, verpEnabled: verpOn, ...(verpOn ? { verpRate: r, verpThresholdMinutes: Math.round(h * 60) } : {}), mailTo: mailTo.trim(), openingBalance: o, openingDate })
+    await updateSettings({ vacation, vacationDefaultDays: vDefaultNum, vacationVersion: 2, name: name.trim() || settings.name, verpEnabled: verpOn, ...(verpOn ? { verpRate: r, verpThresholdMinutes: Math.round(h * 60) } : {}), mailTo: mailTo.trim(), openingBalance: o, openingDate })
     onSaved('Einstellungen gespeichert')
     onClose()
   }
@@ -101,8 +117,13 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
         </div>
       </div>
       <section className="blk vac-block" aria-label="Urlaub">
+        <div className="label">Urlaub</div>
+        <div className="field">
+          <label className="label" htmlFor="st-vac-default">Urlaubstage pro Jahr (kommen am 1. Januar dazu)</label>
+          <input id="st-vac-default" inputMode="decimal" value={vDefault} onChange={(e) => { setVDefault(e.target.value); setError('') }} />
+        </div>
         <div className="row between">
-          <div className="label">Urlaubstage {vYear}</div>
+          <div className="label">Jahr {vYear}</div>
           <span className="row">
             <button className="icon-btn small" onClick={() => changeYear(vYear - 1)} aria-label="Vorheriges Jahr">‹</button>
             <button className="icon-btn small" onClick={() => changeYear(vYear + 1)} aria-label="Nächstes Jahr">›</button>
@@ -110,16 +131,24 @@ export function SettingsSheet({ settings, onClose, onSaved }: { settings: Settin
         </div>
         <div className="row">
           <div className="field grow">
-            <label className="label" htmlFor="st-vac">Urlaubstage im Jahr</label>
-            <input id="st-vac" inputMode="decimal" placeholder="z. B. 30" value={vDays} onChange={(e) => { setVDays(e.target.value); setVTouched(true); setError('') }} />
+            <label className="label" htmlFor="st-vac">Urlaubstage {vYear}</label>
+            <input id="st-vac" inputMode="decimal" placeholder={`${formatDays(vInfo.defaultDays)} (automatisch)`} value={vDays} onChange={(e) => { setVDays(e.target.value); setVTouched(true); setError('') }} />
           </div>
           <div className="field grow">
-            <label className="label" htmlFor="st-vac-carry">Resturlaub Vorjahr</label>
-            <input id="st-vac-carry" inputMode="decimal" placeholder="0" value={vCarry} onChange={(e) => { setVCarry(e.target.value); setVTouched(true); setError('') }} />
+            <label className="label" htmlFor="st-vac-carry">Resturlaub aus {vYear - 1}</label>
+            <input id="st-vac-carry" inputMode="decimal" placeholder={`${formatDays(vInfo.autoCarryOver)} (automatisch)`} value={vCarry} onChange={(e) => { setVCarry(e.target.value); setVTouched(true); setError('') }} />
           </div>
         </div>
         <div className="note">
-          {vPreview.unset ? 'Trage deinen Anspruch ein, dann zählt die App mit. Halbe Tage sind erlaubt (z. B. 27,5).' : `Genommen ${formatDays(vPreview.taken)} · geplant ${formatDays(vPreview.planned)} · noch übrig ${formatDays(vPreview.remaining)} von ${formatDays(vPreview.total)} Tagen. Der Anspruch gilt auch für die Folgejahre, bis du ihn änderst.`}
+          Leer lassen heißt automatisch: Am 1. Januar kommen {formatDays(vInfo.defaultDays)} Tage dazu, plus der Rest des Vorjahres. Fängst du mitten im Jahr an, trage hier die Tage ein, die dir für {vYear} zustehen.
+        </div>
+        {(vDays.trim() !== '' || vCarry.trim() !== '') && (
+          <button className="btn slim" onClick={resetYear}>Zurück auf automatisch</button>
+        )}
+        <div className="note vac-sum">
+          {vPreview.unset
+            ? `Für ${vYear} ist kein Urlaubsanspruch eingetragen.`
+            : `Anspruch ${formatDays(vInfo.entitlement)}${vInfo.manualDays ? ' (manuell)' : ''} + Resturlaub ${formatDays(vInfo.carryOver)}${vInfo.manualCarryOver ? ' (manuell)' : ''} = ${formatDays(vPreview.total)} Tage. Genommen ${formatDays(vPreview.taken)}, geplant ${formatDays(vPreview.planned)}, noch übrig ${formatDays(vPreview.remaining)}.`}
         </div>
       </section>
       <div className="field">
