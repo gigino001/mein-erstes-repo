@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { formatDuration, formatPrice } from "@/lib/format";
 import { ConfirmCancelButtons } from "@/app/admin/(dashboard)/ConfirmCancelButtons";
 import { ManualAppointmentForm } from "@/app/admin/(dashboard)/ManualAppointmentForm";
+import { AppointmentCalendar } from "@/app/admin/(dashboard)/AppointmentCalendar";
 
 function formatDateTime(d: Date) {
   return d.toLocaleString("de-DE", {
@@ -24,11 +25,9 @@ export default async function AdminDashboardPage() {
   ]);
 
   const now = new Date();
-  const upcoming = appointments.filter((a) => a.startAt >= now);
-  const past = appointments.filter((a) => a.startAt < now);
-
-  const requested = upcoming.filter((a) => a.status === "requested");
-  const confirmed = upcoming.filter((a) => a.status === "confirmed");
+  const requested = appointments.filter((a) => a.status === "requested" && a.startAt >= now);
+  const stalePastRequests = appointments.filter((a) => a.status === "requested" && a.startAt < now);
+  const confirmed = appointments.filter((a) => a.status === "confirmed");
 
   return (
     <div className="px-6 md:px-18 py-12 flex flex-col gap-14 max-w-4xl">
@@ -80,27 +79,24 @@ export default async function AdminDashboardPage() {
 
       <section className="flex flex-col gap-5">
         <h2 className="font-semibold text-lg">Bestätigte Termine</h2>
-        {confirmed.length === 0 && <p className="text-sm text-ink-muted">Noch keine bestätigten Termine.</p>}
-        <div className="flex flex-col divide-y divide-sky-mist">
-          {confirmed.map((a) => (
-            <div key={a.id} className="py-4 flex items-center justify-between gap-4 flex-wrap">
-              <div>
-                <p className="font-semibold">
-                  {a.customerName} — {a.service.name}
-                </p>
-                <p className="text-sm text-ink-muted">{formatDateTime(a.startAt)}</p>
-              </div>
-              <ConfirmCancelButtons id={a.id} showConfirm={false} hasDeposit={a.depositAmountCents > 0} />
-            </div>
-          ))}
-        </div>
+        <AppointmentCalendar
+          appointments={confirmed.map((a) => ({
+            id: a.id,
+            customerName: a.customerName,
+            serviceName: a.service.name,
+            durationMinutes: a.service.durationMinutes,
+            priceCents: a.service.priceCents,
+            depositAmountCents: a.depositAmountCents,
+            startAt: a.startAt.toISOString(),
+          }))}
+        />
       </section>
 
-      {past.length > 0 && (
+      {stalePastRequests.length > 0 && (
         <section className="flex flex-col gap-5">
-          <h2 className="font-semibold text-lg text-ink-muted">Vergangen ({past.length})</h2>
+          <h2 className="font-semibold text-lg text-ink-muted">Abgelaufene offene Anfragen ({stalePastRequests.length})</h2>
           <div className="flex flex-col divide-y divide-sky-mist opacity-60">
-            {past.slice(-10).reverse().map((a) => (
+            {stalePastRequests.slice(-10).reverse().map((a) => (
               <div key={a.id} className="py-3 text-sm">
                 {formatDateTime(a.startAt)} — {a.customerName} — {a.service.name}
               </div>
