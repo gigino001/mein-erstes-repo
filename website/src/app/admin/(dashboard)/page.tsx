@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { formatDuration, formatPrice } from "@/lib/format";
 import { ConfirmCancelButtons } from "@/app/admin/(dashboard)/ConfirmCancelButtons";
+import { ManualAppointmentForm } from "@/app/admin/(dashboard)/ManualAppointmentForm";
 
 function formatDateTime(d: Date) {
   return d.toLocaleString("de-DE", {
@@ -13,11 +14,14 @@ function formatDateTime(d: Date) {
 }
 
 export default async function AdminDashboardPage() {
-  const appointments = await prisma.appointment.findMany({
-    where: { status: { not: "cancelled" } },
-    orderBy: { startAt: "asc" },
-    include: { service: true },
-  });
+  const [appointments, services] = await Promise.all([
+    prisma.appointment.findMany({
+      where: { status: { not: "cancelled" } },
+      orderBy: { startAt: "asc" },
+      include: { service: true },
+    }),
+    prisma.service.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } }),
+  ]);
 
   const now = new Date();
   const upcoming = appointments.filter((a) => a.startAt >= now);
@@ -34,6 +38,8 @@ export default async function AdminDashboardPage() {
         </span>
         <h1 className="font-poster uppercase text-4xl">Termine</h1>
       </div>
+
+      <ManualAppointmentForm services={services} />
 
       <section className="flex flex-col gap-5">
         <h2 className="font-semibold text-lg">

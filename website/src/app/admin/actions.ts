@@ -1,12 +1,14 @@
 "use server";
 
 import bcrypt from "bcryptjs";
+import { randomBytes } from "node:crypto";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createAdminSession, deleteAdminSession } from "@/lib/session";
 import { verifyAdminSession } from "@/lib/dal";
 import { sendAppointmentConfirmedToCustomer, sendMarketingMailToCustomer } from "@/lib/mail";
 import { performAppointmentCancellation } from "@/lib/appointments";
+import { slotToRange } from "@/lib/availability";
 
 export type LoginResult = { ok: false; error: string } | never;
 
@@ -85,6 +87,88 @@ export async function createBlock(input: {
       reason: input.reason || null,
     },
   });
+}
+
+export type ManualAppointmentInput = {
+  serviceId: string;
+  date: string;
+  time: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  note?: string;
+  /** true = trotz erkannter Überschneidung mit einem bestehenden Termin anlegen. */
+  force?: boolean;
+};
+
+export type ManualAppointmentResult = { ok: true } | { ok: false; error: string } | { ok: false; conflict: true };
+
+/**
+ * Trägt einen Termin ein, den Claudia selbst entgegengenommen hat (Telefon,
+ * vor Ort usw.) — wird sofort als "bestätigt" angelegt, nicht als Anfrage.
+ * Die Kundin bekommt dieselbe Bestätigungsmail (inkl. Kalenderdatei und
+ * Stornierungslink) wie bei einer Online-Buchung. Die Bewertungs-Anfrage
+ * 2 Tage später läuft automatisch über die bestehende tägliche Funktion
+ * mit — die prüft nur auf Status "bestätigt", unabhängig vom Buchungsweg.
+ */
+export async function createManualAppointment(input: ManualAppointmentInput): Promise<ManualAppointmentResult> {
+  await verifyAdminSession();
+
+  const customerName = input.customerName.trim();
+  const customerEmail = input.customerEmail.trim();
+  if (!customerName || !customerEmail) {
+    return { ok: false, error: "Name und E-Mail sind erforderlich." };
+  }
+
+  const service = await prisma.service.findUnique({ where: { id: input.serviceId } });
+  if (!service) return { ok: false, error: "Leistung nicht gefunden." };
+
+  const staff = await prisma.staff.findFirst({ where: { active: true } });
+  if (!staff) return { ok: false, error: "Keine aktive Mitarbeiterin gefunden." };
+
+  const { startAt, endAt } = slotToRange(input.date, input.time, service.durationMinutes);
+  if (Number.isNaN(startAt.getTime())) {
+    return { ok: false, error: "Ungültiges Datum oder Uhrzeit." };
+  }
+
+  if (!input.force) {
+    const overlapping = await prisma.appointment.findFirst({
+      where: {
+        staffId: staff.id,
+        status: { not: "cancelled" },
+        startAt: { lt: endAt },
+        endAt: { gt: startAt },
+      },
+    });
+    if (overlapping) return { ok: false, conflict: true };
+  }
+
+  const appointment = await prisma.appointment.create({
+    data: {
+      serviceId: service.id,
+      staffId: staff.id,
+      startAt,
+      endAt,
+      customerName,
+      customerEmail,
+      customerPhone: input.customerPhone?.trim() || null,
+      note: input.note?.trim() || null,
+      status: "confirmed",
+      cancelToken: randomBytes(24).toString("hex"),
+    },
+  });
+
+  await sendAppointmentConfirmedToCustomer({
+    id: appointment.id,
+    customerName: appointment.customerName,
+    customerEmail: appointment.customerEmail,
+    serviceName: service.name,
+    startAt: appointment.startAt,
+    endAt: appointment.endAt,
+    cancelToken: appointment.cancelToken,
+  });
+
+  return { ok: true };
 }
 
 export async function deleteBlock(id: string) {
