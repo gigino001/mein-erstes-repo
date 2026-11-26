@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { formatDuration, formatPrice } from "@/lib/format";
 import { ConfirmCancelButtons } from "@/app/admin/(dashboard)/ConfirmCancelButtons";
+import { DeleteBlockButton } from "@/app/admin/(dashboard)/blockieren/DeleteBlockButton";
 
 const MONTH_NAMES = [
   "Januar", "Februar", "März", "April", "Mai", "Juni",
@@ -20,6 +21,21 @@ type Appointment = {
   startAt: string;
 };
 
+type Block = {
+  id: string;
+  date: string;
+  allDay: boolean;
+  startMinute: number | null;
+  endMinute: number | null;
+  reason: string | null;
+};
+
+function formatBlockTime(minutes: number) {
+  const hh = String(Math.floor(minutes / 60)).padStart(2, "0");
+  const mm = String(minutes % 60).padStart(2, "0");
+  return `${hh}:${mm}`;
+}
+
 function formatYMD(date: Date): string {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -35,7 +51,13 @@ function isSameDay(a: Date, b: Date): boolean {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
 
-export function AppointmentCalendar({ appointments }: { appointments: Appointment[] }) {
+export function AppointmentCalendar({
+  appointments,
+  blocks,
+}: {
+  appointments: Appointment[];
+  blocks: Block[];
+}) {
   const today = useMemo(() => new Date(), []);
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
@@ -53,6 +75,17 @@ export function AppointmentCalendar({ appointments }: { appointments: Appointmen
     return map;
   }, [appointments]);
 
+  const blocksByDate = useMemo(() => {
+    const map = new Map<string, Block[]>();
+    for (const b of blocks) {
+      const key = formatYMD(new Date(b.date));
+      const list = map.get(key) ?? [];
+      list.push(b);
+      map.set(key, list);
+    }
+    return map;
+  }, [blocks]);
+
   const firstOfMonth = new Date(viewYear, viewMonth, 1);
   const firstWeekday = (firstOfMonth.getDay() + 6) % 7; // Montag = 0
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
@@ -69,6 +102,7 @@ export function AppointmentCalendar({ appointments }: { appointments: Appointmen
   }
 
   const selectedAppointments = byDate.get(selectedDate) ?? [];
+  const selectedBlocks = blocksByDate.get(selectedDate) ?? [];
   const selectedDateObj = useMemo(() => {
     const [y, m, d] = selectedDate.split("-").map(Number);
     return new Date(y, m - 1, d);
@@ -113,6 +147,8 @@ export function AppointmentCalendar({ appointments }: { appointments: Appointmen
             if (!cell) return <span key={`empty-${i}`} />;
             const dateStr = formatYMD(cell);
             const dayAppointments = byDate.get(dateStr) ?? [];
+            const dayBlocks = blocksByDate.get(dateStr) ?? [];
+            const isAllDayBlocked = dayBlocks.some((b) => b.allDay);
             const isSelected = dateStr === selectedDate;
             const isToday = isSameDay(cell, today);
             return (
@@ -120,20 +156,24 @@ export function AppointmentCalendar({ appointments }: { appointments: Appointmen
                 key={dateStr}
                 type="button"
                 onClick={() => setSelectedDate(dateStr)}
+                title={isAllDayBlocked ? "Blockiert" : undefined}
                 className={`relative w-9 h-9 mx-auto rounded-full text-sm flex items-center justify-center transition-colors ${
                   isSelected
                     ? "bg-ocean text-white font-semibold"
-                    : `hover:bg-sky-mist ${isToday ? "border-2 border-ocean" : ""}`
+                    : `hover:bg-sky-mist ${isToday ? "border-2 border-ocean" : ""} ${
+                        isAllDayBlocked ? "line-through text-ink-muted/60" : ""
+                      }`
                 }`}
               >
                 {cell.getDate()}
-                {dayAppointments.length > 0 && (
-                  <span
-                    className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
-                      isSelected ? "bg-white" : "bg-coral"
-                    }`}
-                  />
-                )}
+                <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 flex gap-0.5">
+                  {dayAppointments.length > 0 && (
+                    <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-coral"}`} />
+                  )}
+                  {dayBlocks.length > 0 && (
+                    <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-ink-muted"}`} />
+                  )}
+                </span>
               </button>
             );
           })}
@@ -149,8 +189,29 @@ export function AppointmentCalendar({ appointments }: { appointments: Appointmen
             year: "numeric",
           })}
         </h3>
+        {selectedBlocks.length > 0 && (
+          <div className="flex flex-col gap-3">
+            {selectedBlocks.map((b) => (
+              <div
+                key={b.id}
+                className="rounded-xl bg-sky-mist/60 px-4 py-3 flex items-center justify-between gap-4 flex-wrap"
+              >
+                <p className="text-sm font-semibold text-ink-soft">
+                  {b.allDay
+                    ? "Ganztägig blockiert"
+                    : `Blockiert ${formatBlockTime(b.startMinute ?? 0)}–${formatBlockTime(b.endMinute ?? 0)}`}
+                  {b.reason && ` · ${b.reason}`}
+                </p>
+                <DeleteBlockButton id={b.id} />
+              </div>
+            ))}
+          </div>
+        )}
+
         {selectedAppointments.length === 0 ? (
-          <p className="text-sm text-ink-muted">Keine bestätigten Termine an diesem Tag.</p>
+          selectedBlocks.length === 0 && (
+            <p className="text-sm text-ink-muted">Keine bestätigten Termine an diesem Tag.</p>
+          )
         ) : (
           <div className="flex flex-col divide-y divide-sky-mist">
             {selectedAppointments.map((a) => (

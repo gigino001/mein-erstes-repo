@@ -15,13 +15,14 @@ function formatDateTime(d: Date) {
 }
 
 export default async function AdminDashboardPage() {
-  const [appointments, services] = await Promise.all([
+  const [appointments, services, blocks] = await Promise.all([
     prisma.appointment.findMany({
       where: { status: { not: "cancelled" } },
       orderBy: { startAt: "asc" },
       include: { service: true },
     }),
     prisma.service.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } }),
+    prisma.availabilityException.findMany({ orderBy: { date: "asc" } }),
   ]);
 
   const now = new Date();
@@ -88,6 +89,14 @@ export default async function AdminDashboardPage() {
             priceCents: a.service.priceCents,
             depositAmountCents: a.depositAmountCents,
             startAt: a.startAt.toISOString(),
+          }))}
+          blocks={blocks.map((b) => ({
+            id: b.id,
+            date: b.date.toISOString(),
+            allDay: b.allDay,
+            startMinute: b.startMinute,
+            endMinute: b.endMinute,
+            reason: b.reason,
           }))}
         />
       </section>
